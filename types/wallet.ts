@@ -9,6 +9,8 @@ export type WalletType =
 
 import { Currency } from "./international";
 
+export { Currency };
+
 export interface Wallet {
   id: string;
   type: WalletType;

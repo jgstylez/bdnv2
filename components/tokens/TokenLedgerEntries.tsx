@@ -1,165 +1,42 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { TokenLedgerEntry } from "../../types/token";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
-interface TokenLedgerEntriesProps {
-  entries: TokenLedgerEntry[];
-}
-
-export function TokenLedgerEntries({ entries }: TokenLedgerEntriesProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const getTransactionIcon = (type: string) => {
-    switch (type) {
-      case "purchase":
-        return "add-shopping-cart";
-      case "transfer":
-        return "swap-horiz";
-      case "reward":
-        return "stars";
-      case "redemption":
-        return "redeem";
-      default:
-        return "account-balance-wallet";
-    }
-  };
-
-  const getTransactionColor = (type: string) => {
-    switch (type) {
-      case "purchase":
-      case "reward":
-        return colors.status.success;
-      case "transfer":
-      case "redemption":
-        return colors.status.error;
-      default:
-        return colors.accent;
-    }
-  };
-
-  if (entries.length === 0) {
-    return (
-      <View style={styles.emptyState}>
-        <MaterialIcons name="receipt" size={48} color="rgba(186, 153, 136, 0.5)" />
-        <Text style={styles.emptyStateText}>No ledger entries</Text>
-      </View>
-    );
-  }
-
+export const TokenLedgerEntries = ({ 
+  ledgerEntries, 
+  getTransactionIcon, 
+  formatDate 
+}) => {
   return (
     <View>
-      {entries.map((entry) => {
-        const isPositive = entry.transactionType === "purchase" || entry.transactionType === "reward";
-        const iconColor = getTransactionColor(entry.transactionType);
-        
-        return (
-          <View key={entry.id} style={styles.entryCard}>
-            <View style={styles.entryContent}>
-              <View
-                style={[
-                  styles.iconContainer,
-                  { backgroundColor: `${iconColor}20` },
-                ]}
-              >
-                <MaterialIcons
-                  name={getTransactionIcon(entry.transactionType) as any}
-                  size={24}
-                  color={iconColor}
-                />
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        <Text style={{ fontSize: 20, fontWeight: '700', color: '#ffffff' }}>Token Ledger</Text>
+      </View>
+      <Text style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.6)', marginBottom: 16, fontStyle: 'italic' }}>
+        All successful one-time and recurring purchases are automatically reflected here
+      </Text>
+      {ledgerEntries.map((entry) => (
+        <View key={entry.id} style={{ backgroundColor: "#474747", borderRadius: 16, padding: 20, borderWidth: 1, borderColor: "rgba(186, 153, 136, 0.2)", marginBottom: 12 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
+              <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: entry.transactionType === "purchase" || entry.transactionType === "reward" ? "rgba(186, 153, 136, 0.2)" : "rgba(255, 68, 68, 0.2)", alignItems: 'center', justifyContent: 'center' }}>
+                <MaterialIcons name={getTransactionIcon(entry.transactionType) as any} size={20} color={entry.transactionType === "purchase" || entry.transactionType === "reward" ? "#ba9988" : "#ff4444"} />
               </View>
-              <View style={styles.entryInfo}>
-                <Text style={styles.entryDescription}>{entry.description}</Text>
-                <Text style={styles.entryDate}>{formatDate(entry.date)}</Text>
-              </View>
-              <View style={styles.entryAmount}>
-                <Text
-                  style={[
-                    styles.amountText,
-                    { color: isPositive ? colors.status.success : colors.status.error },
-                  ]}
-                >
-                  {isPositive ? "+" : "-"}
-                  {entry.tokens} Tokens
-                </Text>
-                <Text style={styles.balanceText}>Balance: {entry.balance}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 16, fontWeight: '600', color: '#ffffff', marginBottom: 4 }}>{entry.description}</Text>
+                <Text style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.6)' }}>{formatDate(entry.date)}</Text>
               </View>
             </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={{ fontSize: 18, fontWeight: '700', color: entry.transactionType === "purchase" || entry.transactionType === "reward" ? "#ba9988" : "#ff4444" }}>
+                {entry.transactionType === "purchase" || entry.transactionType === "reward" ? "+" : "-"}
+                {entry.tokens}
+              </Text>
+              <Text style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.6)', marginTop: 4 }}>Balance: {entry.balance}</Text>
+            </View>
           </View>
-        );
-      })}
+        </View>
+      ))}
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  emptyState: {
-    backgroundColor: colors.secondary.bg,
-    borderRadius: borderRadius.lg,
-    padding: spacing["4xl"],
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: colors.border.light,
-  },
-  emptyStateText: {
-    fontSize: typography.fontSize.lg,
-    color: colors.text.tertiary,
-    textAlign: "center",
-    marginTop: spacing.lg,
-  },
-  entryCard: {
-    backgroundColor: colors.secondary.bg,
-    borderRadius: borderRadius.lg,
-    padding: spacing.xl,
-    borderWidth: 1,
-    borderColor: colors.border.light,
-    marginBottom: spacing.md,
-  },
-  entryContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-  },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  entryInfo: {
-    flex: 1,
-  },
-  entryDescription: {
-    fontSize: typography.fontSize.base,
-    fontWeight: typography.fontWeight.bold,
-    color: colors.text.primary,
-    marginBottom: spacing.xs,
-  },
-  entryDate: {
-    fontSize: typography.fontSize.sm,
-    color: colors.text.secondary,
-  },
-  entryAmount: {
-    alignItems: "flex-end",
-  },
-  amountText: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: typography.fontWeight.bold,
-    marginBottom: spacing.xs,
-  },
-  balanceText: {
-    fontSize: typography.fontSize.sm,
-    color: colors.text.secondary,
-  },
-});
-
+};

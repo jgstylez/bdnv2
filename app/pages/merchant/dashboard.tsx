@@ -231,6 +231,30 @@ export default function MerchantDashboard() {
                 Orders
               </Text>
             </TouchableOpacity>
+             <TouchableOpacity
+              onPress={() => router.push("/pages/merchant/subscriptions")}
+              style={{
+                flex: 1,
+                minWidth: 0,
+                backgroundColor: "#474747",
+                borderRadius: 16,
+                padding: isMobile ? 16 : 20,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons name="subscriptions" size={isMobile ? 20 : 24} color="#ba9988" style={{ marginBottom: 8 }} />
+              <Text
+                style={{
+                  fontSize: isMobile ? 12 : 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                }}
+              >
+                Subscriptions
+              </Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push("/pages/merchant/analytics")}
               style={{
@@ -319,4 +343,3 @@ export default function MerchantDashboard() {
     </View>
   );
 }
-

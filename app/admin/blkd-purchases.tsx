@@ -332,7 +332,7 @@ export default function BLKDPurchasesManagement() {
                   actions={[
                     {
                       label: "View Details",
-                      icon: "visibility",
+                      icon: "info",
                       variant: "info",
                       onPress: () => {
                         setSelectedOrder(purchase);

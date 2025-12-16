@@ -422,7 +422,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                         display: "-webkit-box",
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: "vertical",
-                        lineHeight: 20,
+                        lineHeight: "20px",
                       }),
                     }}
                   >
@@ -692,9 +692,9 @@ export default function Marketplace() {
                   activeOpacity={0.8}
                   style={{
                     width: cardWidth,
-                    flex: Platform.OS === "web" ? `0 0 ${cardWidth}` : 1,
-                    flexBasis: cardWidth || "33.333%",
-                    maxWidth: cardWidth || "33.333%",
+                    flex: Platform.OS === "web" ? 1 : undefined,
+                    flexBasis: cardWidth,
+                    maxWidth: cardWidth,
                     minWidth: 0,
                     backgroundColor: colors.secondary.bg,
                     borderRadius: borderRadius.lg,
