@@ -318,8 +318,6 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                       />
                     ) : (
                       <ProductPlaceholder
-                        width="100%"
-                        height="100%"
                         aspectRatio={1}
                       />
                     )}
@@ -418,13 +416,12 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                       height: 40,
                       overflow: "hidden",
                       ...(Platform.OS === "web" && {
-                        // @ts-ignore - Web-only CSS properties
                         display: "-webkit-box",
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: "vertical",
                         lineHeight: "20px",
                       }),
-                    }}
+                    } as any}
                   >
                     {product.name}
                   </Text>
@@ -701,7 +698,7 @@ export default function Marketplace() {
                     overflow: "hidden",
                     borderWidth: 1,
                     borderColor: colors.border.light,
-                  }}
+                  } as any}
                 >
                   {/* Product Image */}
                   <View

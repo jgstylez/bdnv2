@@ -3,13 +3,13 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator,
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { PayItForward, CampaignStatus } from "types/nonprofit";
-import { useResponsive } from "hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "constants/theme";
-import { getMockCampaign } from "data/mocks/campaigns";
-import { BackButton } from "components/navigation/BackButton";
-import { FormInput, FormTextArea } from "components/forms";
-import { DateTimePickerComponent } from "components/forms/DateTimePicker";
+import { PayItForward, CampaignStatus } from "../../../../../types/nonprofit";
+import { useResponsive } from "../../../../../hooks/useResponsive";
+import { colors, spacing, borderRadius, typography } from "../../../../../constants/theme";
+import { getMockCampaign } from "../../../../../data/mocks/campaigns";
+import { BackButton } from "../../../../../components/navigation/BackButton";
+import { FormInput, FormTextArea } from "../../../../../components/forms";
+import { DateTimePickerComponent } from "../../../../../components/forms/DateTimePicker";
 
 // Mock fetch and update functions
 const fetchCampaignById = async (id: string): Promise<PayItForward | null> => {

@@ -136,6 +136,22 @@ export const AdminMenuPanel: React.FC<AdminMenuPanelProps> = ({ isOpen, onClose 
     });
   }, [pathname]);
 
+  const handleItemPress = (href: string) => {
+    try {
+      const result = router.push(href as any);
+      if (result && typeof result.finally === 'function') {
+        result.finally(() => {
+          onClose();
+        });
+      } else {
+        onClose();
+      }
+    } catch (error) {
+      console.error("Error during navigation:", error);
+      onClose();
+    }
+  };
+
   if (!isOpen && translateX.value === width) {
     return null;
   }
@@ -145,10 +161,7 @@ export const AdminMenuPanel: React.FC<AdminMenuPanelProps> = ({ isOpen, onClose 
     return (
       <TouchableOpacity
         key={item.href}
-        onPress={() => {
-          router.push(item.href as any);
-          onClose();
-        }}
+        onPress={() => handleItemPress(item.href)}
         style={{
           backgroundColor: active ? "rgba(186, 153, 136, 0.2)" : "#474747",
           borderRadius: 12,
@@ -332,10 +345,7 @@ export const AdminMenuPanel: React.FC<AdminMenuPanelProps> = ({ isOpen, onClose 
 
           {/* Back to User View */}
           <TouchableOpacity
-            onPress={() => {
-              router.push("/(tabs)/dashboard");
-              onClose();
-            }}
+            onPress={() => handleItemPress("/(tabs)/dashboard")}
             style={{
               backgroundColor: "#474747",
               borderRadius: 12,
@@ -364,4 +374,3 @@ export const AdminMenuPanel: React.FC<AdminMenuPanelProps> = ({ isOpen, onClose 
     </>
   );
 };
-

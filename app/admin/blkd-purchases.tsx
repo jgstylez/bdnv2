@@ -343,7 +343,7 @@ export default function BLKDPurchasesManagement() {
                       ? [
                           {
                             label: "Retry Processing",
-                            icon: "refresh",
+                            icon: "refresh" as keyof typeof MaterialIcons.glyphMap,
                             variant: "primary" as const,
                             onPress: () => handleRetryProcessing(purchase),
                           },
@@ -351,7 +351,7 @@ export default function BLKDPurchasesManagement() {
                       : []),
                     {
                       label: "Flag for Review",
-                      icon: "flag",
+                      icon: "flag" as keyof typeof MaterialIcons.glyphMap,
                       variant: "secondary" as const,
                       onPress: () => {
                         setSelectedOrder(purchase);
@@ -477,7 +477,7 @@ export default function BLKDPurchasesManagement() {
                   Discount
                 </Text>
                 <Text style={{ fontSize: typography.fontSize.base, color: "#4caf50" }}>
-                  {selectedOrder.discountPercent}% ({formatCurrency(selectedOrder.savings || 0, "USD")} saved)
+                  {selectedOrder.discountPercent}% ({formatCurrency(selectedOrder.savings || 0, "USD")})
                 </Text>
               </View>
               <View style={{ gap: spacing.sm }}>
@@ -591,4 +591,3 @@ export default function BLKDPurchasesManagement() {
     </View>
   );
 }
-

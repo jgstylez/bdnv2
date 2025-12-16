@@ -102,12 +102,20 @@ export const AdminSidebar: React.FC = () => {
     });
   }, [pathname]);
 
+  const handleItemPress = (href: string) => {
+    try {
+      router.push(href);
+    } catch (error) {
+      console.error("Error during navigation:", error);
+    }
+  };
+  
   const renderNavItem = (item: NavItem, isChild: boolean = false) => {
     const active = isActive(item.href);
     return (
       <TouchableOpacity
         key={item.href}
-        onPress={() => router.push(item.href as any)}
+        onPress={() => handleItemPress(item.href)}
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -252,4 +260,3 @@ export const AdminSidebar: React.FC = () => {
     </View>
   );
 };
-
