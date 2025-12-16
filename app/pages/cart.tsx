@@ -1,0 +1,458 @@
+import React from "react";
+import { View, Text, ScrollView, TouchableOpacity, Platform } from "react-native";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useResponsive } from "../../hooks/useResponsive";
+import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { ProductPlaceholder } from "../../components/ProductPlaceholder";
+import { HeroSection } from "../../components/layouts/HeroSection";
+import { useCart } from "../../contexts/CartContext";
+import { formatCurrency } from "../../lib/international";
+import { BackButton } from "../../components/navigation/BackButton";
+
+export default function Cart() {
+  const router = useRouter();
+  const { isMobile, paddingHorizontal } = useResponsive();
+  const { 
+    items: cartItems, 
+    businessOrders, 
+    updateQuantity, 
+    removeFromCart, 
+    clearBusinessCart,
+    getSubtotal, 
+    getShippingTotal, 
+    getTotal, 
+    itemCount 
+  } = useCart();
+
+  const subtotal = getSubtotal();
+  const shippingTotal = getShippingTotal();
+  const total = getTotal();
+
+  const handleUpdateQuantity = async (productId: string, delta: number) => {
+    const item = cartItems.find((i) => i.id === productId);
+    if (item) {
+      const newQuantity = item.quantity + delta;
+      await updateQuantity(productId, newQuantity);
+    }
+  };
+
+  const handleRemoveItem = async (productId: string) => {
+    await removeFromCart(productId);
+  };
+
+  const handleRemoveBusiness = async (merchantId: string) => {
+    await clearBusinessCart(merchantId);
+  };
+
+  const handleCheckout = () => {
+    router.push("/pages/checkout");
+  };
+
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+      <StatusBar style="light" />
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal,
+          paddingTop: spacing.lg,
+          paddingBottom: spacing["4xl"],
+        }}
+      >
+        {/* Back Button */}
+        <BackButton label="Back to Marketplace" to="/(tabs)/marketplace" />
+
+        {/* Hero Section */}
+        <HeroSection
+          title="Shopping Cart"
+          subtitle={`${itemCount} ${itemCount === 1 ? "item" : "items"} in your cart`}
+        />
+
+        {cartItems.length === 0 ? (
+          <View style={{ alignItems: "center", justifyContent: "center", paddingVertical: spacing["4xl"] }}>
+            <MaterialIcons name="shopping-cart" size={64} color={colors.text.tertiary} />
+            <Text
+              style={{
+                fontSize: typography.fontSize.xl,
+                fontWeight: typography.fontWeight.bold,
+                color: colors.text.primary,
+                marginTop: spacing.lg,
+                marginBottom: spacing.sm,
+              }}
+            >
+              Your cart is empty
+            </Text>
+            <Text
+              style={{
+                fontSize: typography.fontSize.base,
+                color: colors.text.secondary,
+                marginBottom: spacing.xl,
+              }}
+            >
+              Start shopping to add items to your cart
+            </Text>
+            <TouchableOpacity
+              onPress={() => router.push("/(tabs)/marketplace")}
+              style={{
+                backgroundColor: colors.accent,
+                paddingHorizontal: spacing.xl,
+                paddingVertical: spacing.md,
+                borderRadius: borderRadius.md,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.semibold,
+                  color: colors.text.primary,
+                }}
+              >
+                Browse Marketplace
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <>
+            {/* Business Orders */}
+            <View style={{ gap: spacing.xl, marginBottom: spacing.xl }}>
+              {businessOrders.map((businessOrder) => (
+                <View
+                  key={businessOrder.merchantId}
+                  style={{
+                    backgroundColor: colors.secondary.bg,
+                    borderRadius: borderRadius.lg,
+                    padding: spacing.lg,
+                    borderWidth: 1,
+                    borderColor: colors.border.light,
+                  }}
+                >
+                  {/* Business Header */}
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: spacing.md,
+                      paddingBottom: spacing.md,
+                      borderBottomWidth: 1,
+                      borderBottomColor: colors.border.light,
+                    }}
+                  >
+                    <View style={{ flex: 1 }}>
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.lg,
+                          fontWeight: typography.fontWeight.bold,
+                          color: colors.text.primary,
+                          marginBottom: spacing.xs,
+                        }}
+                      >
+                        {businessOrder.merchantName || `Business ${businessOrder.merchantId}`}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.sm,
+                          color: colors.text.secondary,
+                        }}
+                      >
+                        {businessOrder.items.length} {businessOrder.items.length === 1 ? "item" : "items"}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleRemoveBusiness(businessOrder.merchantId)}
+                      style={{
+                        padding: spacing.xs,
+                      }}
+                    >
+                      <MaterialIcons name="close" size={20} color={colors.text.secondary} />
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Business Items */}
+                  <View style={{ gap: spacing.md, marginBottom: spacing.md }}>
+                    {businessOrder.items.map((item) => (
+                <View
+                  key={item.id}
+                  style={{
+                    flexDirection: "row",
+                    backgroundColor: colors.secondary.bg,
+                    borderRadius: borderRadius.lg,
+                    overflow: "hidden",
+                    borderWidth: 1,
+                    borderColor: colors.border.light,
+                  }}
+                >
+                  {/* Product Image */}
+                  <View
+                    style={{
+                      width: isMobile ? 100 : 120,
+                      height: isMobile ? 100 : 120,
+                      borderRadius: borderRadius.md,
+                      overflow: "hidden",
+                      backgroundColor: colors.secondary.bg,
+                      borderWidth: 1,
+                      borderColor: colors.border.light,
+                    }}
+                  >
+                    {item.images && item.images.length > 0 && item.images[0] ? (
+                      <Image
+                        source={{ uri: item.images[0] }}
+                        style={{ width: "100%", height: "100%" }}
+                        contentFit="cover"
+                        cachePolicy="memory-disk"
+                        onError={() => {}}
+                      />
+                    ) : (
+                      <ProductPlaceholder width="100%" height={isMobile ? 100 : 120} aspectRatio={1} />
+                    )}
+                  </View>
+
+                  {/* Product Details */}
+                  <View style={{ flex: 1, padding: spacing.md, justifyContent: "space-between" }}>
+                    <View>
+                      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <View style={{ flex: 1 }}>
+                          <Text
+                            numberOfLines={2}
+                            style={{
+                              fontSize: typography.fontSize.base,
+                              fontWeight: typography.fontWeight.semibold,
+                              color: colors.text.primary,
+                              marginBottom: spacing.xs,
+                              ...(Platform.OS === "web" && {
+                                // @ts-ignore - Web-only CSS properties
+                                display: "-webkit-box",
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: "vertical",
+                                lineHeight: 20,
+                              }),
+                            }}
+                          >
+                            {item.name}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: typography.fontSize.sm,
+                              color: colors.text.secondary,
+                            }}
+                          >
+                            {formatCurrency(item.price, item.currency)} each
+                          </Text>
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => handleRemoveItem(item.id)}
+                          style={{
+                            padding: spacing.xs,
+                          }}
+                        >
+                          <MaterialIcons name="close" size={20} color={colors.text.secondary} />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+
+                    {/* Quantity Controls */}
+                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: spacing.md }}>
+                      <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.md }}>
+                        <TouchableOpacity
+                          onPress={() => handleUpdateQuantity(item.id, -1)}
+                          style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: borderRadius.sm,
+                            backgroundColor: colors.primary.bg,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderWidth: 1,
+                            borderColor: colors.border.light,
+                          }}
+                        >
+                          <MaterialIcons name="remove" size={18} color={colors.text.primary} />
+                        </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.base,
+                            fontWeight: typography.fontWeight.semibold,
+                            color: colors.text.primary,
+                            minWidth: 30,
+                            textAlign: "center",
+                          }}
+                        >
+                          {item.quantity}
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() => handleUpdateQuantity(item.id, 1)}
+                          style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: borderRadius.sm,
+                            backgroundColor: colors.primary.bg,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderWidth: 1,
+                            borderColor: colors.border.light,
+                          }}
+                        >
+                          <MaterialIcons name="add" size={18} color={colors.text.primary} />
+                        </TouchableOpacity>
+                      </View>
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.lg,
+                          fontWeight: typography.fontWeight.bold,
+                          color: colors.accent,
+                        }}
+                      >
+                        {formatCurrency(item.price * item.quantity, item.currency)}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                    ))}
+                  </View>
+
+                  {/* Business Order Subtotal */}
+                  <View
+                    style={{
+                      marginTop: spacing.md,
+                      paddingTop: spacing.md,
+                      borderTopWidth: 1,
+                      borderTopColor: colors.border.light,
+                    }}
+                  >
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.xs }}>
+                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                        Subtotal
+                      </Text>
+                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                        {formatCurrency(businessOrder.subtotal, businessOrder.currency)}
+                      </Text>
+                    </View>
+                    {businessOrder.shippingTotal > 0 && (
+                      <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.xs }}>
+                        <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                          Shipping
+                        </Text>
+                        <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                          {formatCurrency(businessOrder.shippingTotal, businessOrder.currency)}
+                        </Text>
+                      </View>
+                    )}
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: spacing.xs }}>
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.base,
+                          fontWeight: typography.fontWeight.bold,
+                          color: colors.text.primary,
+                        }}
+                      >
+                        Business Total
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.base,
+                          fontWeight: typography.fontWeight.bold,
+                          color: colors.accent,
+                        }}
+                      >
+                        {formatCurrency(businessOrder.total, businessOrder.currency)}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              ))}
+            </View>
+
+            {/* Order Summary */}
+            <View
+              style={{
+                backgroundColor: colors.secondary.bg,
+                borderRadius: borderRadius.lg,
+                padding: spacing.xl,
+                borderWidth: 1,
+                borderColor: colors.border.light,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: typography.fontSize.xl,
+                  fontWeight: typography.fontWeight.bold,
+                  color: colors.text.primary,
+                  marginBottom: spacing.lg,
+                }}
+              >
+                Order Summary
+              </Text>
+              <View style={{ gap: spacing.md, marginBottom: spacing.lg }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
+                    Subtotal ({itemCount} {itemCount === 1 ? "item" : "items"})
+                  </Text>
+                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    {formatCurrency(subtotal, "USD")}
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
+                    Shipping
+                  </Text>
+                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    {shippingTotal > 0 ? formatCurrency(shippingTotal, "USD") : "Free"}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: colors.border.light,
+                    marginVertical: spacing.sm,
+                  }}
+                />
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.xl,
+                      fontWeight: typography.fontWeight.bold,
+                      color: colors.text.primary,
+                    }}
+                  >
+                    Total
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.xl,
+                      fontWeight: typography.fontWeight.bold,
+                      color: colors.accent,
+                    }}
+                  >
+                    {formatCurrency(total, "USD")}
+                  </Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={handleCheckout}
+                style={{
+                  backgroundColor: colors.accent,
+                  paddingVertical: spacing.md + 2,
+                  borderRadius: borderRadius.md,
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.lg,
+                    fontWeight: typography.fontWeight.bold,
+                    color: colors.text.primary,
+                  }}
+                >
+                  Proceed to Checkout
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+      </ScrollView>
+    </View>
+  );
+}
+

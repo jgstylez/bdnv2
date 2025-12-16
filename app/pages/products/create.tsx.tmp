@@ -1,0 +1,1109 @@
+import React, { useState } from "react";
+import { View, Text, ScrollView, TextInput, TouchableOpacity, useWindowDimensions, Platform } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
+import { MaterialIcons } from "@expo/vector-icons";
+import { ProductType, InventoryTracking } from "../../../../types/merchant";
+
+export default function CreateProduct() {
+  const { width } = useWindowDimensions();
+  const router = useRouter();
+  const isMobile = width < 768;
+  const [step, setStep] = useState(1);
+  const [productType, setProductType] = useState<ProductType | "">("");
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    currency: "USD" as "USD" | "BLKD",
+    category: "",
+    sku: "",
+    barcode: "",
+    inventory: "",
+    inventoryTracking: "manual" as InventoryTracking,
+    lowStockThreshold: "",
+    isActive: true,
+    // Physical
+    weight: "",
+    length: "",
+    width: "",
+    height: "",
+    dimensionUnit: "in" as "in" | "cm",
+    shippingRequired: false,
+    shippingCost: "",
+    returnPolicy: "",
+    // Digital
+    downloadUrl: "",
+    downloadLimit: "",
+    expirationDate: "",
+    // Service
+    duration: "",
+    serviceLocation: "in-store" as "in-store" | "remote" | "on-site" | "hybrid",
+    bookingRequired: false,
+    // Common
+    tags: "",
+    taxCategory: "",
+  });
+
+  const categories = [
+    "Food & Beverage",
+    "Clothing & Apparel",
+    "Electronics",
+    "Home & Garden",
+    "Beauty & Personal Care",
+    "Health & Fitness",
+    "Books & Media",
+    "Toys & Games",
+    "Automotive",
+    "Services",
+    "Digital Products",
+    "Other",
+  ];
+
+  const handleNext = () => {
+    if (step === 1 && (!formData.name || !productType)) {
+      alert("Please fill in product name and select product type");
+      return;
+    }
+    if (step < 3) {
+      setStep(step + 1);
+    } else {
+      handleSubmit();
+    }
+  };
+
+  const handleBack = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleSubmit = () => {
+    // TODO: Submit to API
+    alert("Product created successfully!");
+    router.back();
+  };
+
+  const renderStep1 = () => (
+    <View style={{ gap: 20 }}>
+      <View>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "700",
+            color: "#ffffff",
+            marginBottom: 16,
+          }}
+        >
+          Product Type
+        </Text>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
+          {(["physical", "digital", "service"] as ProductType[]).map((type) => (
+            <TouchableOpacity
+              key={type}
+              onPress={() => setProductType(type)}
+              style={{
+                flex: 1,
+                minWidth: 100,
+                backgroundColor: productType === type ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
+                borderRadius: 12,
+                padding: 20,
+                alignItems: "center",
+                borderWidth: 2,
+                borderColor: productType === type ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+              }}
+            >
+              <MaterialIcons
+                name={type === "physical" ? "inventory" : type === "digital" ? "cloud-download" : "build"}
+                size={32}
+                color={productType === type ? "#ffffff" : "#ba9988"}
+              />
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: productType === type ? "#ffffff" : "#ba9988",
+                  marginTop: 8,
+                  textTransform: "capitalize",
+                }}
+              >
+                {type}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+
+      <View>
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: "600",
+            color: "#ffffff",
+            marginBottom: 8,
+          }}
+        >
+          Product Name <Text style={{ color: "#ff4444" }}>*</Text>
+        </Text>
+        <TextInput
+          value={formData.name}
+          onChangeText={(text) => setFormData({ ...formData, name: text })}
+          placeholder="Enter product name"
+          placeholderTextColor="rgba(255, 255, 255, 0.4)"
+          style={{
+            backgroundColor: "#232323",
+            borderRadius: 12,
+            padding: 16,
+            color: "#ffffff",
+            fontSize: 14,
+            borderWidth: 1,
+            borderColor: "rgba(186, 153, 136, 0.2)",
+          }}
+        />
+      </View>
+
+      <View>
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: "600",
+            color: "#ffffff",
+            marginBottom: 8,
+          }}
+        >
+          Description
+        </Text>
+        <TextInput
+          value={formData.description}
+          onChangeText={(text) => setFormData({ ...formData, description: text })}
+          placeholder="Describe your product..."
+          placeholderTextColor="rgba(255, 255, 255, 0.4)"
+          multiline
+          numberOfLines={4}
+          style={{
+            backgroundColor: "#232323",
+            borderRadius: 12,
+            padding: 16,
+            color: "#ffffff",
+            fontSize: 14,
+            minHeight: 100,
+            textAlignVertical: "top",
+            borderWidth: 1,
+            borderColor: "rgba(186, 153, 136, 0.2)",
+          }}
+        />
+      </View>
+
+      <View style={{ flexDirection: "row", gap: 12 }}>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "600",
+              color: "#ffffff",
+              marginBottom: 8,
+            }}
+          >
+            Price <Text style={{ color: "#ff4444" }}>*</Text>
+          </Text>
+          <TextInput
+            value={formData.price}
+            onChangeText={(text) => setFormData({ ...formData, price: text })}
+            placeholder="0.00"
+            placeholderTextColor="rgba(255, 255, 255, 0.4)"
+            keyboardType="decimal-pad"
+            style={{
+              backgroundColor: "#232323",
+              borderRadius: 12,
+              padding: 16,
+              color: "#ffffff",
+              fontSize: 14,
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+            }}
+          />
+        </View>
+        <View style={{ width: 120 }}>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "600",
+              color: "#ffffff",
+              marginBottom: 8,
+            }}
+          >
+            Currency
+          </Text>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            {(["USD", "BLKD"] as const).map((curr) => (
+              <TouchableOpacity
+                key={curr}
+                onPress={() => setFormData({ ...formData, currency: curr })}
+                style={{
+                  flex: 1,
+                  backgroundColor: formData.currency === curr ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
+                  borderRadius: 8,
+                  padding: 12,
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: formData.currency === curr ? "#ffffff" : "#ba9988",
+                  }}
+                >
+                  {curr}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      </View>
+
+      <View>
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: "600",
+            color: "#ffffff",
+            marginBottom: 8,
+          }}
+        >
+          Category
+        </Text>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          {categories.map((cat) => (
+            <TouchableOpacity
+              key={cat}
+              onPress={() => setFormData({ ...formData, category: cat })}
+              style={{
+                paddingHorizontal: 16,
+                paddingVertical: 10,
+                borderRadius: 20,
+                backgroundColor: formData.category === cat ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
+                borderWidth: 1,
+                borderColor: formData.category === cat ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 13,
+                  fontWeight: "600",
+                  color: formData.category === cat ? "#ffffff" : "#ba9988",
+                }}
+              >
+                {cat}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    </View>
+  );
+
+  const renderStep2 = () => (
+    <View style={{ gap: 20 }}>
+      {/* Inventory */}
+      <View>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "700",
+            color: "#ffffff",
+            marginBottom: 16,
+          }}
+        >
+          Inventory Management
+        </Text>
+        <View style={{ gap: 12 }}>
+          <View>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "600",
+                color: "#ffffff",
+                marginBottom: 8,
+              }}
+            >
+              Tracking Method
+            </Text>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+              {(["none", "manual", "automatic", "integrated"] as InventoryTracking[]).map((method) => (
+                <TouchableOpacity
+                  key={method}
+                  onPress={() => setFormData({ ...formData, inventoryTracking: method })}
+                  style={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 10,
+                    borderRadius: 20,
+                    backgroundColor: formData.inventoryTracking === method ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
+                    borderWidth: 1,
+                    borderColor: formData.inventoryTracking === method ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontWeight: "600",
+                      color: formData.inventoryTracking === method ? "#ffffff" : "#ba9988",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    {method}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {formData.inventoryTracking !== "none" && (
+            <>
+              <View style={{ flexDirection: "row", gap: 12 }}>
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Stock Quantity
+                  </Text>
+                  <TextInput
+                    value={formData.inventory}
+                    onChangeText={(text) => setFormData({ ...formData, inventory: text })}
+                    placeholder="0"
+                    placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                    keyboardType="numeric"
+                    style={{
+                      backgroundColor: "#232323",
+                      borderRadius: 12,
+                      padding: 16,
+                      color: "#ffffff",
+                      fontSize: 14,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.2)",
+                    }}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Low Stock Alert
+                  </Text>
+                  <TextInput
+                    value={formData.lowStockThreshold}
+                    onChangeText={(text) => setFormData({ ...formData, lowStockThreshold: text })}
+                    placeholder="10"
+                    placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                    keyboardType="numeric"
+                    style={{
+                      backgroundColor: "#232323",
+                      borderRadius: 12,
+                      padding: 16,
+                      color: "#ffffff",
+                      fontSize: 14,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.2)",
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View style={{ flexDirection: "row", gap: 12 }}>
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                      marginBottom: 8,
+                    }}
+                  >
+                    SKU
+                  </Text>
+                  <TextInput
+                    value={formData.sku}
+                    onChangeText={(text) => setFormData({ ...formData, sku: text })}
+                    placeholder="SKU-001"
+                    placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                    style={{
+                      backgroundColor: "#232323",
+                      borderRadius: 12,
+                      padding: 16,
+                      color: "#ffffff",
+                      fontSize: 14,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.2)",
+                    }}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Barcode
+                  </Text>
+                  <TextInput
+                    value={formData.barcode}
+                    onChangeText={(text) => setFormData({ ...formData, barcode: text })}
+                    placeholder="1234567890"
+                    placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                    style={{
+                      backgroundColor: "#232323",
+                      borderRadius: 12,
+                      padding: 16,
+                      color: "#ffffff",
+                      fontSize: 14,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.2)",
+                    }}
+                  />
+                </View>
+              </View>
+            </>
+          )}
+        </View>
+      </View>
+
+      {/* Product Type Specific Fields */}
+      {productType === "physical" && (
+        <View>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
+            }}
+          >
+            Physical Product Details
+          </Text>
+          <View style={{ gap: 12 }}>
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
+                }}
+              >
+                Weight (lbs)
+              </Text>
+              <TextInput
+                value={formData.weight}
+                onChangeText={(text) => setFormData({ ...formData, weight: text })}
+                placeholder="0.0"
+                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                keyboardType="decimal-pad"
+                style={{
+                  backgroundColor: "#232323",
+                  borderRadius: 12,
+                  padding: 16,
+                  color: "#ffffff",
+                  fontSize: 14,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                }}
+              />
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
+                }}
+              >
+                Dimensions
+              </Text>
+              <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
+                <TextInput
+                  value={formData.length}
+                  onChangeText={(text) => setFormData({ ...formData, length: text })}
+                  placeholder="L"
+                  placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                  keyboardType="decimal-pad"
+                  style={{
+                    flex: 1,
+                    backgroundColor: "#232323",
+                    borderRadius: 12,
+                    padding: 16,
+                    color: "#ffffff",
+                    fontSize: 14,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                  }}
+                />
+                <Text style={{ color: "rgba(255, 255, 255, 0.5)" }}>×</Text>
+                <TextInput
+                  value={formData.width}
+                  onChangeText={(text) => setFormData({ ...formData, width: text })}
+                  placeholder="W"
+                  placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                  keyboardType="decimal-pad"
+                  style={{
+                    flex: 1,
+                    backgroundColor: "#232323",
+                    borderRadius: 12,
+                    padding: 16,
+                    color: "#ffffff",
+                    fontSize: 14,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                  }}
+                />
+                <Text style={{ color: "rgba(255, 255, 255, 0.5)" }}>×</Text>
+                <TextInput
+                  value={formData.height}
+                  onChangeText={(text) => setFormData({ ...formData, height: text })}
+                  placeholder="H"
+                  placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                  keyboardType="decimal-pad"
+                  style={{
+                    flex: 1,
+                    backgroundColor: "#232323",
+                    borderRadius: 12,
+                    padding: 16,
+                    color: "#ffffff",
+                    fontSize: 14,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                  }}
+                />
+                <View style={{ flexDirection: "row", gap: 4 }}>
+                  {(["in", "cm"] as const).map((unit) => (
+                    <TouchableOpacity
+                      key={unit}
+                      onPress={() => setFormData({ ...formData, dimensionUnit: unit })}
+                      style={{
+                        paddingHorizontal: 8,
+                        paddingVertical: 8,
+                        backgroundColor: formData.dimensionUnit === unit ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
+                        borderRadius: 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontWeight: "600",
+                          color: formData.dimensionUnit === unit ? "#ffffff" : "#ba9988",
+                        }}
+                      >
+                        {unit}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+              <TouchableOpacity
+                onPress={() => setFormData({ ...formData, shippingRequired: !formData.shippingRequired })}
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 4,
+                  backgroundColor: formData.shippingRequired ? "#ba9988" : "transparent",
+                  borderWidth: 2,
+                  borderColor: "#ba9988",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {formData.shippingRequired && <MaterialIcons name="check" size={16} color="#ffffff" />}
+              </TouchableOpacity>
+              <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Requires shipping</Text>
+            </View>
+            {formData.shippingRequired && (
+              <View>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: "#ffffff",
+                    marginBottom: 8,
+                  }}
+                >
+                  Shipping Cost
+                </Text>
+                <TextInput
+                  value={formData.shippingCost}
+                  onChangeText={(text) => setFormData({ ...formData, shippingCost: text })}
+                  placeholder="0.00"
+                  placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                  keyboardType="decimal-pad"
+                  style={{
+                    backgroundColor: "#232323",
+                    borderRadius: 12,
+                    padding: 16,
+                    color: "#ffffff",
+                    fontSize: 14,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                  }}
+                />
+              </View>
+            )}
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
+                }}
+              >
+                Return Policy
+              </Text>
+              <TextInput
+                value={formData.returnPolicy}
+                onChangeText={(text) => setFormData({ ...formData, returnPolicy: text })}
+                placeholder="30-day return policy..."
+                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                multiline
+                numberOfLines={3}
+                style={{
+                  backgroundColor: "#232323",
+                  borderRadius: 12,
+                  padding: 16,
+                  color: "#ffffff",
+                  fontSize: 14,
+                  minHeight: 80,
+                  textAlignVertical: "top",
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      )}
+
+      {productType === "digital" && (
+        <View>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
+            }}
+          >
+            Digital Product Details
+          </Text>
+          <View style={{ gap: 12 }}>
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
+                }}
+              >
+                Download URL
+              </Text>
+              <TextInput
+                value={formData.downloadUrl}
+                onChangeText={(text) => setFormData({ ...formData, downloadUrl: text })}
+                placeholder="https://example.com/download"
+                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                keyboardType="url"
+                autoCapitalize="none"
+                style={{
+                  backgroundColor: "#232323",
+                  borderRadius: 12,
+                  padding: 16,
+                  color: "#ffffff",
+                  fontSize: 14,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                }}
+              />
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
+                }}
+              >
+                Download Limit (-1 for unlimited)
+              </Text>
+              <TextInput
+                value={formData.downloadLimit}
+                onChangeText={(text) => setFormData({ ...formData, downloadLimit: text })}
+                placeholder="-1"
+                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                keyboardType="numeric"
+                style={{
+                  backgroundColor: "#232323",
+                  borderRadius: 12,
+                  padding: 16,
+                  color: "#ffffff",
+                  fontSize: 14,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                }}
+              />
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
+                }}
+              >
+                Expiration Date (optional)
+              </Text>
+              <TextInput
+                value={formData.expirationDate}
+                onChangeText={(text) => setFormData({ ...formData, expirationDate: text })}
+                placeholder="YYYY-MM-DD"
+                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                style={{
+                  backgroundColor: "#232323",
+                  borderRadius: 12,
+                  padding: 16,
+                  color: "#ffffff",
+                  fontSize: 14,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      )}
+
+      {productType === "service" && (
+        <View>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
+            }}
+          >
+            Service Details
+          </Text>
+          <View style={{ gap: 12 }}>
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
+                }}
+              >
+                Duration
+              </Text>
+              <TextInput
+                value={formData.duration}
+                onChangeText={(text) => setFormData({ ...formData, duration: text })}
+                placeholder="1 hour, 30 minutes, etc."
+                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                style={{
+                  backgroundColor: "#232323",
+                  borderRadius: 12,
+                  padding: 16,
+                  color: "#ffffff",
+                  fontSize: 14,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                }}
+              />
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
+                }}
+              >
+                Service Location
+              </Text>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+                {(["in-store", "remote", "on-site", "hybrid"] as const).map((location) => (
+                  <TouchableOpacity
+                    key={location}
+                    onPress={() => setFormData({ ...formData, serviceLocation: location })}
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 10,
+                      borderRadius: 20,
+                      backgroundColor: formData.serviceLocation === location ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
+                      borderWidth: 1,
+                      borderColor: formData.serviceLocation === location ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontWeight: "600",
+                        color: formData.serviceLocation === location ? "#ffffff" : "#ba9988",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {location.replace("-", " ")}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+              <TouchableOpacity
+                onPress={() => setFormData({ ...formData, bookingRequired: !formData.bookingRequired })}
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 4,
+                  backgroundColor: formData.bookingRequired ? "#ba9988" : "transparent",
+                  borderWidth: 2,
+                  borderColor: "#ba9988",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {formData.bookingRequired && <MaterialIcons name="check" size={16} color="#ffffff" />}
+              </TouchableOpacity>
+              <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Booking required</Text>
+            </View>
+          </View>
+        </View>
+      )}
+    </View>
+  );
+
+  const renderStep3 = () => (
+    <View style={{ gap: 20 }}>
+      <View>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "700",
+            color: "#ffffff",
+            marginBottom: 16,
+          }}
+        >
+          Additional Information
+        </Text>
+        <View style={{ gap: 12 }}>
+          <View>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "600",
+                color: "#ffffff",
+                marginBottom: 8,
+              }}
+            >
+              Tags (comma-separated)
+            </Text>
+            <TextInput
+              value={formData.tags}
+              onChangeText={(text) => setFormData({ ...formData, tags: text })}
+              placeholder="tag1, tag2, tag3"
+              placeholderTextColor="rgba(255, 255, 255, 0.4)"
+              style={{
+                backgroundColor: "#232323",
+                borderRadius: 12,
+                padding: 16,
+                color: "#ffffff",
+                fontSize: 14,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+              }}
+            />
+          </View>
+          <View>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "600",
+                color: "#ffffff",
+                marginBottom: 8,
+              }}
+            >
+              Tax Category
+            </Text>
+            <TextInput
+              value={formData.taxCategory}
+              onChangeText={(text) => setFormData({ ...formData, taxCategory: text })}
+              placeholder="Standard, Reduced, Exempt"
+              placeholderTextColor="rgba(255, 255, 255, 0.4)"
+              style={{
+                backgroundColor: "#232323",
+                borderRadius: 12,
+                padding: 16,
+                color: "#ffffff",
+                fontSize: 14,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+              }}
+            />
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+            <TouchableOpacity
+              onPress={() => setFormData({ ...formData, isActive: !formData.isActive })}
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 4,
+                backgroundColor: formData.isActive ? "#ba9988" : "transparent",
+                borderWidth: 2,
+                borderColor: "#ba9988",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {formData.isActive && <MaterialIcons name="check" size={16} color="#ffffff" />}
+            </TouchableOpacity>
+            <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Product is active</Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
+      <StatusBar style="light" />
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
+        }}
+      >
+        {/* Progress Steps */}
+        <View style={{ marginBottom: 24 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 12 }}>
+            {[1, 2, 3].map((s) => (
+              <View key={s} style={{ flex: 1, alignItems: "center" }}>
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                    backgroundColor: step >= s ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 8,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "700",
+                      color: step >= s ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
+                    }}
+                  >
+                    {s}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: step >= s ? "#ba9988" : "rgba(255, 255, 255, 0.5)",
+                  }}
+                >
+                  {s === 1 ? "Basic Info" : s === 2 ? "Details" : "Finalize"}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Form Content */}
+        <View
+          style={{
+            backgroundColor: "#474747",
+            borderRadius: 16,
+            padding: 20,
+            borderWidth: 1,
+            borderColor: "rgba(186, 153, 136, 0.2)",
+          }}
+        >
+          {step === 1 && renderStep1()}
+          {step === 2 && renderStep2()}
+          {step === 3 && renderStep3()}
+        </View>
+
+        {/* Navigation Buttons */}
+        <View style={{ flexDirection: "row", gap: 12, marginTop: 24 }}>
+          <TouchableOpacity
+            onPress={handleBack}
+            style={{
+              flex: 1,
+              paddingVertical: 16,
+              borderRadius: 12,
+              backgroundColor: "#232323",
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: "#ffffff",
+              }}
+            >
+              {step === 1 ? "Cancel" : "Back"}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleNext}
+            style={{
+              flex: 1,
+              paddingVertical: 16,
+              borderRadius: 12,
+              backgroundColor: "#ba9988",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: "#ffffff",
+              }}
+            >
+              {step === 3 ? "Create Product" : "Next"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
+
