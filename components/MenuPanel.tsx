@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView, useWindowDimensions, Platform } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  useWindowDimensions,
+  Platform,
+} from "react-native";
 import { useRouter, usePathname } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import Animated, {
@@ -18,7 +25,6 @@ interface MenuPanelProps {
   onClose: () => void;
 }
 
-
 export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -29,10 +35,10 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
   // Start with all groups collapsed (accordion behavior)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const navigatingRef = React.useRef(false);
-  
+
   // Filter navigation based on feature flags
-  const filteredNavigationMenu = flagsLoading 
-    ? [] 
+  const filteredNavigationMenu = flagsLoading
+    ? []
     : filterNavigationByFeatureFlags(navigationMenu, flags);
 
   React.useEffect(() => {
@@ -47,7 +53,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
   }));
 
   const overlayOpacity = useSharedValue(0);
-  
+
   React.useEffect(() => {
     overlayOpacity.value = withTiming(isOpen ? 0.5 : 0, { duration: 200 });
   }, [isOpen]);
@@ -91,13 +97,13 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
       return pathname?.includes(href);
     };
 
-    const activeGroup = navigationMenu.find((group: NavGroup) =>
+    const activeGroup = filteredNavigationMenu.find((group: NavGroup) =>
       group.items.some((item: NavItem) => checkActive(item.href))
     );
     if (activeGroup) {
       setExpandedGroups(new Set([activeGroup.label]));
     }
-  }, [pathname]);
+  }, [pathname, filteredNavigationMenu]);
 
   const toggleGroup = (groupLabel: string) => {
     const newExpanded = new Set(expandedGroups);
@@ -131,13 +137,13 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
     navigatingRef.current = true;
 
     // Navigate and close menu
-    router.push(href as any).finally(() => {
-      // Reset flag after navigation completes
-      setTimeout(() => {
-        navigatingRef.current = false;
-      }, 300);
-    });
+    router.push(href as any);
     onClose();
+
+    // Reset flag after navigation completes
+    setTimeout(() => {
+      navigatingRef.current = false;
+    }, 300);
   };
 
   if (!isOpen && translateX.value === width) {
@@ -225,140 +231,154 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
               accessibilityLabel="Close menu"
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <MaterialIcons name="close" size={24} color="rgba(255, 255, 255, 0.7)" />
+              <MaterialIcons
+                name="close"
+                size={24}
+                color="rgba(255, 255, 255, 0.7)"
+              />
             </TouchableOpacity>
           </View>
 
           {/* Navigation Groups */}
           <View style={{ paddingTop: 8 }}>
-            {filteredNavigationMenu.map((group: NavGroup, groupIndex: number) => {
-              const isExpanded = isGroupExpanded(group.label);
-              const hasActiveItem = group.items.some((item: NavItem) =>
-                isActive(item.href)
-              );
+            {filteredNavigationMenu.map(
+              (group: NavGroup, groupIndex: number) => {
+                const isExpanded = isGroupExpanded(group.label);
+                const hasActiveItem = group.items.some((item: NavItem) =>
+                  isActive(item.href)
+                );
 
-              return (
-                <View
-                  key={group.label}
-                  style={{
-                    borderBottomWidth: groupIndex < navigationMenu.length - 1 ? 1 : 0,
-                    borderBottomColor: "#474747",
-                  }}
-                >
-                  {/* Group Header */}
-                  <TouchableOpacity
-                    onPress={() => toggleGroup(group.label)}
-                    accessible={true}
-                    accessibilityRole="button"
-                    accessibilityLabel={`${group.label} menu group`}
-                    accessibilityState={{ expanded: isExpanded }}
-                    accessibilityHint={isExpanded ? "Collapse group" : "Expand group"}
+                return (
+                  <View
+                    key={group.label}
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      paddingVertical: 14,
-                      paddingHorizontal: 20,
-                      backgroundColor: hasActiveItem
-                        ? "rgba(186, 153, 136, 0.1)"
-                        : "transparent",
+                      borderBottomWidth:
+                        groupIndex < filteredNavigationMenu.length - 1 ? 1 : 0,
+                      borderBottomColor: "#474747",
                     }}
                   >
-                    <View
+                    {/* Group Header */}
+                    <TouchableOpacity
+                      onPress={() => toggleGroup(group.label)}
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${group.label} menu group`}
+                      accessibilityState={{ expanded: isExpanded }}
+                      accessibilityHint={
+                        isExpanded ? "Collapse group" : "Expand group"
+                      }
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
-                        flex: 1,
-                        gap: 12,
+                        justifyContent: "space-between",
+                        paddingVertical: 14,
+                        paddingHorizontal: 20,
+                        backgroundColor: hasActiveItem
+                          ? "rgba(186, 153, 136, 0.1)"
+                          : "transparent",
                       }}
                     >
-                      <MaterialIcons
-                        name={group.icon}
-                        size={20}
-                        color={
-                          hasActiveItem ? "#ba9988" : "rgba(255, 255, 255, 0.7)"
-                        }
-                      />
-                      <Text
+                      <View
                         style={{
-                          fontSize: 14,
-                          fontWeight: "600",
-                          color: hasActiveItem
-                            ? "#ba9988"
-                            : "rgba(255, 255, 255, 0.9)",
-                          textTransform: "uppercase",
-                          letterSpacing: 0.5,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          flex: 1,
+                          gap: 12,
                         }}
                       >
-                        {group.label}
-                      </Text>
-                    </View>
-                    <MaterialIcons
-                      name={
-                        isExpanded ? "keyboard-arrow-up" : "keyboard-arrow-down"
-                      }
-                      size={20}
-                      color="rgba(255, 255, 255, 0.5)"
-                    />
-                  </TouchableOpacity>
+                        <MaterialIcons
+                          name={group.icon}
+                          size={20}
+                          color={
+                            hasActiveItem
+                              ? "#ba9988"
+                              : "rgba(255, 255, 255, 0.7)"
+                          }
+                        />
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "600",
+                            color: hasActiveItem
+                              ? "#ba9988"
+                              : "rgba(255, 255, 255, 0.9)",
+                            textTransform: "uppercase",
+                            letterSpacing: 0.5,
+                          }}
+                        >
+                          {group.label}
+                        </Text>
+                      </View>
+                      <MaterialIcons
+                        name={
+                          isExpanded
+                            ? "keyboard-arrow-up"
+                            : "keyboard-arrow-down"
+                        }
+                        size={20}
+                        color="rgba(255, 255, 255, 0.5)"
+                      />
+                    </TouchableOpacity>
 
-                  {/* Group Items */}
-                  {isExpanded && (
-                    <View>
-                      {group.items.map((item: NavItem, itemIndex: number) => {
-                        const active = isActive(item.href);
-                        return (
-                          <TouchableOpacity
-                            key={item.href + itemIndex}
-                            onPress={() => handleItemPress(item.href)}
-                            accessible={true}
-                            accessibilityRole="button"
-                            accessibilityLabel={item.label}
-                            accessibilityState={{ selected: active }}
-                            accessibilityHint={`Navigate to ${item.label}`}
-                            style={{
-                              flexDirection: "row",
-                              alignItems: "center",
-                              paddingVertical: 12,
-                              paddingHorizontal: 20,
-                              paddingLeft: 52,
-                              backgroundColor: active
-                                ? "rgba(186, 153, 136, 0.15)"
-                                : "transparent",
-                            }}
-                          >
-                            <MaterialIcons
-                              name={item.icon}
-                              size={18}
-                              color={
-                                active ? "#ba9988" : "rgba(255, 255, 255, 0.7)"
-                              }
-                              style={{ marginRight: 12 }}
-                            />
-                            <Text
+                    {/* Group Items */}
+                    {isExpanded && (
+                      <View>
+                        {group.items.map((item: NavItem, itemIndex: number) => {
+                          const active = isActive(item.href);
+                          return (
+                            <TouchableOpacity
+                              key={item.href + itemIndex}
+                              onPress={() => handleItemPress(item.href)}
+                              accessible={true}
+                              accessibilityRole="button"
+                              accessibilityLabel={item.label}
+                              accessibilityState={{ selected: active }}
+                              accessibilityHint={`Navigate to ${item.label}`}
                               style={{
-                                fontSize: 14,
-                                fontWeight: active ? "600" : "500",
-                                color: active
-                                  ? "#ffffff"
-                                  : "rgba(255, 255, 255, 0.8)",
-                                flex: 1,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                paddingVertical: 12,
+                                paddingHorizontal: 20,
+                                paddingLeft: 52,
+                                backgroundColor: active
+                                  ? "rgba(186, 153, 136, 0.15)"
+                                  : "transparent",
                               }}
                             >
-                              {item.label}
-                            </Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </View>
-                  )}
-                </View>
-              );
-            })}
+                              <MaterialIcons
+                                name={item.icon}
+                                size={18}
+                                color={
+                                  active
+                                    ? "#ba9988"
+                                    : "rgba(255, 255, 255, 0.7)"
+                                }
+                                style={{ marginRight: 12 }}
+                              />
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontWeight: active ? "600" : "500",
+                                  color: active
+                                    ? "#ffffff"
+                                    : "rgba(255, 255, 255, 0.8)",
+                                  flex: 1,
+                                }}
+                              >
+                                {item.label}
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        })}
+                      </View>
+                    )}
+                  </View>
+                );
+              }
+            )}
           </View>
         </ScrollView>
       </Animated.View>
     </>
   );
 };
-
