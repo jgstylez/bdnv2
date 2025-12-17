@@ -8,7 +8,7 @@ const firebaseConfig = {
   authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain,
   projectId: Constants.expoConfig?.extra?.firebaseProjectId,
   storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket,
-  messagingSenderId: Constants.expo_config?.extra?.firebaseMessagingSenderId,
+  messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId,
   appId: Constants.expoConfig?.extra?.firebaseAppId,
 };
 
