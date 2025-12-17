@@ -24,11 +24,21 @@ export const Sidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const sidebarWidth = isCollapsed ? 72 : 240;
   const navigatingRef = React.useRef(false);
+  const previousPathnameRef = React.useRef(pathname);
   
   // Filter navigation based on feature flags
+  // Show full menu while loading to avoid navigation disappearing
   const filteredNavigationMenu = flagsLoading 
-    ? [] 
+    ? navigationMenu 
     : filterNavigationByFeatureFlags(navigationMenu, flags);
+
+  // Reset navigation flag when pathname actually changes (navigation completed)
+  useEffect(() => {
+    if (previousPathnameRef.current !== pathname) {
+      previousPathnameRef.current = pathname;
+      navigatingRef.current = false;
+    }
+  }, [pathname]);
 
   const isActive = (href: string) => {
     if (href === "/(tabs)/dashboard") {
@@ -352,13 +362,8 @@ export const Sidebar: React.FC = () => {
                         // Set navigating flag to prevent duplicate calls
                         navigatingRef.current = true;
 
-                        // Navigate
-                        router.push(item.href as any).finally(() => {
-                          // Reset flag after navigation completes
-                          setTimeout(() => {
-                            navigatingRef.current = false;
-                          }, 300);
-                        });
+                        // Navigate - navigatingRef will be reset by the pathname change effect
+                        router.push(item.href as any);
                       };
 
                       return (

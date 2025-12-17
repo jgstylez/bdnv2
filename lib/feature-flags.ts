@@ -62,9 +62,12 @@ export async function updateFeatureFlags(flags: Partial<FeatureFlags>): Promise<
 
 /**
  * Subscribe to feature flags changes in real-time
+ * @param callback - Called with flags on each update
+ * @param onError - Optional error callback for handling subscription errors
  */
 export function subscribeToFeatureFlags(
-  callback: (flags: FeatureFlags) => void
+  callback: (flags: FeatureFlags) => void,
+  onError?: (error: Error) => void
 ): Unsubscribe | null {
   try {
     const docRef = doc(db, FEATURE_FLAGS_DOC_PATH);
@@ -86,12 +89,21 @@ export function subscribeToFeatureFlags(
       },
       (error) => {
         console.error('Error subscribing to feature flags:', error);
-        // On error, call callback with defaults
-        callback(defaultFeatureFlags);
+        // Call error handler if provided
+        if (onError) {
+          onError(error);
+        } else {
+          // Fallback: call callback with defaults if no error handler
+          callback(defaultFeatureFlags);
+        }
       }
     );
   } catch (error) {
     console.error('Error setting up feature flags subscription:', error);
+    // Call error handler if provided
+    if (onError && error instanceof Error) {
+      onError(error);
+    }
     // Return null if subscription fails
     return null;
   }

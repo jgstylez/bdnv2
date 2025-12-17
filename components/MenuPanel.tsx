@@ -35,10 +35,12 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
   // Start with all groups collapsed (accordion behavior)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const navigatingRef = React.useRef(false);
+  const previousPathnameRef = React.useRef(pathname);
 
   // Filter navigation based on feature flags
+  // Show full menu while loading to avoid navigation disappearing
   const filteredNavigationMenu = flagsLoading
-    ? []
+    ? navigationMenu
     : filterNavigationByFeatureFlags(navigationMenu, flags);
 
   React.useEffect(() => {
@@ -61,6 +63,14 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
   const overlayStyle = useAnimatedStyle(() => ({
     opacity: overlayOpacity.value,
   }));
+
+  // Reset navigation flag when pathname actually changes (navigation completed)
+  React.useEffect(() => {
+    if (previousPathnameRef.current !== pathname) {
+      previousPathnameRef.current = pathname;
+      navigatingRef.current = false;
+    }
+  }, [pathname]);
 
   const isActive = (href: string) => {
     if (href === "/(tabs)/dashboard") {
@@ -137,13 +147,9 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
     navigatingRef.current = true;
 
     // Navigate and close menu
+    // navigatingRef will be reset by the pathname change effect
     router.push(href as any);
     onClose();
-
-    // Reset flag after navigation completes
-    setTimeout(() => {
-      navigatingRef.current = false;
-    }, 300);
   };
 
   if (!isOpen && translateX.value === width) {

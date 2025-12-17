@@ -5,7 +5,7 @@
  * Flags are loaded from Firestore and cached for performance.
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback, ReactNode } from 'react';
 import { FeatureFlags, defaultFeatureFlags } from '@/types/feature-flags';
 import { getFeatureFlags, subscribeToFeatureFlags } from '@/lib/feature-flags';
 
@@ -27,32 +27,32 @@ export function FeatureFlagsProvider({ children }: FeatureFlagsProviderProps) {
   const [flags, setFlags] = useState<FeatureFlags>(defaultFeatureFlags);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const loadFlags = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const loadedFlags = await getFeatureFlags();
-      setFlags(loadedFlags);
-    } catch (err) {
-      console.error('Failed to load feature flags:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load feature flags');
-      // Fallback to default flags on error
-      setFlags(defaultFeatureFlags);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const initializedRef = useRef(false);
 
   useEffect(() => {
-    // Initial load
-    loadFlags();
-
-    // Subscribe to real-time updates
-    const unsubscribe = subscribeToFeatureFlags((updatedFlags) => {
-      setFlags(updatedFlags);
-      setLoading(false);
-    });
+    // Subscribe to real-time updates - onSnapshot fires immediately with current data
+    // so we don't need a separate initial load
+    const unsubscribe = subscribeToFeatureFlags(
+      (updatedFlags) => {
+        setFlags(updatedFlags);
+        // Only clear loading on first successful load
+        if (!initializedRef.current) {
+          initializedRef.current = true;
+          setLoading(false);
+          setError(null);
+        }
+      },
+      (subscriptionError) => {
+        // Handle subscription errors
+        console.error('Feature flags subscription error:', subscriptionError);
+        if (!initializedRef.current) {
+          initializedRef.current = true;
+          setError(subscriptionError instanceof Error ? subscriptionError.message : 'Failed to load feature flags');
+          setFlags(defaultFeatureFlags);
+          setLoading(false);
+        }
+      }
+    );
 
     return () => {
       if (unsubscribe) {
@@ -61,9 +61,19 @@ export function FeatureFlagsProvider({ children }: FeatureFlagsProviderProps) {
     };
   }, []);
 
-  const refresh = async () => {
-    await loadFlags();
-  };
+  const refresh = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const loadedFlags = await getFeatureFlags();
+      setFlags(loadedFlags);
+    } catch (err) {
+      console.error('Failed to refresh feature flags:', err);
+      setError(err instanceof Error ? err.message : 'Failed to refresh feature flags');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const isEnabled = (flag: keyof FeatureFlags): boolean => {
     return flags[flag] === true;
