@@ -1,47 +1,29 @@
-import { useWindowDimensions } from "react-native";
-import { getScrollViewBottomPadding } from "../constants/layout";
+import { useWindowDimensions } from 'react-native';
 
-export interface ResponsiveValues {
-  isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
-  paddingHorizontal: number;
-  width: number;
-  height: number;
-  scrollViewBottomPadding: number;
-}
-
-/**
- * Custom hook for responsive design values
- * Replaces repeated responsive logic throughout the codebase
- * 
- * @returns Responsive values based on screen width
- * 
- * @example
- * ```tsx
- * const { isMobile, paddingHorizontal } = useResponsive();
- * 
- * <View style={{ paddingHorizontal }}>
- *   {isMobile ? <MobileView /> : <DesktopView />}
- * </View>
- * ```
- */
-export const useResponsive = (): ResponsiveValues => {
-  const { width, height } = useWindowDimensions();
+export const useResponsive = () => {
+  const { width } = useWindowDimensions();
   
+  // Breakpoints
   const isMobile = width < 768;
   const isTablet = width >= 768 && width < 1024;
   const isDesktop = width >= 1024;
-  const paddingHorizontal = isMobile ? 20 : 40;
+  
+  // Layout values
+  const paddingHorizontal = isMobile ? 20 : isTablet ? 32 : 40;
+  const maxContentWidth = 1200;
   
   return {
+    width,
     isMobile,
     isTablet,
     isDesktop,
     paddingHorizontal,
-    width,
-    height,
-    scrollViewBottomPadding: getScrollViewBottomPadding(isMobile),
+    maxContentWidth,
+    contentContainerStyle: {
+      paddingHorizontal,
+      maxWidth: maxContentWidth,
+      width: '100%',
+      alignSelf: 'center' as const,
+    }
   };
 };
-

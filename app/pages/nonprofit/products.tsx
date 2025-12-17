@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Platform } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Platform, Alert } from "react-native";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Product, ProductType } from "../../../types/merchant";
 import { ProductPlaceholder } from "../../../components/ProductPlaceholder";
+import { DeleteProductModal } from "../../../components/products/modals/DeleteProductModal";
 
-// Mock products for nonprofit
-const mockProducts: Product[] = [
+// Mock products for nonprofit (Initial State)
+const initialProducts: Product[] = [
   {
     id: "1",
     merchantId: "org1",
@@ -97,14 +98,32 @@ export default function NonprofitProducts() {
   const { width } = useWindowDimensions();
   const router = useRouter();
   const isMobile = width < 768;
+  const [products, setProducts] = useState<Product[]>(initialProducts);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<ProductType | "all">("all");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const filteredProducts = mockProducts.filter((product) => {
+  const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = filterType === "all" || product.productType === filterType;
     return matchesSearch && matchesType;
   });
+
+  const handleDelete = () => {
+    if (selectedProduct) {
+      setProducts(products.filter(p => p.id !== selectedProduct.id));
+      setShowDeleteModal(false);
+      setSelectedProduct(null);
+      // In a real app, you would also make an API call to delete the product
+      Alert.alert("Success", "Product deleted successfully");
+    }
+  };
+
+  const promptDelete = (product: Product) => {
+    setSelectedProduct(product);
+    setShowDeleteModal(true);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
@@ -443,6 +462,7 @@ cachePolicy="memory-disk"
                         <MaterialIcons name="edit" size={20} color="#ba9988" />
                       </TouchableOpacity>
                       <TouchableOpacity
+                        onPress={() => promptDelete(product)}
                         style={{
                           backgroundColor: "#232323",
                           padding: 8,
@@ -482,6 +502,17 @@ cachePolicy="memory-disk"
           </View>
         )}
       </ScrollView>
+
+      {/* Delete Product Modal */}
+      <DeleteProductModal
+        visible={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setSelectedProduct(null);
+        }}
+        onConfirm={handleDelete}
+        productName={selectedProduct?.name || "this product"}
+      />
     </View>
   );
 }

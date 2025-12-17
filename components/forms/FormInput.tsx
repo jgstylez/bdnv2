@@ -1,44 +1,39 @@
 import React from "react";
-import { View, Text, TextInput, TextInputProps } from "react-native";
+import { View, Text, TextInput, TextInputProps, ViewStyle } from "react-native";
 import { colors, spacing, borderRadius, typography } from "../../constants/theme";
 
 interface FormInputProps extends TextInputProps {
-  label: string;
-  required?: boolean;
+  label?: string;
   error?: string;
-  helperText?: string;
+  containerStyle?: ViewStyle;
 }
 
-/**
- * FormInput Component
- * Reusable text input with label, error handling, and consistent styling
- */
-export const FormInput: React.FC<FormInputProps> = ({
+export function FormInput({
   label,
-  required = false,
   error,
-  helperText,
+  containerStyle,
   style,
-  ...textInputProps
-}) => {
+  ...props
+}: FormInputProps) {
   return (
-    <View style={{ marginBottom: spacing.md }}>
-      <Text
-        style={{
-          fontSize: typography.fontSize.base,
-          fontWeight: typography.fontWeight.semibold,
-          color: colors.text.primary,
-          marginBottom: spacing.sm,
-        }}
-      >
-        {label} {required && <Text style={{ color: colors.status.error }}>*</Text>}
-      </Text>
+    <View style={[{ gap: spacing.xs }, containerStyle]}>
+      {label && (
+        <Text
+          style={{
+            fontSize: typography.fontSize.sm,
+            fontWeight: "600",
+            color: colors.text.primary,
+          }}
+        >
+          {label}
+        </Text>
+      )}
       <TextInput
-        {...textInputProps}
+        placeholderTextColor={colors.text.placeholder}
         style={[
           {
-            backgroundColor: colors.background.input,
-            borderRadius: borderRadius.md,
+            backgroundColor: colors.secondary.bg,
+            borderRadius: borderRadius.lg,
             padding: spacing.md,
             color: colors.text.primary,
             fontSize: typography.fontSize.base,
@@ -47,31 +42,18 @@ export const FormInput: React.FC<FormInputProps> = ({
           },
           style,
         ]}
-        placeholderTextColor={colors.text.placeholder}
+        {...props}
       />
       {error && (
         <Text
           style={{
-            fontSize: typography.fontSize.sm,
+            fontSize: typography.fontSize.xs,
             color: colors.status.error,
-            marginTop: spacing.xs,
           }}
         >
           {error}
         </Text>
       )}
-      {helperText && !error && (
-        <Text
-          style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.tertiary,
-            marginTop: spacing.xs,
-          }}
-        >
-          {helperText}
-        </Text>
-      )}
     </View>
   );
-};
-
+}

@@ -8,9 +8,9 @@ import {
   TextStyle,
 } from 'react-native';
 
-import { cn } from '../../../lib/utils';
+import { cn } from '../lib/utils';
 
-import { buttonClassNames, textClassNames, iconColors } from './styles';
+import { buttonClassNames, textClassNames, iconColors } from './styles/button';
 
 interface ButtonProps extends TouchableOpacityProps {
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';

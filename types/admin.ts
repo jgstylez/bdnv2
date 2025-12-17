@@ -45,10 +45,23 @@ export interface ContentManagementItem {
   id: string;
   type: "blog" | "video" | "channel" | "dynamic";
   title: string;
+  content?: string;
   status: "draft" | "published" | "archived";
   author: string;
   createdAt: string;
   updatedAt: string;
   views?: number;
+  videoUrl?: string;
+  imageUrl?: string;
 }
 
+export interface CarouselItem {
+  id: string;
+  imageUrl: string;
+  title?: string;
+  description?: string;
+  link?: string;
+  linkText?: string;
+  displayOrder: number;
+  isActive: boolean;
+}

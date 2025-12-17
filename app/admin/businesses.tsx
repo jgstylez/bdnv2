@@ -1,39 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform, Modal } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { BusinessManagementFilters } from "../../types/admin";
 import { MerchantType } from "../../types/merchant";
 import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
 import { FilterDropdown } from "../../components/admin/FilterDropdown";
-import { AdminDataCard } from "../../components/admin/AdminDataCard";
 import { AdminModal } from "../../components/admin/AdminModal";
 import { Pagination } from "../../components/admin/Pagination";
 import { useResponsive } from "../../hooks/useResponsive";
 import { colors, spacing, typography, borderRadius } from "../../constants/theme";
 import { InternationalAddress, CountryCode, Currency, TaxIdentification } from "../../types/international";
-import { InternationalAddressForm } from "../../components/forms/InternationalAddressForm";
-import { CurrencySelector } from "../../components/forms/CurrencySelector";
-import { TaxIdSelector } from "../../components/forms/TaxIdSelector";
-import { formatAddressDisplay } from "../../lib/international";
-
-interface Business {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  phoneCountryCode?: CountryCode;
-  merchantType: MerchantType;
-  merchantLevel: "basic" | "premier" | "platinum";
-  status: "pending" | "approved" | "rejected" | "suspended";
-  submittedDate: string;
-  category: string;
-  description?: string;
-  address?: InternationalAddress;
-  currency?: Currency;
-  taxIdentification?: TaxIdentification;
-  website?: string;
-}
+import { BusinessList, Business } from "../../components/admin/businesses/BusinessList";
+import { BusinessModal } from "../../components/admin/businesses/BusinessModal";
 
 // Mock businesses
 const mockBusinesses: Business[] = [
@@ -81,25 +60,6 @@ const mockBusinesses: Business[] = [
     category: "Retail",
     description: "Independent bookstore",
   },
-];
-
-const MERCHANT_TYPES: { value: MerchantType; label: string }[] = [
-  { value: "local-shop", label: "Local Shop" },
-  { value: "local-service", label: "Local Service" },
-  { value: "national-service", label: "National Service" },
-  { value: "online-shopping", label: "Online Shopping" },
-];
-
-const categories = [
-  "Restaurant",
-  "Retail",
-  "Services",
-  "Technology",
-  "Beauty & Wellness",
-  "Health & Fitness",
-  "Education",
-  "Entertainment",
-  "Other",
 ];
 
 export default function BusinessManagement() {
@@ -270,8 +230,9 @@ export default function BusinessManagement() {
       name: "",
       email: "",
       phone: "",
-      merchantType: "local-shop",
-      merchantLevel: "basic",
+      phoneCountryCode: "US" as CountryCode,
+      merchantType: "local-shop" as MerchantType,
+      merchantLevel: "basic" as "basic" | "premier" | "platinum",
       category: "",
       description: "",
       address: {
@@ -394,82 +355,18 @@ export default function BusinessManagement() {
 
         {/* Businesses List */}
         {filteredBusinesses.length > 0 ? (
-          <View style={{ gap: spacing.md }}>
-            {paginatedBusinesses.map((business) => {
-              const statusColor = getStatusColor(business.status);
-              const actions: Array<{
-                label: string;
-                icon: keyof typeof MaterialIcons.glyphMap;
-                onPress: () => void;
-                variant: "primary" | "secondary" | "danger" | "info";
-              }> = [
-                {
-                  label: "Edit",
-                  icon: "edit",
-                  onPress: () => handleEdit(business),
-                  variant: "secondary",
-                },
-                ...(business.status === "pending"
-                  ? [
-                      {
-                        label: "Approve",
-                        icon: "check" as keyof typeof MaterialIcons.glyphMap,
-                        onPress: () => handleApprove(business),
-                        variant: "primary" as const,
-                      },
-                      {
-                        label: "Reject",
-                        icon: "close" as keyof typeof MaterialIcons.glyphMap,
-                        onPress: () => handleReject(business),
-                        variant: "danger" as const,
-                      },
-                    ]
-                  : [
-                      {
-                        label: business.status === "suspended" ? "Activate" : "Suspend",
-                        icon: (business.status === "suspended" ? "check-circle" : "block") as keyof typeof MaterialIcons.glyphMap,
-                        onPress: () => handleSuspend(business),
-                        variant: (business.status === "suspended" ? "primary" : "danger") as "primary" | "danger",
-                      },
-                    ]),
-                {
-                  label: "Delete",
-                  icon: "delete",
-                  onPress: () => {
-                    setSelectedBusiness(business);
-                    setShowDeleteModal(true);
-                  },
-                  variant: "danger",
-                },
-              ];
-
-              return (
-                <AdminDataCard
-                  key={business.id}
-                  title={business.name}
-                  subtitle={`${business.email}${business.phone ? ` • ${business.phone}` : ""}`}
-                  badges={[
-                    {
-                      label: business.category,
-                      color: colors.accent,
-                      backgroundColor: colors.accentLight,
-                    },
-                    {
-                      label: business.merchantLevel,
-                      color: colors.accent,
-                      backgroundColor: colors.accentLight,
-                    },
-                    {
-                      label: business.status,
-                      color: statusColor,
-                      backgroundColor: `${statusColor}20`,
-                    },
-                  ]}
-                  actions={actions}
-                />
-              );
-            })}
-          </View>
+          <BusinessList
+            businesses={paginatedBusinesses}
+            onEdit={handleEdit}
+            onApprove={handleApprove}
+            onReject={handleReject}
+            onSuspend={handleSuspend}
+            onDelete={(business) => {
+              setSelectedBusiness(business);
+              setShowDeleteModal(true);
+            }}
+            getStatusColor={getStatusColor}
+          />
         ) : (
           <View
             style={{
@@ -507,266 +404,17 @@ export default function BusinessManagement() {
         )}
 
         {/* Edit Business Modal */}
-        <AdminModal
+        <BusinessModal
           visible={showEditModal}
           onClose={() => setShowEditModal(false)}
-          title="Edit Business"
-          actions={[
-            {
-              label: "Cancel",
-              onPress: () => setShowEditModal(false),
-              variant: "secondary",
-            },
-            {
-              label: "Save",
-              onPress: handleSaveEdit,
-              variant: "primary",
-            },
-          ]}
-        >
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ gap: spacing.lg }}>
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Business Name *</Text>
-                  <TextInput
-                    value={editForm.name}
-                    onChangeText={(text) => setEditForm({ ...editForm, name: text })}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Email *</Text>
-                  <TextInput
-                    value={editForm.email}
-                    onChangeText={(text) => setEditForm({ ...editForm, email: text })}
-                    keyboardType="email-address"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Phone</Text>
-                  <TextInput
-                    value={editForm.phone}
-                    onChangeText={(text) => setEditForm({ ...editForm, phone: text })}
-                    keyboardType="phone-pad"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Category *</Text>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 8 }} contentContainerStyle={{ gap: 8 }}>
-                    {categories.map((cat) => (
-                      <TouchableOpacity
-                        key={cat}
-                        onPress={() => setEditForm({ ...editForm, category: cat })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: editForm.category === cat ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: editForm.category === cat ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: editForm.category === cat ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                          }}
-                        >
-                          {cat}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Merchant Type</Text>
-                  <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                    {MERCHANT_TYPES.map((type) => (
-                      <TouchableOpacity
-                        key={type.value}
-                        onPress={() => setEditForm({ ...editForm, merchantType: type.value })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: editForm.merchantType === type.value ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: editForm.merchantType === type.value ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: editForm.merchantType === type.value ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                          }}
-                        >
-                          {type.label}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Merchant Level</Text>
-                  <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                    {(["basic", "premier", "platinum"] as const).map((level) => (
-                      <TouchableOpacity
-                        key={level}
-                        onPress={() => setEditForm({ ...editForm, merchantLevel: level })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: editForm.merchantLevel === level ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: editForm.merchantLevel === level ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: editForm.merchantLevel === level ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {level}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Status</Text>
-                  <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                    {(["pending", "approved", "rejected", "suspended"] as const).map((status) => (
-                      <TouchableOpacity
-                        key={status}
-                        onPress={() => setEditForm({ ...editForm, status })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: editForm.status === status ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: editForm.status === status ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: editForm.status === status ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {status}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Description</Text>
-                  <TextInput
-                    value={editForm.description}
-                    onChangeText={(text) => setEditForm({ ...editForm, description: text })}
-                    multiline
-                    numberOfLines={4}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                      textAlignVertical: "top",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 16 }}>
-                    Address
-                  </Text>
-                  <InternationalAddressForm
-                    value={editForm.address}
-                    onChange={(address) => setEditForm({ ...editForm, address: { ...editForm.address, ...address } })}
-                    defaultCountry={editForm.address?.country || "US"}
-                  />
-                </View>
-
-                <CurrencySelector
-                  value={editForm.currency}
-                  onChange={(currency) => setEditForm({ ...editForm, currency })}
-                  showBLKD={true}
-                    />
-
-                <TaxIdSelector
-                  value={editForm.taxIdentification}
-                  onChange={(taxId) => setEditForm({ ...editForm, taxIdentification: taxId })}
-                  country={editForm.address?.country || "US"}
-                    />
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Website</Text>
-                  <TextInput
-                    value={editForm.website}
-                    onChangeText={(text) => setEditForm({ ...editForm, website: text })}
-                    keyboardType="url"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-            </View>
-          </ScrollView>
-        </AdminModal>
+          isEditing={true}
+          onSave={handleSaveEdit}
+          form={editForm}
+          setForm={setEditForm}
+        />
 
         {/* Create Business Modal */}
-        <AdminModal
+        <BusinessModal
           visible={showCreateModal}
           onClose={() => {
             setShowCreateModal(false);
@@ -781,8 +429,8 @@ export default function BusinessManagement() {
               description: "",
               address: {
                 street: "",
-              city: "",
-              state: "",
+                city: "",
+                state: "",
                 postalCode: "",
                 country: "US" as CountryCode,
               },
@@ -795,176 +443,11 @@ export default function BusinessManagement() {
               website: "",
             });
           }}
-          title="Create Business"
-          actions={[
-            {
-              label: "Cancel",
-              onPress: () => {
-                setShowCreateModal(false);
-                setCreateForm({
-                  name: "",
-                  email: "",
-                  phone: "",
-                  merchantType: "local-shop",
-                  merchantLevel: "basic",
-                  category: "",
-                  description: "",
-                  address: "",
-                  city: "",
-                  state: "",
-                  zipCode: "",
-                  website: "",
-                });
-              },
-              variant: "secondary",
-            },
-            {
-              label: "Create",
-              onPress: handleCreate,
-              variant: "primary",
-            },
-          ]}
-        >
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ gap: spacing.lg }}>
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Business Name *</Text>
-                  <TextInput
-                    value={createForm.name}
-                    onChangeText={(text) => setCreateForm({ ...createForm, name: text })}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Email *</Text>
-                  <TextInput
-                    value={createForm.email}
-                    onChangeText={(text) => setCreateForm({ ...createForm, email: text })}
-                    keyboardType="email-address"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Category *</Text>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 8 }} contentContainerStyle={{ gap: 8 }}>
-                    {categories.map((cat) => (
-                      <TouchableOpacity
-                        key={cat}
-                        onPress={() => setCreateForm({ ...createForm, category: cat })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: createForm.category === cat ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: createForm.category === cat ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: createForm.category === cat ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                          }}
-                        >
-                          {cat}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Merchant Type</Text>
-                  <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                    {MERCHANT_TYPES.map((type) => (
-                      <TouchableOpacity
-                        key={type.value}
-                        onPress={() => setCreateForm({ ...createForm, merchantType: type.value })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: createForm.merchantType === type.value ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: createForm.merchantType === type.value ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: createForm.merchantType === type.value ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                          }}
-                        >
-                          {type.label}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 16 }}>
-                    Address
-                  </Text>
-                  <InternationalAddressForm
-                    value={createForm.address}
-                    onChange={(address) => setCreateForm({ ...createForm, address: { ...createForm.address, ...address } })}
-                    defaultCountry={createForm.address?.country || "US"}
-                  />
-                </View>
-
-                <CurrencySelector
-                  value={createForm.currency}
-                  onChange={(currency) => setCreateForm({ ...createForm, currency })}
-                  showBLKD={true}
-                />
-
-                <TaxIdSelector
-                  value={createForm.taxIdentification}
-                  onChange={(taxId) => setCreateForm({ ...createForm, taxIdentification: taxId })}
-                  country={createForm.address?.country || "US"}
-                />
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Website</Text>
-                  <TextInput
-                    value={createForm.website}
-                    onChangeText={(text) => setCreateForm({ ...createForm, website: text })}
-                    keyboardType="url"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-            </View>
-          </ScrollView>
-        </AdminModal>
+          isEditing={false}
+          onSave={handleCreate}
+          form={createForm}
+          setForm={setCreateForm}
+        />
 
         {/* Delete Confirmation Modal */}
         <AdminModal

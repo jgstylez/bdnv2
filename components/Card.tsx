@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ViewProps, TextProps } from 'react-native';
-import { cn } from '../../../lib/utils';
+import { cn } from '../lib/utils';
 
 import {
   cardClassNames,
@@ -9,7 +9,7 @@ import {
   cardDescriptionClassNames,
   cardContentClassNames,
   cardFooterClassNames,
-} from './styles';
+} from './styles/card';
 
 // Main Card container
 interface CardProps extends ViewProps {

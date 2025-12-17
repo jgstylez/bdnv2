@@ -10,8 +10,7 @@ import { Pagination } from "../../components/admin/Pagination";
 import { useResponsive } from "../../hooks/useResponsive";
 import { colors, spacing, typography, borderRadius } from "../../constants/theme";
 import { InternationalAddress, CountryCode, TaxIdentification } from "../../types/international";
-import { InternationalAddressForm } from "../../components/forms/InternationalAddressForm";
-import { TaxIdSelector } from "../../components/forms/TaxIdSelector";
+import { NonprofitModal } from "../../components/admin/nonprofits/NonprofitModal";
 
 interface Nonprofit {
   id: string;
@@ -85,16 +84,6 @@ const mockNonprofits: Nonprofit[] = [
     verified: true,
     missionStatement: "Promoting health and wellness in underserved communities",
   },
-];
-
-const categories = [
-  "Education",
-  "Community",
-  "Health",
-  "Arts & Culture",
-  "Environment",
-  "Social Services",
-  "Other",
 ];
 
 export default function NonprofitManagement() {
@@ -267,13 +256,22 @@ export default function NonprofitManagement() {
       name: "",
       email: "",
       phone: "",
+      phoneCountryCode: "US",
+      taxIdentification: {
+        type: "EIN" as TaxIdentification["type"],
+        number: "",
+        country: "US" as CountryCode,
+      },
       ein: "",
       category: "",
       missionStatement: "",
-      address: "",
-      city: "",
-      state: "",
-      zipCode: "",
+      address: {
+        street: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        country: "US" as CountryCode,
+      },
       website: "",
     });
     alert("Nonprofit created successfully");
@@ -510,189 +508,17 @@ export default function NonprofitManagement() {
         )}
 
         {/* Edit Nonprofit Modal */}
-        <AdminModal
+        <NonprofitModal
           visible={showEditModal}
           onClose={() => setShowEditModal(false)}
-          title="Edit Nonprofit"
-          actions={[
-            {
-              label: "Cancel",
-              onPress: () => setShowEditModal(false),
-              variant: "secondary",
-            },
-            {
-              label: "Save",
-              onPress: handleSaveEdit,
-              variant: "primary",
-            },
-          ]}
-        >
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ gap: spacing.lg }}>
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Organization Name *</Text>
-                  <TextInput
-                    value={editForm.name}
-                    onChangeText={(text) => setEditForm({ ...editForm, name: text })}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Email *</Text>
-                  <TextInput
-                    value={editForm.email}
-                    onChangeText={(text) => setEditForm({ ...editForm, email: text })}
-                    keyboardType="email-address"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <TaxIdSelector
-                  value={editForm.taxIdentification}
-                  onChange={(taxId) => setEditForm({ ...editForm, taxIdentification: taxId })}
-                  country={editForm.address?.country || "US"}
-                  required
-                />
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Category *</Text>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 8 }} contentContainerStyle={{ gap: 8 }}>
-                    {categories.map((cat) => (
-                      <TouchableOpacity
-                        key={cat}
-                        onPress={() => setEditForm({ ...editForm, category: cat })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: editForm.category === cat ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: editForm.category === cat ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: editForm.category === cat ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                          }}
-                        >
-                          {cat}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Status</Text>
-                  <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                    {(["pending", "approved", "rejected", "suspended"] as const).map((status) => (
-                      <TouchableOpacity
-                        key={status}
-                        onPress={() => setEditForm({ ...editForm, status })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: editForm.status === status ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: editForm.status === status ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: editForm.status === status ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {status}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 16 }}>
-                    Address
-                  </Text>
-                  <InternationalAddressForm
-                    value={editForm.address}
-                    onChange={(address) => setEditForm({ ...editForm, address: { ...editForm.address, ...address } })}
-                    defaultCountry={editForm.address?.country || "US"}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Mission Statement</Text>
-                  <TextInput
-                    value={editForm.missionStatement}
-                    onChangeText={(text) => setEditForm({ ...editForm, missionStatement: text })}
-                    multiline
-                    numberOfLines={4}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                      textAlignVertical: "top",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Verified</Text>
-                  <TouchableOpacity
-                    onPress={() => setEditForm({ ...editForm, verified: !editForm.verified })}
-                    style={{
-                      width: 50,
-                      height: 30,
-                      borderRadius: 15,
-                      backgroundColor: editForm.verified ? "#4caf50" : "#474747",
-                      justifyContent: "center",
-                      paddingHorizontal: 4,
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: 22,
-                        height: 22,
-                        borderRadius: 11,
-                        backgroundColor: "#ffffff",
-                        transform: [{ translateX: editForm.verified ? 20 : 0 }],
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-            </View>
-          </ScrollView>
-        </AdminModal>
+          isEditing={true}
+          onSave={handleSaveEdit}
+          form={editForm}
+          setForm={setEditForm}
+        />
 
         {/* Create Nonprofit Modal */}
-        <AdminModal
+        <NonprofitModal
           visible={showCreateModal}
           onClose={() => {
             setShowCreateModal(false);
@@ -711,183 +537,19 @@ export default function NonprofitManagement() {
               missionStatement: "",
               address: {
                 street: "",
-              city: "",
-              state: "",
+                city: "",
+                state: "",
                 postalCode: "",
                 country: "US" as CountryCode,
               },
               website: "",
             });
           }}
-          title="Create Nonprofit"
-          actions={[
-            {
-              label: "Cancel",
-              onPress: () => {
-                setShowCreateModal(false);
-                setCreateForm({
-                  name: "",
-                  email: "",
-                  phone: "",
-                  ein: "",
-                  category: "",
-                  missionStatement: "",
-                  address: "",
-                  city: "",
-                  state: "",
-                  zipCode: "",
-                  website: "",
-                });
-              },
-              variant: "secondary",
-            },
-            {
-              label: "Create",
-              onPress: handleCreate,
-              variant: "primary",
-            },
-          ]}
-        >
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ gap: spacing.lg }}>
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Organization Name *</Text>
-                  <TextInput
-                    value={createForm.name}
-                    onChangeText={(text) => setCreateForm({ ...createForm, name: text })}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Email *</Text>
-                  <TextInput
-                    value={createForm.email}
-                    onChangeText={(text) => setCreateForm({ ...createForm, email: text })}
-                    keyboardType="email-address"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <TaxIdSelector
-                  value={createForm.taxIdentification}
-                  onChange={(taxId) => setCreateForm({ ...createForm, taxIdentification: taxId })}
-                  country={createForm.address?.country || "US"}
-                  required
-                />
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 16 }}>
-                    Address
-                  </Text>
-                  <InternationalAddressForm
-                    value={createForm.address}
-                    onChange={(address) => setCreateForm({ ...createForm, address: { ...createForm.address, ...address } })}
-                    defaultCountry={createForm.address?.country || "US"}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Category *</Text>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 8 }} contentContainerStyle={{ gap: 8 }}>
-                    {categories.map((cat) => (
-                      <TouchableOpacity
-                        key={cat}
-                        onPress={() => setCreateForm({ ...createForm, category: cat })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: createForm.category === cat ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: createForm.category === cat ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: createForm.category === cat ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                          }}
-                        >
-                          {cat}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-              </View>
-
-              <View style={{ flexDirection: "row", gap: 12, marginTop: 24 }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setShowCreateModal(false);
-                    setCreateForm({
-                      name: "",
-                      email: "",
-                      phone: "",
-                      phoneCountryCode: "US",
-                      taxIdentification: {
-                        type: "EIN" as TaxIdentification["type"],
-                        number: "",
-                        country: "US" as CountryCode,
-                      },
-                      ein: "",
-                      category: "",
-                      missionStatement: "",
-                      address: {
-                        street: "",
-                      city: "",
-                      state: "",
-                        postalCode: "",
-                        country: "US" as CountryCode,
-                      },
-                      website: "",
-                    });
-                  }}
-                  style={{
-                    flex: 1,
-                    paddingVertical: 14,
-                    borderRadius: 12,
-                    backgroundColor: "#232323",
-                    borderWidth: 1,
-                    borderColor: "rgba(186, 153, 136, 0.2)",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 16, fontWeight: "600", color: "#ffffff" }}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleCreate}
-                  style={{
-                    flex: 1,
-                    paddingVertical: 14,
-                    borderRadius: 12,
-                    backgroundColor: "#ba9988",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 16, fontWeight: "600", color: "#ffffff" }}>Create</Text>
-                </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </AdminModal>
+          isEditing={false}
+          onSave={handleCreate}
+          form={createForm}
+          setForm={setCreateForm}
+        />
 
         {/* Delete Confirmation Modal */}
         <AdminModal

@@ -1,26 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal, Platform } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ContentManagementItem } from "../../types/admin";
+import { ContentManagementItem, CarouselItem } from "../../types/admin";
 import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
 import { FilterDropdown } from "../../components/admin/FilterDropdown";
-import { AdminDataCard } from "../../components/admin/AdminDataCard";
 import { AdminModal } from "../../components/admin/AdminModal";
 import { Pagination } from "../../components/admin/Pagination";
 import { useResponsive } from "../../hooks/useResponsive";
 import { colors, spacing, typography, borderRadius } from "../../constants/theme";
-
-interface CarouselItem {
-  id: string;
-  imageUrl: string;
-  title?: string;
-  description?: string;
-  link?: string;
-  linkText?: string;
-  displayOrder: number;
-  isActive: boolean;
-}
+import { ContentList } from "../../components/admin/content/ContentList";
+import { CarouselList } from "../../components/admin/content/CarouselList";
+import { ContentModal } from "../../components/admin/content/ContentModal";
+import { CarouselModal } from "../../components/admin/content/CarouselModal";
 
 // Mock content items
 const mockContent: ContentManagementItem[] = [
@@ -197,11 +189,11 @@ export default function ContentManagement() {
     setContentForm({
       type: item.type as any,
       title: item.title,
-      content: "",
+      content: item.content || "",
       author: item.author,
       status: item.status as any,
-      videoUrl: "",
-      imageUrl: "",
+      videoUrl: item.videoUrl || "",
+      imageUrl: item.imageUrl || "",
     });
     setShowContentModal(true);
   };
@@ -220,8 +212,11 @@ export default function ContentManagement() {
         id: `content-${Date.now()}`,
         type: contentForm.type,
         title: contentForm.title,
+        content: contentForm.content,
         status: contentForm.status,
         author: contentForm.author,
+        videoUrl: contentForm.videoUrl,
+        imageUrl: contentForm.imageUrl,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         views: 0,
@@ -439,82 +434,20 @@ export default function ContentManagement() {
 
             {/* Content List */}
             {filteredContent.length > 0 ? (
-              <View style={{ gap: spacing.md }}>
-                {paginatedContent.map((item) => {
-                  const statusColor = getStatusColor(item.status);
-                  const actions: Array<{
-                    label: string;
-                    icon: keyof typeof MaterialIcons.glyphMap;
-                    onPress: () => void;
-                    variant: "primary" | "secondary" | "danger" | "info";
-                  }> = [
-                    {
-                      label: "Edit",
-                      icon: "edit",
-                      onPress: () => handleEditContent(item),
-                      variant: "secondary",
-                    },
-                    {
-                      label: "Delete",
-                      icon: "delete",
-                      onPress: () => {
-                        setSelectedContent(item);
-                        setShowDeleteModal(true);
-                      },
-                      variant: "danger",
-                    },
-                    ...(item.status === "draft"
-                      ? [
-                          {
-                            label: "Publish",
-                            icon: "publish" as keyof typeof MaterialIcons.glyphMap,
-                            onPress: () => {
-                              setContent(content.map(c => c.id === item.id ? { ...c, status: "published" } : c));
-                              alert("Content published");
-                            },
-                            variant: "primary" as const,
-                          },
-                        ]
-                      : []),
-                  ];
-
-                  return (
-                    <AdminDataCard
-                      key={item.id}
-                      title={item.title}
-                      subtitle={`By ${item.author}${item.views ? ` • ${item.views.toLocaleString()} views` : ""}`}
-                      badges={[
-                        {
-                          label: item.type,
-                          color: colors.accent,
-                          backgroundColor: colors.accentLight,
-                        },
-                        {
-                          label: item.status,
-                          color: statusColor,
-                          backgroundColor: `${statusColor}20`,
-                        },
-                      ]}
-                      actions={actions}
-                    >
-                      <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginTop: spacing.md }}>
-                        <View
-                          style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: 20,
-                            backgroundColor: colors.primary.bg,
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <MaterialIcons name={getTypeIcon(item.type) as any} size={20} color={colors.accent} />
-                        </View>
-                      </View>
-                    </AdminDataCard>
-                  );
-                })}
-              </View>
+              <ContentList
+                content={paginatedContent}
+                onEdit={handleEditContent}
+                onDelete={(item) => {
+                  setSelectedContent(item);
+                  setShowDeleteModal(true);
+                }}
+                onPublish={(item) => {
+                  setContent(content.map(c => c.id === item.id ? { ...c, status: "published" } : c));
+                  alert("Content published");
+                }}
+                getTypeIcon={getTypeIcon}
+                getStatusColor={getStatusColor}
+              />
             ) : (
               <View
                 style={{
@@ -583,161 +516,12 @@ export default function ContentManagement() {
 
             {/* Carousel List */}
             {carouselItems.length > 0 ? (
-              <View style={{ gap: 12 }}>
-                {paginatedCarouselItems.map((item) => (
-                    <View
-                      key={item.id}
-                      style={{
-                        backgroundColor: "#474747",
-                        borderRadius: 16,
-                        padding: 20,
-                        borderWidth: 1,
-                        borderColor: item.isActive ? "rgba(76, 175, 80, 0.3)" : "rgba(186, 153, 136, 0.2)",
-                        opacity: item.isActive ? 1 : 0.6,
-                      }}
-                    >
-                      <View style={{ flexDirection: "row", gap: 12 }}>
-                        <View
-                          style={{
-                            width: 120,
-                            height: 80,
-                            borderRadius: 12,
-                            backgroundColor: "#232323",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 10,
-                              color: "rgba(255, 255, 255, 0.5)",
-                              textAlign: "center",
-                              padding: 8,
-                            }}
-                          >
-                            Image Preview
-                          </Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
-                            <Text
-                              style={{
-                                fontSize: 16,
-                                fontWeight: "700",
-                                color: "#ffffff",
-                              }}
-                            >
-                              {item.title || "Untitled"}
-                            </Text>
-                            <View
-                              style={{
-                                backgroundColor: item.isActive ? "rgba(76, 175, 80, 0.2)" : "rgba(255, 255, 255, 0.1)",
-                                paddingHorizontal: 8,
-                                paddingVertical: 4,
-                                borderRadius: 8,
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 10,
-                                  fontWeight: "600",
-                                  color: item.isActive ? "#4caf50" : "rgba(255, 255, 255, 0.5)",
-                                  textTransform: "uppercase",
-                                }}
-                              >
-                                {item.isActive ? "Active" : "Inactive"}
-                              </Text>
-                            </View>
-                          </View>
-                          {item.description && (
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color: "rgba(255, 255, 255, 0.7)",
-                                marginBottom: 8,
-                              }}
-                            >
-                              {item.description}
-                            </Text>
-                          )}
-                          <Text
-                            style={{
-                              fontSize: 11,
-                              color: "rgba(255, 255, 255, 0.5)",
-                              marginBottom: 12,
-                            }}
-                          >
-                            Order: {item.displayOrder} • Link: {item.link || "None"}
-                          </Text>
-                          <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                            <TouchableOpacity
-                              onPress={() => handleEditCarousel(item)}
-                              style={{
-                                paddingHorizontal: 12,
-                                paddingVertical: 8,
-                                borderRadius: 8,
-                                backgroundColor: "#232323",
-                                borderWidth: 1,
-                                borderColor: "rgba(186, 153, 136, 0.2)",
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  fontWeight: "600",
-                                  color: "#ba9988",
-                                }}
-                              >
-                                Edit
-                              </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              onPress={() => handleToggleCarouselActive(item)}
-                              style={{
-                                paddingHorizontal: 12,
-                                paddingVertical: 8,
-                                borderRadius: 8,
-                                backgroundColor: item.isActive ? "rgba(255, 68, 68, 0.2)" : "rgba(76, 175, 80, 0.2)",
-                                borderWidth: 1,
-                                borderColor: item.isActive ? "#ff4444" : "#4caf50",
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  fontWeight: "600",
-                                  color: item.isActive ? "#ff4444" : "#4caf50",
-                                }}
-                              >
-                                {item.isActive ? "Deactivate" : "Activate"}
-                              </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              onPress={() => handleDeleteCarousel(item)}
-                              style={{
-                                paddingHorizontal: 12,
-                                paddingVertical: 8,
-                                borderRadius: 8,
-                                backgroundColor: "rgba(255, 68, 68, 0.2)",
-                                borderWidth: 1,
-                                borderColor: "#ff4444",
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  fontWeight: "600",
-                                  color: "#ff4444",
-                                }}
-                              >
-                                Delete
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  ))}
-              </View>
+              <CarouselList
+                items={paginatedCarouselItems}
+                onEdit={handleEditCarousel}
+                onDelete={handleDeleteCarousel}
+                onToggleActive={handleToggleCarouselActive}
+              />
             ) : (
               <View
                 style={{
@@ -777,345 +561,32 @@ export default function ContentManagement() {
         )}
 
         {/* Create/Edit Content Modal */}
-        <AdminModal
+        <ContentModal
           visible={showContentModal}
           onClose={() => {
             setShowContentModal(false);
             setSelectedContent(null);
             setIsEditing(false);
           }}
-          title={isEditing ? "Edit Content" : "Create Content"}
-          actions={[
-            {
-              label: "Cancel",
-              onPress: () => {
-                setShowContentModal(false);
-                setSelectedContent(null);
-                setIsEditing(false);
-              },
-              variant: "secondary",
-            },
-            {
-              label: "Save",
-              onPress: handleSaveContent,
-              variant: "primary",
-            },
-          ]}
-        >
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ gap: spacing.lg }}>
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Type</Text>
-                  <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                    {(["blog", "video", "dynamic"] as const).map((type) => (
-                      <TouchableOpacity
-                        key={type}
-                        onPress={() => setContentForm({ ...contentForm, type })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: contentForm.type === type ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: contentForm.type === type ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: contentForm.type === type ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {type}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Title *</Text>
-                  <TextInput
-                    value={contentForm.title}
-                    onChangeText={(text) => setContentForm({ ...contentForm, title: text })}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                {contentForm.type === "blog" && (
-                  <View>
-                    <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Content</Text>
-                    <TextInput
-                      value={contentForm.content}
-                      onChangeText={(text) => setContentForm({ ...contentForm, content: text })}
-                      multiline
-                      numberOfLines={10}
-                      style={{
-                        backgroundColor: "#232323",
-                        borderRadius: 12,
-                        padding: 14,
-                        color: "#ffffff",
-                        fontSize: 14,
-                        borderWidth: 1,
-                        borderColor: "rgba(186, 153, 136, 0.2)",
-                        textAlignVertical: "top",
-                      }}
-                    />
-                  </View>
-                )}
-
-                {contentForm.type === "video" && (
-                  <View>
-                    <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Video URL</Text>
-                    <TextInput
-                      value={contentForm.videoUrl}
-                      onChangeText={(text) => setContentForm({ ...contentForm, videoUrl: text })}
-                      keyboardType="url"
-                      style={{
-                        backgroundColor: "#232323",
-                        borderRadius: 12,
-                        padding: 14,
-                        color: "#ffffff",
-                        fontSize: 14,
-                        borderWidth: 1,
-                        borderColor: "rgba(186, 153, 136, 0.2)",
-                      }}
-                    />
-                  </View>
-                )}
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Author *</Text>
-                  <TextInput
-                    value={contentForm.author}
-                    onChangeText={(text) => setContentForm({ ...contentForm, author: text })}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Status</Text>
-                  <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
-                    {(["published", "draft", "archived"] as const).map((status) => (
-                      <TouchableOpacity
-                        key={status}
-                        onPress={() => setContentForm({ ...contentForm, status })}
-                        style={{
-                          paddingHorizontal: 16,
-                          paddingVertical: 10,
-                          borderRadius: 12,
-                          backgroundColor: contentForm.status === status ? "#ba9988" : "#232323",
-                          borderWidth: 1,
-                          borderColor: contentForm.status === status ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: contentForm.status === status ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {status}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-            </View>
-          </ScrollView>
-        </AdminModal>
+          isEditing={isEditing}
+          onSave={handleSaveContent}
+          form={contentForm}
+          setForm={setContentForm}
+        />
 
         {/* Create/Edit Carousel Modal */}
-        <AdminModal
+        <CarouselModal
           visible={showCarouselModal}
           onClose={() => {
             setShowCarouselModal(false);
             setSelectedCarouselItem(null);
             setIsEditing(false);
           }}
-          title={isEditing ? "Edit Carousel Item" : "Create Carousel Item"}
-          actions={[
-            {
-              label: "Cancel",
-              onPress: () => {
-                setShowCarouselModal(false);
-                setSelectedCarouselItem(null);
-                setIsEditing(false);
-              },
-              variant: "secondary",
-            },
-            {
-              label: "Save",
-              onPress: handleSaveCarousel,
-              variant: "primary",
-            },
-          ]}
-        >
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ gap: spacing.lg }}>
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Image URL *</Text>
-                  <TextInput
-                    value={carouselForm.imageUrl}
-                    onChangeText={(text) => setCarouselForm({ ...carouselForm, imageUrl: text })}
-                    keyboardType="url"
-                    placeholder="https://example.com/image.jpg"
-                    placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Title</Text>
-                  <TextInput
-                    value={carouselForm.title}
-                    onChangeText={(text) => setCarouselForm({ ...carouselForm, title: text })}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Description</Text>
-                  <TextInput
-                    value={carouselForm.description}
-                    onChangeText={(text) => setCarouselForm({ ...carouselForm, description: text })}
-                    multiline
-                    numberOfLines={4}
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                      textAlignVertical: "top",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Link</Text>
-                  <TextInput
-                    value={carouselForm.link}
-                    onChangeText={(text) => setCarouselForm({ ...carouselForm, link: text })}
-                    placeholder="/pages/search"
-                    placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Link Text</Text>
-                  <TextInput
-                    value={carouselForm.linkText}
-                    onChangeText={(text) => setCarouselForm({ ...carouselForm, linkText: text })}
-                    placeholder="Explore Now"
-                    placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Display Order</Text>
-                  <TextInput
-                    value={carouselForm.displayOrder.toString()}
-                    onChangeText={(text) => {
-                      const num = parseInt(text) || 1;
-                      setCarouselForm({ ...carouselForm, displayOrder: num });
-                    }}
-                    keyboardType="numeric"
-                    style={{
-                      backgroundColor: "#232323",
-                      borderRadius: 12,
-                      padding: 14,
-                      color: "#ffffff",
-                      fontSize: 14,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                    }}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>Active</Text>
-                  <TouchableOpacity
-                    onPress={() => setCarouselForm({ ...carouselForm, isActive: !carouselForm.isActive })}
-                    style={{
-                      width: 50,
-                      height: 30,
-                      borderRadius: 15,
-                      backgroundColor: carouselForm.isActive ? "#4caf50" : "#474747",
-                      justifyContent: "center",
-                      paddingHorizontal: 4,
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: 22,
-                        height: 22,
-                        borderRadius: 11,
-                        backgroundColor: "#ffffff",
-                        transform: [{ translateX: carouselForm.isActive ? 20 : 0 }],
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-            </View>
-          </ScrollView>
-        </AdminModal>
+          isEditing={isEditing}
+          onSave={handleSaveCarousel}
+          form={carouselForm}
+          setForm={setCarouselForm}
+        />
 
         {/* Delete Confirmation Modal */}
         <AdminModal

@@ -1,61 +1,32 @@
-export type WalletType =
-  | "primary"
-  | "myimpact"
-  | "giftcard"
-  | "business"
-  | "organization"
-  | "bankaccount"
-  | "creditcard";
+export type Currency = 'USD' | 'BLKD';
 
-import { Currency } from "./international";
-
-export { Currency };
+export type WalletType = 'bank' | 'card' | 'giftcard' | 'blkd' | 'external';
 
 export interface Wallet {
   id: string;
-  type: WalletType;
-  name: string;
+  userId: string;
   currency: Currency;
   balance: number;
-  availableBalance?: number;
-  isActive: boolean;
-  isDefault?: boolean;
-  isBackup?: boolean;
-  lastUpdated?: string;
-  // Multi-currency support
-  country?: string; // ISO country code for country-specific wallets
-  exchangeRate?: number; // Current exchange rate to base currency (USD)
-}
-
-export interface GiftCard extends Wallet {
-  type: "giftcard";
-  merchantId?: string;
-  merchantName?: string;
-  expirationDate?: string;
-  cardNumber?: string;
+  provider: string;
 }
 
 export interface BankAccountWallet extends Wallet {
-  type: "bankaccount";
-  bankName: string;
-  accountType: "checking" | "savings";
-  last4: string;
-  routingNumber?: string;
+  type: 'bank';
+  accountNumber: string;
+  routingNumber: string;
+  isDefault: boolean;
 }
 
 export interface CreditCardWallet extends Wallet {
-  type: "creditcard";
-  cardBrand: string;
+  type: 'card';
   last4: string;
-  expirationDate: string;
-  cardholderName: string;
+  expiryMonth: number;
+  expiryYear: number;
+  isDefault: boolean;
 }
 
 export interface GiftCardWallet extends Wallet {
-  type: "giftcard";
-  merchantId?: string;
-  merchantName?: string;
-  expirationDate?: string;
-  cardNumber?: string;
+  type: 'giftcard';
+  last4: string;
+  isDefault: boolean;
 }
-

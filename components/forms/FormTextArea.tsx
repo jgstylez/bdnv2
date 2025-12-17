@@ -1,83 +1,64 @@
 import React from "react";
-import { View, Text, TextInput, TextInputProps } from "react-native";
+import { View, Text, TextInput, TextInputProps, ViewStyle } from "react-native";
 import { colors, spacing, borderRadius, typography } from "../../constants/theme";
 
 interface FormTextAreaProps extends TextInputProps {
-  label: string;
-  required?: boolean;
+  label?: string;
   error?: string;
-  helperText?: string;
-  rows?: number;
+  containerStyle?: ViewStyle;
 }
 
-/**
- * FormTextArea Component
- * Reusable multiline text input with label and error handling
- */
-export const FormTextArea: React.FC<FormTextAreaProps> = ({
+export function FormTextArea({
   label,
-  required = false,
   error,
-  helperText,
-  rows = 4,
+  containerStyle,
   style,
-  ...textInputProps
-}) => {
+  numberOfLines = 4,
+  ...props
+}: FormTextAreaProps) {
   return (
-    <View style={{ marginBottom: spacing.md }}>
-      <Text
-        style={{
-          fontSize: typography.fontSize.base,
-          fontWeight: typography.fontWeight.semibold,
-          color: colors.text.primary,
-          marginBottom: spacing.sm,
-        }}
-      >
-        {label} {required && <Text style={{ color: colors.status.error }}>*</Text>}
-      </Text>
+    <View style={[{ gap: spacing.xs }, containerStyle]}>
+      {label && (
+        <Text
+          style={{
+            fontSize: typography.fontSize.sm,
+            fontWeight: "600",
+            color: colors.text.primary,
+          }}
+        >
+          {label}
+        </Text>
+      )}
       <TextInput
-        {...textInputProps}
+        placeholderTextColor={colors.text.placeholder}
         multiline
-        numberOfLines={rows}
+        numberOfLines={numberOfLines}
         textAlignVertical="top"
         style={[
           {
-            backgroundColor: colors.background.input,
-            borderRadius: borderRadius.md,
+            backgroundColor: colors.secondary.bg,
+            borderRadius: borderRadius.lg,
             padding: spacing.md,
             color: colors.text.primary,
             fontSize: typography.fontSize.base,
-            minHeight: rows * 24,
             borderWidth: 1,
             borderColor: error ? colors.status.error : colors.border.light,
+            minHeight: numberOfLines * 24 + spacing.md * 2,
           },
           style,
         ]}
-        placeholderTextColor={colors.text.placeholder}
+        {...props}
       />
       {error && (
         <Text
           style={{
-            fontSize: typography.fontSize.sm,
+            fontSize: typography.fontSize.xs,
             color: colors.status.error,
-            marginTop: spacing.xs,
           }}
         >
           {error}
         </Text>
       )}
-      {helperText && !error && (
-        <Text
-          style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.tertiary,
-            marginTop: spacing.xs,
-          }}
-        >
-          {helperText}
-        </Text>
-      )}
     </View>
   );
-};
-
+}

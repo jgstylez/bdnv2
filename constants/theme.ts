@@ -1,133 +1,193 @@
-/**
- * BDN Theme Constants
- * Centralized theme values for colors, spacing, and typography
- * 
- * Usage:
- * ```tsx
- * import { colors, spacing } from '@/constants/theme';
- * 
- * <View style={{ backgroundColor: colors.primary.bg, padding: spacing.md }}>
- *   <Text style={{ color: colors.primary.text }}>Hello</Text>
- * </View>
- * ```
- */
+
+const palette = {
+  blue: {
+    '50': '#eef6ff',
+    '100': '#d9eaff',
+    '200': '#badfff',
+    '300': '#92d0ff',
+    '400': '#62baff',
+    '500': '#3d9ef7',
+    '600': '#2481e3',
+    '700': '#1b67c2',
+    '800': '#1c559f',
+    '900': '#1a487f',
+    '950': '#122c4d',
+  },
+  gray: {
+    '50': '#f7f7f8',
+    '100': '#ececf0',
+    '200': '#d9d9e0',
+    '300': '#c0c0cf',
+    '400': '#9f9fb0',
+    '500': '#838395',
+    '600': '#6b6b7c',
+    '700': '#5a5a68',
+    '800': '#4a4a54',
+    '900': '#3e3e46',
+    '950': '#28282d',
+    '1000': '#1a1a1a',
+  },
+  green: {
+    '50': '#f2fcf3',
+    '100': '#e1f7e4',
+    '200': '#c5edcb',
+    '300': '#9ce0a4',
+    '400': '#6fcf7a',
+    '500': '#4bb858',
+    '600': '#3b9c46',
+    '700': '#307b39',
+    '800': '#296231',
+    '900': '#23512a',
+    '950': '#142d18',
+  },
+  orange: {
+    '50': '#fff8f0',
+    '100': '#ffefd9',
+    '200': '#ffdbb3',
+    '300': '#ffbf82',
+    '400': '#ffa24d',
+    '500': '#ff8521',
+    '600': '#f56a0c',
+    '700': '#c94f08',
+    '800': '#a13e0c',
+    '900': '#82340d',
+    '950': '#461805',
+  },
+  red: {
+    '50': '#fff2f2',
+    '100': '#ffdede',
+    '200': '#ffc2c2',
+    '300': '#ff9b9b',
+    '400': '#ff6969',
+    '500': '#f74141',
+    '600': '#e32626',
+    '700': '#bf1d1d',
+    '800': '#9d1b1b',
+    '900': '#801c1c',
+    '950': '#450b0b',
+  },
+  brown: {
+    '50': '#fdf8f6',
+    '100': '#f2e8e5',
+    '200': '#eaddd7',
+    '300': '#e0cec7',
+    '400': '#d2bab0',
+    '500': '#bfa094',
+    '600': '#a18072',
+    '700': '#846658',
+    '800': '#674c43',
+    '900': '#49312c',
+    '950': '#36201b',
+  },
+};
 
 export const colors = {
-  primary: {
-    bg: "#232323",
-    text: "#ffffff",
-  },
-  secondary: {
-    bg: "#474747",
-    text: "rgba(255, 255, 255, 0.9)",
-  },
-  accent: "#ba9988",
-  accentLight: "rgba(186, 153, 136, 0.15)",
-  accentBorder: "rgba(186, 153, 136, 0.2)",
-  accentBorderLight: "rgba(186, 153, 136, 0.3)",
+  primary: palette.brown[500],
+  secondary: palette.gray[700],
+  tertiary: palette.gray[500],
+  accent: palette.brown[300],
+  success: palette.green[500],
+  error: palette.red[500],
+  warning: palette.orange[500],
+  info: palette.blue[500],
+
+  background: palette.gray[1000],
+  border: palette.gray[900],
+  input: palette.gray[950],
   
-  // Text colors
   text: {
-    primary: "#ffffff",
-    secondary: "rgba(255, 255, 255, 0.7)",
-    tertiary: "rgba(255, 255, 255, 0.6)",
-    disabled: "rgba(255, 255, 255, 0.4)",
-    placeholder: "rgba(255, 255, 255, 0.4)",
+    primary: palette.gray[100],
+    secondary: palette.gray[400],
+    tertiary: palette.gray[600],
+    placeholder: palette.gray[700],
   },
   
-  // Border colors
-  border: {
-    default: "rgba(71, 71, 71, 0.3)",
-    light: "rgba(186, 153, 136, 0.2)",
-    accent: "rgba(186, 153, 136, 0.3)",
-  },
-  
-  // Status colors
+  light: '#ffffff',
+  dark: '#000000',
+
   status: {
-    success: "#4caf50",
-    successLight: "rgba(76, 175, 80, 0.2)",
-    error: "#ff4444",
-    errorLight: "rgba(255, 68, 68, 0.2)",
-    warning: "#ff9800",
-    warningLight: "rgba(255, 152, 0, 0.2)",
-    info: "#2196f3",
-    infoLight: "rgba(33, 150, 243, 0.2)",
+    success: palette.green[500],
+    successLight: palette.green[100],
+    error: palette.red[500],
+    errorLight: palette.red[100],
+    warning: palette.orange[500],
+    warningLight: palette.orange[100],
+    info: palette.blue[500],
+    infoLight: palette.blue[100],
   },
-  
-  // Background variations
-  background: {
-    primary: "#232323",
-    secondary: "#474747",
-    card: "#474747",
-    input: "#232323",
-  },
-  
-  // Secondary accent colors - use sparingly for special accents
-  secondaryAccents: {
-    darkMaroon: "#230007",    // Very dark red/maroon
-    lightBeige: "#EAE0D5",    // Light beige/cream
-    bronze: "#D98324",        // Orange/bronze
-    darkRed: "#A40606",       // Dark red
-    burgundy: "#5A0002",      // Very dark red/burgundy
-  },
-} as const;
+};
 
 export const spacing = {
   xs: 4,
   sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 20,
-  "2xl": 24,
-  "3xl": 32,
-  "4xl": 40,
-  "5xl": 48,
-  "6xl": 60,
-  "7xl": 80,
-  
-  // Responsive padding
-  mobile: 20,
-  desktop: 40,
-} as const;
+  md: 16,
+  lg: 24,
+  xl: 32,
+  '2xl': 40,
+  '3xl': 48,
+  '4xl': 64,
+};
 
 export const borderRadius = {
-  sm: 8,
-  md: 12,
+  sm: 4,
+  md: 8,
   lg: 16,
-  xl: 20,
-  "2xl": 24,
+  xl: 24,
   full: 9999,
-} as const;
+};
+
+const baseFont = 'Inter';
 
 export const typography = {
-  fontSize: {
-    xs: 10,
-    sm: 12,
-    base: 14,
-    lg: 16,
-    xl: 18,
-    "2xl": 20,
-    "3xl": 24,
-    "4xl": 32,
+  h1: {
+    fontFamily: `${baseFont}_900Black`,
+    fontSize: 40,
+    lineHeight: 48,
   },
-  fontWeight: {
-    normal: "400" as const,
-    medium: "500" as const,
-    semibold: "600" as const,
-    bold: "700" as const,
-    extrabold: "800" as const,
+  h2: {
+    fontFamily: `${baseFont}_800ExtraBold`,
+    fontSize: 32,
+    lineHeight: 40,
   },
-  lineHeight: {
-    tight: 16,
-    normal: 20,
-    relaxed: 24,
+  h3: {
+    fontFamily: `${baseFont}_700Bold`,
+    fontSize: 24,
+    lineHeight: 32,
   },
-} as const;
-
-// Breakpoints (for reference, use useResponsive hook instead)
-export const breakpoints = {
-  mobile: 768,
-  tablet: 1024,
-  desktop: 1280,
-} as const;
-
+  h4: {
+    fontFamily: `${baseFont}_600SemiBold`,
+    fontSize: 20,
+    lineHeight: 28,
+  },
+  body: {
+    fontFamily: `${baseFont}_400Regular`,
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  caption: {
+    fontFamily: `${baseFont}_400Regular`,
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  sizes: {
+    xs: 12,
+    sm: 14,
+    md: 16,
+    lg: 20,
+    xl: 24,
+    '2xl': 32,
+    '3xl': 40,
+    '4xl': 48,
+  },
+  weights: {
+    thin: '100',
+    extralight: '200',
+    light: '300',
+    normal: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+    extrabold: '800',
+    black: '900',
+  },
+};
