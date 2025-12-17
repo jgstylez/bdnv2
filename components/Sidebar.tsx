@@ -11,16 +11,24 @@ import { useRouter, usePathname } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { navigationMenu, NavGroup, NavItem } from "@/config/navigation";
+import { useFeatureFlags } from "@/hooks/useFeatureFlags";
+import { filterNavigationByFeatureFlags } from "@/lib/navigation-utils";
 
 export const Sidebar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { width } = useWindowDimensions();
+  const { flags, loading: flagsLoading } = useFeatureFlags();
   // Start with all groups collapsed
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [isCollapsed, setIsCollapsed] = useState(false);
   const sidebarWidth = isCollapsed ? 72 : 240;
   const navigatingRef = React.useRef(false);
+  
+  // Filter navigation based on feature flags
+  const filteredNavigationMenu = flagsLoading 
+    ? [] 
+    : filterNavigationByFeatureFlags(navigationMenu, flags);
 
   const isActive = (href: string) => {
     if (href === "/(tabs)/dashboard") {
@@ -63,13 +71,13 @@ export const Sidebar: React.FC = () => {
       return pathname?.includes(href);
     };
 
-    const activeGroup = navigationMenu.find((group: NavGroup) =>
+    const activeGroup = filteredNavigationMenu.find((group: NavGroup) =>
       group.items.some((item: NavItem) => checkActive(item.href))
     );
     if (activeGroup) {
       setExpandedGroups(new Set([activeGroup.label]));
     }
-  }, [pathname]);
+  }, [pathname, filteredNavigationMenu]);
 
   const toggleGroup = (groupLabel: string) => {
     // If sidebar is collapsed, expand it first
@@ -230,7 +238,7 @@ export const Sidebar: React.FC = () => {
           }}
           showsVerticalScrollIndicator={false}
         >
-          {navigationMenu.map((group: NavGroup, groupIndex: number) => {
+          {filteredNavigationMenu.map((group: NavGroup, groupIndex: number) => {
             const isExpanded = isGroupExpanded(group.label);
             const hasActiveItem = group.items.some((item: NavItem) =>
               isActive(item.href)
@@ -246,7 +254,7 @@ export const Sidebar: React.FC = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     paddingVertical: 12,
-                    marginBottom: groupIndex < navigationMenu.length - 1 ? 4 : 0,
+                    marginBottom: groupIndex < filteredNavigationMenu.length - 1 ? 4 : 0,
                     borderRadius: 8,
                     backgroundColor: hasActiveItem
                       ? "rgba(186, 153, 136, 0.1)"
@@ -269,7 +277,7 @@ export const Sidebar: React.FC = () => {
               <View
                 key={group.label}
                 style={{
-                  marginBottom: groupIndex < navigationMenu.length - 1 ? 8 : 0,
+                  marginBottom: groupIndex < filteredNavigationMenu.length - 1 ? 8 : 0,
                 }}
               >
                 {/* Group Header */}

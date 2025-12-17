@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Switch, Platform } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Switch, Platform, ActivityIndicator, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AdminModal } from '@/components/admin/AdminModal';
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, typography, borderRadius } from '@/constants/theme';
+import { FeatureFlags, featureFlagMetadata } from '@/types/feature-flags';
+import { getFeatureFlags, updateFeatureFlags } from '@/lib/feature-flags';
 
 const settingsCategories = [
   {
@@ -45,20 +47,6 @@ interface PlatformSettings {
   defaultCurrency: string;
   supportedCurrencies: string[];
   timezone: string;
-}
-
-// Mock feature flags
-interface FeatureFlags {
-  subscriptionBoxes: boolean;
-  giftCards: boolean;
-  events: boolean;
-  myImpact: boolean;
-  university: boolean;
-  media: boolean;
-  referrals: boolean;
-  blkdPurchases: boolean;
-  bdnPlus: boolean;
-  bdnPlusBusiness: boolean;
 }
 
 // Mock payment settings
@@ -108,19 +96,6 @@ const initialPlatformSettings: PlatformSettings = {
   timezone: "America/New_York",
 };
 
-const initialFeatureFlags: FeatureFlags = {
-  subscriptionBoxes: true,
-  giftCards: true,
-  events: true,
-  myImpact: true,
-  university: true,
-  media: true,
-  referrals: true,
-  blkdPurchases: true,
-  bdnPlus: true,
-  bdnPlusBusiness: true,
-};
-
 const initialPaymentSettings: PaymentSettings = {
   bdnPaymentEnabled: true,
   bdnPaymentApiKey: "pk_live_...",
@@ -157,9 +132,29 @@ export default function AdminSettings() {
   const { isMobile, paddingHorizontal } = useResponsive();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [platformSettings, setPlatformSettings] = useState<PlatformSettings>(initialPlatformSettings);
-  const [featureFlags, setFeatureFlags] = useState<FeatureFlags>(initialFeatureFlags);
+  const [featureFlags, setFeatureFlags] = useState<FeatureFlags | null>(null);
+  const [featureFlagsLoading, setFeatureFlagsLoading] = useState(true);
+  const [featureFlagsSaving, setFeatureFlagsSaving] = useState(false);
   const [paymentSettings, setPaymentSettings] = useState<PaymentSettings>(initialPaymentSettings);
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>(initialNotificationSettings);
+
+  // Load feature flags on mount
+  useEffect(() => {
+    loadFeatureFlags();
+  }, []);
+
+  const loadFeatureFlags = async () => {
+    try {
+      setFeatureFlagsLoading(true);
+      const flags = await getFeatureFlags();
+      setFeatureFlags(flags);
+    } catch (error) {
+      console.error('Failed to load feature flags:', error);
+      Alert.alert('Error', 'Failed to load feature flags. Please try again.');
+    } finally {
+      setFeatureFlagsLoading(false);
+    }
+  };
 
   const handleSavePlatformSettings = () => {
     // TODO: Save via API
@@ -167,10 +162,20 @@ export default function AdminSettings() {
     setSelectedCategory(null);
   };
 
-  const handleSaveFeatureFlags = () => {
-    // TODO: Save via API
-    alert("Feature flags saved successfully");
-    setSelectedCategory(null);
+  const handleSaveFeatureFlags = async () => {
+    if (!featureFlags) return;
+    
+    try {
+      setFeatureFlagsSaving(true);
+      await updateFeatureFlags(featureFlags);
+      Alert.alert('Success', 'Feature flags saved successfully');
+      setSelectedCategory(null);
+    } catch (error) {
+      console.error('Failed to save feature flags:', error);
+      Alert.alert('Error', 'Failed to save feature flags. Please try again.');
+    } finally {
+      setFeatureFlagsSaving(false);
+    }
   };
 
   const handleSavePaymentSettings = () => {
@@ -383,78 +388,187 @@ export default function AdminSettings() {
     </AdminModal>
   );
 
-  const renderFeatureFlags = () => (
-    <AdminModal
-      visible={selectedCategory === "features"}
-      onClose={() => setSelectedCategory(null)}
-      title="Feature Flags"
-    >
-      <ScrollView style={{ maxHeight: 600 }}>
-        <View style={{ gap: spacing.md }}>
-          {Object.entries(featureFlags).map(([key, value]) => (
-            <View key={key} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
-              <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, textTransform: "capitalize" }}>
-                  {key.replace(/([A-Z])/g, " $1").trim()}
-                </Text>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
-                  {key === "subscriptionBoxes" && "Enable subscription box feature for businesses"}
-                  {key === "giftCards" && "Enable gift card purchases"}
-                  {key === "events" && "Enable event creation and ticketing"}
-                  {key === "myImpact" && "Enable MyImpact rewards program"}
-                  {key === "university" && "Enable university/education features"}
-                  {key === "media" && "Enable media content features"}
-                  {key === "referrals" && "Enable referral program"}
-                  {key === "blkdPurchases" && "Enable BLKD token purchases"}
-                  {key === "bdnPlus" && "Enable BDN+ consumer subscriptions"}
-                  {key === "bdnPlusBusiness" && "Enable BDN+ Business subscriptions"}
-                </Text>
-              </View>
-              <Switch
-                value={value}
-                onValueChange={(newValue) => setFeatureFlags({ ...featureFlags, [key]: newValue })}
-                trackColor={{ false: colors.border.light, true: colors.accent }}
-                thumbColor={colors.text.primary}
-              />
-            </View>
-          ))}
+  const renderFeatureFlags = () => {
+    if (featureFlagsLoading) {
+      return (
+        <AdminModal
+          visible={selectedCategory === "features"}
+          onClose={() => setSelectedCategory(null)}
+          title="Feature Flags"
+        >
+          <View style={{ padding: spacing.xl, alignItems: "center", justifyContent: "center", minHeight: 200 }}>
+            <ActivityIndicator size="large" color={colors.accent} />
+            <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary, marginTop: spacing.md }}>
+              Loading feature flags...
+            </Text>
+          </View>
+        </AdminModal>
+      );
+    }
 
-          <View style={{ flexDirection: "row", gap: spacing.md, marginTop: spacing.md }}>
+    if (!featureFlags) {
+      return (
+        <AdminModal
+          visible={selectedCategory === "features"}
+          onClose={() => setSelectedCategory(null)}
+          title="Feature Flags"
+        >
+          <View style={{ padding: spacing.xl, alignItems: "center", justifyContent: "center", minHeight: 200 }}>
+            <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
+              Failed to load feature flags
+            </Text>
             <TouchableOpacity
-              onPress={() => setSelectedCategory(null)}
+              onPress={loadFeatureFlags}
               style={{
-                flex: 1,
-                padding: spacing.md,
-                borderRadius: borderRadius.md,
-                backgroundColor: colors.secondary.bg,
-                borderWidth: 1,
-                borderColor: colors.border.light,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
-                Cancel
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleSaveFeatureFlags}
-              style={{
-                flex: 1,
+                marginTop: spacing.md,
                 padding: spacing.md,
                 borderRadius: borderRadius.md,
                 backgroundColor: colors.accent,
-                alignItems: "center",
               }}
             >
               <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
-                Save Changes
+                Retry
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </ScrollView>
-    </AdminModal>
-  );
+        </AdminModal>
+      );
+    }
+
+    // Group flags by category
+    const flagsByCategory = featureFlagMetadata.reduce((acc, meta) => {
+      if (!acc[meta.category]) {
+        acc[meta.category] = [];
+      }
+      acc[meta.category].push(meta);
+      return acc;
+    }, {} as Record<string, typeof featureFlagMetadata>);
+
+    const categoryLabels: Record<string, string> = {
+      core: 'Core Features',
+      subscriptions: 'Subscription Tiers',
+      nonprofit: 'Nonprofit Features',
+      tokens: 'Token & Wallet Features',
+      business: 'Business Features',
+      payments: 'Payment Features',
+      dashboards: 'Dashboard Features',
+      'sub-features': 'Sub-features',
+    };
+
+    return (
+      <AdminModal
+        visible={selectedCategory === "features"}
+        onClose={() => setSelectedCategory(null)}
+        title="Feature Flags"
+      >
+        <ScrollView style={{ maxHeight: 600 }}>
+          <View style={{ gap: spacing.lg }}>
+            {Object.entries(flagsByCategory).map(([category, flags]) => (
+              <View key={category} style={{ gap: spacing.md }}>
+                <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                  {categoryLabels[category] || category}
+                </Text>
+                {flags.map((meta) => {
+                  const value = featureFlags[meta.key];
+                  const isDisabled = meta.requires && meta.requires.some(req => !featureFlags[req]);
+                  
+                  return (
+                    <View
+                      key={meta.key}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        paddingVertical: spacing.md,
+                        paddingHorizontal: spacing.md,
+                        borderBottomWidth: 1,
+                        borderBottomColor: colors.border.light,
+                        backgroundColor: isDisabled ? colors.secondary.bg + "40" : "transparent",
+                        borderRadius: borderRadius.md,
+                      }}
+                    >
+                      <View style={{ flex: 1 }}>
+                        <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xs }}>
+                          <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                            {meta.label}
+                          </Text>
+                          {meta.impact === 'high' && (
+                            <View style={{ backgroundColor: colors.status.error + "40", paddingHorizontal: spacing.xs, paddingVertical: 2, borderRadius: borderRadius.sm }}>
+                              <Text style={{ fontSize: typography.fontSize.xs, color: colors.status.error, fontWeight: typography.fontWeight.semibold }}>
+                                HIGH
+                              </Text>
+                            </View>
+                          )}
+                        </View>
+                        <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
+                          {meta.description}
+                        </Text>
+                        {isDisabled && (
+                          <Text style={{ fontSize: typography.fontSize.xs, color: colors.status.warning, marginTop: spacing.xs }}>
+                            Requires: {meta.requires?.map(req => featureFlagMetadata.find(m => m.key === req)?.label).join(', ')}
+                          </Text>
+                        )}
+                      </View>
+                      <Switch
+                        value={value}
+                        disabled={isDisabled}
+                        onValueChange={(newValue) => {
+                          setFeatureFlags({ ...featureFlags, [meta.key]: newValue });
+                        }}
+                        trackColor={{ false: colors.border.light, true: colors.accent }}
+                        thumbColor={colors.text.primary}
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+            ))}
+
+            <View style={{ flexDirection: "row", gap: spacing.md, marginTop: spacing.md }}>
+              <TouchableOpacity
+                onPress={() => setSelectedCategory(null)}
+                disabled={featureFlagsSaving}
+                style={{
+                  flex: 1,
+                  padding: spacing.md,
+                  borderRadius: borderRadius.md,
+                  backgroundColor: colors.secondary.bg,
+                  borderWidth: 1,
+                  borderColor: colors.border.light,
+                  alignItems: "center",
+                  opacity: featureFlagsSaving ? 0.5 : 1,
+                }}
+              >
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleSaveFeatureFlags}
+                disabled={featureFlagsSaving}
+                style={{
+                  flex: 1,
+                  padding: spacing.md,
+                  borderRadius: borderRadius.md,
+                  backgroundColor: colors.accent,
+                  alignItems: "center",
+                  opacity: featureFlagsSaving ? 0.5 : 1,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  gap: spacing.sm,
+                }}
+              >
+                {featureFlagsSaving && <ActivityIndicator size="small" color={colors.text.primary} />}
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                  {featureFlagsSaving ? 'Saving...' : 'Save Changes'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </AdminModal>
+    );
+  };
 
   const renderPaymentSettings = () => (
     <AdminModal

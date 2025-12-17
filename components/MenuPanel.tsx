@@ -10,6 +10,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { navigationMenu, NavGroup, NavItem } from "@/config/navigation";
+import { useFeatureFlags } from "@/hooks/useFeatureFlags";
+import { filterNavigationByFeatureFlags } from "@/lib/navigation-utils";
 
 interface MenuPanelProps {
   isOpen: boolean;
@@ -23,9 +25,15 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const translateX = useSharedValue(width);
+  const { flags, loading: flagsLoading } = useFeatureFlags();
   // Start with all groups collapsed (accordion behavior)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const navigatingRef = React.useRef(false);
+  
+  // Filter navigation based on feature flags
+  const filteredNavigationMenu = flagsLoading 
+    ? [] 
+    : filterNavigationByFeatureFlags(navigationMenu, flags);
 
   React.useEffect(() => {
     translateX.value = withSpring(isOpen ? 0 : width, {
@@ -223,7 +231,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
 
           {/* Navigation Groups */}
           <View style={{ paddingTop: 8 }}>
-            {navigationMenu.map((group: NavGroup, groupIndex: number) => {
+            {filteredNavigationMenu.map((group: NavGroup, groupIndex: number) => {
               const isExpanded = isGroupExpanded(group.label);
               const hasActiveItem = group.items.some((item: NavItem) =>
                 isActive(item.href)
