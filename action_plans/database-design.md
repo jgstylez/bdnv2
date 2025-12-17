@@ -39,6 +39,7 @@
 **CRITICAL**: This database design is PCI DSS compliant. The following rules MUST be followed:
 
 **NEVER STORE:**
+
 - Full Primary Account Numbers (PAN) - card numbers
 - CVV/CVC codes
 - Full bank account numbers
@@ -47,6 +48,7 @@
 - Any sensitive authentication data
 
 **ONLY STORE:**
+
 - Tokenized payment method references (e.g., Stripe `payment_method_id`)
 - Last 4 digits of cards/accounts (for display only)
 - Card brand, expiry month/year (safe to store)
@@ -54,6 +56,7 @@
 - Display names and labels
 
 **Payment Processing:**
+
 - All sensitive payment data must be handled by PCI-compliant payment processors (Stripe, Square, PayPal, etc.)
 - Use payment processor tokens/references instead of storing raw payment data
 - Payment methods are tokenized at the processor level before storage
@@ -118,47 +121,47 @@ users/{userId}
   email: string; // Unique, indexed
   phone?: string;
   phoneCountryCode?: string;
-  
+
   // Profile
   firstName: string;
   lastName: string;
   displayName: string;
   avatar?: string;
   bio?: string;
-  
+
   // User Type & Role
   userType: "consumer" | "business" | "nonprofit" | "admin";
   role: "user" | "admin" | "moderator"; // For admin users
   isAdmin: boolean;
-  
+
   // Tier System
   tier: "basic" | "bronze" | "silver" | "gold" | "diamond" | "black-diamond";
   points: number; // Total lifetime points
   level: number; // Calculated from points
-  
+
   // Authentication
   emailVerified: boolean;
   phoneVerified: boolean;
   twoFactorEnabled: boolean;
   biometricEnabled: boolean;
-  
+
   // Demographics Case Study (for tracking Black dollar circulation)
   demographics?: {
     // Basic Demographics
     ethnicity?: "african-american" | "afro-caribbean" | "afro-latino" | "african" | "multiracial-black" | "other" | "prefer-not-to-say";
     ageRange?: "18-24" | "25-34" | "35-44" | "45-54" | "55-64" | "65+";
     gender?: "male" | "female" | "non-binary" | "prefer-not-to-say";
-    
+
     // Professional & Educational
     industry?: string; // Technology, Healthcare, Finance, Education, etc.
     employmentStatus?: "employed" | "self-employed" | "unemployed" | "student" | "retired" | "prefer-not-to-say";
     educationalBackground?: "high-school" | "some-college" | "bachelors" | "masters" | "doctorate" | "prefer-not-to-say";
     hbcu?: string; // HBCU attended (if applicable)
-    
+
     // Economic
     incomeRange?: "under-25k" | "25k-50k" | "50k-75k" | "75k-100k" | "100k-150k" | "150k-200k" | "200k+" | "prefer-not-to-say";
     householdSize?: number;
-    
+
     // Location & Community
     location?: {
       city?: string;
@@ -167,14 +170,14 @@ users/{userId}
       country?: string;
     };
     preferredLanguage?: string;
-    
+
     // Case Study Participation
     completed: boolean; // Whether user completed demographics case study
     completedAt?: string; // When demographics were completed
     consentGiven: boolean; // User consent for data use in case study
     consentDate?: string; // When consent was given
   };
-  
+
   // Preferences
   preferences: {
     notifications: {
@@ -192,7 +195,7 @@ users/{userId}
     currency: "USD" | "BLKD";
     timezone: string;
   };
-  
+
   // Shopping & Shipping Preferences
   shopping: {
     // Default shipping address (ID of default address)
@@ -210,28 +213,28 @@ users/{userId}
     // Email shipping updates
     emailShippingUpdates: boolean;
   };
-  
+
   // Referral System
   referralCode: string; // Unique code for this user
   referredBy?: string; // userId of referrer
   referralCount: number; // Total referrals made
-  
+
   // Activity Tracking
   lastActiveAt: string;
   activityStreak: number; // Days of consecutive activity
   lastActivityDate: string; // Last date of activity (YYYY-MM-DD)
-  
+
   // Status
   status: "active" | "suspended" | "deleted";
   suspendedAt?: string;
   suspendedReason?: string;
   deletedAt?: string;
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
   lastLoginAt?: string;
-  
+
   // Metadata
   metadata?: {
     signupSource?: string; // "web" | "ios" | "android"
@@ -242,6 +245,7 @@ users/{userId}
 ```
 
 **Subcollections:**
+
 - `users/{userId}/badges` - User badges
 - `users/{userId}/notifications` - User notifications
 - `users/{userId}/referrals` - Referral records
@@ -250,6 +254,7 @@ users/{userId}
 - `users/{userId}/orderHistory` - User order history (denormalized for quick access)
 
 **Shipping Addresses Subcollection:**
+
 ```typescript
 users/{userId}/shippingAddresses/{addressId}
 {
@@ -285,6 +290,7 @@ users/{userId}/shippingAddresses/{addressId}
 ```
 
 **Billing Addresses Subcollection:**
+
 ```typescript
 users/{userId}/billingAddresses/{addressId}
 {
@@ -316,6 +322,7 @@ users/{userId}/billingAddresses/{addressId}
 ```
 
 **Indexes:**
+
 - `email` (unique)
 - `referralCode` (unique)
 - `tier`, `points` (composite)
@@ -336,20 +343,20 @@ businesses/{businessId}
   userId: string; // Owner's user ID
   name: string;
   slug: string; // URL-friendly name, unique
-  
+
   // Business Details
   type: "local-shop" | "local-service" | "national-service" | "online-shopping" | "restaurant";
   level: "basic" | "premier" | "platinum";
   category: string;
   description: string;
   shortDescription?: string; // For cards/previews
-  
+
   // Contact Information
   email: string;
   phone?: string;
   phoneCountryCode?: string;
   website?: string;
-  
+
   // Location (International Support)
   address: {
     street: string;
@@ -360,25 +367,25 @@ businesses/{businessId}
     latitude?: number;
     longitude?: number;
   };
-  
+
   // Legacy fields (for backward compatibility)
   city?: string;
   state?: string;
   zipCode?: string;
-  
+
   // Media
   logoUrl?: string;
   coverImageUrl?: string;
   images?: string[]; // Array of image URLs
   qrCodeUrl?: string; // QR code for check-ins
-  
+
   // Verification
   isVerified: boolean;
   verifiedAt?: string;
   blackOwnedVerificationStatus: "pending" | "verified" | "rejected" | "not-applicable";
   blackOwnedVerifiedAt?: string;
   blackOwnedVerificationDocuments?: string[]; // Document URLs
-  
+
   // Business Information
   incorporation?: {
     isIncorporated: boolean;
@@ -387,7 +394,7 @@ businesses/{businessId}
     incorporationDate?: string;
     incorporationCountry?: string;
   };
-  
+
   // Tax Identification (International)
   taxIdentification?: {
     type: "ein" | "ssn" | "vat" | "gst" | "other";
@@ -395,7 +402,7 @@ businesses/{businessId}
     country: string;
   };
   ein?: string; // Legacy, US-specific
-  
+
   // Business Hours
   hours?: {
     [day: string]: { // "monday", "tuesday", etc.
@@ -404,7 +411,7 @@ businesses/{businessId}
       closed?: boolean;
     };
   };
-  
+
   // Social Media
   socialMedia?: {
     facebook?: string;
@@ -412,7 +419,7 @@ businesses/{businessId}
     twitter?: string;
     linkedin?: string;
   };
-  
+
   // Statistics (denormalized for performance)
   stats: {
     totalSales: number;
@@ -422,7 +429,7 @@ businesses/{businessId}
     reviewCount: number;
     totalRevenue: number; // Lifetime revenue
   };
-  
+
   // Status
   status: "pending" | "approved" | "rejected" | "suspended" | "active";
   isActive: boolean;
@@ -432,11 +439,11 @@ businesses/{businessId}
   rejectionReason?: string;
   suspendedAt?: string;
   suspendedReason?: string;
-  
+
   // Subscription
   hasBDNPlusBusiness: boolean; // Reduces platform fees to 5%
   subscriptionId?: string; // Link to subscription document
-  
+
   // Shipping & Fulfillment Settings
   shipping: {
     // Shipping origin address (where orders ship from)
@@ -474,7 +481,7 @@ businesses/{businessId}
       insuranceThreshold?: number; // Value threshold for insurance
     };
   };
-  
+
   // Payment Processing Settings
   paymentProcessing: {
     // Payment processor integration
@@ -496,7 +503,7 @@ businesses/{businessId}
       depositPercentage?: number;
     };
   };
-  
+
   // Fulfillment Settings
   fulfillment: {
     // Fulfillment type
@@ -533,7 +540,7 @@ businesses/{businessId}
       returnInstructions?: string;
     };
   };
-  
+
   // Inventory Management
   inventory: {
     // Low stock alerts
@@ -549,7 +556,7 @@ businesses/{businessId}
     // Out of stock behavior
     outOfStockBehavior: "hide" | "show-unavailable" | "show-preorder";
   };
-  
+
   // Tax Settings
   tax: {
     // Tax collection enabled
@@ -563,7 +570,7 @@ businesses/{businessId}
       [location: string]: number; // e.g., "US-CA": 0.0825
     };
   };
-  
+
   // Business Analytics & Reporting
   analytics: {
     // Sales reporting frequency
@@ -574,7 +581,7 @@ businesses/{businessId}
       reportTypes?: string[];
     };
   };
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -583,12 +590,14 @@ businesses/{businessId}
 ```
 
 **Subcollections:**
+
 - `businesses/{businessId}/products` - Business products
 - `businesses/{businessId}/orders` - Business orders
 - `businesses/{businessId}/reviews` - Business reviews
 - `businesses/{businessId}/analytics` - Business analytics
 
 **Indexes:**
+
 - `slug` (unique)
 - `userId` (indexed)
 - `status`, `createdAt` (composite)
@@ -611,18 +620,18 @@ nonprofits/{nonprofitId}
   userId: string; // Admin/owner's user ID
   name: string;
   slug: string; // URL-friendly name
-  
+
   // Organization Details
   type: "nonprofit" | "charity" | "foundation" | "community-organization";
   description: string;
   mission: string;
-  
+
   // Contact Information
   email: string;
   phone?: string;
   phoneCountryCode?: string;
   website?: string;
-  
+
   // Location (International Support)
   address: {
     street: string;
@@ -633,11 +642,11 @@ nonprofits/{nonprofitId}
     latitude?: number;
     longitude?: number;
   };
-  
+
   // Media
   logoUrl?: string;
   images?: string[];
-  
+
   // Tax Identification (International)
   taxIdentification?: {
     type: "ein" | "charity-number" | "vat" | "other";
@@ -645,11 +654,11 @@ nonprofits/{nonprofitId}
     country: string;
   };
   ein?: string; // Legacy, US-specific
-  
+
   // Verification
   verified: boolean;
   verifiedAt?: string;
-  
+
   // Statistics (denormalized)
   stats: {
     totalRaised: {
@@ -660,17 +669,17 @@ nonprofits/{nonprofitId}
     activeCampaigns: number;
     contributors: number;
   };
-  
+
   // Status
   status: "pending" | "approved" | "rejected" | "suspended" | "active";
   approvedAt?: string;
   approvedBy?: string;
   rejectedAt?: string;
   rejectionReason?: string;
-  
+
   // Subscription
   hasBDNPlusBusiness: boolean; // Reduces platform fees to 5%
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -679,11 +688,13 @@ nonprofits/{nonprofitId}
 ```
 
 **Subcollections:**
+
 - `nonprofits/{nonprofitId}/campaigns` - Nonprofit campaigns
 - `nonprofits/{nonprofitId}/donations` - Donations received
 - `nonprofits/{nonprofitId}/orders` - Donation orders
 
 **Indexes:**
+
 - `slug` (unique)
 - `userId` (indexed)
 - `status`, `createdAt` (composite)
@@ -706,24 +717,24 @@ products/{productId}
   merchantId: string; // Business ID
   name: string;
   slug: string; // URL-friendly name
-  
+
   // Product Details
   description: string;
   productType: "physical" | "digital" | "service";
   category: string;
   tags?: string[];
-  
+
   // Pricing
   price: number; // Base price
   currency: "USD" | "BLKD";
   sku?: string; // Base SKU
   barcode?: string; // Base barcode
-  
+
   // Inventory
   inventory: number; // Base inventory (or sum of variants)
   inventoryTracking: "none" | "basic" | "advanced";
   lowStockThreshold?: number;
-  
+
   // Variants
   variantOptions?: { // Available options (e.g., Size, Color)
     name: string; // "Size"
@@ -738,7 +749,7 @@ products/{productId}
     inventory: number;
     lowStockThreshold?: number;
   }[];
-  
+
   // Physical Product Fields
   weight?: number; // in lbs/kg
   dimensions?: {
@@ -751,31 +762,31 @@ products/{productId}
   shippingCost?: number;
   shippingMethods?: string[];
   returnPolicy?: string;
-  
+
   // Digital Product Fields
   downloadUrl?: string;
   downloadLimit?: number; // -1 for unlimited
   expirationDate?: string;
-  
+
   // Service Product Fields
   duration?: string; // "1 hour", "30 minutes"
   serviceLocation?: "in-store" | "remote" | "on-site" | "hybrid";
   bookingRequired?: boolean;
-  
+
   // Media
   images?: string[]; // Array of image URLs
   videoUrl?: string;
-  
+
   // Status
   isActive: boolean;
-  
+
   // Statistics
   stats: {
     totalSales: number;
     totalOrders: number;
     views: number;
   };
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -783,9 +794,11 @@ products/{productId}
 ```
 
 **Subcollections:**
+
 - `products/{productId}/reviews` - Product reviews (if applicable)
 
 **Indexes:**
+
 - `merchantId`, `isActive` (composite)
 - `category`, `isActive` (composite)
 - `productType`, `isActive` (composite)
@@ -803,21 +816,21 @@ orders/{orderId}
   // Identity
   id: string; // Same as document ID
   orderNumber: string; // Human-readable: "ORD-2024-001234"
-  
+
   // Entity Information
   entityId: string; // Business or nonprofit ID
   entityType: "business" | "nonprofit";
   entityName: string;
-  
+
   // Order Type
   orderType: "product" | "donation" | "subscription-box" | "event-ticket" | "c2b-payment" | "service";
-  
+
   // Customer Information
   customerId: string;
   customerName: string;
   customerEmail: string;
   customerPhone?: string;
-  
+
   // Order Items
   items: {
     id: string;
@@ -837,7 +850,7 @@ orders/{orderId}
     serviceDate?: string; // For service products
     serviceLocation?: string;
   }[];
-  
+
   // Pricing
   subtotal: number;
   tax: number;
@@ -846,7 +859,7 @@ orders/{orderId}
   discount: number;
   total: number;
   currency: "USD" | "BLKD";
-  
+
   // Payment Details
   payment: {
     status: "pending" | "processing" | "completed" | "failed" | "refunded" | "partially-refunded";
@@ -854,19 +867,32 @@ orders/{orderId}
       type: "card" | "bank_transfer" | "wallet" | "blkd" | "cash" | "crypto" | "other";
       id?: string; // Payment method ID
       walletId?: string; // Wallet ID if using wallet
-      // Card details (if card payment)
-      card?: {
-        last4?: string;
-        brand?: string; // "visa", "mastercard", etc.
-        expiryMonth?: number;
-        expiryYear?: number;
+
+      // PCI COMPLIANCE: Only store tokenized references and display info
+      // Payment method token from PCI-compliant processor
+      paymentMethodToken?: string; // Tokenized reference (Stripe payment_method_id, etc.)
+      processor?: string; // "stripe", "square", "paypal", etc.
+
+      // Display-only information (safe to store)
+      displayInfo?: {
+        // Card display info (last 4 digits only)
+        cardLast4?: string; // Last 4 digits only - NEVER full card number
+        cardBrand?: string; // "visa", "mastercard", "amex", "discover"
+        expiryMonth?: number; // Safe to store
+        expiryYear?: number; // Safe to store
+        funding?: "credit" | "debit" | "prepaid" | "unknown";
+
+        // Bank display info (last 4 digits only)
+        accountLast4?: string; // Last 4 digits only - NEVER full account number
+        bankName?: string; // Display name only
+        accountType?: "checking" | "savings";
       };
-      // Bank details (if bank transfer)
-      bank?: {
-        last4?: string;
-        bankName?: string;
-        accountType?: string;
-      };
+
+      // NEVER STORE:
+      // - Full card numbers (PAN)
+      // - CVV/CVC codes
+      // - Full account numbers
+      // - Full routing numbers
     };
     // Transaction details
     transactionId?: string; // Link to transaction document
@@ -896,11 +922,11 @@ orders/{orderId}
     }[];
     totalRefunded?: number; // Total amount refunded
   };
-  
+
   // Order Status & Fulfillment
   status: "pending" | "confirmed" | "processing" | "ready-to-ship" | "shipped" | "delivered" | "completed" | "cancelled" | "refunded" | "failed";
   fulfillmentStatus: "unfulfilled" | "partial" | "fulfilled" | "shipped" | "delivered";
-  
+
   // Detailed Fulfillment Information
   fulfillment: {
     // Fulfillment workflow
@@ -946,7 +972,7 @@ orders/{orderId}
       printedAt?: string;
     };
   };
-  
+
   // Shipping Address (from user's saved addresses)
   shippingAddressId?: string; // Reference to user's shipping address
   shippingAddress: {
@@ -968,7 +994,7 @@ orders/{orderId}
     // Special instructions
     deliveryInstructions?: string; // "Leave at door", "Ring bell", etc.
   };
-  
+
   // Billing Address (may differ from shipping)
   billingAddressId?: string;
   billingAddress?: {
@@ -984,7 +1010,7 @@ orders/{orderId}
     phone?: string;
     phoneCountryCode?: string;
   };
-  
+
   // Detailed Shipping Information
   shippingInfo: {
     // Shipping method details
@@ -1040,16 +1066,16 @@ orders/{orderId}
       packageCount?: number; // Number of packages in shipment
     };
   };
-  
+
   // Notes
   customerNotes?: string;
   internalNotes?: string;
-  
+
   // Related Entities
   subscriptionBoxId?: string; // For subscription box orders
   eventId?: string; // For event ticket orders
   campaignId?: string; // For donation orders
-  
+
   // Refunds & Returns
   refunds: {
     id: string;
@@ -1065,7 +1091,7 @@ orders/{orderId}
     notes?: string;
   }[];
   totalRefunded: number; // Total amount refunded
-  
+
   // Returns
   returns?: {
     id: string;
@@ -1084,7 +1110,7 @@ orders/{orderId}
     receivedAt?: string;
     processedAt?: string;
   }[];
-  
+
   // Dates
   createdAt: string;
   updatedAt?: string;
@@ -1095,6 +1121,7 @@ orders/{orderId}
 ```
 
 **Indexes:**
+
 - `orderNumber` (unique)
 - `customerId`, `createdAt` (composite)
 - `entityId`, `entityType`, `createdAt` (composite)
@@ -1116,15 +1143,15 @@ transactions/{transactionId}
   // Identity
   id: string; // Same as document ID
   transactionNumber: string; // Human-readable: "TXN-2024-001234"
-  
+
   // User Information
   userId: string; // User who made/received transaction
   userName?: string; // Denormalized for performance
-  
+
   // Transaction Details
   type: "payment" | "transfer" | "refund" | "token-purchase" | "event-ticket" | "donation" | "cashback" | "withdrawal" | "deposit" | "fee";
   status: "pending" | "completed" | "failed" | "cancelled" | "refunded";
-  
+
   // Amounts
   amount: number; // Transaction amount
   currency: "USD" | "BLKD";
@@ -1132,21 +1159,21 @@ transactions/{transactionId}
   feeType?: "service" | "platform" | "processing";
   feePercentage?: number; // Fee percentage applied
   netAmount: number; // Amount after fees
-  
+
   // For business/nonprofit transactions
   grossAmount?: number; // Original amount before platform fee
   platformFee?: number; // Platform fee deducted
   hasBDNPlusBusiness?: boolean; // Whether entity had BDN+ Business
-  
+
   // Description
   description: string;
-  
+
   // Related Entities
   relatedEntityId?: string; // Business/nonprofit ID
   relatedEntityType?: "business" | "nonprofit";
   orderId?: string;
   invoiceId?: string;
-  
+
   // Payment Method Details
   paymentMethod: {
     type: "card" | "bank_transfer" | "wallet" | "blkd" | "cash" | "crypto" | "other";
@@ -1156,7 +1183,7 @@ transactions/{transactionId}
     // Payment method token from PCI-compliant processor
     paymentMethodToken?: string; // Tokenized reference (Stripe payment_method_id, etc.)
     processor?: string; // "stripe", "square", "paypal", etc.
-    
+
     // Display-only information (safe to store)
     displayInfo?: {
       // Card display info (last 4 digits only)
@@ -1165,13 +1192,13 @@ transactions/{transactionId}
       expiryMonth?: number; // Safe to store
       expiryYear?: number; // Safe to store
       funding?: "credit" | "debit" | "prepaid" | "unknown";
-      
+
       // Bank display info (last 4 digits only)
       accountLast4?: string; // Last 4 digits only - NEVER full account number
       bankName?: string; // Display name only
       accountType?: "checking" | "savings";
     };
-    
+
     // NEVER STORE:
     // - Full card numbers (PAN)
     // - CVV/CVC codes
@@ -1184,7 +1211,7 @@ transactions/{transactionId}
       currency: "USD" | "BLKD";
     };
   };
-  
+
   // Payment Processing Details
   processing: {
     processor?: string; // "stripe", "square", "paypal", "custom"
@@ -1217,7 +1244,7 @@ transactions/{transactionId}
       resolvedAt?: string;
     };
   };
-  
+
   // Metadata
   metadata?: {
     [key: string]: any;
@@ -1237,7 +1264,7 @@ transactions/{transactionId}
     riskLevel?: "low" | "medium" | "high";
     flaggedForReview?: boolean;
   };
-  
+
   // Dates
   createdAt: string;
   completedAt?: string;
@@ -1247,6 +1274,7 @@ transactions/{transactionId}
 ```
 
 **Indexes:**
+
 - `transactionNumber` (unique)
 - `userId`, `createdAt` (composite)
 - `type`, `status`, `createdAt` (composite)
@@ -1265,32 +1293,32 @@ wallets/{walletId}
   // Identity
   id: string; // Same as document ID
   userId: string;
-  
+
   // Wallet Type
   type: "bank" | "card" | "giftcard" | "blkd" | "external";
   currency: "USD" | "BLKD";
-  
+
   // Balance
   balance: number;
   availableBalance?: number; // Available after holds
-  
+
   // Provider Information
   provider: string; // "stripe", "square", "bank-name", etc.
-  
+
   // PCI COMPLIANCE: Only store tokenized references, NEVER full payment data
   // All sensitive payment data must be stored with PCI-compliant payment processor (Stripe, Square, etc.)
-  
+
   // Payment Method Token (from PCI-compliant processor)
   paymentMethodToken?: string; // Tokenized reference from payment processor (Stripe payment_method_id, etc.)
   processor?: string; // "stripe", "square", "paypal", etc.
-  
+
   // Display-only information (safe to store)
   displayInfo?: {
     // Bank Account Display Info (last 4 digits only)
     accountLast4?: string; // Last 4 digits only - NEVER full account number
     bankName?: string; // Display name only
     accountType?: "checking" | "savings";
-    
+
     // Card Display Info (last 4 digits only)
     cardLast4?: string; // Last 4 digits only - NEVER full card number
     cardBrand?: string; // "visa", "mastercard", "amex", "discover"
@@ -1298,7 +1326,7 @@ wallets/{walletId}
     expiryYear?: number; // Expiry year (safe)
     funding?: "credit" | "debit" | "prepaid" | "unknown";
   };
-  
+
   // NEVER STORE:
   // - Full card numbers (PAN)
   // - CVV/CVC codes
@@ -1306,15 +1334,15 @@ wallets/{walletId}
   // - Full routing numbers
   // - PINs or passwords
   // All sensitive data must be handled by PCI-compliant payment processor
-  
+
   // Gift Card Details
   giftCardCode?: string; // For gift card wallets
-  
+
   // Status
   isDefault: boolean;
   isActive: boolean;
   isVerified: boolean;
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -1323,6 +1351,7 @@ wallets/{walletId}
 ```
 
 **Indexes:**
+
 - `userId`, `currency` (composite)
 - `userId`, `type` (composite)
 - `userId`, `isDefault` (composite)
@@ -1339,26 +1368,28 @@ subscriptions/{subscriptionId}
   // Identity
   id: string; // Same as document ID
   userId: string;
-  
+
   // Subscription Details
   tier: "free" | "plus" | "premium" | "enterprise";
   status: "active" | "cancelled" | "expired" | "trial" | "pending";
-  
+
   // Pricing
   price: number;
   currency: "USD" | "BLKD";
   billingCycle: "monthly" | "yearly";
-  
+
   // Dates
   startDate: string;
   endDate?: string;
   nextBillingDate?: string;
   cancelledAt?: string;
-  
+
   // Settings
   autoRenew: boolean;
-  paymentMethodId?: string;
-  
+  // Payment method reference (references wallet ID or payment method token, NOT raw payment data)
+  paymentMethodId?: string; // Wallet ID or payment method token reference
+  paymentMethodToken?: string; // Direct payment processor token (Stripe payment_method_id, etc.)
+
   // Features
   features: {
     id: string;
@@ -1367,7 +1398,7 @@ subscriptions/{subscriptionId}
     enabled: boolean;
     category: "analytics" | "marketing" | "support" | "features" | "rewards";
   }[];
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -1375,6 +1406,7 @@ subscriptions/{subscriptionId}
 ```
 
 **Indexes:**
+
 - `userId`, `status` (composite)
 - `tier`, `status` (composite)
 - `nextBillingDate` (indexed for billing jobs)
@@ -1394,36 +1426,38 @@ subscriptionBoxes/{subscriptionBoxId}
   productId: string;
   merchantId: string;
   planId: string; // Link to subscription box plan
-  
+
   // Subscription Details
   quantity: number;
   frequency: "weekly" | "bi-weekly" | "monthly" | "bi-monthly" | "quarterly";
   duration: number; // Number of shipments (-1 for indefinite)
-  
+
   // Status
   status: "active" | "paused" | "cancelled" | "expired" | "pending";
-  
+
   // Pricing
   pricePerShipment: number;
   shippingCostPerShipment: number;
   currency: "USD" | "BLKD";
   discountPercentage?: number;
-  
+
   // Billing
-  paymentMethodId: string;
+  // Payment method reference (references wallet ID or payment method token, NOT raw payment data)
+  paymentMethodId: string; // Wallet ID or payment method token reference
+  paymentMethodToken?: string; // Direct payment processor token (Stripe payment_method_id, etc.)
   nextBillingDate: string;
   nextShipmentDate: string;
-  
+
   // Tracking
   shipmentsCompleted: number;
   shipmentsRemaining: number; // -1 for indefinite
-  
+
   // Dates
   startDate: string;
   endDate?: string; // Only if duration is finite
   pausedUntil?: string; // If paused
   cancelledAt?: string;
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -1431,9 +1465,11 @@ subscriptionBoxes/{subscriptionBoxId}
 ```
 
 **Subcollections:**
+
 - `subscriptionBoxes/{subscriptionBoxId}/shipments` - Individual shipments
 
 **Indexes:**
+
 - `userId`, `status` (composite)
 - `merchantId`, `status` (composite)
 - `nextBillingDate` (indexed for billing jobs)
@@ -1451,12 +1487,12 @@ invoices/{invoiceId}
   // Identity
   id: string; // Same as document ID
   invoiceNumber: string; // Human-readable: "INV-2024-001"
-  
+
   // Issuer Information
   issuerId: string; // Business or nonprofit ID
   issuerType: "business" | "nonprofit";
   issuerName: string;
-  
+
   // Recipient Information
   recipientId: string; // User ID
   recipientName: string;
@@ -1468,12 +1504,12 @@ invoices/{invoiceId}
     postalCode: string;
     country: string;
   };
-  
+
   // Billing Details
   billingType: "one-time" | "recurring";
   status: "draft" | "sent" | "paid" | "overdue" | "cancelled" | "refunded";
   currency: "USD" | "BLKD";
-  
+
   // Amounts
   subtotal: number;
   tax: number;
@@ -1481,7 +1517,7 @@ invoices/{invoiceId}
   total: number;
   amountPaid: number;
   amountDue: number;
-  
+
   // Line Items
   lineItems: {
     id: string;
@@ -1492,7 +1528,7 @@ invoices/{invoiceId}
     discount?: number;
     total: number;
   }[];
-  
+
   // Recurring Settings
   recurringSettings?: {
     frequency: "daily" | "weekly" | "monthly" | "quarterly" | "yearly";
@@ -1502,19 +1538,19 @@ invoices/{invoiceId}
     billingCycleCount?: number;
     currentCycle: number;
   };
-  
+
   // Dates
   issueDate: string;
   dueDate: string;
   paidAt?: string;
   createdAt: string;
   updatedAt: string;
-  
+
   // Additional Info
   notes?: string;
   terms?: string;
   paymentTerms?: string; // "Net 30", "Due on receipt"
-  
+
   // Payments
   payments?: {
     id: string;
@@ -1529,6 +1565,7 @@ invoices/{invoiceId}
 ```
 
 **Indexes:**
+
 - `invoiceNumber` (unique)
 - `issuerId`, `issuerType`, `createdAt` (composite)
 - `recipientId`, `status` (composite)
@@ -1551,13 +1588,13 @@ events/{eventId}
   organizerId: string; // User ID (business/nonprofit/individual)
   organizerName: string;
   organizerType: "business" | "nonprofit" | "individual";
-  
+
   // Event Details
   title: string;
   description: string;
   category: "music" | "sports" | "business" | "community" | "education" | "arts" | "food" | "other";
   imageUrl?: string;
-  
+
   // Location
   venue: {
     name: string;
@@ -1569,20 +1606,20 @@ events/{eventId}
     latitude?: number;
     longitude?: number;
   };
-  
+
   // Schedule
   startDate: string; // ISO 8601
   endDate: string; // ISO 8601
   timezone: string;
-  
+
   // Status
   status: "draft" | "published" | "cancelled" | "completed";
   isPublic: boolean;
-  
+
   // Capacity
   maxAttendees?: number;
   currentAttendees: number;
-  
+
   // Ticket Types
   ticketTypes: {
     id: string;
@@ -1598,10 +1635,10 @@ events/{eventId}
     maxPerOrder: number;
     minPerOrder: number;
   }[];
-  
+
   // Tags
   tags: string[];
-  
+
   // Statistics
   stats: {
     totalTicketsSold: number;
@@ -1609,7 +1646,7 @@ events/{eventId}
     views: number;
     shares: number;
   };
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -1618,10 +1655,12 @@ events/{eventId}
 ```
 
 **Subcollections:**
+
 - `events/{eventId}/tickets` - Individual tickets sold
 - `events/{eventId}/registrations` - Event registrations
 
 **Indexes:**
+
 - `organizerId`, `status` (composite)
 - `status`, `startDate` (composite)
 - `category`, `status` (composite)
@@ -1641,38 +1680,38 @@ campaigns/{campaignId}
   organizationId: string; // Nonprofit ID
   organizationName: string;
   slug: string; // URL-friendly name
-  
+
   // Campaign Details
   title: string;
   description: string;
   shortDescription?: string; // For cards/previews
   imageUrl?: string;
   videoUrl?: string; // Campaign video
-  
+
   // Campaign Type
   type: "donation" | "sponsorship" | "volunteer" | "fundraiser";
-  
+
   // Goals
   targetAmount?: number; // Optional target amount
   currentAmount: number; // Current amount raised
   currency: "USD" | "BLKD";
   contributors: number; // Number of unique contributors
-  
+
   // Campaign Settings
   allowRecurring: boolean; // Allow recurring donations
   recurringFrequencies?: ("weekly" | "bi-weekly" | "monthly" | "quarterly" | "annually")[];
   allowAnonymous: boolean; // Allow anonymous donations
   allowMessages: boolean; // Allow donor messages
   minimumDonation?: number; // Minimum donation amount
-  
+
   // Status
   status: "draft" | "active" | "completed" | "cancelled" | "paused";
-  
+
   // Dates
   startDate: string;
   endDate?: string; // Optional end date
   publishedAt?: string; // When campaign was published
-  
+
   // Statistics (denormalized for performance)
   stats: {
     totalDonations: number;
@@ -1683,11 +1722,11 @@ campaigns/{campaignId}
     views: number;
     shares: number;
   };
-  
+
   // Tags & Categories
   tags: string[];
   category?: string; // Campaign category
-  
+
   // Impact Tracking
   impactDescription?: string; // How funds will be used
   impactUpdates?: {
@@ -1697,7 +1736,7 @@ campaigns/{campaignId}
     imageUrl?: string;
     createdAt: string;
   }[];
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -1705,10 +1744,12 @@ campaigns/{campaignId}
 ```
 
 **Subcollections:**
+
 - `campaigns/{campaignId}/donations` - Individual donations
 - `campaigns/{campaignId}/updates` - Campaign impact updates
 
 **Indexes:**
+
 - `slug` (unique)
 - `organizationId`, `status` (composite)
 - `status`, `createdAt` (composite)
@@ -1730,28 +1771,29 @@ reviews/{reviewId}
   userId: string;
   userName: string;
   userAvatar?: string;
-  
+
   // Review Content
   rating: number; // 1-5 stars
   npsScore?: number; // 0-10 (Net Promoter Score)
   selectedReasons: string[]; // Review reason IDs
   comment?: string;
-  
+
   // Verification
-  verifiedPurchase: boolean;
+  orderId?: string; // Link to specific order (for purchase reviews)
+  verifiedPurchase: boolean; // Whether user made a purchase
   visitDate?: string;
-  
+
   // Engagement
   helpfulCount: number;
   reported: boolean;
-  
+
   // Business Response
   businessResponse?: {
     id: string;
     message: string;
     createdAt: string;
   };
-  
+
   // Dates
   createdAt: string;
   updatedAt?: string;
@@ -1759,10 +1801,13 @@ reviews/{reviewId}
 ```
 
 **Indexes:**
+
 - `businessId`, `createdAt` (composite)
 - `userId`, `createdAt` (composite)
 - `businessId`, `rating` (composite)
 - `verifiedPurchase`, `createdAt` (composite)
+- `orderId` (indexed, for order-based queries)
+- `userId`, `orderId` (composite, unique - prevents duplicate reviews for same order)
 
 ---
 
@@ -1777,22 +1822,22 @@ badges/{badgeId}
   id: string; // Same as document ID
   name: string;
   description: string;
-  
+
   // Badge Details
   category: "purchases" | "social" | "community" | "achievement" | "education" | "milestone";
   rarity: "common" | "rare" | "epic" | "legendary";
   icon: string; // SVG icon identifier
-  
+
   // Requirements
   requirement: {
     type: string; // "purchase_count", "referral_count", etc.
     value: number;
     description: string;
   };
-  
+
   // Rewards
   pointsReward: number;
-  
+
   // Visual
   color: string;
   gradient: string[];
@@ -1800,6 +1845,7 @@ badges/{badgeId}
 ```
 
 **Subcollection:**
+
 - `users/{userId}/badges` - User badge progress
 
 ```typescript
@@ -1826,16 +1872,16 @@ referrals/{referralId}
   id: string; // Same as document ID
   referrerId: string; // User who made the referral
   referredUserId: string; // User who was referred
-  
+
   // Referral Details
   referralCode: string; // Code used
   status: "pending" | "completed" | "expired";
-  
+
   // Rewards
   rewardEarned: boolean;
   rewardAmount?: number;
   rewardType?: "points" | "cashback" | "discount";
-  
+
   // Dates
   createdAt: string;
   completedAt?: string; // When referred user completed signup/first purchase
@@ -1844,6 +1890,7 @@ referrals/{referralId}
 ```
 
 **Indexes:**
+
 - `referrerId`, `status` (composite)
 - `referredUserId` (unique)
 - `referralCode`, `status` (composite)
@@ -1864,7 +1911,7 @@ conversations/{conversationId}
   participantIds: string[]; // Array of user IDs
   participantNames: string[];
   participantAvatars?: string[];
-  
+
   // Conversation Details
   type: "direct" | "group" | "support";
   lastMessage?: {
@@ -1873,11 +1920,11 @@ conversations/{conversationId}
     text: string;
     createdAt: string;
   };
-  
+
   // Status
   unreadCount: number; // Per participant
   unreadBy: string[]; // User IDs with unread messages
-  
+
   // Dates
   updatedAt: string;
   createdAt: string;
@@ -1885,6 +1932,7 @@ conversations/{conversationId}
 ```
 
 **Subcollection:**
+
 - `conversations/{conversationId}/messages` - Individual messages
 
 ```typescript
@@ -1913,6 +1961,7 @@ conversations/{conversationId}/messages/{messageId}
 ```
 
 **Indexes:**
+
 - `participantIds` (array-contains)
 - `updatedAt` (indexed)
 
@@ -1928,18 +1977,18 @@ notifications/{notificationId}
   // Identity
   id: string; // Same as document ID
   userId: string;
-  
+
   // Notification Details
   type: "transaction" | "promotion" | "event" | "system" | "social" | "achievement" | "reminder";
   channel: "wallet" | "promotions" | "events" | "system" | "social" | "merchant";
   priority: "low" | "normal" | "high" | "urgent";
-  
+
   // Content
   title: string;
   message: string;
   imageUrl?: string;
   icon?: string;
-  
+
   // Data
   data?: {
     [key: string]: any;
@@ -1949,20 +1998,21 @@ notifications/{notificationId}
     link?: string;
     actionUrl?: string;
   };
-  
+
   // Status
   read: boolean;
   readAt?: string;
-  
+
   // Expiration
   expiresAt?: string;
-  
+
   // Dates
   createdAt: string;
 }
 ```
 
 **Indexes:**
+
 - `userId`, `read`, `createdAt` (composite)
 - `userId`, `channel`, `createdAt` (composite)
 - `userId`, `type`, `createdAt` (composite)
@@ -1981,13 +2031,13 @@ courses/{courseId}
   title: string;
   description: string;
   slug: string; // URL-friendly name
-  
+
   // Course Details
   category: "getting-started" | "features" | "merchant" | "payments" | "rewards" | "community";
   difficulty: "beginner" | "intermediate" | "advanced";
   estimatedTime: string; // e.g., "15 min", "1 hour"
   icon: string;
-  
+
   // Content
   learningObjectives?: string[]; // What users will learn
   prerequisites?: string[]; // What users should know before starting
@@ -2016,7 +2066,7 @@ courses/{courseId}
     completionCriteria?: string; // What needs to be done to complete this step
     estimatedTime?: string; // Time for this specific step
   }[];
-  
+
   // Statistics
   stats: {
     enrollments: number;
@@ -2024,11 +2074,11 @@ courses/{courseId}
     averageRating: number;
     averageCompletionTime?: number; // Average time to complete in minutes
   };
-  
+
   // Status
   isPublished: boolean;
   publishedAt?: string;
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -2036,10 +2086,12 @@ courses/{courseId}
 ```
 
 **Subcollections:**
+
 - `courses/{courseId}/enrollments` - User course enrollments
 - `courses/{courseId}/completions` - User course completions
 
 **Indexes:**
+
 - `slug` (unique)
 - `category`, `isPublished` (composite)
 - `difficulty`, `isPublished` (composite)
@@ -2058,22 +2110,22 @@ videos/{videoId}
   title: string;
   description: string;
   slug: string;
-  
+
   // Video Details
   thumbnailUrl: string;
   videoUrl: string; // Video file URL or embed URL
   duration: string; // e.g., "5:30"
   category: "tutorial" | "feature" | "tips" | "community" | "business";
   tags: string[];
-  
+
   // Statistics
   views: number;
   likes?: number;
-  
+
   // Status
   isPublished: boolean;
   publishedAt?: string;
-  
+
   // Dates
   createdAt: string;
   updatedAt?: string;
@@ -2081,6 +2133,7 @@ videos/{videoId}
 ```
 
 **Indexes:**
+
 - `slug` (unique)
 - `category`, `isPublished` (composite)
 - `views` (indexed for popular videos)
@@ -2099,13 +2152,13 @@ guides/{guideId}
   title: string;
   description: string;
   slug: string;
-  
+
   // Guide Details
   category: "getting-started" | "features" | "merchant" | "payments" | "rewards" | "community";
   difficulty: "beginner" | "intermediate" | "advanced";
   estimatedTime: string;
   icon: string;
-  
+
   // Content
   learningObjectives?: string[];
   prerequisites?: string[];
@@ -2131,17 +2184,17 @@ guides/{guideId}
     completionCriteria?: string;
     estimatedTime?: string;
   }[];
-  
+
   // Statistics
   stats: {
     completions: number;
     averageRating: number;
   };
-  
+
   // Status
   isPublished: boolean;
   publishedAt?: string;
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -2149,6 +2202,7 @@ guides/{guideId}
 ```
 
 **Indexes:**
+
 - `slug` (unique)
 - `category`, `isPublished` (composite)
 
@@ -2166,7 +2220,7 @@ blogPosts/{postId}
   title: string;
   excerpt: string;
   slug: string;
-  
+
   // Content
   content: string; // Plain text or markdown fallback
   contentBlocks?: {
@@ -2183,36 +2237,37 @@ blogPosts/{postId}
     author?: string; // For quotes
     variant?: "info" | "warning" | "success" | "error"; // For callouts
   }[];
-  
+
   // Author
   author: {
     name: string;
     avatar?: string;
     bio?: string;
   };
-  
+
   // Metadata
   category: "news" | "tips" | "community" | "business" | "updates";
   featuredImage?: string;
   tags: string[];
   relatedPosts?: string[]; // IDs of related posts
-  
+
   // Statistics
   readTime: number; // minutes
   views: number;
   likes?: number;
-  
+
   // Status
   isPublished: boolean;
   publishedAt: string;
   updatedAt?: string;
-  
+
   // Dates
   createdAt: string;
 }
 ```
 
 **Indexes:**
+
 - `slug` (unique)
 - `category`, `publishedAt` (composite)
 - `publishedAt` (indexed for recent posts)
@@ -2231,20 +2286,20 @@ helpArticles/{articleId}
   title: string;
   content: string;
   slug: string;
-  
+
   // Metadata
   category: "account" | "payments" | "merchant" | "rewards" | "troubleshooting" | "faq";
   tags: string[];
   relatedArticles?: string[]; // IDs of related articles
-  
+
   // Feedback
   helpful: number;
   notHelpful: number;
-  
+
   // Status
   isPublished: boolean;
   publishedAt?: string;
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -2252,6 +2307,7 @@ helpArticles/{articleId}
 ```
 
 **Indexes:**
+
 - `slug` (unique)
 - `category`, `isPublished` (composite)
 - `helpful` (indexed for popular articles)
@@ -2269,12 +2325,12 @@ directory/{entryId}
   id: string; // Same as document ID
   businessId: string; // Reference to business document
   businessName: string; // Denormalized for search performance
-  
+
   // Search Metadata
   searchableText: string; // Combined searchable text (name, description, category, tags)
   category: string;
   tags: string[];
-  
+
   // Location (for geo-search)
   location: {
     address: {
@@ -2289,18 +2345,18 @@ directory/{entryId}
       longitude: number;
     };
   };
-  
+
   // Business Details (denormalized for search)
   type: "local-shop" | "local-service" | "national-service" | "online-shopping" | "restaurant";
   isVerified: boolean;
   isActive: boolean;
   averageRating: number;
   reviewCount: number;
-  
+
   // Search Ranking
   relevanceScore: number; // Calculated relevance score
   popularityScore: number; // Based on views, clicks, orders
-  
+
   // Dates
   createdAt: string;
   updatedAt: string;
@@ -2311,6 +2367,7 @@ directory/{entryId}
 **Note:** This collection is optimized for search. Consider using Elasticsearch or Algolia for advanced search capabilities.
 
 **Indexes:**
+
 - `businessId` (unique)
 - `category`, `isActive` (composite)
 - `location.coordinates` (geo index)
@@ -2330,7 +2387,7 @@ searchHistory/{searchId}
   // Identity
   id: string; // Same as document ID
   userId: string;
-  
+
   // Search Details
   query: string;
   filters?: {
@@ -2348,17 +2405,18 @@ searchHistory/{searchId}
     type?: string[];
     tags?: string[];
   };
-  
+
   // Results
   resultCount: number;
   clickedResults?: string[]; // IDs of results user clicked
-  
+
   // Dates
   createdAt: string;
 }
 ```
 
 **Indexes:**
+
 - `userId`, `createdAt` (composite)
 - `query` (indexed for popular searches)
 
@@ -2371,7 +2429,7 @@ searchHistory/{searchId}
 **Purpose:** Admin operations and settings
 
 ```typescript
-admin/{documentId}
+admin / { documentId };
 {
   // Various admin documents:
   // - settings: Platform settings
@@ -2381,6 +2439,7 @@ admin/{documentId}
 ```
 
 **Subcollections:**
+
 - `admin/disputes/{disputeId}` - User disputes
 - `admin/auditLogs/{logId}` - Admin action logs
 - `admin/settings` - Platform settings
@@ -2392,7 +2451,7 @@ admin/{documentId}
 **Purpose:** Aggregated analytics data
 
 ```typescript
-analytics/{documentId}
+analytics / { documentId };
 {
   // Various analytics documents:
   // - dailyStats: Daily platform statistics
@@ -2402,6 +2461,7 @@ analytics/{documentId}
 ```
 
 **Example: Daily Stats**
+
 ```typescript
 analytics/dailyStats/{date} // Date: "2025-01-15"
 {
@@ -2444,7 +2504,7 @@ users: [
   { fields: ["tier", "points"] },
   { fields: ["status", "createdAt"] },
   { fields: ["userType", "status"] },
-]
+];
 
 // Businesses
 businesses: [
@@ -2454,7 +2514,7 @@ businesses: [
   { fields: ["category", "status"] },
   { fields: ["address.country", "address.city"] },
   { fields: ["isActive", "isVerified"] },
-]
+];
 
 // Orders
 orders: [
@@ -2464,7 +2524,7 @@ orders: [
   { fields: ["status", "createdAt"] },
   { fields: ["paymentStatus", "createdAt"] },
   { fields: ["orderType", "status"] },
-]
+];
 
 // Transactions
 transactions: [
@@ -2472,40 +2532,40 @@ transactions: [
   { fields: ["userId", "createdAt"] },
   { fields: ["type", "status", "createdAt"] },
   { fields: ["relatedEntityId", "relatedEntityType", "createdAt"] },
-]
+];
 
 // Events
 events: [
   { fields: ["organizerId", "status"] },
   { fields: ["status", "startDate"] },
   { fields: ["category", "status"] },
-]
+];
 
 // Reviews
 reviews: [
   { fields: ["businessId", "createdAt"] },
   { fields: ["userId", "createdAt"] },
   { fields: ["businessId", "rating"] },
-]
+];
 
 // Notifications
 notifications: [
   { fields: ["userId", "read", "createdAt"] },
   { fields: ["userId", "channel", "createdAt"] },
-]
+];
 
 // Subscriptions
 subscriptions: [
   { fields: ["userId", "status"] },
   { fields: ["nextBillingDate"] },
-]
+];
 
 // Subscription Boxes
 subscriptionBoxes: [
   { fields: ["userId", "status"] },
   { fields: ["nextBillingDate"] },
   { fields: ["nextShipmentDate"] },
-]
+];
 ```
 
 ---
@@ -2527,7 +2587,7 @@ subscriptionBoxes: [
 match /users/{userId} {
   allow read: if request.auth != null && request.auth.uid == userId;
   allow write: if request.auth != null && request.auth.uid == userId;
-  allow read: if request.auth != null && 
+  allow read: if request.auth != null &&
     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
 }
 
@@ -2535,20 +2595,20 @@ match /users/{userId} {
 match /businesses/{businessId} {
   allow read: if true; // Public read
   allow create: if request.auth != null;
-  allow update: if request.auth != null && 
-    (resource.data.userId == request.auth.uid || 
+  allow update: if request.auth != null &&
+    (resource.data.userId == request.auth.uid ||
      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
-  allow delete: if request.auth != null && 
+  allow delete: if request.auth != null &&
     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
 }
 
 // Orders
 match /orders/{orderId} {
-  allow read: if request.auth != null && 
+  allow read: if request.auth != null &&
     (resource.data.customerId == request.auth.uid ||
      resource.data.entityId in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.businessIds);
   allow create: if request.auth != null;
-  allow update: if request.auth != null && 
+  allow update: if request.auth != null &&
     (resource.data.entityId in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.businessIds ||
      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
 }
@@ -2668,4 +2728,3 @@ This database design provides a comprehensive foundation for the BDN platform, s
 - Analytics and reporting
 
 The design follows Firestore best practices for scalability, performance, and maintainability.
-

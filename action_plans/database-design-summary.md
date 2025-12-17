@@ -21,7 +21,7 @@
 | `invoices`          | Invoices for businesses/nonprofits                 | `id`, `invoiceNumber`, `issuerId`, `recipientId`, `status`                                        |
 | `events`            | Community events                                   | `id`, `organizerId`, `title`, `startDate`, `status`                                               |
 | `campaigns`         | Nonprofit fundraising campaigns                    | `id`, `organizationId`, `title`, `status`, `targetAmount`                                         |
-| `reviews`           | Business reviews and ratings                       | `id`, `businessId`, `userId`, `rating`, `comment`                                                 |
+| `reviews`           | Business reviews and ratings                       | `id`, `businessId`, `userId`, `orderId`, `rating`, `comment`, `verifiedPurchase`                |
 | `badges`            | Badge definitions (system-wide)                    | `id`, `name`, `category`, `rarity`, `requirement`                                                 |
 | `referrals`         | Referral tracking                                  | `id`, `referrerId`, `referredUserId`, `status`                                                    |
 | `conversations`     | Direct message conversations                       | `id`, `participantIds`, `type`, `lastMessage`                                                     |
@@ -42,6 +42,7 @@
 - **User → Wallets**: `wallets.userId = users.id`
 - **User → Subscriptions**: `subscriptions.userId = users.id`
 - **User → Reviews**: `reviews.userId = users.id`
+- **Order → Reviews**: `reviews.orderId = orders.id` (for purchase reviews)
 - **User → Referrals**: `referrals.referrerId = users.id` or `referrals.referredUserId = users.id`
 - **User → Shipping Addresses**: `users/{userId}/shippingAddresses/{addressId}`
 - **User → Billing Addresses**: `users/{userId}/billingAddresses/{addressId}`
@@ -466,7 +467,8 @@ db.collection("notifications")
 
 **Payment Details** (`orders.payment`):
 
-- Payment method with card/bank details
+- Payment method with tokenized references (`paymentMethodToken`) and display info only
+- PCI-compliant: Only stores last 4 digits, brand, expiry (no full card/account numbers)
 - Payment processing information
 - Authorization and capture details
 - Refund tracking with history
