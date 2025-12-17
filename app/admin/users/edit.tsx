@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, Alert } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { PageTitle } from '../../../../components/header/PageTitle';
-import { FormSection } from '../../../../components/forms/FormSection';
-import { UserForm } from '../../../../components/admin/users/UserForm';
-import { ConfirmModal, FormModal } from '../../../../components/modals';
+import { PageTitle } from '../../components/header/PageTitle';
+import { FormSection } from '../../components/forms/FormSection';
+import { UserForm } from '../../components/admin/users/UserForm';
+import { ConfirmModal, FormModal } from '../../components/modals';
 
 // Mock data for a user. In a real app, you would fetch this based on the ID.
 const MOCK_USER = {
