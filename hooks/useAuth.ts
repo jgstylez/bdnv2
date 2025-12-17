@@ -8,6 +8,14 @@ import {
   isBiometricEnabled,
   setBiometricEnabled,
 } from '../lib/secure-storage';
+import { auth, db } from '../lib/firebase';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -15,9 +23,10 @@ export function useAuth() {
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      const { token } = await getAuthTokens();
-      if (token) {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const token = await user.getIdToken();
+        await storeAuthTokens(token);
         setIsAuthenticated(true);
         const biometricsEnabled = await isBiometricEnabled();
         if (biometricsEnabled) {
@@ -27,20 +36,36 @@ export function useAuth() {
         setIsAuthenticated(false);
       }
       setIsLoading(false);
-    };
-    checkAuthStatus();
+    });
+    return () => unsubscribe();
   }, []);
 
   const login = async (email, password) => {
-    // Replace with your actual API call
-    // const { token, refreshToken } = await api.login(email, password);
-    const token = 'fake-token'; // Replace with actual token
-    await storeAuthTokens(token);
-    setIsAuthenticated(true);
-    router.push('/(tabs)/dashboard');
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push('/(tabs)/dashboard');
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  };
+
+  const signup = async (email, password) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // Create a new document in the 'users' collection
+      await setDoc(doc(db, 'users', user.uid), {
+        email: user.email,
+        createdAt: new Date(),
+      });
+      router.push('/(tabs)/dashboard');
+    } catch (error) {
+      console.error('Signup failed:', error);
+    }
   };
 
   const logout = async () => {
+    await signOut(auth);
     await clearAuthTokens();
     setIsAuthenticated(false);
     router.push('/(auth)/login');
@@ -49,12 +74,12 @@ export function useAuth() {
   const handleBiometricAuth = async () => {
     const hasHardware = await LocalAuthentication.hasHardwareAsync();
     if (!hasHardware) {
-      return; // Or show an alert
+      return;
     }
 
     const isEnrolled = await LocalAuthentication.isEnrolledAsync();
     if (!isEnrolled) {
-      return; // Or show an alert
+      return;
     }
 
     const { success } = await LocalAuthentication.authenticateAsync({
@@ -64,8 +89,6 @@ export function useAuth() {
     if (success) {
       setIsAuthenticated(true);
       router.push('/(tabs)/dashboard');
-    } else {
-      // Handle failed authentication
     }
   };
 
@@ -82,6 +105,7 @@ export function useAuth() {
     isLoading,
     login,
     logout,
+    signup,
     handleBiometricAuth,
     enableBiometrics,
     disableBiometrics,

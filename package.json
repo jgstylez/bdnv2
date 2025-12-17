@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.3",
+    "@firebase/firestore": "^4.9.3",
     "@nativecn/cli": "^0.3.7",
     "@react-native-community/datetimepicker": "^8.0.1",
     "clsx": "^2.1.1",
@@ -27,6 +28,7 @@
     "expo-router": "~3.5.0",
     "expo-secure-store": "~13.0.2",
     "expo-status-bar": "~1.12.0",
+    "firebase": "^12.7.0",
     "nativewind": "^4.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
