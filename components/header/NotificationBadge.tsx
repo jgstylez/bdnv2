@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, borderRadius, typography } from "../../constants/theme";
+import { colors, borderRadius, typography } from '../../constants/theme';
 
 interface NotificationBadgeProps {
   count?: number;

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Modal } from "react-native";
+import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 
 interface UserDropdownProps {
   user?: {
@@ -46,7 +47,12 @@ export function UserDropdown({ user }: UserDropdownProps) {
           }}
         >
           {user?.avatar ? (
-            <Image source={{ uri: user.avatar }} style={{ width: 32, height: 32 }} />
+            <Image 
+              source={{ uri: user.avatar }} 
+              style={{ width: 32, height: 32 }} 
+              contentFit="cover"
+              cachePolicy="memory-disk"
+            />
           ) : (
             <Text style={{ color: "#fff", fontWeight: "bold" }}>
               {user?.name?.[0]?.toUpperCase() || "U"}

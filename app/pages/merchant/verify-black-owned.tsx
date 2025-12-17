@@ -4,11 +4,11 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { typography, spacing } from "../../../constants/theme";
-import { logError } from "../../../lib/logger";
-import { parseDocument, RECOMMENDED_DOCUMENTS, ParsedBusinessInfo } from "../../../lib/documentParser";
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useResponsive } from '@/hooks/useResponsive';
+import { typography, spacing } from '@/constants/theme';
+import { logError } from '@/lib/logger';
+import { parseDocument, RECOMMENDED_DOCUMENTS, ParsedBusinessInfo } from '@/lib/documentParser';
 
 export default function VerifyBlackOwned() {
   const { width } = useWindowDimensions();

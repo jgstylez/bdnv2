@@ -4,9 +4,9 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Product, ProductType } from "../../../types/merchant";
-import { ProductPlaceholder } from "../../../components/ProductPlaceholder";
-import { DeleteProductModal } from "../../../components/products/modals/DeleteProductModal";
+import { Product, ProductType } from '@/types/merchant';
+import { ProductPlaceholder } from '@/components/ProductPlaceholder';
+import { DeleteProductModal } from '@/components/products/modals/DeleteProductModal';
 
 // Mock products for nonprofit (Initial State)
 const initialProducts: Product[] = [

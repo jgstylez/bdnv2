@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, Modal, TouchableOpacity, ScrollView, Platform, KeyboardAvoidingView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
-import { useResponsive } from "../../hooks/useResponsive";
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
+import { useResponsive } from '../../hooks/useResponsive';
 
 export interface ModalAction {
   label: string;

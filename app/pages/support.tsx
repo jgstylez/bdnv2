@@ -5,7 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
-import { MessageAttachment } from "../../types/messages";
+import { MessageAttachment } from '@/types/messages';
 
 interface Message {
   id: string;

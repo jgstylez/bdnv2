@@ -1,0 +1,31 @@
+# BDN 2.0 Development Rules
+
+## Routing Convention
+
+**IMPORTANT**: All new pages MUST be placed in `app/pages/` directory, NOT in `app/(tabs)/`.
+
+- Core tab navigation (Dashboard, Shop, Pay, Account) stays in `app/(tabs)/`
+- All other pages go in `app/(tabs)/pages/`:
+  - Business detail pages: `app/pages/businesses/[id].tsx`
+  - Search pages: `app/pages/search/*`
+  - Merchant pages: `app/pages/merchant/*`
+  - MyImpact pages: `app/pages/myimpact/*`
+  - University pages: `app/pages/university/*`
+  - Media pages: `app/pages/media/*`
+  - Enrollment pages: `app/pages/enroll-*.tsx`
+  - Token pages: `app/pages/tokens.tsx`
+  - Referral pages: `app/pages/referrals.tsx`
+  - Admin pages: `app/admin/*`
+
+## File Organization
+
+- Keep files under 400 lines of code (LOC) when possible
+- Refactor into smaller components when needed
+- Place documentation in `action_plans/` folder
+
+## Code Style
+
+- Use TypeScript for type safety
+- Follow existing dark theme (#232323, #474747, #ba9988)
+- Use flat vector iconography (@expo/vector-icons)
+- Mobile-first responsive design

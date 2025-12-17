@@ -3,7 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "r
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { UserBehaviorAnalytics } from "../../../types/bi";
+import { UserBehaviorAnalytics } from '@/types/bi';
 
 // Mock user behavior analytics
 const mockUserBehavior: UserBehaviorAnalytics = {

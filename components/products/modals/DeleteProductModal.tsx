@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { ConfirmModal } from "../../modals/ConfirmModal";
-import { colors, typography } from "../../../constants/theme";
+import { colors, typography } from '../../../constants/theme';
 
 interface DeleteProductModalProps {
   visible: boolean;

@@ -3,10 +3,10 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { PaymentKeypad } from "../../../components/PaymentKeypad";
-import { TOKEN_PRICE } from "../../../types/token";
-import { Wallet as WalletType, BankAccountWallet, CreditCardWallet } from "../../../types/wallet";
-import { BackButton } from "../../../components/navigation/BackButton";
+import { PaymentKeypad } from '@/components/PaymentKeypad';
+import { TOKEN_PRICE } from '@/types/token';
+import { Wallet as WalletType, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock wallets
 const mockWallets: WalletType[] = [

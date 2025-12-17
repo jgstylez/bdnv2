@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { View, useWindowDimensions, Platform } from "react-native";
 import { Tabs } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Sidebar } from "../../components/Sidebar";
-import { AppHeader } from "../../components/AppHeader";
-import { MenuPanel } from "../../components/MenuPanel";
-import { CustomTabBar } from "../../components/CustomTabBar";
+import { Sidebar } from '@/components/Sidebar';
+import { AppHeader } from '@/components/AppHeader';
+import { MenuPanel } from '@/components/MenuPanel';
+import { CustomTabBar } from '@/components/CustomTabBar';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabsLayout() {

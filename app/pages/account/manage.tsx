@@ -3,10 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, Alert, Platform, TextInput, M
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { FormInput } from "../../../components/forms";
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { FormInput } from '@/components/forms';
 
 export default function ManageAccount() {
   const router = useRouter();

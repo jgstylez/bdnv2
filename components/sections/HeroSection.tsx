@@ -176,6 +176,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => router.push("/(auth)/signup")}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Get Started Free"
+            accessibilityHint="Sign up for a free account"
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               backgroundColor: "#ba9988",
               paddingHorizontal: isMobile ? 40 : 48,
@@ -206,6 +211,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => router.push("/(auth)/login")}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Sign In"
+            accessibilityHint="Sign in to your existing account"
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               paddingHorizontal: isMobile ? 40 : 48,
               paddingVertical: isMobile ? 16 : 18,

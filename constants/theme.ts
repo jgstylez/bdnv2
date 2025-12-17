@@ -172,6 +172,19 @@ export const typography = {
   sizes: {
     xs: 12,
     sm: 14,
+    base: 16,
+    md: 16,
+    lg: 20,
+    xl: 24,
+    '2xl': 32,
+    '3xl': 40,
+    '4xl': 48,
+  },
+  // Alias for backwards compatibility
+  fontSize: {
+    xs: 12,
+    sm: 14,
+    base: 16,
     md: 16,
     lg: 20,
     xl: 24,
@@ -189,5 +202,25 @@ export const typography = {
     bold: '700',
     extrabold: '800',
     black: '900',
+  },
+  // Alias for backwards compatibility
+  fontWeight: {
+    thin: '100',
+    extralight: '200',
+    light: '300',
+    normal: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+    extrabold: '800',
+    black: '900',
+  },
+  // Line heights alias
+  lineHeight: {
+    tight: 16,
+    snug: 20,
+    normal: 24,
+    relaxed: 28,
+    loose: 32,
   },
 };

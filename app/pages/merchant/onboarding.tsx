@@ -3,13 +3,13 @@ import { View, Text, TextInput, TouchableOpacity, useWindowDimensions, KeyboardA
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { MerchantType } from "../../../types/merchant";
-import { InternationalAddress, CountryCode, Currency } from "../../../types/international";
-import { InternationalAddressForm } from "../../../components/forms/InternationalAddressForm";
-import { CurrencySelector } from "../../../components/forms/CurrencySelector";
-import { TaxIdSelector } from "../../../components/forms/TaxIdSelector";
-import { TaxIdentification } from "../../../types/international";
-import { requiresStateField } from "../../../lib/international";
+import { MerchantType } from '@/types/merchant';
+import { InternationalAddress, CountryCode, Currency } from '@/types/international';
+import { InternationalAddressForm } from '@/components/forms/InternationalAddressForm';
+import { CurrencySelector } from '@/components/forms/CurrencySelector';
+import { TaxIdSelector } from '@/components/forms/TaxIdSelector';
+import { TaxIdentification } from '@/types/international';
+import { requiresStateField } from '@/lib/international';
 
 const MERCHANT_TYPES: { value: MerchantType; label: string; description: string }[] = [
   { value: "local-shop", label: "Local Shop", description: "Physical retail location" },

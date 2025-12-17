@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { Product, ProductVariant, ProductVariantOption } from "../../types/merchant";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { Product, ProductVariant, ProductVariantOption } from '../../types/merchant';
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 import { MaterialIcons } from "@expo/vector-icons";
 
 interface VariantSelectorProps {
@@ -150,6 +150,16 @@ export default function VariantSelector({
                       }
                     }}
                     disabled={isDisabled}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`${option.name} ${value}${isSelected ? ", selected" : ""}${isDisabled ? ", unavailable" : ""}`}
+                    accessibilityState={{ 
+                      selected: isSelected,
+                      disabled: isDisabled 
+                    }}
+                    accessibilityHint={isDisabled ? "This option is not available" : `Select ${option.name} ${value}`}
+                    activeOpacity={0.7}
+                    hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}
                     style={{
                       paddingHorizontal: spacing.md,
                       paddingVertical: spacing.sm,

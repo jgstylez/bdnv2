@@ -8,8 +8,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Currency } from "../types/international";
-import { formatCurrency } from "../lib/international";
+import { Currency } from '../types/international';
+import { formatCurrency } from '../lib/international';
 
 interface FeeBreakdownProps {
   amount: number;

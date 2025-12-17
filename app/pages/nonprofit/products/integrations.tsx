@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TextInput, TouchableOpacity, useWindowDimension
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { InventoryIntegration } from "../../../../types/merchant";
+import { InventoryIntegration } from '@/types/merchant';
 
 const availableIntegrations = [
   {

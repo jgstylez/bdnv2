@@ -3,9 +3,9 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Share, P
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
-import { Merchant } from "../../../types/merchant";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { logError } from "../../../lib/logger";
+import { Merchant } from '@/types/merchant';
+import { useResponsive } from '@/hooks/useResponsive';
+import { logError } from '@/lib/logger';
 
 // Mock merchant data
 const mockMerchant: Merchant = {

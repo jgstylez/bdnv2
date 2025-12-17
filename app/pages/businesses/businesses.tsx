@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { HeroSection } from "../../../components/layouts/HeroSection";
+import { HeroSection } from '@/components/layouts/HeroSection';
 
 // Mock businesses data
 const mockBusinesses = [

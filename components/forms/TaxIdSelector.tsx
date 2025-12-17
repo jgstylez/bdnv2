@@ -7,8 +7,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, ScrollView, TextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { TaxIdType, CountryCode, TaxIdentification } from "../../types/international";
-import { getDefaultTaxIdType, validateTaxId } from "../../lib/international";
+import { TaxIdType, CountryCode, TaxIdentification } from '../../types/international';
+import { getDefaultTaxIdType, validateTaxId } from '../../lib/international';
 
 interface TaxIdSelectorProps {
   value?: TaxIdentification;

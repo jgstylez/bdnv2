@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { FormInput } from '../../../forms';
+import { FormInput } from '../../forms';
 
 interface UserFormProps {
   form: any;

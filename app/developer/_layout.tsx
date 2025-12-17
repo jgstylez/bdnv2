@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, useWindowDimensions, Platform } from "react-native";
 import { Stack } from "expo-router";
-import { DeveloperSidebar } from "../../components/DeveloperSidebar";
-import { DeveloperHeader } from "../../components/DeveloperHeader";
-import { DeveloperMenuPanel } from "../../components/DeveloperMenuPanel";
+import { DeveloperSidebar } from '@/components/DeveloperSidebar';
+import { DeveloperHeader } from '@/components/DeveloperHeader';
+import { DeveloperMenuPanel } from '@/components/DeveloperMenuPanel';
 
 export default function DeveloperLayout() {
   const { width } = useWindowDimensions();

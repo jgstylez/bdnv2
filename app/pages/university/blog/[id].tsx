@@ -13,8 +13,9 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { BlogPost, BlogContentBlock } from "../../../../types/education";
-import RichContentRenderer from "../../../../components/blog/RichContentRenderer";
+import { BlogPost, BlogContentBlock } from '@/types/education';
+import RichContentRenderer from '@/components/blog/RichContentRenderer';
+import { logger } from '@/lib/logger';
 
 // Mock blog posts with rich content
 const mockBlogPosts: BlogPost[] = [
@@ -362,7 +363,7 @@ export default function BlogDetail() {
         title: post.title,
       });
     } catch (error) {
-      console.error("Error sharing:", error);
+      logger.error("Error sharing", error);
     }
   };
 

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Modal, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Transaction, TransactionType, TransactionStatus } from "../../types/transactions";
-import { formatCurrency } from "../../lib/international";
-import { Pagination } from "../../components/admin/Pagination";
+import { Transaction, TransactionType, TransactionStatus } from '@/types/transactions';
+import { formatCurrency } from '@/lib/international';
+import { Pagination } from '@/components/admin/Pagination';
 
 // Mock transactions
 const mockTransactions: Transaction[] = [

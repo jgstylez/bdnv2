@@ -25,6 +25,13 @@ export const TokenPurchaseForm = ({
         <View style={{ flexDirection: 'row', gap: 12 }}>
           <TouchableOpacity
             onPress={() => setPurchaseType("recurring")}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Recurring purchase"
+            accessibilityState={{ selected: purchaseType === "recurring" }}
+            accessibilityHint="Select recurring purchase with auto-renewal"
+            activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               flex: 1,
               backgroundColor: purchaseType === "recurring" ? "#ba9988" : "#474747",
@@ -41,6 +48,13 @@ export const TokenPurchaseForm = ({
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setPurchaseType("one-time")}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="One-time purchase"
+            accessibilityState={{ selected: purchaseType === "one-time" }}
+            accessibilityHint="Select single one-time purchase"
+            activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               flex: 1,
               backgroundColor: purchaseType === "one-time" ? "#ba9988" : "#474747",
@@ -70,6 +84,13 @@ export const TokenPurchaseForm = ({
               <TouchableOpacity
                 key={amount}
                 onPress={() => setTokenAmount(amount.toString())}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={`${amount} token${amount !== 1 ? "s" : ""} for $${totalPrice.toFixed(2)}${selected ? ", selected" : ""}`}
+                accessibilityState={{ selected }}
+                accessibilityHint={`Select ${amount} token${amount !== 1 ? "s" : ""}`}
+                activeOpacity={0.7}
+                hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}
                 style={{
                   flex: isMobile ? undefined : 1,
                   minWidth: isMobile ? '48%' : 0,
@@ -103,6 +124,10 @@ export const TokenPurchaseForm = ({
             keyboardType="number-pad"
             placeholder={purchaseType === "recurring" ? "Enter amount (min 1)" : "Enter custom amount"}
             placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            accessible={true}
+            accessibilityRole="textbox"
+            accessibilityLabel="Custom token amount"
+            accessibilityHint={purchaseType === "recurring" ? "Enter number of tokens, minimum 1" : "Enter custom number of tokens"}
             style={{
               backgroundColor: "#474747",
               borderRadius: 12,
@@ -132,6 +157,13 @@ export const TokenPurchaseForm = ({
               <TouchableOpacity
                 key={freq.value}
                 onPress={() => setRecurringFrequency(freq.value as any)}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={`Frequency ${freq.label}${recurringFrequency === freq.value ? ", selected" : ""}`}
+                accessibilityState={{ selected: recurringFrequency === freq.value }}
+                accessibilityHint={`Select ${freq.label.toLowerCase()} frequency`}
+                activeOpacity={0.7}
+                hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}
                 style={{
                   backgroundColor: recurringFrequency === freq.value ? "#ba9988" : "#474747",
                   borderRadius: 8,
@@ -183,6 +215,15 @@ export const TokenPurchaseForm = ({
       <TouchableOpacity
         onPress={() => purchaseType === "recurring" ? handleSetupRecurringPurchase() : handlePurchase()}
         disabled={purchaseType === "recurring" ? (!tokenAmount || parseInt(tokenAmount) < 1) : (!tokenAmount || parseInt(tokenAmount) <= 0)}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel={purchaseType === "recurring" ? "Set Up Recurring Purchase" : "Make One-Time Purchase"}
+        accessibilityState={{ 
+          disabled: purchaseType === "recurring" ? (!tokenAmount || parseInt(tokenAmount) < 1) : (!tokenAmount || parseInt(tokenAmount) <= 0)
+        }}
+        accessibilityHint={purchaseType === "recurring" ? "Complete recurring purchase setup" : "Complete one-time token purchase"}
+        activeOpacity={0.7}
+        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         style={{
           backgroundColor: (purchaseType === "recurring" ? parseInt(tokenAmount) >= 1 : parseInt(tokenAmount) > 0) ? "#ba9988" : "rgba(186, 153, 136, 0.3)",
           borderRadius: 12,

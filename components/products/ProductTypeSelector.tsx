@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { spacing } from "../../constants/theme";
+import { spacing } from '../../constants/theme';
 
 interface ProductTypeSelectorProps {
   selectedType: string;

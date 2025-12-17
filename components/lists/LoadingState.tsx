@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ActivityIndicator } from "react-native";
-import { colors, spacing, typography, borderRadius } from "../../constants/theme";
+import { colors, spacing, typography, borderRadius } from '../../constants/theme';
 
 interface LoadingStateProps {
   message?: string;

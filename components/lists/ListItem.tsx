@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 
 export interface ListItemAction {
   icon: keyof typeof MaterialIcons.glyphMap;
@@ -119,6 +119,11 @@ export function ListItem({
             <TouchableOpacity
               key={index}
               onPress={action.onPress}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel={action.label || `Action ${index + 1}`}
+              accessibilityHint={action.label ? undefined : `Perform action ${index + 1}`}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               style={{
                 padding: 8,
                 borderRadius: borderRadius.md,
@@ -140,8 +145,27 @@ export function ListItem({
   );
 
   if (onPress) {
-    return <TouchableOpacity onPress={onPress}>{Content}</TouchableOpacity>;
+    return (
+      <TouchableOpacity 
+        onPress={onPress}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel={`${title}${subtitle ? `. ${subtitle}` : ""}`}
+        accessibilityHint="Double tap to open"
+        activeOpacity={0.7}
+      >
+        {Content}
+      </TouchableOpacity>
+    );
   }
 
-  return Content;
+  return (
+    <View
+      accessible={true}
+      accessibilityRole="text"
+      accessibilityLabel={`${title}${subtitle ? `. ${subtitle}` : ""}`}
+    >
+      {Content}
+    </View>
+  );
 }

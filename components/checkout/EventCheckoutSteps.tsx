@@ -1,13 +1,14 @@
 import React from "react";
-import { View, Text, ScrollView, TouchableOpacity, Platform, ActivityIndicator, Image } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Platform, ActivityIndicator } from "react-native";
+import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Event, TicketOrder } from "../../types/events";
-import { Wallet } from "../../types/wallet";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { Event, TicketOrder } from '../../types/events';
+import { Wallet } from '../../types/wallet';
+import { useResponsive } from '../../hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 import { BackButton } from "../navigation/BackButton";
 import { PaymentMethodSelector } from "./PaymentMethodSelector";
-import { formatCurrency } from "../../lib/international";
+import { formatCurrency } from '../../lib/international';
 
 type CheckoutStep = "review" | "payment" | "processing" | "success";
 
@@ -114,7 +115,9 @@ export function EventCheckoutReviewStep({
               <Image
                 source={{ uri: event.imageUrl }}
                 style={{ width: "100%", height: "100%" }}
-                resizeMode="cover"
+                contentFit="cover"
+                cachePolicy="memory-disk"
+                transition={200}
               />
             ) : (
               <View style={{ width: "100%", height: "100%", backgroundColor: colors.secondary.bg, justifyContent: "center", alignItems: "center" }}>
@@ -291,6 +294,12 @@ export function EventCheckoutReviewStep({
         {/* Proceed Button */}
         <TouchableOpacity
           onPress={onProceedToPayment}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Proceed to Payment"
+          accessibilityHint="Continue to payment step"
+          activeOpacity={0.7}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           style={{
             backgroundColor: colors.accent,
             borderRadius: borderRadius.md,
@@ -451,6 +460,13 @@ export function EventCheckoutPaymentStep({
               </View>
               <TouchableOpacity
                 onPress={onToggleBLKD}
+                accessible={true}
+                accessibilityRole="switch"
+                accessibilityLabel="Use MyImpact Rewards"
+                accessibilityState={{ checked: useBLKD }}
+                accessibilityHint={useBLKD ? "Disable MyImpact Rewards" : "Enable MyImpact Rewards"}
+                activeOpacity={0.7}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 style={{
                   width: 48,
                   height: 28,
@@ -493,6 +509,15 @@ export function EventCheckoutPaymentStep({
         <TouchableOpacity
           onPress={onProcessPayment}
           disabled={remainingAfterBLKD > 0 && !selectedWalletId && !useBLKD}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Complete Purchase"
+          accessibilityState={{ 
+            disabled: remainingAfterBLKD > 0 && !selectedWalletId && !useBLKD 
+          }}
+          accessibilityHint="Finalize and complete your purchase"
+          activeOpacity={0.7}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           style={{
             backgroundColor:
               remainingAfterBLKD > 0 && !selectedWalletId && !useBLKD ? colors.border.light : colors.accent,
@@ -645,6 +670,12 @@ export function EventCheckoutSuccessStep({
         <View style={{ width: "100%", gap: spacing.md }}>
           <TouchableOpacity
             onPress={onViewTickets}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="View My Tickets"
+            accessibilityHint="View your purchased event tickets"
+            activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               backgroundColor: colors.accent,
               borderRadius: borderRadius.md,
@@ -665,6 +696,12 @@ export function EventCheckoutSuccessStep({
 
           <TouchableOpacity
             onPress={onBackToEvent}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Back to Event"
+            accessibilityHint="Return to event details page"
+            activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               backgroundColor: colors.secondary.bg,
               borderRadius: borderRadius.md,

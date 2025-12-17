@@ -6,7 +6,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
-import { Message, MessageAttachment } from "../../../types/messages";
+import { Message, MessageAttachment } from '@/types/messages';
 
 // Mock messages by conversation ID
 const getMessagesForConversation = (conversationId: string): Message[] => {

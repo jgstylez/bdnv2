@@ -3,9 +3,9 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { LeaderboardEntry } from "../../../types/impact";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { useResponsive } from "../../../hooks/useResponsive";
+import { LeaderboardEntry } from '@/types/impact';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useResponsive } from '@/hooks/useResponsive';
 
 // Mock leaderboard data - Top 20
 const mockLeaderboard: LeaderboardEntry[] = [

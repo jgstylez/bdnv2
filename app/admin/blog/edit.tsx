@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Alert } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { PageTitle } from '../../components/header/PageTitle';
-import { FormSection } from '../../components/forms/FormSection';
-import { BlogPostForm } from '../../components/admin/blog/BlogPostForm';
-import { BaseModal, ConfirmModal, FormModal } from '../../components/modals';
+import { PageTitle } from '@/components/header/PageTitle';
+import { FormSection } from '@/components/forms/FormSection';
+import { BlogPostForm } from '@/components/admin/blog/BlogPostForm';
+import { ConfirmModal, FormModal } from '@/components/modals';
+import Button from '@/components/Button';
+import { logger } from '@/lib/logger';
 
 // Mock data for a blog post. In a real app, you would fetch this based on the ID.
 const MOCK_POST = {
@@ -22,16 +24,17 @@ export default function EditBlogPost() {
     author: '',
   });
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [isFormModalVisible, setFormModalVisible] = useState(false);
 
   useEffect(() => {
     // In a real app, you would fetch the blog post data from a database using the id
-    console.log(`Fetching blog post with id: ${id}`);
+    logger.debug(`Fetching blog post with id: ${id}`);
     setForm(MOCK_POST);
   }, [id]);
 
   const handleUpdate = () => {
     // In a real app, you would update this data in a database
-    console.log('Updating blog post:', form);
+    logger.info('Updating blog post', { form });
     Alert.alert('Success', 'Blog post updated successfully!', [
       { text: 'OK', onPress: () => router.back() },
     ]);
@@ -43,7 +46,7 @@ export default function EditBlogPost() {
 
   const confirmDelete = () => {
     // In a real app, you would delete this data from a database
-    console.log('Deleting blog post with id:', id);
+    logger.info('Deleting blog post', { postId: id });
     setDeleteModalVisible(false);
     Alert.alert('Success', 'Blog post deleted successfully!', [
       { text: 'OK', onPress: () => router.push('/admin/blog') },
@@ -56,22 +59,17 @@ export default function EditBlogPost() {
       <FormSection title="Blog Post Details">
         <BlogPostForm form={form} setForm={setForm} />
       </FormSection>
-      <FormModal
-        visible={true} // This should be controlled by state in a real app
-        title="Edit Blog Post"
-        onSave={handleUpdate}
-        onCancel={() => router.back()}
-        onDelete={handleDelete}
-      >
-        <BlogPostForm form={form} setForm={setForm} />
-      </FormModal>
+      <View style={{ flexDirection: 'row', gap: 8, padding: 16 }}>
+        <Button onPress={handleUpdate}>Save Changes</Button>
+        <Button variant="destructive" onPress={handleDelete}>Delete</Button>
+      </View>
 
       <ConfirmModal
         visible={isDeleteModalVisible}
         title="Delete Blog Post"
         message="Are you sure you want to delete this blog post? This action cannot be undone."
         onConfirm={confirmDelete}
-        onCancel={() => setDeleteModalVisible(false)}
+        onClose={() => setDeleteModalVisible(false)}
       />
     </ScrollView>
   );

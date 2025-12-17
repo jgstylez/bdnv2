@@ -9,9 +9,9 @@ import { SearchBar } from "./header/SearchBar";
 import { NotificationBadge } from "./header/NotificationBadge";
 import { CartBadge } from "./header/CartBadge";
 import { UserDropdown } from "./header/UserDropdown";
-import { useResponsive } from "../hooks/useResponsive";
-import { colors, spacing, borderRadius } from "../constants/theme";
-import { userMenuItems } from "../config/userMenu";
+import { useResponsive } from '../hooks/useResponsive';
+import { colors, spacing, borderRadius } from '../constants/theme';
+import { userMenuItems } from '../config/userMenu';
 
 interface AppHeaderProps {
   onMenuPress: () => void;

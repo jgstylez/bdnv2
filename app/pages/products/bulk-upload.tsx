@@ -4,9 +4,9 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter, usePathname } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
-import { BulkUploadResult } from "../../../types/merchant";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
+import { BulkUploadResult } from '@/types/merchant';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 
 /**
  * Shared Bulk Upload Component

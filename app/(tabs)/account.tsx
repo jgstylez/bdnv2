@@ -5,8 +5,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { userMenuItems } from "../../config/userMenu";
-import { UserBadge, BADGE_DEFINITIONS } from "../../types/badges";
-import { BadgeIcon } from "../../components/BadgeIcon";
+import { UserBadge, BADGE_DEFINITIONS } from '@/types/badges';
+import { BadgeIcon } from '@/components/BadgeIcon';
 
 // Mock user data
 const mockUser = {

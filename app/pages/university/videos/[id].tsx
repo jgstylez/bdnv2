@@ -4,11 +4,11 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Video } from "../../../../types/education";
-import { HeroSection } from "../../../../components/layouts/HeroSection";
-import { useResponsive } from "../../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../../constants/theme";
-import { logError } from "../../../../lib/logger";
+import { Video } from '@/types/education';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { logError } from '@/lib/logger';
 
 // Mock videos - in production, fetch from API
 const mockVideos: Record<string, Video> = {

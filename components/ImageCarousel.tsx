@@ -178,6 +178,14 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
                   height: "100%",
                 }}
                 resizeMode="cover"
+                accessible={true}
+                accessibilityRole="image"
+                accessibilityLabel={
+                  item.title 
+                    ? `Carousel image: ${item.title}${item.description ? `. ${item.description}` : ""}`
+                    : `Carousel image ${index + 1} of ${items.length}`
+                }
+                accessibilityHint={item.link ? "Double tap to open link" : undefined}
               />
               {/* Solid Black Overlay - Half Container */}
               {(item.title || item.description || item.link) && (
@@ -281,6 +289,12 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
                         >
                           <TouchableOpacity
                             onPress={() => onItemPress?.(item)}
+                            accessible={true}
+                            accessibilityRole="button"
+                            accessibilityLabel={item.linkText || "Open link"}
+                            accessibilityHint={`Opens ${item.title || "carousel item"}`}
+                            activeOpacity={0.7}
+                            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                             style={{
                               flexDirection: "row",
                               alignItems: "center",
@@ -336,6 +350,12 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
         <>
           <TouchableOpacity
             onPress={scrollPrevious}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Previous carousel item"
+            accessibilityHint="Navigate to previous image in carousel"
+            activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               position: "absolute",
               left: 0,
@@ -353,12 +373,17 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
               borderWidth: 1,
               borderColor: "rgba(186, 153, 136, 0.3)",
             }}
-            activeOpacity={0.7}
           >
             <MaterialIcons name="chevron-left" size={28} color="#ba9988" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={scrollNext}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Next carousel item"
+            accessibilityHint="Navigate to next image in carousel"
+            activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               position: "absolute",
               right: 0,
@@ -439,6 +464,13 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
             <TouchableOpacity
               key={index}
               onPress={() => scrollToIndex(index)}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel={`Go to carousel item ${index + 1}`}
+              accessibilityState={{ selected: currentIndex === index }}
+              accessibilityHint={`Navigate to ${index + 1} of ${items.length}`}
+              activeOpacity={0.7}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               style={{
                 width: currentIndex === index ? 24 : 8,
                 height: 8,

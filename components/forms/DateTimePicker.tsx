@@ -2,8 +2,8 @@ import React, { useState, useRef } from "react";
 import { View, Text, TouchableOpacity, Platform, Modal, ScrollView, Dimensions, Animated } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
-import { logWarn } from "../../lib/logger";
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
+import { logWarn } from '../../lib/logger';
 
 // Conditional import for native date picker (not available on web)
 let DateTimePicker: any = null;

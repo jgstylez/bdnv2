@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Alert, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 
 const copyToClipboard = async (text: string): Promise<boolean> => {
   if (Platform.OS === "web") {

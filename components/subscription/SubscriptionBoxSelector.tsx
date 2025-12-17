@@ -6,12 +6,12 @@ import {
   SubscriptionDuration,
   getFrequencyLabel,
   getDurationLabel,
-} from "../../types/subscription-box";
-import { calculateSubscriptionBoxPricing } from "../../lib/subscription-box";
-import { SubscriptionBoxPlan } from "../../types/subscription-box";
-import { formatCurrency } from "../../lib/international";
-import { calculateConsumerServiceFee, checkBDNPlusSubscription } from "../../lib/fees";
-import { colors, typography, spacing, borderRadius } from "../../constants/theme";
+} from '../../types/subscription-box';
+import { calculateSubscriptionBoxPricing } from '../../lib/subscription-box';
+import { SubscriptionBoxPlan } from '../../types/subscription-box';
+import { formatCurrency } from '../../lib/international';
+import { calculateConsumerServiceFee, checkBDNPlusSubscription } from '../../lib/fees';
+import { colors, typography, spacing, borderRadius } from '../../constants/theme';
 
 // Compact Select Component (similar to CurrencySelector)
 interface CompactSelectProps<T> {

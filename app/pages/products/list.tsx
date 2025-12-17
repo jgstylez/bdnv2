@@ -4,10 +4,10 @@ import { Image } from "expo-image";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Product } from "../../../types/merchant";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
-import { ProductPlaceholder } from "../../../components/ProductPlaceholder";
+import { Product } from '@/types/merchant';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { ProductPlaceholder } from '@/components/ProductPlaceholder';
 import { Platform } from "react-native";
 
 // Mock products - in production, this would come from an API

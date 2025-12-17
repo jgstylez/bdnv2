@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { colors, spacing, borderRadius } from "../../constants/theme";
+import { colors, spacing, borderRadius } from '../../constants/theme';
 
 interface TokenTabsProps {
   activeTab: "purchase" | "manage";

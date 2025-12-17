@@ -4,8 +4,8 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { SearchResult, SearchFilters, RecentActivity } from "../../../types/search";
-import { Carousel } from "../../../components/layouts/Carousel";
+import { SearchResult, SearchFilters, RecentActivity } from '@/types/search';
+import { Carousel } from '@/components/layouts/Carousel';
 
 // Mock recent searches
 const mockRecentSearches: RecentActivity[] = [

@@ -3,9 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, Linking, Alert } from "react-
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Invoice } from "../../../types/invoices";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
+import { Invoice } from '@/types/invoices';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { logger } from '@/lib/logger';
 
 // Mock invoice data - in production, fetch by ID
 const mockInvoices: Record<string, Invoice> = {
@@ -142,7 +143,7 @@ export default function InvoiceDetail() {
           style: "destructive",
           onPress: () => {
             // TODO: Implement actual deletion logic
-            console.log("Deleting invoice:", invoice.id);
+            logger.info("Deleting invoice", { invoiceId: invoice.id });
             router.back();
           },
         },

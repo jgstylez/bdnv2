@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { AdminModal } from "../AdminModal";
-import { spacing } from "../../constants/theme";
+import { spacing } from '../../../constants/theme';
 
 interface UserModalProps {
   visible: boolean;

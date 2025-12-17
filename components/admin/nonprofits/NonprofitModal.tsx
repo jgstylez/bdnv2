@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import { AdminModal } from "../AdminModal";
-import { InternationalAddressForm } from "../../forms/InternationalAddressForm";
-import { TaxIdSelector } from "../../forms/TaxIdSelector";
-import { spacing } from "../../constants/theme";
+import { InternationalAddressForm } from '../../forms/InternationalAddressForm';
+import { TaxIdSelector } from '../../forms/TaxIdSelector';
+import { spacing } from '../../../constants/theme';
 
 const categories = [
   "Education",

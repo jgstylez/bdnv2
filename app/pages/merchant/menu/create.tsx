@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TextInput, TouchableOpacity, useWindowDimension
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { MenuCategory, MenuItem } from "../../../../types/menu";
+import { MenuCategory, MenuItem } from '@/types/menu';
 
 export default function CreateMenu() {
   const { width } = useWindowDimensions();

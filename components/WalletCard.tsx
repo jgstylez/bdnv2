@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Wallet, WalletType, BankAccountWallet, CreditCardWallet, GiftCardWallet } from "../types/wallet";
+import { Wallet, WalletType, BankAccountWallet, CreditCardWallet, GiftCardWallet } from '../types/wallet';
 
 interface WalletCardProps {
   wallet: Wallet;

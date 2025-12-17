@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { logger } from '../lib/logger';
 
 import { SelectBusiness } from './c2b-payment/SelectBusiness';
 import { AmountStep } from './c2b-payment/AmountStep';
@@ -101,7 +102,7 @@ export const C2BPayment = () => {
   };
 
   const handleFeedbackSubmit = () => {
-    console.log('Feedback Submitted:', { rating, feedback });
+    logger.info('Feedback Submitted', { rating, feedback });
     setFeedbackVisible(false);
     resetPaymentFlow();
   };

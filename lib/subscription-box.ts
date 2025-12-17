@@ -112,7 +112,7 @@ export function calculateSubscriptionBoxPricing(
     pricePerShipment: plan.pricePerShipment * quantity,
     shippingPerShipment: plan.shippingCostPerShipment * quantity,
     subtotalPerShipment: discountedSubtotal,
-    serviceFeePerShipment: feeCalculation.fee,
+    serviceFeePerShipment: feeCalculation.serviceFee,
     totalPerShipment: feeCalculation.total,
     currency: plan.currency,
     discountAmount,

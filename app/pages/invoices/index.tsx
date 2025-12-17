@@ -3,11 +3,11 @@ import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Invoice, InvoiceStatus } from "../../../types/invoices";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { AdminFilterBar } from "../../../components/admin/AdminFilterBar";
+import { Invoice, InvoiceStatus } from '@/types/invoices';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { AdminFilterBar } from '@/components/admin/AdminFilterBar';
 
 // Mock invoices - in production, fetch from API
 const mockInvoices: Invoice[] = [

@@ -3,20 +3,20 @@ import { View, Text, ScrollView, TouchableOpacity, Platform, Alert, ActivityIndi
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Event, TicketType, TicketOrder } from "../../../types/events";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
-import { Wallet } from "../../../types/wallet";
-import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from "../../../lib/fees";
-import { getMockEvent } from "../../../data/mocks/events";
-import { mockWallets } from "../../../data/mocks/wallets";
-import { BackButton } from "../../../components/navigation/BackButton";
+import { Event, TicketType, TicketOrder } from '@/types/events';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { Wallet } from '@/types/wallet';
+import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '@/lib/fees';
+import { getMockEvent } from '@/data/mocks/events';
+import { mockWallets } from '@/data/mocks/wallets';
+import { BackButton } from '@/components/navigation/BackButton';
 import {
   EventCheckoutReviewStep,
   EventCheckoutPaymentStep,
   EventCheckoutProcessingStep,
   EventCheckoutSuccessStep,
-} from "../../../components/checkout/EventCheckoutSteps";
+} from '@/components/checkout/EventCheckoutSteps';
 
 type CheckoutStep = "review" | "payment" | "processing" | "success";
 

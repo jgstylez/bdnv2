@@ -3,9 +3,9 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Carousel } from "../../../components/layouts/Carousel";
-import { EnhancedBentoGrid } from "../../../components/layouts/EnhancedBentoGrid";
-import { HeroSection } from "../../../components/layouts/HeroSection";
+import { Carousel } from '@/components/layouts/Carousel';
+import { EnhancedBentoGrid } from '@/components/layouts/EnhancedBentoGrid';
+import { HeroSection } from '@/components/layouts/HeroSection';
 
 const mediaSections = [
   {

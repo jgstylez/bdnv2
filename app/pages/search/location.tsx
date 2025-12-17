@@ -3,8 +3,8 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInpu
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { SearchResult } from "../../../types/search";
-import { BusinessPlaceholder } from "../../../components/BusinessPlaceholder";
+import { SearchResult } from '@/types/search';
+import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
 
 // Mock nearby businesses
 const mockNearbyBusinesses: SearchResult[] = [

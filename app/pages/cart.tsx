@@ -4,13 +4,13 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
-import { ProductPlaceholder } from "../../components/ProductPlaceholder";
-import { HeroSection } from "../../components/layouts/HeroSection";
-import { useCart } from "../../contexts/CartContext";
-import { formatCurrency } from "../../lib/international";
-import { BackButton } from "../../components/navigation/BackButton";
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { ProductPlaceholder } from '@/components/ProductPlaceholder';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useCart } from '@/contexts/CartContext';
+import { formatCurrency } from '@/lib/international';
+import { BackButton } from '@/components/navigation/BackButton';
 
 export default function Cart() {
   const router = useRouter();
@@ -243,6 +243,11 @@ export default function Cart() {
                         </View>
                         <TouchableOpacity
                           onPress={() => handleRemoveItem(item.id)}
+                          accessible={true}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Remove ${item.name} from cart`}
+                          accessibilityHint="Double tap to remove this item from your cart"
+                          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                           style={{
                             padding: spacing.xs,
                           }}
@@ -257,6 +262,11 @@ export default function Cart() {
                       <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.md }}>
                         <TouchableOpacity
                           onPress={() => handleUpdateQuantity(item.id, -1)}
+                          accessible={true}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Decrease quantity of ${item.name}`}
+                          accessibilityHint="Double tap to decrease quantity by one"
+                          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                           style={{
                             width: 32,
                             height: 32,
@@ -271,6 +281,9 @@ export default function Cart() {
                           <MaterialIcons name="remove" size={18} color={colors.text.primary} />
                         </TouchableOpacity>
                         <Text
+                          accessible={true}
+                          accessibilityRole="text"
+                          accessibilityLabel={`Quantity: ${item.quantity}`}
                           style={{
                             fontSize: typography.fontSize.base,
                             fontWeight: typography.fontWeight.semibold,
@@ -283,6 +296,11 @@ export default function Cart() {
                         </Text>
                         <TouchableOpacity
                           onPress={() => handleUpdateQuantity(item.id, 1)}
+                          accessible={true}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Increase quantity of ${item.name}`}
+                          accessibilityHint="Double tap to increase quantity by one"
+                          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                           style={{
                             width: 32,
                             height: 32,
@@ -431,6 +449,11 @@ export default function Cart() {
               </View>
               <TouchableOpacity
                 onPress={handleCheckout}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Proceed to checkout"
+                accessibilityHint="Double tap to proceed to checkout"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 style={{
                   backgroundColor: colors.accent,
                   paddingVertical: spacing.md + 2,

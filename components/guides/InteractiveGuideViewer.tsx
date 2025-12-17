@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Guide, GuideStep, InteractiveElement } from "../../types/education";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
-import { useResponsive } from "../../hooks/useResponsive";
+import { Guide, GuideStep, InteractiveElement } from '../../types/education';
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface InteractiveGuideViewerProps {
   guide: Guide;
@@ -405,7 +406,9 @@ export default function InteractiveGuideViewer({
                 aspectRatio: 16 / 9,
                 backgroundColor: colors.secondary.bg,
               }}
-              resizeMode="cover"
+              contentFit="cover"
+              cachePolicy="memory-disk"
+              transition={200}
             />
           </View>
         )}

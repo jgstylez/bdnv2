@@ -3,10 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, Platform } from "react-native
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Transaction, TransactionType, TransactionStatus } from "../../../types/transactions";
-import { formatCurrency } from "../../../lib/international";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { HeroSection } from "../../../components/layouts/HeroSection";
+import { Transaction, TransactionType, TransactionStatus } from '@/types/transactions';
+import { formatCurrency } from '@/lib/international';
+import { useResponsive } from '@/hooks/useResponsive';
+import { HeroSection } from '@/components/layouts/HeroSection';
 
 // Mock transactions data - in production, fetch by ID
 const mockTransactions: Record<string, Transaction> = {

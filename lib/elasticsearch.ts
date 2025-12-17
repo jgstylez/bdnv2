@@ -1,4 +1,5 @@
 import { SearchResult, SearchFilters, ElasticsearchConfig } from "../types/search";
+import { logError, logInfo } from "./logger";
 
 // Elasticsearch configuration
 const config: ElasticsearchConfig = {

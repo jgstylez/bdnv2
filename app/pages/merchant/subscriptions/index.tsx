@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { PageTitle } from '../../../../components/header/PageTitle';
-import { ActionButton } from '../../../../components/buttons/ActionButton';
+import { PageTitle } from '@/components/header/PageTitle';
+import Button from '@/components/Button';
 
 // Mock data for subscriptions. In a real app, you would fetch this from a database.
 const MOCK_SUBSCRIPTIONS = [
@@ -24,10 +24,9 @@ export default function SubscriptionManagement() {
   return (
     <View style={{ flex: 1 }}>
       <PageTitle title="Subscription Management" />
-      <ActionButton
-        title="Create New Subscription"
-        onPress={() => router.push('/pages/merchant/subscriptions/create')}
-      />
+      <Button onPress={() => router.push('/pages/merchant/subscriptions/create')}>
+        Create New Subscription
+      </Button>
       <FlatList
         data={MOCK_SUBSCRIPTIONS}
         renderItem={renderItem}

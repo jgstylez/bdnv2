@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { PageTitle } from '../../components/header/PageTitle';
-import { ActionButton } from '../../components/buttons/ActionButton';
+import { PageTitle } from '@/components/header/PageTitle';
+import Button from '@/components/Button';
 
 // Mock data for blog posts. In a real app, you would fetch this from a database.
 const MOCK_POSTS = [
@@ -23,7 +23,7 @@ export default function BlogManagement() {
   return (
     <View style={{ flex: 1 }}>
       <PageTitle title="Blog Management" />
-      <ActionButton
+      <Button
         title="Create New Post"
         onPress={() => router.push('/admin/blog/create')}
       />

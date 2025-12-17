@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TextInput, TextInputProps, ViewStyle } from "react-native";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 
 interface FormInputProps extends TextInputProps {
   label?: string;
@@ -30,6 +30,14 @@ export function FormInput({
       )}
       <TextInput
         placeholderTextColor={colors.text.placeholder}
+        accessible={true}
+        accessibilityRole="textbox"
+        accessibilityLabel={props.accessibilityLabel || label || props.placeholder || "Text input"}
+        accessibilityHint={props.accessibilityHint || (error ? `Error: ${error}` : undefined)}
+        accessibilityState={{ 
+          ...props.accessibilityState,
+          ...(error ? { invalid: true } : {})
+        }}
         style={[
           {
             backgroundColor: colors.secondary.bg,

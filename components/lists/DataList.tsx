@@ -4,7 +4,7 @@ import { ListItem, ListItemAction } from "./ListItem";
 import { EmptyState } from "./EmptyState";
 import { LoadingState } from "./LoadingState";
 import { MaterialIcons } from "@expo/vector-icons";
-import { spacing } from "../../constants/theme";
+import { spacing } from '../../constants/theme';
 
 interface DataListProps<T> extends Omit<FlatListProps<T>, "renderItem"> {
   data: T[];

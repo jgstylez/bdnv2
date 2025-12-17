@@ -3,8 +3,8 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "r
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { BusinessMetrics } from "../../../types/bi";
-import { Pagination } from "../../../components/admin/Pagination";
+import { BusinessMetrics } from '@/types/bi';
+import { Pagination } from '@/components/admin/Pagination';
 
 // Mock business metrics
 const mockBusinessMetrics: BusinessMetrics[] = [

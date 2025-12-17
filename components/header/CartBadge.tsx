@@ -2,8 +2,8 @@ import React from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
-import { useCart } from "../../contexts/CartContext";
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
+import { useCart } from '../../contexts/CartContext';
 
 interface CartBadgeProps {
   isDesktop: boolean;

@@ -4,9 +4,9 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Event, TicketType } from "../../../types/events";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { getMockEvent } from "../../../data/mocks";
+import { Event, TicketType } from '@/types/events';
+import { useResponsive } from '@/hooks/useResponsive';
+import { getMockEvent } from '@/data/mocks';
 
 export default function EventDetail() {
   const { id } = useLocalSearchParams();

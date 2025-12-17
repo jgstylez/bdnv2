@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ContentManagementItem, CarouselItem } from "../../types/admin";
-import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
-import { FilterDropdown } from "../../components/admin/FilterDropdown";
-import { AdminModal } from "../../components/admin/AdminModal";
-import { Pagination } from "../../components/admin/Pagination";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, typography, borderRadius } from "../../constants/theme";
-import { ContentList } from "../../components/admin/content/ContentList";
-import { CarouselList } from "../../components/admin/content/CarouselList";
-import { ContentModal } from "../../components/admin/content/ContentModal";
-import { CarouselModal } from "../../components/admin/content/CarouselModal";
+import { ContentManagementItem, CarouselItem } from '@/types/admin';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { AdminModal } from '@/components/admin/AdminModal';
+import { Pagination } from '@/components/admin/Pagination';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, typography, borderRadius } from '@/constants/theme';
+import { ContentList } from '@/components/admin/content/ContentList';
+import { CarouselList } from '@/components/admin/content/CarouselList';
+import { ContentModal } from '@/components/admin/content/ContentModal';
+import { CarouselModal } from '@/components/admin/content/CarouselModal';
 
 // Mock content items
 const mockContent: ContentManagementItem[] = [

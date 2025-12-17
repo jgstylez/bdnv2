@@ -3,13 +3,13 @@ import { View, Text, ScrollView, TextInput, TouchableOpacity, useWindowDimension
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { GiftCardType, GiftCardOrderFormData } from "../../../types/gift-card-order";
-import { Wallet } from "../../../types/wallet";
-import { PaymentMethodSelector } from "../../../components/checkout/PaymentMethodSelector";
-import { formatCurrency } from "../../../lib/international";
-import { DateTimePickerComponent } from "../../../components/forms/DateTimePicker";
-import { BusinessPlaceholder } from "../../../components/BusinessPlaceholder";
+import { useResponsive } from '@/hooks/useResponsive';
+import { GiftCardType, GiftCardOrderFormData } from '@/types/gift-card-order';
+import { Wallet } from '@/types/wallet';
+import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelector';
+import { formatCurrency } from '@/lib/international';
+import { DateTimePickerComponent } from '@/components/forms/DateTimePicker';
+import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
 
 // Mock user data for recipient search
 const mockUsers = [

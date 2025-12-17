@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
-import { spacing } from "../../constants/theme";
+import { spacing } from '../../constants/theme';
 
 interface ProductFormProps {
   form: any;
@@ -29,6 +30,10 @@ export function ProductForm({ form, setForm, categories, isNonprofit }: ProductF
               onChangeText={(text) => setForm({ ...form, name: text })}
               placeholder={isNonprofit ? "e.g. Handmade Quilt" : "e.g. Premium T-Shirt"}
               placeholderTextColor="rgba(255, 255, 255, 0.3)"
+              accessible={true}
+              accessibilityRole="textbox"
+              accessibilityLabel={isNonprofit ? "Item Name" : "Product Name"}
+              accessibilityHint="Enter the name of your product"
               style={{
                 backgroundColor: "#232323",
                 borderRadius: 12,
@@ -52,6 +57,10 @@ export function ProductForm({ form, setForm, categories, isNonprofit }: ProductF
               numberOfLines={4}
               placeholder="Describe your item..."
               placeholderTextColor="rgba(255, 255, 255, 0.3)"
+              accessible={true}
+              accessibilityRole="textbox"
+              accessibilityLabel="Description"
+              accessibilityHint="Enter a detailed description of your product"
               style={{
                 backgroundColor: "#232323",
                 borderRadius: 12,
@@ -74,6 +83,13 @@ export function ProductForm({ form, setForm, categories, isNonprofit }: ProductF
                 <TouchableOpacity
                   key={cat}
                   onPress={() => setForm({ ...form, category: cat })}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Category ${cat}${form.category === cat ? ", selected" : ""}`}
+                  accessibilityState={{ selected: form.category === cat }}
+                  accessibilityHint={`Select ${cat} as product category`}
+                  activeOpacity={0.7}
+                  hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}
                   style={{
                     paddingHorizontal: 16,
                     paddingVertical: 10,
@@ -116,6 +132,10 @@ export function ProductForm({ form, setForm, categories, isNonprofit }: ProductF
               keyboardType="decimal-pad"
               placeholder="0.00"
               placeholderTextColor="rgba(255, 255, 255, 0.3)"
+              accessible={true}
+              accessibilityRole="textbox"
+              accessibilityLabel="Price in dollars"
+              accessibilityHint="Enter the product price"
               style={{
                 backgroundColor: "#232323",
                 borderRadius: 12,
@@ -138,6 +158,10 @@ export function ProductForm({ form, setForm, categories, isNonprofit }: ProductF
               keyboardType="number-pad"
               placeholder="0"
               placeholderTextColor="rgba(255, 255, 255, 0.3)"
+              accessible={true}
+              accessibilityRole="textbox"
+              accessibilityLabel="Stock quantity"
+              accessibilityHint="Enter the number of items in stock"
               style={{
                 backgroundColor: "#232323",
                 borderRadius: 12,
@@ -164,9 +188,21 @@ export function ProductForm({ form, setForm, categories, isNonprofit }: ProductF
               <Image
                 source={{ uri: img }}
                 style={{ width: 100, height: 100, borderRadius: 12, backgroundColor: "#232323" }}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+                transition={200}
+                accessible={true}
+                accessibilityRole="image"
+                accessibilityLabel={`Product image ${index + 1}`}
               />
               <TouchableOpacity
                 onPress={() => setForm({ ...form, images: form.images.filter((_: string, i: number) => i !== index) })}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={`Remove image ${index + 1}`}
+                accessibilityHint="Delete this product image"
+                activeOpacity={0.7}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 style={{
                   position: "absolute",
                   top: -8,
@@ -182,6 +218,12 @@ export function ProductForm({ form, setForm, categories, isNonprofit }: ProductF
           ))}
           
           <TouchableOpacity
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Add product image"
+            accessibilityHint="Add a new image to your product"
+            activeOpacity={0.7}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               width: 100,
               height: 100,

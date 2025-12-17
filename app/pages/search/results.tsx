@@ -11,9 +11,9 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { SearchResult, SearchFilters } from "../../../types/search";
-import { BusinessPlaceholder } from "../../../components/BusinessPlaceholder";
-import { ProductPlaceholder } from "../../../components/ProductPlaceholder";
+import { SearchResult, SearchFilters } from '@/types/search';
+import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
+import { ProductPlaceholder } from '@/components/ProductPlaceholder';
 
 // Mock search results
 const mockResults: SearchResult[] = [

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNonprofit } from "../contexts/NonprofitContext";
+import { useNonprofit } from '../contexts/NonprofitContext';
 import { useRouter } from "expo-router";
-import { colors, spacing, typography, borderRadius } from "../constants/theme";
-import { useResponsive } from "../hooks/useResponsive";
+import { colors, spacing, typography, borderRadius } from '../constants/theme';
+import { useResponsive } from '../hooks/useResponsive';
 
 export function NonprofitSwitcher() {
   const { nonprofits, selectedNonprofit, selectNonprofit, isLoading } = useNonprofit();

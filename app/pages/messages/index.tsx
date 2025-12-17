@@ -3,7 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Conversation } from "../../../types/messages";
+import { Conversation } from '@/types/messages';
 
 // Mock conversations
 const mockConversations: Conversation[] = [

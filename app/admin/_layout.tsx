@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, useWindowDimensions, Platform } from "react-native";
 import { Stack } from "expo-router";
-import { AdminSidebar } from "../../components/AdminSidebar";
-import { AdminHeader } from "../../components/AdminHeader";
-import { AdminMenuPanel } from "../../components/AdminMenuPanel";
+import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminHeader } from '@/components/AdminHeader';
+import { AdminMenuPanel } from '@/components/AdminMenuPanel';
 
 export default function AdminLayout() {
   const { width } = useWindowDimensions();

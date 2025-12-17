@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform, TextInput } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { SubscriptionBox, SubscriptionBoxPlan, SubscriptionBoxShipment, SubscriptionStatus, SubscriptionFrequency, getFrequencyLabel, getDurationLabel } from "../../types/subscription-box";
-import { formatCurrency } from "../../lib/international";
-import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
-import { FilterDropdown } from "../../components/admin/FilterDropdown";
-import { AdminDataCard } from "../../components/admin/AdminDataCard";
-import { AdminModal } from "../../components/admin/AdminModal";
-import { Pagination } from "../../components/admin/Pagination";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { SubscriptionBox, SubscriptionBoxPlan, SubscriptionBoxShipment, SubscriptionStatus, SubscriptionFrequency, getFrequencyLabel, getDurationLabel } from '@/types/subscription-box';
+import { formatCurrency } from '@/lib/international';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { AdminDataCard } from '@/components/admin/AdminDataCard';
+import { AdminModal } from '@/components/admin/AdminModal';
+import { Pagination } from '@/components/admin/Pagination';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 
 // Mock subscription boxes
 const mockSubscriptionBoxes: SubscriptionBox[] = [
@@ -294,11 +294,11 @@ export default function SubscriptionBoxesManagement() {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.md,
             paddingHorizontal: spacing.lg,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
           }}
         >
           <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
@@ -311,7 +311,7 @@ export default function SubscriptionBoxesManagement() {
               flex: 1,
               paddingVertical: spacing.md - 2,
               paddingHorizontal: spacing.md,
-              fontSize: typography.fontSize.base,
+              fontSize: typography.sizes.md,
               color: colors.text.primary,
             }}
           />
@@ -384,26 +384,26 @@ export default function SubscriptionBoxesManagement() {
               >
                 <View style={{ gap: spacing.sm, marginTop: spacing.sm }}>
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       User:
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                       {subscription.userId}
                     </Text>
                   </View>
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Next Billing:
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                       {formatDate(subscription.nextBillingDate)}
                     </Text>
                   </View>
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Shipments:
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                       {subscription.shipmentsCompleted} / {subscription.shipmentsRemaining === -1 ? "∞" : subscription.shipmentsRemaining + subscription.shipmentsCompleted}
                     </Text>
                   </View>
@@ -451,11 +451,11 @@ export default function SubscriptionBoxesManagement() {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.md,
             paddingHorizontal: spacing.lg,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
           }}
         >
           <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
@@ -468,7 +468,7 @@ export default function SubscriptionBoxesManagement() {
               flex: 1,
               paddingVertical: spacing.md - 2,
               paddingHorizontal: spacing.md,
-              fontSize: typography.fontSize.base,
+              fontSize: typography.sizes.md,
               color: colors.text.primary,
             }}
           />
@@ -508,18 +508,18 @@ export default function SubscriptionBoxesManagement() {
             >
               <View style={{ gap: spacing.sm, marginTop: spacing.sm }}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                  <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                     Product ID:
                   </Text>
-                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                  <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                     {plan.productId}
                   </Text>
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                  <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                     Merchant ID:
                   </Text>
-                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                  <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                     {plan.merchantId}
                   </Text>
                 </View>
@@ -566,11 +566,11 @@ export default function SubscriptionBoxesManagement() {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.md,
             paddingHorizontal: spacing.lg,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
           }}
         >
           <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
@@ -583,7 +583,7 @@ export default function SubscriptionBoxesManagement() {
               flex: 1,
               paddingVertical: spacing.md - 2,
               paddingHorizontal: spacing.md,
-              fontSize: typography.fontSize.base,
+              fontSize: typography.sizes.md,
               color: colors.text.primary,
             }}
           />
@@ -653,30 +653,30 @@ export default function SubscriptionBoxesManagement() {
                 <View style={{ gap: spacing.sm, marginTop: spacing.sm }}>
                   {shipment.trackingNumber && (
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                         Tracking:
                       </Text>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                         {shipment.trackingNumber}
                       </Text>
                     </View>
                   )}
                   {shipment.carrier && (
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                         Carrier:
                       </Text>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                         {shipment.carrier}
                       </Text>
                     </View>
                   )}
                   {shipment.deliveredAt && (
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                         Delivered:
                       </Text>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                         {formatDate(shipment.deliveredAt)}
                       </Text>
                     </View>
@@ -853,7 +853,7 @@ export default function SubscriptionBoxesManagement() {
                 />
                 <Text
                   style={{
-                    fontSize: typography.fontSize.base,
+                    fontSize: typography.sizes.md,
                     fontWeight: activeTab === tab.key ? "600" : "500",
                     color: activeTab === tab.key ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
                   }}
@@ -890,44 +890,44 @@ export default function SubscriptionBoxesManagement() {
               {activeTab === "subscriptions" && selectedOrder && "userId" in selectedOrder && (
                 <>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Subscription ID
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {(selectedOrder as SubscriptionBox).id}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       User ID
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {(selectedOrder as SubscriptionBox).userId}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Frequency
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {getFrequencyLabel((selectedOrder as SubscriptionBox).frequency)}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Duration
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {getDurationLabel((selectedOrder as SubscriptionBox).duration)}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Status
                     </Text>
                     <Text
                       style={{
-                        fontSize: typography.fontSize.base,
+                        fontSize: typography.sizes.md,
                         color: getStatusColor((selectedOrder as SubscriptionBox).status),
                       }}
                     >
@@ -935,26 +935,26 @@ export default function SubscriptionBoxesManagement() {
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Next Billing Date
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {formatDate((selectedOrder as SubscriptionBox).nextBillingDate)}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Next Shipment Date
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {formatDate((selectedOrder as SubscriptionBox).nextShipmentDate)}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Shipments Completed
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {(selectedOrder as SubscriptionBox).shipmentsCompleted} /{" "}
                       {(selectedOrder as SubscriptionBox).shipmentsRemaining === -1
                         ? "∞"
@@ -967,42 +967,42 @@ export default function SubscriptionBoxesManagement() {
               {activeTab === "plans" && selectedOrder && "productId" in selectedOrder && (
                 <>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Plan ID
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {(selectedOrder as SubscriptionBoxPlan).id}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Product ID
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {(selectedOrder as SubscriptionBoxPlan).productId}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Merchant ID
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {(selectedOrder as SubscriptionBoxPlan).merchantId}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Frequency
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {getFrequencyLabel((selectedOrder as SubscriptionBoxPlan).frequency)}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Price Per Shipment
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {formatCurrency(
                         (selectedOrder as SubscriptionBoxPlan).pricePerShipment +
                           (selectedOrder as SubscriptionBoxPlan).shippingCostPerShipment,
@@ -1015,28 +1015,28 @@ export default function SubscriptionBoxesManagement() {
               {activeTab === "shipments" && selectedOrder && "shipmentNumber" in selectedOrder && (
                 <>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Shipment ID
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {(selectedOrder as SubscriptionBoxShipment).id}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Subscription ID
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                       {(selectedOrder as SubscriptionBoxShipment).subscriptionBoxId}
                     </Text>
                   </View>
                   <View style={{ gap: spacing.sm }}>
-                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                       Status
                     </Text>
                     <Text
                       style={{
-                        fontSize: typography.fontSize.base,
+                        fontSize: typography.sizes.md,
                         color: getStatusColor((selectedOrder as SubscriptionBoxShipment).status),
                       }}
                     >
@@ -1045,20 +1045,20 @@ export default function SubscriptionBoxesManagement() {
                   </View>
                   {(selectedOrder as SubscriptionBoxShipment).trackingNumber && (
                     <View style={{ gap: spacing.sm }}>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                         Tracking Number
                       </Text>
-                      <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                      <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                         {(selectedOrder as SubscriptionBoxShipment).trackingNumber}
                       </Text>
                     </View>
                   )}
                   {(selectedOrder as SubscriptionBoxShipment).carrier && (
                     <View style={{ gap: spacing.sm }}>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                         Carrier
                       </Text>
-                      <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                      <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                         {(selectedOrder as SubscriptionBoxShipment).carrier}
                       </Text>
                     </View>
@@ -1096,7 +1096,7 @@ export default function SubscriptionBoxesManagement() {
           ]}
         >
           <View style={{ gap: spacing.md }}>
-            <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
+            <Text style={{ fontSize: typography.sizes.md, color: colors.text.secondary }}>
               Add a note explaining why this needs review:
             </Text>
             <TextInput
@@ -1107,13 +1107,13 @@ export default function SubscriptionBoxesManagement() {
               multiline
               numberOfLines={4}
               style={{
-                backgroundColor: colors.primary.bg,
+                backgroundColor: colors.background,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
-                fontSize: typography.fontSize.base,
+                fontSize: typography.sizes.md,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
                 minHeight: 100,
                 textAlignVertical: "top",
               }}

@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import { AdminModal } from "../AdminModal";
-import { MerchantType } from "../../types/merchant";
-import { InternationalAddressForm } from "../../forms/InternationalAddressForm";
-import { CurrencySelector } from "../../forms/CurrencySelector";
-import { TaxIdSelector } from "../../forms/TaxIdSelector";
-import { spacing } from "../../constants/theme";
+import { MerchantType } from '../../../types/merchant';
+import { InternationalAddressForm } from '../../forms/InternationalAddressForm';
+import { CurrencySelector } from '../../forms/CurrencySelector';
+import { TaxIdSelector } from '../../forms/TaxIdSelector';
+import { spacing } from '../../../constants/theme';
 
 const categories = [
   "Restaurant",

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import { useRouter, usePathname } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { logger } from '../lib/logger';
 
 interface NavItem {
   label: string;
@@ -106,7 +107,7 @@ export const AdminSidebar: React.FC = () => {
     try {
       router.push(href);
     } catch (error) {
-      console.error("Error during navigation:", error);
+      logger.error("Error during navigation", error);
     }
   };
   

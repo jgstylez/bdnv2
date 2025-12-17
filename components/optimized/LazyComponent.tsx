@@ -1,6 +1,6 @@
 import React, { Suspense, ComponentType, lazy } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
-import { colors, spacing } from "../../constants/theme";
+import { colors, spacing } from '../../constants/theme';
 
 interface LazyComponentProps {
   children: React.ReactNode;

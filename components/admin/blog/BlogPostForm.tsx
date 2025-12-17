@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { FormInput, FormTextArea } from '../../../forms';
+import { FormInput, FormTextArea } from '../../forms';
 
 interface BlogPostFormProps {
   form: any;

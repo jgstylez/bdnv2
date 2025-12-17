@@ -3,12 +3,12 @@ import { View, Text, ScrollView, useWindowDimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Navigation } from "../../components/Navigation";
-import { Footer } from "../../components/Footer";
-import { HeroSection } from "../../components/layouts/HeroSection";
-import { ScrollAnimatedView } from "../../components/ScrollAnimatedView";
-import { FintechFeaturesSection } from "../../components/sections/FintechFeaturesSection";
-import { FeaturesSection } from "../../components/sections/FeaturesSection";
+import { Navigation } from '@/components/Navigation';
+import { Footer } from '@/components/Footer';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
+import { FintechFeaturesSection } from '@/components/sections/FintechFeaturesSection';
+import { FeaturesSection } from '@/components/sections/FeaturesSection';
 
 export default function Features() {
   const { width } = useWindowDimensions();

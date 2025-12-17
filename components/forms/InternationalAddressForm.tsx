@@ -8,16 +8,16 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { InternationalAddress, CountryCode, COUNTRY_INFO } from "../../types/international";
+import { InternationalAddress, CountryCode, COUNTRY_INFO } from '../../types/international';
 import {
   getCountryInfo,
   validatePostalCode,
-} from "../../types/international";
+} from '../../types/international';
 import {
   requiresStateField,
   getStateFieldLabel,
   getPostalCodeLabel,
-} from "../../lib/international";
+} from '../../lib/international';
 
 interface InternationalAddressFormProps {
   value: Partial<InternationalAddress>;
@@ -91,6 +91,11 @@ export function InternationalAddressForm({
           placeholder="Enter street address"
           placeholderTextColor="rgba(255, 255, 255, 0.4)"
           editable={editable}
+          accessible={true}
+          accessibilityRole="textbox"
+          accessibilityLabel="Street address"
+          accessibilityHint="Enter your street address"
+          accessibilityState={{ disabled: !editable }}
           style={{
             backgroundColor: "#232323",
             borderRadius: 12,
@@ -121,6 +126,11 @@ export function InternationalAddressForm({
           placeholder="Apt, Suite, Unit, etc."
           placeholderTextColor="rgba(255, 255, 255, 0.4)"
           editable={editable}
+          accessible={true}
+          accessibilityRole="textbox"
+          accessibilityLabel="Apartment, suite, or unit number"
+          accessibilityHint="Enter apartment, suite, or unit number if applicable"
+          accessibilityState={{ disabled: !editable }}
           style={{
             backgroundColor: "#232323",
             borderRadius: 12,
@@ -152,6 +162,11 @@ export function InternationalAddressForm({
             placeholder="City"
             placeholderTextColor="rgba(255, 255, 255, 0.4)"
             editable={editable}
+            accessible={true}
+            accessibilityRole="textbox"
+            accessibilityLabel="City"
+            accessibilityHint="Enter your city"
+            accessibilityState={{ disabled: !editable }}
             style={{
               backgroundColor: "#232323",
               borderRadius: 12,
@@ -182,6 +197,11 @@ export function InternationalAddressForm({
               placeholder={stateLabel}
               placeholderTextColor="rgba(255, 255, 255, 0.4)"
               editable={editable}
+              accessible={true}
+              accessibilityRole="textbox"
+              accessibilityLabel={stateLabel}
+              accessibilityHint={`Enter your ${stateLabel.toLowerCase()}`}
+              accessibilityState={{ disabled: !editable }}
               style={{
                 backgroundColor: "#232323",
                 borderRadius: 12,
@@ -216,6 +236,11 @@ export function InternationalAddressForm({
             placeholderTextColor="rgba(255, 255, 255, 0.4)"
             keyboardType="default"
             editable={editable}
+            accessible={true}
+            accessibilityRole="textbox"
+            accessibilityLabel={postalCodeLabel}
+            accessibilityHint={`Enter your ${postalCodeLabel.toLowerCase()}`}
+            accessibilityState={{ disabled: !editable }}
             style={{
               backgroundColor: "#232323",
               borderRadius: 12,
@@ -247,6 +272,12 @@ export function InternationalAddressForm({
             <TouchableOpacity
               onPress={() => editable && setShowCountryList(!showCountryList)}
               disabled={!editable}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel={`Country selector. Current selection: ${countryInfo?.name || address.country || "Select Country"}`}
+              accessibilityHint="Double tap to open country selection list"
+              accessibilityState={{ disabled: !editable, expanded: showCountryList }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               style={{
                 backgroundColor: "#232323",
                 borderRadius: 12,
@@ -290,6 +321,12 @@ export function InternationalAddressForm({
                     <TouchableOpacity
                       key={country.code}
                       onPress={() => handleCountrySelect(country.code)}
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Select country ${country.name}`}
+                      accessibilityState={{ selected: address.country === country.code }}
+                      accessibilityHint="Double tap to select this country"
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                       style={{
                         padding: 16,
                         borderBottomWidth: 1,

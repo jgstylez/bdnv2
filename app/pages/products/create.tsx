@@ -3,12 +3,12 @@ import { View, Text, ScrollView, TouchableOpacity, Alert, Platform } from "react
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import { AppHeader } from "../../components/AppHeader";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing } from "../../constants/theme";
-import { ProductStepIndicator } from "../../components/products/ProductStepIndicator";
-import { ProductTypeSelector } from "../../components/products/ProductTypeSelector";
-import { ProductForm } from "../../components/products/ProductForm";
+import { AppHeader } from "@/components/AppHeader";
+import { useResponsive } from "@/hooks/useResponsive";
+import { colors, spacing } from "@/constants/theme";
+import { ProductStepIndicator } from "@/components/products/ProductStepIndicator";
+import { ProductTypeSelector } from "@/components/products/ProductTypeSelector";
+import { ProductForm } from "@/components/products/ProductForm";
 
 // Categories based on user type
 const MERCHANT_CATEGORIES = [

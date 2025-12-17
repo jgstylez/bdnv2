@@ -1,22 +1,22 @@
 import React from 'react';
 import { View, ScrollView, useWindowDimensions, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useResponsive } from '../../hooks/useResponsive';
-import { BackButton } from '../../components/navigation/BackButton';
+import { useResponsive } from '@/hooks/useResponsive';
+import { BackButton } from '@/components/navigation/BackButton';
 import {
   TokenBalanceCard,
   TokenTabs,
   CertificateModal,
   RecurringConfirmModal,
-} from '../../components/tokens';
-import { TokenPurchaseForm } from '../../components/tokens/TokenPurchaseForm';
-import { useTokensPage } from '../../hooks/useTokensPage';
+} from '@/components/tokens';
+import { TokenPurchaseForm } from '@/components/tokens/TokenPurchaseForm';
+import { useTokensPage } from '@/hooks/useTokensPage';
 
 // Mock Data (to be removed)
-import { mockLedgerEntries, mockPurchases, mockRecurringPurchase } from '../../data/mocks/tokens';
-import { RecurringPurchaseManager } from '../../components/tokens/RecurringPurchaseManager';
-import { PurchaseHistoryList } from '../../components/tokens/PurchaseHistoryList';
-import { TokenLedgerEntries } from '../../components/tokens/TokenLedgerEntries';
+import { mockLedgerEntries, mockPurchases, mockRecurringPurchase } from '@/data/mocks/tokens';
+import { RecurringPurchaseManager } from '@/components/tokens/RecurringPurchaseManager';
+import { PurchaseHistoryList } from '@/components/tokens/PurchaseHistoryList';
+import { TokenLedgerEntries } from '@/components/tokens/TokenLedgerEntries';
 
 export default function Tokens() {
   const { width } = useWindowDimensions();

@@ -3,7 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "r
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 
 // Mock developer stats
 const mockStats = {

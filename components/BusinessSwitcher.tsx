@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useBusiness } from "../contexts/BusinessContext";
+import { useBusiness } from '../contexts/BusinessContext';
 import { useRouter } from "expo-router";
-import { colors, spacing, typography, borderRadius } from "../constants/theme";
-import { useResponsive } from "../hooks/useResponsive";
+import { colors, spacing, typography, borderRadius } from '../constants/theme';
+import { useResponsive } from '../hooks/useResponsive';
 
 export function BusinessSwitcher() {
   const { businesses, selectedBusiness, selectBusiness, isLoading } = useBusiness();

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { PageTitle } from '../../../../components/header/PageTitle';
-import { ActionButton } from '../../../../components/buttons/ActionButton';
+import { PageTitle } from '@/components/header/PageTitle';
+import Button from '@/components/Button';
 
 // Mock data for videos. In a real app, you would fetch this from a database.
 const MOCK_VIDEOS = [
@@ -23,10 +23,9 @@ export default function VideoManagement() {
   return (
     <View style={{ flex: 1 }}>
       <PageTitle title="Video Management" />
-      <ActionButton
-        title="Create New Video"
-        onPress={() => router.push('/admin/videos/create')}
-      />
+      <Button onPress={() => router.push('/admin/videos/create')}>
+        Create New Video
+      </Button>
       <FlatList
         data={MOCK_VIDEOS}
         renderItem={renderItem}

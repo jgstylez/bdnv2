@@ -3,9 +3,9 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Share, P
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
-import { Organization } from "../../../types/nonprofit";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { logError } from "../../../lib/logger";
+import { Organization } from '@/types/nonprofit';
+import { useResponsive } from '@/hooks/useResponsive';
+import { logError } from '@/lib/logger';
 
 // Mock nonprofit data
 const mockNonprofit: Organization = {

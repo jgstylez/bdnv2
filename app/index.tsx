@@ -7,18 +7,18 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { Navigation } from "../components/Navigation";
-import { Footer } from "../components/Footer";
-import { HeroSection } from "../components/sections/HeroSection";
-import { StatsSection } from "../components/sections/StatsSection";
-import { BentoGrid } from "../components/sections/BentoGrid";
-import { FeatureHighlight } from "../components/sections/FeatureHighlight";
-import { FeaturesSection } from "../components/sections/FeaturesSection";
-import { FintechFeaturesSection } from "../components/sections/FintechFeaturesSection";
-import { BusinessDirectoryPreview } from "../components/sections/BusinessDirectoryPreview";
-import { TestimonialsSection } from "../components/sections/TestimonialsSection";
-import { CTASection } from "../components/sections/CTASection";
-import { EmailCaptureSection } from "../components/sections/EmailCaptureSection";
+import { Navigation } from '@/components/Navigation';
+import { Footer } from '@/components/Footer';
+import { HeroSection } from '@/components/sections/HeroSection';
+import { StatsSection } from '@/components/sections/StatsSection';
+import { BentoGrid } from '@/components/sections/BentoGrid';
+import { FeatureHighlight } from '@/components/sections/FeatureHighlight';
+import { FeaturesSection } from '@/components/sections/FeaturesSection';
+import { FintechFeaturesSection } from '@/components/sections/FintechFeaturesSection';
+import { BusinessDirectoryPreview } from '@/components/sections/BusinessDirectoryPreview';
+import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
+import { CTASection } from '@/components/sections/CTASection';
+import { EmailCaptureSection } from '@/components/sections/EmailCaptureSection';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 

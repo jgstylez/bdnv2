@@ -3,7 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInpu
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { EventCategory } from "../../../types/events";
+import { EventCategory } from '@/types/events';
 
 export default function CreateEvent() {
   const { width } = useWindowDimensions();

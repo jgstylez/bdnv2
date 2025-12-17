@@ -4,14 +4,26 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { WalletCard } from "../../components/WalletCard";
-import { Carousel } from "../../components/layouts/Carousel";
-import { Wallet, Currency, BankAccountWallet, CreditCardWallet } from "../../types/wallet";
+import { WalletCard } from '@/components/WalletCard';
+import { Carousel } from '@/components/layouts/Carousel';
+import { Wallet, Currency, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
+
+// Extended wallet type for mock data with additional properties
+type MockWallet = Wallet & {
+  type?: string;
+  name?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+  availableBalance?: number;
+  [key: string]: any;
+};
 
 // Mock wallet data - will be replaced with actual state management
-const mockWallets: Wallet[] = [
+const mockWallets: MockWallet[] = [
   {
     id: "1",
+    userId: "user-1",
+    provider: "bdn",
     type: "primary",
     name: "Primary",
     currency: "USD",
@@ -21,6 +33,8 @@ const mockWallets: Wallet[] = [
   },
   {
     id: "2",
+    userId: "user-1",
+    provider: "bdn",
     type: "myimpact",
     name: "MyImpact Rewards",
     currency: "BLKD",
@@ -29,6 +43,8 @@ const mockWallets: Wallet[] = [
   },
   {
     id: "3",
+    userId: "user-1",
+    provider: "bdn",
     type: "giftcard",
     name: "Gift Card",
     currency: "USD",
@@ -37,46 +53,59 @@ const mockWallets: Wallet[] = [
   },
   {
     id: "4",
-    type: "bankaccount",
+    userId: "user-1",
+    provider: "chase",
+    type: "bank",
     name: "Chase Checking",
     currency: "USD",
     balance: 5432.18,
+    accountNumber: "****4321",
+    routingNumber: "****1234",
+    isDefault: false,
     availableBalance: 5432.18,
     isActive: true,
-    isBackup: true,
     bankName: "Chase",
     accountType: "checking" as const,
     last4: "4321",
   } as BankAccountWallet,
   {
     id: "5",
-    type: "creditcard",
+    userId: "user-1",
+    provider: "visa",
+    type: "card",
     name: "Visa Card",
     currency: "USD",
     balance: 0,
+    last4: "8765",
+    expiryMonth: 12,
+    expiryYear: 2025,
+    isDefault: false,
     availableBalance: 5000,
     isActive: true,
     cardBrand: "Visa",
-    last4: "8765",
     expirationDate: "12/25",
     cardholderName: "John Doe",
   } as CreditCardWallet,
   {
     id: "6",
+    userId: "user-1",
+    provider: "bdn",
     type: "business",
     name: "Business",
     currency: "USD",
     balance: 8750.50,
     isActive: true,
-  } as Wallet,
+  },
   {
     id: "7",
+    userId: "user-1",
+    provider: "bdn",
     type: "organization",
     name: "Nonprofit",
     currency: "USD",
     balance: 3420.25,
     isActive: true,
-  } as Wallet,
+  },
 ];
 
 export default function Pay() {
@@ -86,7 +115,7 @@ export default function Pay() {
   const isMobile = width < 768;
   const isDesktop = width >= 1024 && Platform.OS === "web";
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>("USD");
-  const [wallets, setWallets] = useState<Wallet[]>(mockWallets);
+  const [wallets, setWallets] = useState<MockWallet[]>(mockWallets);
   const [showAddModal, setShowAddModal] = useState(false);
   const [paymentMethodType, setPaymentMethodType] = useState<"bank" | "card" | null>(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -114,17 +143,20 @@ export default function Pay() {
   // For desktop: use flex: 1 to distribute evenly
 
   const filteredWallets = wallets.filter(
-    (wallet) => wallet.currency === selectedCurrency && wallet.isActive
+    (wallet) => wallet.currency === selectedCurrency && (wallet.isActive !== false)
   );
 
-  const defaultWallet = filteredWallets.find((wallet) => wallet.isDefault);
+  const defaultWallet = filteredWallets.find((wallet) => wallet.isDefault === true);
   const businessWallet = filteredWallets.find((wallet) => wallet.type === "business");
   const nonprofitWallet = filteredWallets.find((wallet) => wallet.type === "organization");
   const nonDefaultWallets = filteredWallets.filter(
     (wallet) => !wallet.isDefault && wallet.type !== "business" && wallet.type !== "organization"
   );
 
-  const totalBalance = filteredWallets.reduce((sum, wallet) => sum + (wallet.availableBalance || wallet.balance), 0);
+  const totalBalance = filteredWallets.reduce((sum, wallet) => {
+    const balance = wallet.availableBalance ?? wallet.balance;
+    return sum + balance;
+  }, 0);
 
   const handleAddPaymentMethod = () => {
     setShowAddModal(true);
@@ -154,18 +186,20 @@ export default function Pay() {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    const newBankAccount: BankAccountWallet = {
+    const newBankAccount = {
       id: `bank-${Date.now()}`,
-      type: "bankaccount",
-      name: `${bankName} ${accountType === "checking" ? "Checking" : "Savings"}`,
-      currency: "USD",
+      userId: "user-1", // TODO: Get from auth context
+      provider: bankName.toLowerCase(),
+      type: "bank" as const,
+      currency: "USD" as Currency,
       balance: 0,
-      availableBalance: 0,
-      isActive: true,
+      accountNumber: accountNumber,
+      routingNumber: routingNumber || "****1234",
+      isDefault: false,
       bankName,
       accountType,
       last4: accountNumber.slice(-4),
-    } as BankAccountWallet;
+    } as BankAccountWallet & { bankName: string; accountType: "checking" | "savings" };
 
     setWallets([...wallets, newBankAccount]);
     setIsAdding(false);
@@ -202,19 +236,22 @@ export default function Pay() {
     if (firstDigit === "3") cardBrand = "American Express";
     if (firstDigit === "4") cardBrand = "Visa";
 
-    const newCreditCard: CreditCardWallet = {
+    const [expiryMonth, expiryYear] = expirationDate.split("/").map(Number);
+    const newCreditCard = {
       id: `card-${Date.now()}`,
-      type: "creditcard",
-      name: `${cardBrand} Card`,
-      currency: "USD",
+      userId: "user-1", // TODO: Get from auth context
+      provider: cardBrand.toLowerCase(),
+      type: "card" as const,
+      currency: "USD" as Currency,
       balance: 0,
-      availableBalance: 5000, // Mock credit limit
-      isActive: true,
-      cardBrand,
       last4: cardNumber.replace(/\s/g, "").slice(-4),
+      expiryMonth: expiryMonth || 12,
+      expiryYear: 2000 + (expiryYear || 25),
+      isDefault: false,
+      cardBrand,
       expirationDate,
       cardholderName,
-    } as CreditCardWallet;
+    } as CreditCardWallet & { cardBrand: string; expirationDate: string; cardholderName: string };
 
     setWallets([...wallets, newCreditCard]);
     setIsAdding(false);

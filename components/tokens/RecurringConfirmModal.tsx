@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from "react-native";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
-import { TOKEN_PRICE } from "../../types/token";
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
+import { TOKEN_PRICE } from '../../types/token';
 
 interface RecurringConfirmModalProps {
   visible: boolean;

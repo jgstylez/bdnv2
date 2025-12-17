@@ -2,8 +2,8 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AdminDataCard } from "../AdminDataCard";
-import { ContentManagementItem } from "../../types/admin";
-import { colors, spacing } from "../../constants/theme";
+import { ContentManagementItem } from '../../../types/admin';
+import { colors, spacing } from '../../../constants/theme';
 
 interface ContentListProps {
   content: ContentManagementItem[];

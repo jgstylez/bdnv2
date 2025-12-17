@@ -8,9 +8,9 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Wallet, BankAccountWallet, CreditCardWallet } from "../../types/wallet";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
-import { formatCurrency } from "../../lib/international";
+import { Wallet, BankAccountWallet, CreditCardWallet } from '../../types/wallet';
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
+import { formatCurrency } from '../../lib/international';
 
 interface PaymentMethodSelectorProps {
   wallets: Wallet[];
@@ -203,6 +203,16 @@ export function PaymentMethodSelector({
                   key={wallet.id}
                   onPress={() => onSelectWallet(wallet.id)}
                   disabled={!canCoverRemaining}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Payment method ${wallet.type}${isSelected ? ", selected" : ""}${!canCoverRemaining ? ", insufficient balance" : ""}`}
+                  accessibilityState={{ 
+                    selected: isSelected,
+                    disabled: !canCoverRemaining 
+                  }}
+                  accessibilityHint={canCoverRemaining ? `Select ${wallet.type} payment method` : "Insufficient balance for this payment method"}
+                  activeOpacity={0.7}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                   style={{
                     backgroundColor: isSelected ? colors.accent : colors.secondary.bg,
                     borderRadius: borderRadius.md,

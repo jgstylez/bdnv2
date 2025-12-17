@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { LineChart } from "../../components/charts/LineChart";
-import { BarChart } from "../../components/charts/BarChart";
-import { PieChart } from "../../components/charts/PieChart";
-import { AreaChart } from "../../components/charts/AreaChart";
+import { LineChart } from '@/components/charts/LineChart';
+import { BarChart } from '@/components/charts/BarChart';
+import { PieChart } from '@/components/charts/PieChart';
+import { AreaChart } from '@/components/charts/AreaChart';
 
 export default function AdminAnalytics() {
   const { width } = useWindowDimensions();

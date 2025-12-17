@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { GiftCardOrder, GiftCardType } from "../../types/gift-card-order";
-import { formatCurrency } from "../../lib/international";
-import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
-import { FilterDropdown } from "../../components/admin/FilterDropdown";
-import { AdminDataCard } from "../../components/admin/AdminDataCard";
-import { AdminModal } from "../../components/admin/AdminModal";
-import { Pagination } from "../../components/admin/Pagination";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { GiftCardOrder, GiftCardType } from '@/types/gift-card-order';
+import { formatCurrency } from '@/lib/international';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { AdminDataCard } from '@/components/admin/AdminDataCard';
+import { AdminModal } from '@/components/admin/AdminModal';
+import { Pagination } from '@/components/admin/Pagination';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 
 // Mock gift card orders
 const mockGiftCardOrders: GiftCardOrder[] = [

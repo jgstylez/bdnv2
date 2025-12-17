@@ -4,18 +4,18 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Product } from "../../../types/merchant";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
-import { ProductPlaceholder } from "../../../components/ProductPlaceholder";
-import { useCart } from "../../../contexts/CartContext";
-import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from "../../../lib/fees";
-import { formatCurrency } from "../../../lib/international";
-import { getMerchantName } from "../../../lib/merchant-lookup";
-import { checkMerchantHasBDNPlusBusiness, createSubscriptionBoxPlan, calculateSubscriptionBoxPricing } from "../../../lib/subscription-box";
-import SubscriptionBoxSelector from "../../../components/subscription/SubscriptionBoxSelector";
-import { SubscriptionFrequency, SubscriptionDuration, getFrequencyLabel } from "../../../types/subscription-box";
-import VariantSelector from "../../../components/products/VariantSelector";
+import { Product } from '@/types/merchant';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { ProductPlaceholder } from '@/components/ProductPlaceholder';
+import { useCart } from '@/contexts/CartContext';
+import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '@/lib/fees';
+import { formatCurrency } from '@/lib/international';
+import { getMerchantName } from '@/lib/merchant-lookup';
+import { checkMerchantHasBDNPlusBusiness, createSubscriptionBoxPlan, calculateSubscriptionBoxPricing } from '@/lib/subscription-box';
+import SubscriptionBoxSelector from '@/components/subscription/SubscriptionBoxSelector';
+import { SubscriptionFrequency, SubscriptionDuration, getFrequencyLabel } from '@/types/subscription-box';
+import VariantSelector from '@/components/products/VariantSelector';
 
 // Mock product data - in production, fetch by ID
 const mockProducts: Record<string, Product> = {
@@ -574,7 +574,10 @@ export default function ProductDetail() {
                   source={{ uri: images[selectedImageIndex] }}
                   style={{ width: "100%", height: "100%" }}
                   contentFit="cover"
-cachePolicy="memory-disk"
+                  cachePolicy="memory-disk"
+                  accessible={true}
+                  accessibilityRole="image"
+                  accessibilityLabel={`${product.name} - Main product image ${selectedImageIndex + 1} of ${images.length}`}
                   onError={() => setImageError(true)}
                 />
               ) : (
@@ -596,6 +599,13 @@ cachePolicy="memory-disk"
                       setSelectedImageIndex(index);
                       setImageError(false);
                     }}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`View product image ${index + 1} of ${images.length}`}
+                    accessibilityState={{ selected: selectedImageIndex === index }}
+                    accessibilityHint="Double tap to view this image"
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    activeOpacity={0.7}
                     style={{
                       width: 80,
                       height: 80,
@@ -611,7 +621,8 @@ cachePolicy="memory-disk"
                         source={{ uri: image }}
                         style={{ width: "100%", height: "100%" }}
                         contentFit="cover"
-cachePolicy="memory-disk"
+                        cachePolicy="memory-disk"
+                        accessible={false}
                         onError={() => {
                           if (selectedImageIndex === index) {
                             setImageError(true);
@@ -1065,6 +1076,12 @@ cachePolicy="memory-disk"
                 <>
                   <TouchableOpacity
                     onPress={handleBuyNow}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Buy now for ${formatCurrency(isSubscriptionEnabled ? subscriptionTotal : finalTotal, product.currency)}`}
+                    accessibilityHint={isSubscriptionEnabled ? "Double tap to buy now with subscription" : "Double tap to buy now"}
+                    accessibilityState={{ disabled: variantRequired || (currentInventory <= 0 && product.productType === "physical") }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       flex: 1,
                       backgroundColor: colors.accent,
@@ -1097,6 +1114,20 @@ cachePolicy="memory-disk"
                   <TouchableOpacity
                     onPress={handleAddToCart}
                     disabled={isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical")}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                      isAddingToCart
+                        ? "Adding to cart"
+                        : variantRequired
+                          ? "Select options to add to cart"
+                          : currentInventory <= 0 && product.productType === "physical"
+                            ? "Out of stock"
+                            : `Add ${product.name} to cart`
+                    }
+                    accessibilityHint="Double tap to add this product to your cart"
+                    accessibilityState={{ disabled: isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical") }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       flex: 1,
                       backgroundColor: colors.secondary.bg,

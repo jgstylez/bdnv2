@@ -3,13 +3,13 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { OrganizationAccount } from "../../../types/nonprofit";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { NonprofitSwitcher } from "../../../components/NonprofitSwitcher";
-import { useNonprofit } from "../../../contexts/NonprofitContext";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { spacing } from "../../../constants/theme";
-import { mockNonprofitAccounts } from "../../../contexts/NonprofitContext";
+import { OrganizationAccount } from '@/types/nonprofit';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { NonprofitSwitcher } from '@/components/NonprofitSwitcher';
+import { useNonprofit } from '@/contexts/NonprofitContext';
+import { useResponsive } from '@/hooks/useResponsive';
+import { spacing } from '@/constants/theme';
+import { mockNonprofitAccounts } from '@/contexts/NonprofitContext';
 
 export default function NonprofitDashboard() {
   const { width } = useWindowDimensions();

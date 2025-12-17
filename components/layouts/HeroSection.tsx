@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { useResponsive } from '../../hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 
 interface HeroSectionProps {
   title: string;

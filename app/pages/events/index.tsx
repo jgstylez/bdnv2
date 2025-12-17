@@ -4,8 +4,8 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Event, EventCategory } from "../../../types/events";
-import { HeroSection } from "../../../components/layouts/HeroSection";
+import { Event, EventCategory } from '@/types/events';
+import { HeroSection } from '@/components/layouts/HeroSection';
 
 // Mock events data with real placeholder images
 const mockEvents: Event[] = [

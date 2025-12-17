@@ -3,10 +3,10 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Transaction, TransactionType, TransactionStatus } from "../../types/transactions";
-import { formatCurrency } from "../../lib/international";
-import { FilterDropdown } from "../../components/admin/FilterDropdown";
-import { HeroSection } from "../../components/layouts/HeroSection";
+import { Transaction, TransactionType, TransactionStatus } from '@/types/transactions';
+import { formatCurrency } from '@/lib/international';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { HeroSection } from '@/components/layouts/HeroSection';
 
 // Mock transactions data
 const mockTransactions: Transaction[] = [

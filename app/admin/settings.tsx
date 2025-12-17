@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Switch, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AdminModal } from "../../components/admin/AdminModal";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, typography, borderRadius } from "../../constants/theme";
+import { AdminModal } from '@/components/admin/AdminModal';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, typography, borderRadius } from '@/constants/theme';
 
 const settingsCategories = [
   {

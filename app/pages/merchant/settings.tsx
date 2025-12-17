@@ -4,14 +4,14 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Merchant } from "../../../types/merchant";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
-import { FormInput, FormTextArea } from "../../../components/forms";
-import { InternationalAddressForm } from "../../../components/forms/InternationalAddressForm";
-import { InternationalAddress } from "../../../types/international";
-import { convertToInternationalAddress } from "../../../lib/international";
+import { Merchant } from '@/types/merchant';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { FormInput, FormTextArea } from '@/components/forms';
+import { InternationalAddressForm } from '@/components/forms/InternationalAddressForm';
+import { InternationalAddress } from '@/types/international';
+import { convertToInternationalAddress } from '@/lib/international';
 import { platformValues } from "../../../utils/platform";
 
 // Mock merchant data

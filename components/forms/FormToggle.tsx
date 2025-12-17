@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { colors, spacing, typography } from "../../constants/theme";
+import { colors, spacing, typography } from '../../constants/theme';
 
 interface FormToggleProps {
   label: string;

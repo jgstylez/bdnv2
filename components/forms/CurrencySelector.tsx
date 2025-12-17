@@ -8,7 +8,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Currency, getCurrencySymbol } from "../../lib/international";
+import { Currency, getCurrencySymbol } from '../../lib/international';
 
 interface CurrencySelectorProps {
   value: Currency;

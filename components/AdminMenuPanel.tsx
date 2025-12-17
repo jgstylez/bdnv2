@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, useWindowDimensions } from "react-native";
 import { useRouter, usePathname } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { logger } from '../lib/logger';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -147,7 +148,7 @@ export const AdminMenuPanel: React.FC<AdminMenuPanelProps> = ({ isOpen, onClose 
         onClose();
       }
     } catch (error) {
-      console.error("Error during navigation:", error);
+      logger.error("Error during navigation", error);
       onClose();
     }
   };

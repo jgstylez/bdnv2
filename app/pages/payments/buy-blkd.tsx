@@ -10,14 +10,14 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useResponsive } from "../../../hooks/useResponsive";
+import { useResponsive } from '@/hooks/useResponsive';
 import {
   BLKDPurchaseTier,
   BLKDPurchaseFormData,
-} from "../../../types/blkd-purchase";
-import { Wallet } from "../../../types/wallet";
-import { PaymentMethodSelector } from "../../../components/checkout/PaymentMethodSelector";
-import { formatCurrency } from "../../../lib/international";
+} from '@/types/blkd-purchase';
+import { Wallet } from '@/types/wallet';
+import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelector';
+import { formatCurrency } from '@/lib/international';
 
 // BLKD Purchase Tiers with bulk discounts
 // Base rate: 1 BLKD = $1 USD

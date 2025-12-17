@@ -4,12 +4,12 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ReviewForm } from "../../../components/ReviewForm";
-import { ReviewCard } from "../../../components/ReviewCard";
-import { MenuDisplay } from "../../../components/MenuDisplay";
-import { BusinessReview, ReviewReason } from "../../../types/review";
-import { Menu, isFoodBusiness } from "../../../types/menu";
-import { BackButton } from "../../../components/navigation/BackButton";
+import { ReviewForm } from '@/components/ReviewForm';
+import { ReviewCard } from '@/components/ReviewCard';
+import { MenuDisplay } from '@/components/MenuDisplay';
+import { BusinessReview, ReviewReason } from '@/types/review';
+import { Menu, isFoodBusiness } from '@/types/menu';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock business data - in production, this would come from an API
 const mockBusinessData: Record<string, any> = {

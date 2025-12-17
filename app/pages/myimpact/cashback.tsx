@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Cashback } from "../../../types/impact";
+import { Cashback } from '@/types/impact';
 
 // Mock cashback data
 const mockCashback: Cashback[] = [

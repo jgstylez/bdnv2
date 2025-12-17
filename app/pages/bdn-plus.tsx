@@ -3,9 +3,9 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { SUBSCRIPTION_PLANS, SubscriptionPlan } from "../../types/subscription";
-import { HeroSection } from "../../components/layouts/HeroSection";
-import { useResponsive } from "../../hooks/useResponsive";
+import { SUBSCRIPTION_PLANS, SubscriptionPlan } from '@/types/subscription';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useResponsive } from '@/hooks/useResponsive';
 
 // Mock current subscription
 const mockCurrentSubscription = {

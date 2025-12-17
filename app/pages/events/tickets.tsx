@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
-import { Ticket, TicketStatus } from "../../../types/events";
+import { Ticket, TicketStatus } from '@/types/events';
 
 // Mock tickets data
 const mockTickets: Ticket[] = [

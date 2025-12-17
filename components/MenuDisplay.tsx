@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Menu, MenuCategory, MenuItem } from "../types/menu";
+import { Menu, MenuCategory, MenuItem } from '../types/menu';
 
 interface MenuDisplayProps {
   menu: Menu;

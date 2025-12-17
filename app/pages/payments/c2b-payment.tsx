@@ -3,12 +3,13 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { PaymentKeypad } from "../../../components/PaymentKeypad";
-import { Wallet as WalletType, Currency, BankAccountWallet, CreditCardWallet } from "../../../types/wallet";
-import { BusinessPlaceholder } from "../../../components/BusinessPlaceholder";
-import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from "../../../lib/fees";
-import { formatCurrency } from "../../../lib/international";
-import { ReviewReason, REVIEW_REASONS } from "../../../types/review";
+import { PaymentKeypad } from '@/components/PaymentKeypad';
+import { Wallet as WalletType, Currency, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
+import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
+import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '@/lib/fees';
+import { formatCurrency } from '@/lib/international';
+import { ReviewReason, REVIEW_REASONS } from '@/types/review';
+import { logger } from '@/lib/logger';
 
 // Mock wallets
 const mockWallets: WalletType[] = [
@@ -1678,7 +1679,7 @@ export default function C2BPayment() {
                   onPress={() => {
                     if (feedbackRating > 0) {
                       // TODO: Submit feedback to API
-                      console.log("Feedback submitted:", {
+                      logger.info("Feedback submitted", {
                         businessId: business?.id,
                         rating: feedbackRating,
                         selectedReasons,

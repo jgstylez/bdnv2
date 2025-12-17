@@ -14,6 +14,7 @@
  */
 
 import { DailyCallConfig, VideoCall } from "../types/video-call";
+import { logger } from "../lib/logger";
 
 // Daily.co API configuration
 const DAILY_CO_API_KEY = process.env.EXPO_PUBLIC_DAILY_CO_API_KEY || "";
@@ -69,7 +70,7 @@ export async function createDailyRoom(conversationId: string, isGroupCall: boole
       id: roomName,
     };
   } catch (error) {
-    console.error("Error creating Daily.co room:", error);
+    logger.error("Error creating Daily.co room", error);
     throw error;
   }
 }
@@ -113,7 +114,7 @@ export async function generateDailyToken(
     // Mock token for development
     return `mock-token-${roomName}-${userId}-${Date.now()}`;
   } catch (error) {
-    console.error("Error generating Daily.co token:", error);
+    logger.error("Error generating Daily.co token", error);
     throw error;
   }
 }
@@ -156,9 +157,9 @@ export async function deleteDailyRoom(roomName: string): Promise<void> {
       },
     });
     */
-    console.log(`Room ${roomName} would be deleted`);
+    logger.debug(`Room ${roomName} would be deleted`);
   } catch (error) {
-    console.error("Error deleting Daily.co room:", error);
+    logger.error("Error deleting Daily.co room", error);
     throw error;
   }
 }

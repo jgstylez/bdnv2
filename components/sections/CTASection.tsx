@@ -148,6 +148,11 @@ export const CTASection: React.FC<CTASectionProps> = ({ onPress }) => {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={handlePress}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Enroll Your Business"
+          accessibilityHint="Start the business enrollment process"
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           style={{
             backgroundColor: "#ba9988",
                     paddingHorizontal: isMobile ? 40 : 48,

@@ -4,8 +4,8 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { ImpactSummary } from "../../../types/impact";
-import { HeroSection } from "../../../components/layouts/HeroSection";
+import { ImpactSummary } from '@/types/impact';
+import { HeroSection } from '@/components/layouts/HeroSection';
 
 // Mock impact summary
 const mockImpactSummary: ImpactSummary = {

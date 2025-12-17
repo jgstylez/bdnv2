@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TextInput, TextInputProps, ViewStyle } from "react-native";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 
 interface FormTextAreaProps extends TextInputProps {
   label?: string;
@@ -34,6 +34,14 @@ export function FormTextArea({
         multiline
         numberOfLines={numberOfLines}
         textAlignVertical="top"
+        accessible={true}
+        accessibilityRole="textbox"
+        accessibilityLabel={props.accessibilityLabel || label || props.placeholder || "Text area input"}
+        accessibilityHint={props.accessibilityHint || (error ? `Error: ${error}` : "Multiline text input")}
+        accessibilityState={{ 
+          ...props.accessibilityState,
+          ...(error ? { invalid: true } : {})
+        }}
         style={[
           {
             backgroundColor: colors.secondary.bg,

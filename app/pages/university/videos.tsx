@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Video } from "../../../types/education";
+import { Video } from '@/types/education';
 import { platformValues, isAndroid } from "../../../utils/platform";
 
 // Mock videos

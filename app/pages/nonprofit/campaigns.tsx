@@ -3,9 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, Platform, Alert } from "react
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { NonprofitSwitcher } from "../../../components/NonprofitSwitcher";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { useCampaigns } from "../../../hooks/useCampaigns";
+import { NonprofitSwitcher } from '@/components/NonprofitSwitcher';
+import { useResponsive } from '@/hooks/useResponsive';
+import { useCampaigns } from '@/hooks/useCampaigns';
+import { logger } from '@/lib/logger';
 
 export default function NonprofitCampaigns() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function NonprofitCampaigns() {
           text: "Cancel",
           style: "cancel"
         },
-        { text: "OK", onPress: () => console.log("Campaign deleted: ", id) }
+        { text: "OK", onPress: () => logger.info("Campaign deleted", { campaignId: id }) }
       ]
     );
   }

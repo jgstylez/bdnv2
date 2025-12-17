@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Badge, BadgeCategory, UserBadge, BADGE_DEFINITIONS } from "../../../types/badges";
-import { BadgeIcon } from "../../../components/BadgeIcon";
-import { HeroSection } from "../../../components/layouts/HeroSection";
+import { Badge, BadgeCategory, UserBadge, BADGE_DEFINITIONS } from '@/types/badges';
+import { BadgeIcon } from '@/components/BadgeIcon';
+import { HeroSection } from '@/components/layouts/HeroSection';
 
 // Mock user badges - in production, this would come from an API
 const mockUserBadges: UserBadge[] = [

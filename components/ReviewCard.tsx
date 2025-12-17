@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { BusinessReview, REVIEW_REASONS } from "../types/review";
+import { BusinessReview, REVIEW_REASONS } from '../types/review';
 
 interface ReviewCardProps {
   review: BusinessReview;

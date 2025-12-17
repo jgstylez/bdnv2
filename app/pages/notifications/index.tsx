@@ -3,9 +3,9 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, RefreshC
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Notification, NotificationChannel, NotificationBadge } from "../../../types/notifications";
-import { markAllNotificationsRead } from "../../../lib/notifications";
-import { logError } from "../../../lib/logger";
+import { Notification, NotificationChannel, NotificationBadge } from '@/types/notifications';
+import { markAllNotificationsRead } from '@/lib/notifications';
+import { logError } from '@/lib/logger';
 
 // Mock notifications - initial data
 const initialNotifications: Notification[] = [

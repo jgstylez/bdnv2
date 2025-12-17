@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, spacing, typography, borderRadius } from "../../constants/theme";
+import { colors, spacing, typography, borderRadius } from '../../constants/theme';
 
 interface EmptyStateProps {
   icon?: keyof typeof MaterialIcons.glyphMap;

@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
-import { colors, spacing, borderRadius, typography } from "../constants/theme";
+import { colors, spacing, borderRadius, typography } from '../constants/theme';
 
 /**
  * Custom Toast Configuration

@@ -3,8 +3,8 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "r
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { RevenueShare, RevenueShareSettings } from "../../../types/bi";
-import { Pagination } from "../../../components/admin/Pagination";
+import { RevenueShare, RevenueShareSettings } from '@/types/bi';
+import { Pagination } from '@/components/admin/Pagination';
 
 // Mock revenue shares
 const mockRevenueShares: RevenueShare[] = [

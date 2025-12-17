@@ -3,7 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Switch, 
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { NotificationPreferences, NotificationChannel } from "../../../types/notifications";
+import { NotificationPreferences, NotificationChannel } from '@/types/notifications';
 
 const channelLabels: Record<NotificationChannel, string> = {
   wallet: "Wallet",

@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, useWindowDimensions } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { BlogContentBlock } from "../../types/education";
+import { BlogContentBlock } from '../../types/education';
 
 interface RichContentRendererProps {
   blocks: BlogContentBlock[];

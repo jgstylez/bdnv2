@@ -12,17 +12,17 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Product } from "../../types/merchant";
-import { useResponsive } from "../../hooks/useResponsive";
+import { Product } from '@/types/merchant';
+import { useResponsive } from '@/hooks/useResponsive';
 import {
   colors,
   spacing,
   borderRadius,
   typography,
-} from "../../constants/theme";
-import { ProductPlaceholder } from "../../components/ProductPlaceholder";
-import { HeroSection } from "../../components/layouts/HeroSection";
-import { getMerchantName } from "../../lib/merchant-lookup";
+} from '@/constants/theme';
+import { ProductPlaceholder } from '@/components/ProductPlaceholder';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { getMerchantName } from '@/lib/merchant-lookup';
 
 // Mock products data
 const mockProducts: Product[] = [
@@ -233,19 +233,26 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       >
         <Text
           style={{
-            fontSize: typography.fontSize["2xl"],
-            fontWeight: typography.fontWeight.bold,
+            fontSize: typography.sizes["2xl"],
+            fontWeight: typography.weights.bold as any,
             color: colors.text.primary,
           }}
         >
           {title}
         </Text>
-        <TouchableOpacity onPress={handleSeeAll}>
+        <TouchableOpacity 
+          onPress={handleSeeAll}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={`See all ${title.toLowerCase()} products`}
+          accessibilityHint="Double tap to view all products in this category"
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <Text
             style={{
-              fontSize: typography.fontSize.base,
+              fontSize: typography.sizes.md,
               color: colors.accent,
-              fontWeight: typography.fontWeight.semibold,
+              fontWeight: typography.weights.semibold as any,
             }}
           >
             See All
@@ -268,17 +275,22 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
               key={product.id}
               style={{
                 width: isMobile ? 160 : 200,
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.secondary,
                 borderRadius: borderRadius.lg,
                 overflow: "hidden",
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             >
               {/* Product Image - Square, bleeding to top, left, bottom */}
               <TouchableOpacity
                 onPress={() => onProductPress(product)}
                 activeOpacity={0.8}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={`View ${product.name} product details`}
+                accessibilityHint="Double tap to view product details"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
                 <View
                   style={{
@@ -286,7 +298,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                     aspectRatio: 1,
                     position: "relative",
                     overflow: "hidden",
-                    backgroundColor: colors.secondary.bg,
+                    backgroundColor: colors.secondary,
                     marginTop: -1,
                     marginLeft: -1,
                     marginBottom: -1,
@@ -314,6 +326,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                         source={{ uri: product.images[0] }}
                         style={{ width: "100%", height: "100%" }}
                         resizeMode="cover"
+                        accessible={false}
                         onError={() => {}}
                       />
                     ) : (
@@ -339,8 +352,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                     >
                       <Text
                         style={{
-                          fontSize: typography.fontSize.xs,
-                          fontWeight: typography.fontWeight.bold,
+                          fontSize: typography.sizes.xs,
+                          fontWeight: typography.weights.bold as any,
                           color: "#ffffff",
                         }}
                       >
@@ -363,8 +376,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                     >
                       <Text
                         style={{
-                          fontSize: typography.fontSize.xs,
-                          fontWeight: typography.fontWeight.bold,
+                          fontSize: typography.sizes.xs,
+                          fontWeight: typography.weights.bold as any,
                           color: "#ffffff",
                         }}
                       >
@@ -387,8 +400,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                     >
                       <Text
                         style={{
-                          fontSize: typography.fontSize.xs,
-                          fontWeight: typography.fontWeight.bold,
+                          fontSize: typography.sizes.xs,
+                          fontWeight: typography.weights.bold as any,
                           color: "#ffffff",
                         }}
                       >
@@ -404,13 +417,18 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                 <TouchableOpacity
                   onPress={() => onProductPress(product)}
                   activeOpacity={0.8}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={`View ${product.name} product details`}
+                  accessibilityHint="Double tap to view product details"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
                   <Text
                     numberOfLines={2}
                     ellipsizeMode="tail"
                     style={{
-                      fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
+                      fontSize: typography.sizes.md,
+                      fontWeight: typography.weights.semibold as any,
                       color: colors.text.primary,
                       marginBottom: spacing.xs,
                       height: 40,
@@ -431,13 +449,17 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   onPress={handleBusinessPress}
                   activeOpacity={0.7}
                   style={{ marginBottom: spacing.xs }}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={`View ${getMerchantName(product.merchantId)} business page`}
+                  accessibilityHint="Double tap to view business details"
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
                   <Text
                     style={{
-                      fontSize: typography.fontSize.xs,
+                      fontSize: typography.sizes.xs,
                       color: colors.accent,
-                      fontWeight: typography.fontWeight.semibold,
+                      fontWeight: typography.weights.semibold as any,
                     }}
                   >
                     {getMerchantName(product.merchantId)} • {product.category}
@@ -453,7 +475,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   <MaterialIcons name="star" size={16} color={colors.accent} />
                   <Text
                     style={{
-                      fontSize: typography.fontSize.sm,
+                      fontSize: typography.sizes.sm,
                       color: colors.text.secondary,
                       marginLeft: spacing.xs,
                     }}
@@ -462,7 +484,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   </Text>
                   <Text
                     style={{
-                      fontSize: typography.fontSize.xs,
+                      fontSize: typography.sizes.xs,
                       color: colors.text.tertiary,
                       marginLeft: spacing.sm,
                     }}
@@ -479,8 +501,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                 >
                   <Text
                     style={{
-                      fontSize: typography.fontSize.lg,
-                      fontWeight: typography.fontWeight.bold,
+                      fontSize: typography.sizes.lg,
+                      fontWeight: typography.weights.bold as any,
                       color: colors.accent,
                     }}
                   >
@@ -490,7 +512,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                 {product.productType === "service" && product.duration && (
                   <Text
                     style={{
-                      fontSize: typography.fontSize.xs,
+                      fontSize: typography.sizes.xs,
                       color: colors.text.tertiary,
                       marginTop: spacing.xs,
                     }}
@@ -562,7 +584,7 @@ export default function Marketplace() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
@@ -600,19 +622,19 @@ export default function Marketplace() {
                   selectedCategory === category ||
                   (category === "All" && selectedCategory === null)
                     ? colors.accent
-                    : colors.secondary.bg,
+                    : colors.secondary,
                 borderWidth: 1,
                 borderColor:
                   selectedCategory === category ||
                   (category === "All" && selectedCategory === null)
                     ? colors.accent
-                    : colors.border.light,
+                    : colors.border,
               }}
             >
               <Text
                 style={{
-                  fontSize: typography.fontSize.base,
-                  fontWeight: typography.fontWeight.semibold,
+                  fontSize: typography.sizes.md,
+                  fontWeight: typography.weights.semibold as any,
                   color:
                     selectedCategory === category ||
                     (category === "All" && selectedCategory === null)
@@ -687,17 +709,22 @@ export default function Marketplace() {
                   key={product.id}
                   onPress={() => handleProductPress(product)}
                   activeOpacity={0.8}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={`View ${product.name} product details`}
+                  accessibilityHint="Double tap to view product details"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     width: cardWidth,
                     flex: Platform.OS === "web" ? 1 : undefined,
                     flexBasis: cardWidth,
                     maxWidth: cardWidth,
                     minWidth: 0,
-                    backgroundColor: colors.secondary.bg,
+                    backgroundColor: colors.secondary,
                     borderRadius: borderRadius.lg,
                     overflow: "hidden",
                     borderWidth: 1,
-                    borderColor: colors.border.light,
+                    borderColor: colors.border,
                   } as any}
                 >
                   {/* Product Image */}
@@ -706,7 +733,7 @@ export default function Marketplace() {
                       width: "100%",
                       aspectRatio: 1,
                       overflow: "hidden",
-                      backgroundColor: colors.secondary.bg,
+                      backgroundColor: colors.secondary,
                     }}
                   >
                     {product.images &&
@@ -716,12 +743,12 @@ export default function Marketplace() {
                         source={{ uri: product.images[0] }}
                         style={{ width: "100%", height: "100%" }}
                         resizeMode="cover"
+                        accessible={false}
                         onError={() => {}}
                       />
                     ) : (
                       <ProductPlaceholder
                         width="100%"
-                        height="100%"
                         aspectRatio={1}
                       />
                     )}
@@ -737,8 +764,8 @@ export default function Marketplace() {
                       numberOfLines={2}
                       ellipsizeMode="tail"
                       style={{
-                        fontSize: typography.fontSize.base,
-                        fontWeight: typography.fontWeight.bold,
+                        fontSize: typography.sizes.md,
+                        fontWeight: typography.weights.bold as any,
                         color: colors.text.primary,
                         marginBottom: spacing.xs,
                       }}
@@ -748,7 +775,7 @@ export default function Marketplace() {
                     <Text
                       numberOfLines={2}
                       style={{
-                        fontSize: typography.fontSize.sm,
+                        fontSize: typography.sizes.sm,
                         color: colors.text.secondary,
                         marginBottom: spacing.xs,
                       }}
@@ -763,13 +790,17 @@ export default function Marketplace() {
                       }}
                       activeOpacity={0.7}
                       style={{ marginBottom: spacing.xs }}
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={`View ${getMerchantName(product.merchantId)} business page`}
+                      accessibilityHint="Double tap to view business details"
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     >
                       <Text
                         style={{
-                          fontSize: typography.fontSize.xs,
+                          fontSize: typography.sizes.xs,
                           color: colors.accent,
-                          fontWeight: typography.fontWeight.semibold,
+                          fontWeight: typography.weights.semibold as any,
                         }}
                       >
                         {getMerchantName(product.merchantId)} •{" "}
@@ -790,7 +821,7 @@ export default function Marketplace() {
                       />
                       <Text
                         style={{
-                          fontSize: typography.fontSize.xs,
+                          fontSize: typography.sizes.xs,
                           color: colors.text.secondary,
                           marginLeft: spacing.xs,
                         }}
@@ -807,8 +838,8 @@ export default function Marketplace() {
                     >
                       <Text
                         style={{
-                          fontSize: typography.fontSize.lg,
-                          fontWeight: typography.fontWeight.bold,
+                          fontSize: typography.sizes.lg,
+                          fontWeight: typography.weights.bold as any,
                           color: colors.accent,
                         }}
                       >

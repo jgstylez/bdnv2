@@ -11,20 +11,20 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
-import { HeroSection } from "../../components/layouts/HeroSection";
-import { useCart } from "../../contexts/CartContext";
-import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from "../../lib/fees";
-import { formatCurrency } from "../../lib/international";
-import { Product } from "../../types/merchant";
-import { ProductPlaceholder } from "../../components/ProductPlaceholder";
-import { FeeBreakdown } from "../../components/FeeBreakdown";
-import { PaymentMethodSelector } from "../../components/checkout/PaymentMethodSelector";
-import { Wallet, BankAccountWallet, CreditCardWallet } from "../../types/wallet";
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useCart } from '@/contexts/CartContext';
+import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '@/lib/fees';
+import { formatCurrency } from '@/lib/international';
+import { Product } from '@/types/merchant';
+import { ProductPlaceholder } from '@/components/ProductPlaceholder';
+import { FeeBreakdown } from '@/components/FeeBreakdown';
+import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelector';
+import { Wallet, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
 import { useEffect } from "react";
-import { getMerchantName } from "../../lib/merchant-lookup";
-import { BackButton } from "../../components/navigation/BackButton";
+import { getMerchantName } from '@/lib/merchant-lookup';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock product data - in production, fetch by ID
 const mockProducts: Record<string, Product> = {

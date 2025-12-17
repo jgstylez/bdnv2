@@ -3,7 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Menu, MenuCategory, MenuItem } from "../../../types/menu";
+import { Menu, MenuCategory, MenuItem } from '@/types/menu';
 
 // Mock menu data
 const mockMenus: Menu[] = [

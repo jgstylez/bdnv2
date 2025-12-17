@@ -3,11 +3,11 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Organization } from "../../../types/nonprofit";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
-import { FormInput } from "../../../components/forms";
+import { Organization } from '@/types/nonprofit';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { FormInput } from '@/components/forms';
 
 // Mock organization data
 const mockOrganization: Organization = {

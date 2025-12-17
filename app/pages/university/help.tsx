@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { HelpArticle } from "../../../types/education";
+import { HelpArticle } from '@/types/education';
 
 // Mock help articles
 const mockArticles: HelpArticle[] = [

@@ -3,14 +3,14 @@ import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { InvoiceTemplate } from "../../../../types/invoices";
-import { useResponsive } from "../../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../../constants/theme";
-import { HeroSection } from "../../../../components/layouts/HeroSection";
-import { AdminPageHeader } from "../../../../components/admin/AdminPageHeader";
-import { AdminDataCard } from "../../../../components/admin/AdminDataCard";
-import { AdminModal } from "../../../../components/admin/AdminModal";
-import { FormInput, FormTextArea } from "../../../../components/forms";
+import { InvoiceTemplate } from '@/types/invoices';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { AdminDataCard } from '@/components/admin/AdminDataCard';
+import { AdminModal } from '@/components/admin/AdminModal';
+import { FormInput, FormTextArea } from '@/components/forms';
 
 // Mock templates - in production, fetch from API
 const mockTemplates: InvoiceTemplate[] = [

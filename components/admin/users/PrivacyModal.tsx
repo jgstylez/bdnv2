@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { AdminModal } from "../AdminModal";
-import { spacing, typography } from "../../constants/theme";
+import { spacing, typography } from '../../../constants/theme';
 
 interface PrivacyModalProps {
   visible: boolean;

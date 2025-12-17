@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Platform, Alert, ActivityIndicator } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { MaterialIcons } from '@expo/vector-icons';
-import { useResponsive } from '../../../../../hooks/useResponsive';
-import { colors, spacing, borderRadius, typography } from '../../../../../constants/theme';
-import { PageHeader } from '../../../../../components/admin/AdminPageHeader';
-import { FormInput, FormTextArea } from '../../../../../components/forms';
-import { SubscriptionBoxPlan, SubscriptionFrequency, SubscriptionDuration, getFrequencyLabel, getDurationLabel } from '../../../../../types/subscription-box';
-import { Currency } from '../../../../../types/international';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { PageHeader } from '@/components/admin/AdminPageHeader';
+import { FormInput, FormTextArea } from '@/components/forms';
+import { SubscriptionBoxPlan, SubscriptionFrequency, SubscriptionDuration, getFrequencyLabel, getDurationLabel } from '@/types/subscription-box';
+import { Currency } from '@/types/international';
+import { logger } from '@/lib/logger';
 
 // Mock fetch function
 const fetchPlanById = async (id: string): Promise<SubscriptionBoxPlan | null> => {
-  console.log(`Fetching plan with ID: ${id}`);
+  logger.debug(`Fetching plan with ID: ${id}`);
   await new Promise(resolve => setTimeout(resolve, 1000));
   const mockPlan: SubscriptionBoxPlan = {
     id: id,
@@ -92,7 +92,7 @@ export default function EditSubscriptionPlan() {
     setIsSubmitting(true);
     // Mock API call
     await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log("Updated Plan Data:", {
+    logger.info("Updated Plan Data", {
       id,
       name,
       description,

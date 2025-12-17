@@ -3,7 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "r
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AdminDashboardStats } from "../../types/admin";
+import { AdminDashboardStats } from '@/types/admin';
 
 // Mock admin stats
 const mockStats: AdminDashboardStats = {

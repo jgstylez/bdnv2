@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { TokenPurchase } from "../types/token";
+import { TokenPurchase } from '../types/token';
 
 interface TokenPurchaseCardProps {
   purchase: TokenPurchase;

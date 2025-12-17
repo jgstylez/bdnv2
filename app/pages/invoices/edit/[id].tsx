@@ -3,17 +3,18 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform, Activity
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Invoice, InvoiceLineItem, BillingType, RecurringFrequency } from "../../../../types/invoices";
-import { useResponsive } from "../../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../../constants/theme";
-import { HeroSection } from "../../../../components/layouts/HeroSection";
-import { FormInput, FormTextArea, FormSelect, FormToggle, DateTimePickerComponent } from "../../../../components/forms";
-import { FilterDropdown } from "../../../../components/admin/FilterDropdown";
-import { BackButton } from "../../../../components/navigation/BackButton";
+import { Invoice, InvoiceLineItem, BillingType, RecurringFrequency } from '@/types/invoices';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { FormInput, FormTextArea, FormSelect, FormToggle, DateTimePickerComponent } from '@/components/forms';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { BackButton } from '@/components/navigation/BackButton';
+import { logger } from '@/lib/logger';
 
 // Mock fetching function - replace with actual API call
 const fetchInvoiceById = async (id: string): Promise<Invoice | null> => {
-  console.log(`Fetching invoice with ID: ${id}`);
+  logger.debug(`Fetching invoice with ID: ${id}`);
   // Mock API delay
   await new Promise(resolve => setTimeout(resolve, 1000));
   

@@ -3,12 +3,12 @@ import { View, Text, TextInput, TouchableOpacity, useWindowDimensions, KeyboardA
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { OrganizationType } from "../../../types/nonprofit";
-import { InternationalAddress, CountryCode } from "../../../types/international";
-import { InternationalAddressForm } from "../../../components/forms/InternationalAddressForm";
-import { TaxIdSelector } from "../../../components/forms/TaxIdSelector";
-import { TaxIdentification } from "../../../types/international";
-import { requiresStateField } from "../../../lib/international";
+import { OrganizationType } from '@/types/nonprofit';
+import { InternationalAddress, CountryCode } from '@/types/international';
+import { InternationalAddressForm } from '@/components/forms/InternationalAddressForm';
+import { TaxIdSelector } from '@/components/forms/TaxIdSelector';
+import { TaxIdentification } from '@/types/international';
+import { requiresStateField } from '@/lib/international';
 
 const ORGANIZATION_TYPES: { value: OrganizationType; label: string; description: string }[] = [
   { value: "nonprofit", label: "Nonprofit", description: "501(c)(3) nonprofit organization" },

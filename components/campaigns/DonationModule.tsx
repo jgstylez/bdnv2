@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Modal, ScrollView, TextInput, Platform, ActivityIndicator } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { PayItForward } from "../../types/nonprofit";
-import { Currency, Wallet } from "../../types/wallet";
+import { PayItForward } from '../../types/nonprofit';
+import { Currency, Wallet } from '../../types/wallet';
 import { PaymentMethodSelector } from "../checkout/PaymentMethodSelector";
 import { PaymentKeypad } from "../PaymentKeypad";
-import { colors, spacing, typography, borderRadius } from "../../constants/theme";
-import { formatCurrency } from "../../lib/international";
-import { mockWallets } from "../../data/mocks/wallets";
+import { colors, spacing, typography, borderRadius } from '../../constants/theme';
+import { formatCurrency } from '../../lib/international';
+import { mockWallets } from '../../data/mocks/wallets';
 
 type DonationStep = "amount" | "payment" | "review" | "processing" | "success" | null;
 type DonationType = "one-time" | "recurring";

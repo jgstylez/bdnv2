@@ -4,15 +4,16 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { PayItForward } from "../../../../types/nonprofit";
-import { useResponsive } from "../../../../hooks/useResponsive";
-import { colors, spacing, typography, borderRadius } from "../../../../constants/theme";
-import { formatCurrency } from "../../../../lib/international";
-import { BackButton } from "../../../../components/navigation/BackButton";
-import { useNonprofit } from "../../../../contexts/NonprofitContext";
-import { getMockCampaign, mockDonors } from "../../../../data/mocks/campaigns";
-import { getMockOrganization } from "../../../../data/mocks/organizations";
-import { DonationModule } from "../../../../components/campaigns/DonationModule";
+import { PayItForward } from '@/types/nonprofit';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, typography, borderRadius } from '@/constants/theme';
+import { formatCurrency } from '@/lib/international';
+import { BackButton } from '@/components/navigation/BackButton';
+import { useNonprofit } from '@/contexts/NonprofitContext';
+import { getMockCampaign, mockDonors } from '@/data/mocks/campaigns';
+import { getMockOrganization } from '@/data/mocks/organizations';
+import { DonationModule } from '@/components/campaigns/DonationModule';
+import { logger } from '@/lib/logger';
 
 export default function CampaignDetail() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function CampaignDetail() {
           text: "Delete",
           style: "destructive",
           onPress: () => {
-            console.log("Deleting campaign:", campaign.id);
+            logger.info("Deleting campaign", { campaignId: campaign.id });
             router.back();
           },
         },

@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Event, EventStatus } from "../../../types/events";
+import { Event, EventStatus } from '@/types/events';
 
 // Mock events data
 const mockEvents: Event[] = [

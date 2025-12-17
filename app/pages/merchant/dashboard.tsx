@@ -3,11 +3,11 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { BusinessSwitcher } from "../../../components/BusinessSwitcher";
-import { useBusiness } from "../../../contexts/BusinessContext";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { mockBusinessMetrics } from "../../../contexts/BusinessContext";
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { BusinessSwitcher } from '@/components/BusinessSwitcher';
+import { useBusiness } from '@/contexts/BusinessContext';
+import { useResponsive } from '@/hooks/useResponsive';
+import { mockBusinessMetrics } from '@/contexts/BusinessContext';
 
 export default function MerchantDashboard() {
   const { width } = useWindowDimensions();

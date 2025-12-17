@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { SalesMetrics, CustomerInsight, PerformanceMetric } from "../../../types/merchant";
-import { ReviewAnalytics, REVIEW_REASONS } from "../../../types/review";
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useResponsive } from '@/hooks/useResponsive';
+import { SalesMetrics, CustomerInsight, PerformanceMetric } from '@/types/merchant';
+import { ReviewAnalytics, REVIEW_REASONS } from '@/types/review';
 import { platformValues, isAndroid } from "../../../utils/platform";
 
 // Mock analytics data

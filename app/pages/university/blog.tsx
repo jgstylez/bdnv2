@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { BlogPost } from "../../../types/education";
+import { BlogPost } from '@/types/education';
 import { platformValues, isAndroid } from "../../../utils/platform";
 
 // Mock blog posts

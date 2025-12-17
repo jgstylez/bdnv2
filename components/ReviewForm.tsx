@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, useWindowDimensions, Platform } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ReviewReason, REVIEW_REASONS } from "../types/review";
+import { ReviewReason, REVIEW_REASONS } from '../types/review';
 
 interface ReviewFormProps {
   businessId: string;

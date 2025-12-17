@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Modal, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TokenCertificate } from "./TokenCertificate";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 
 interface CertificateModalProps {
   visible: boolean;

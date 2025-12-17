@@ -2,10 +2,10 @@ import React from "react";
 import { View, Text, ScrollView, useWindowDimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Navigation } from "../../components/Navigation";
-import { Footer } from "../../components/Footer";
-import { HeroSection } from "../../components/layouts/HeroSection";
-import { ScrollAnimatedView } from "../../components/ScrollAnimatedView";
+import { Navigation } from '@/components/Navigation';
+import { Footer } from '@/components/Footer';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 
 const sections = [
   {

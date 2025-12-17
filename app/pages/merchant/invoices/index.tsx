@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { PageTitle } from '../../../../components/header/PageTitle';
-import { ActionButton } from '../../../../components/buttons/ActionButton';
+import { PageTitle } from '@/components/header/PageTitle';
+import Button from '@/components/Button';
 
 // Mock data for invoices. In a real app, you would fetch this from a database.
 const MOCK_INVOICES = [
@@ -24,10 +24,9 @@ export default function InvoiceManagement() {
   return (
     <View style={{ flex: 1 }}>
       <PageTitle title="Invoice Management" />
-      <ActionButton
-        title="Create New Invoice"
-        onPress={() => router.push('/pages/merchant/invoices/create')}
-      />
+      <Button onPress={() => router.push('/pages/merchant/invoices/create')}>
+        Create New Invoice
+      </Button>
       <FlatList
         data={MOCK_INVOICES}
         renderItem={renderItem}

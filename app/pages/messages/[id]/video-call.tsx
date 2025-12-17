@@ -15,8 +15,9 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { getDailyCallConfig } from "../../../../services/daily-co";
-import { VideoCallParticipant } from "../../../../types/video-call";
+import { getDailyCallConfig } from '@/services/daily-co';
+import { VideoCallParticipant } from '@/types/video-call';
+import { logger } from '@/lib/logger';
 
 /**
  * Video Call Screen
@@ -174,7 +175,7 @@ export default function VideoCallScreen() {
       // await call.join({ url: config.url, token: config.token });
       
     } catch (error) {
-      console.error("Error initializing call:", error);
+      logger.error("Error initializing call", error);
       Alert.alert("Error", "Failed to start video call. Please try again.");
       setIsLoading(false);
       router.back();

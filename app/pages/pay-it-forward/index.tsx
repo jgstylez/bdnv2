@@ -3,10 +3,10 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Organization } from "../../../types/nonprofit";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { spacing } from "../../../constants/theme";
+import { Organization } from '@/types/nonprofit';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useResponsive } from '@/hooks/useResponsive';
+import { spacing } from '@/constants/theme';
 
 // Mock organizations available for Pay-It-Forward
 const mockOrganizations: Organization[] = [

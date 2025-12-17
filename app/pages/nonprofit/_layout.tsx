@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack } from "expo-router";
-import { NonprofitProvider } from "../../../contexts/NonprofitContext";
+import { NonprofitProvider } from '@/contexts/NonprofitContext';
 
 export default function NonprofitLayout() {
   return (

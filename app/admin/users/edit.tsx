@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, Alert } from 'react-native';
+import { View, ScrollView, Alert } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { PageTitle } from '../../components/header/PageTitle';
-import { FormSection } from '../../components/forms/FormSection';
-import { UserForm } from '../../components/admin/users/UserForm';
-import { ConfirmModal, FormModal } from '../../components/modals';
+import { PageTitle } from '@/components/header/PageTitle';
+import { FormSection } from '@/components/forms/FormSection';
+import { UserForm } from '@/components/admin/users/UserForm';
+import { ConfirmModal } from '@/components/modals';
+import Button from '@/components/Button';
+import { logger } from '@/lib/logger';
 
 // Mock data for a user. In a real app, you would fetch this based on the ID.
 const MOCK_USER = {
@@ -23,13 +25,13 @@ export default function EditUser() {
 
   useEffect(() => {
     // In a real app, you would fetch the user data from a database using the id
-    console.log(`Fetching user with id: ${id}`);
+    logger.debug(`Fetching user with id: ${id}`);
     setForm(MOCK_USER);
   }, [id]);
 
   const handleUpdate = () => {
     // In a real app, you would update this data in a database
-    console.log('Updating user:', form);
+    logger.info('Updating user', { form });
     Alert.alert('Success', 'User updated successfully!', [
       { text: 'OK', onPress: () => router.back() },
     ]);
@@ -41,7 +43,7 @@ export default function EditUser() {
 
   const confirmDelete = () => {
     // In a real app, you would delete this data from a database
-    console.log('Deleting user with id:', id);
+    logger.info('Deleting user', { userId: id });
     setDeleteModalVisible(false);
     Alert.alert('Success', 'User deleted successfully!', [
       { text: 'OK', onPress: () => router.push('/admin/users') },
@@ -54,22 +56,17 @@ export default function EditUser() {
       <FormSection title="User Details">
         <UserForm form={form} setForm={setForm} />
       </FormSection>
-      <FormModal
-        visible={true} // This should be controlled by state in a real app
-        title="Edit User"
-        onSave={handleUpdate}
-        onCancel={() => router.back()}
-        onDelete={handleDelete}
-      >
-        <UserForm form={form} setForm={setForm} />
-      </FormModal>
+      <View style={{ flexDirection: 'row', gap: 8, padding: 16 }}>
+        <Button onPress={handleUpdate}>Save Changes</Button>
+        <Button variant="destructive" onPress={handleDelete}>Delete</Button>
+      </View>
 
       <ConfirmModal
         visible={isDeleteModalVisible}
         title="Delete User"
         message="Are you sure you want to delete this user? This action cannot be undone."
         onConfirm={confirmDelete}
-        onCancel={() => setDeleteModalVisible(false)}
+        onClose={() => setDeleteModalVisible(false)}
       />
     </ScrollView>
   );

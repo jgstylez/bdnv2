@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { PageTitle } from '../../../../components/header/PageTitle';
-import { ActionButton } from '../../../../components/buttons/ActionButton';
+import { PageTitle } from '@/components/header/PageTitle';
+import Button from '@/components/Button';
 
 // Mock data for users. In a real app, you would fetch this from a database.
 const MOCK_USERS = [
@@ -23,10 +23,9 @@ export default function UserManagement() {
   return (
     <View style={{ flex: 1 }}>
       <PageTitle title="User Management" />
-      <ActionButton
-        title="Create New User"
-        onPress={() => router.push('/admin/users/create')}
-      />
+      <Button onPress={() => router.push('/admin/users/create')}>
+        Create New User
+      </Button>
       <FlatList
         data={MOCK_USERS}
         renderItem={renderItem}

@@ -3,10 +3,10 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "r
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Navigation } from "../../components/Navigation";
-import { Footer } from "../../components/Footer";
-import { HeroSection } from "../../components/layouts/HeroSection";
-import { ScrollAnimatedView } from "../../components/ScrollAnimatedView";
+import { Navigation } from '@/components/Navigation';
+import { Footer } from '@/components/Footer';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 
 const openPositions = [
   {

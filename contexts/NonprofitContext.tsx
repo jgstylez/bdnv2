@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { Organization } from "../types/nonprofit";
+import { logger } from "../lib/logger";
 
 // AsyncStorage import with fallback for web
 let AsyncStorage: any;
@@ -157,7 +158,7 @@ export function NonprofitProvider({ children }: { children: React.ReactNode }) {
         await AsyncStorage.setItem(SELECTED_NONPROFIT_KEY, mockNonprofits[0].id);
       }
     } catch (error) {
-      console.error("Error loading nonprofits:", error);
+      logger.error("Error loading nonprofits", error);
     } finally {
       setIsLoading(false);
     }

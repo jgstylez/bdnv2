@@ -3,8 +3,8 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "r
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Guide } from "../../../types/education";
-import { useResponsive } from "../../../hooks/useResponsive";
+import { Guide } from '@/types/education';
+import { useResponsive } from '@/hooks/useResponsive';
 import { platformValues, isAndroid } from "../../../utils/platform";
 
 // Mock guides

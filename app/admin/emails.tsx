@@ -3,7 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInpu
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { RichTextEditor } from "../../components/admin/RichTextEditor";
+import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import * as ImagePicker from "expo-image-picker";
 
 type TargetAudience = "all" | "consumers" | "businesses" | "nonprofits" | "specific";

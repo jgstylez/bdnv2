@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { BLKDPurchase } from "../../types/blkd-purchase";
-import { formatCurrency } from "../../lib/international";
-import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
-import { FilterDropdown } from "../../components/admin/FilterDropdown";
-import { AdminDataCard } from "../../components/admin/AdminDataCard";
-import { AdminModal } from "../../components/admin/AdminModal";
-import { Pagination } from "../../components/admin/Pagination";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { BLKDPurchase } from '@/types/blkd-purchase';
+import { formatCurrency } from '@/lib/international';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { AdminDataCard } from '@/components/admin/AdminDataCard';
+import { AdminModal } from '@/components/admin/AdminModal';
+import { Pagination } from '@/components/admin/Pagination';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 
 // Mock BLKD purchases
 const mockBLKDPurchases: BLKDPurchase[] = [
@@ -262,11 +262,11 @@ export default function BLKDPurchasesManagement() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.secondary,
               borderRadius: borderRadius.md,
               paddingHorizontal: spacing.lg,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
             }}
           >
             <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
@@ -279,7 +279,7 @@ export default function BLKDPurchasesManagement() {
                 flex: 1,
                 paddingVertical: spacing.md - 2,
                 paddingHorizontal: spacing.md,
-                fontSize: typography.fontSize.base,
+                fontSize: typography.sizes.md,
                 color: colors.text.primary,
               }}
             />
@@ -362,35 +362,35 @@ export default function BLKDPurchasesManagement() {
                 >
                   <View style={{ gap: spacing.sm, marginTop: spacing.sm }}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                         User:
                       </Text>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                         {purchase.userId}
                       </Text>
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                         Savings:
                       </Text>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: "#4caf50" }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: "#4caf50" }}>
                         {formatCurrency(purchase.savings || 0, "USD")}
                       </Text>
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                         Created:
                       </Text>
-                      <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                      <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                         {formatDate(purchase.createdAt)}
                       </Text>
                     </View>
                     {purchase.completedAt && (
                       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                        <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                        <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                           Completed:
                         </Text>
-                        <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                        <Text style={{ fontSize: typography.sizes.sm, color: colors.text.primary }}>
                           {formatDate(purchase.completedAt)}
                         </Text>
                       </View>
@@ -441,93 +441,93 @@ export default function BLKDPurchasesManagement() {
           {selectedOrder && (
             <View style={{ gap: spacing.md }}>
               <View style={{ gap: spacing.sm }}>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                   Purchase ID
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                   {selectedOrder.id}
                 </Text>
               </View>
               <View style={{ gap: spacing.sm }}>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                   User ID
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                   {selectedOrder.userId}
                 </Text>
               </View>
               <View style={{ gap: spacing.sm }}>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                   BLKD Amount
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                   {selectedOrder.blkdAmount.toLocaleString()} BLKD
                 </Text>
               </View>
               <View style={{ gap: spacing.sm }}>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                   USD Price
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                   {formatCurrency(selectedOrder.usdPrice, "USD")}
                 </Text>
               </View>
               <View style={{ gap: spacing.sm }}>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                   Discount
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, color: "#4caf50" }}>
+                <Text style={{ fontSize: typography.sizes.md, color: "#4caf50" }}>
                   {selectedOrder.discountPercent}% ({formatCurrency(selectedOrder.savings || 0, "USD")})
                 </Text>
               </View>
               <View style={{ gap: spacing.sm }}>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                   Tier
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                   {getTierLabel(selectedOrder.blkdAmount)}
                 </Text>
               </View>
               <View style={{ gap: spacing.sm }}>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                   Status
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, color: getStatusColor(selectedOrder.status) }}>
+                <Text style={{ fontSize: typography.sizes.md, color: getStatusColor(selectedOrder.status) }}>
                   {selectedOrder.status}
                 </Text>
               </View>
               <View style={{ gap: spacing.sm }}>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                   Payment Method ID
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                   {selectedOrder.paymentMethodId}
                 </Text>
               </View>
               {selectedOrder.transactionId && (
                 <View style={{ gap: spacing.sm }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                  <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                     Transaction ID
                   </Text>
-                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                  <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                     {selectedOrder.transactionId}
                   </Text>
                 </View>
               )}
               <View style={{ gap: spacing.sm }}>
-                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                   Created At
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                   {formatDate(selectedOrder.createdAt)}
                 </Text>
               </View>
               {selectedOrder.completedAt && (
                 <View style={{ gap: spacing.sm }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                  <Text style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
                     Completed At
                   </Text>
-                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                  <Text style={{ fontSize: typography.sizes.md, color: colors.text.primary }}>
                     {formatDate(selectedOrder.completedAt)}
                   </Text>
                 </View>
@@ -563,7 +563,7 @@ export default function BLKDPurchasesManagement() {
           ]}
         >
           <View style={{ gap: spacing.md }}>
-            <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
+            <Text style={{ fontSize: typography.sizes.md, color: colors.text.secondary }}>
               Add a note explaining why this purchase needs review:
             </Text>
             <TextInput
@@ -574,13 +574,13 @@ export default function BLKDPurchasesManagement() {
               multiline
               numberOfLines={4}
               style={{
-                backgroundColor: colors.primary.bg,
+                backgroundColor: colors.background,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
-                fontSize: typography.fontSize.base,
+                fontSize: typography.sizes.md,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
                 minHeight: 100,
                 textAlignVertical: "top",
               }}

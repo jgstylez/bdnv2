@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import { AdminModal } from "../AdminModal";
-import { CarouselItem } from "../../types/admin";
-import { spacing } from "../../constants/theme";
+import { CarouselItem } from '../../../types/admin';
+import { spacing } from '../../../constants/theme';
 
 interface CarouselModalProps {
   visible: boolean;

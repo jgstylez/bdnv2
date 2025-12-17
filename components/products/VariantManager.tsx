@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ProductVariantOption, ProductVariant } from "../../types/merchant";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { ProductVariantOption, ProductVariant } from '../../types/merchant';
+import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 
 interface VariantManagerProps {
   variantOptions: ProductVariantOption[];

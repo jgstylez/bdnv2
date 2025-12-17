@@ -59,21 +59,29 @@ class ApiClient {
     }
   }
 
-  public async get<T>(endpoint: string): Promise<T> {
-    return this.request(endpoint, { method: 'GET' });
+  public async get<T>(endpoint: string, options?: { params?: Record<string, string | number | boolean> }): Promise<T> {
+    let url = endpoint;
+    if (options?.params) {
+      const params = new URLSearchParams();
+      Object.entries(options.params).forEach(([key, value]) => {
+        params.append(key, String(value));
+      });
+      url += `?${params.toString()}`;
+    }
+    return this.request(url, { method: 'GET' });
   }
 
-  public async post<T>(endpoint: string, data: any): Promise<T> {
+  public async post<T>(endpoint: string, data?: any): Promise<T> {
     return this.request(endpoint, {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: data ? JSON.stringify(data) : undefined,
     });
   }
 
-  public async put<T>(endpoint: string, data: any): Promise<T> {
+  public async put<T>(endpoint: string, data?: any): Promise<T> {
     return this.request(endpoint, {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: data ? JSON.stringify(data) : undefined,
     });
   }
 
@@ -83,3 +91,20 @@ class ApiClient {
 }
 
 export const apiClient = new ApiClient(API_URL);
+
+// Export types for useApi hook
+export interface ApiError {
+  message: string;
+  code?: string;
+  statusCode?: number;
+  details?: any;
+}
+
+export interface ApiResponse<T> {
+  data: T;
+  message?: string;
+  statusCode?: number;
+}
+
+// Export apiClient as 'api' for backward compatibility (if needed)
+export const api = apiClient;

@@ -71,6 +71,9 @@ const Button: React.FC<ButtonProps> = ({
   const accessibilityLabel = props.accessibilityLabel || 
     (typeof children === 'string' ? children : undefined);
   const accessibilityRole = props.accessibilityRole || 'button';
+  
+  // Add hitSlop for better touch targets (minimum 44x44 points)
+  const hitSlop = props.hitSlop || { top: 10, bottom: 10, left: 10, right: 10 };
 
   return (
     <Pressable
@@ -80,6 +83,8 @@ const Button: React.FC<ButtonProps> = ({
       accessibilityRole={accessibilityRole}
       accessibilityLabel={accessibilityLabel}
       accessibilityState={{ disabled }}
+      accessibilityHint={props.accessibilityHint}
+      hitSlop={hitSlop}
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}
       android_ripple={variant !== 'link' ? { color: 'rgba(0, 0, 0, 0.1)' } : null}

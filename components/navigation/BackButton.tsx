@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, Text } from "react-native";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, spacing, typography } from "../../constants/theme";
+import { colors, spacing, typography } from '../../constants/theme';
 
 interface BackButtonProps {
   /**

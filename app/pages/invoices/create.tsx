@@ -3,13 +3,13 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform } from "r
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Invoice, InvoiceLineItem, BillingType, RecurringFrequency } from "../../../types/invoices";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { FormInput, FormTextArea, FormSelect, FormToggle, DateTimePickerComponent } from "../../../components/forms";
-import { FilterDropdown } from "../../../components/admin/FilterDropdown";
-import { BackButton } from "../../../components/navigation/BackButton";
+import { Invoice, InvoiceLineItem, BillingType, RecurringFrequency } from '@/types/invoices';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { FormInput, FormTextArea, FormSelect, FormToggle, DateTimePickerComponent } from '@/components/forms';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { BackButton } from '@/components/navigation/BackButton';
 
 export default function CreateInvoice() {
   const router = useRouter();

@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { BusinessManagementFilters } from "../../types/admin";
-import { MerchantType } from "../../types/merchant";
-import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
-import { FilterDropdown } from "../../components/admin/FilterDropdown";
-import { AdminModal } from "../../components/admin/AdminModal";
-import { Pagination } from "../../components/admin/Pagination";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, typography, borderRadius } from "../../constants/theme";
-import { InternationalAddress, CountryCode, Currency, TaxIdentification } from "../../types/international";
-import { BusinessList, Business } from "../../components/admin/businesses/BusinessList";
-import { BusinessModal } from "../../components/admin/businesses/BusinessModal";
+import { BusinessManagementFilters } from '@/types/admin';
+import { MerchantType } from '@/types/merchant';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { AdminModal } from '@/components/admin/AdminModal';
+import { Pagination } from '@/components/admin/Pagination';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, typography, borderRadius } from '@/constants/theme';
+import { InternationalAddress, CountryCode, Currency, TaxIdentification } from '@/types/international';
+import { BusinessList, Business } from '@/components/admin/businesses/BusinessList';
+import { BusinessModal } from '@/components/admin/businesses/BusinessModal';
 
 // Mock businesses
 const mockBusinesses: Business[] = [

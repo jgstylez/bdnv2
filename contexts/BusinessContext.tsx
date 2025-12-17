@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { Merchant } from "../types/merchant";
+import { logger } from "../lib/logger";
 
 // AsyncStorage import with fallback for web
 let AsyncStorage: any;
@@ -159,7 +160,7 @@ export function BusinessProvider({ children }: { children: React.ReactNode }) {
         await AsyncStorage.setItem(SELECTED_BUSINESS_KEY, mockBusinesses[0].id);
       }
     } catch (error) {
-      console.error("Error loading businesses:", error);
+      logger.error("Error loading businesses", error);
     } finally {
       setIsLoading(false);
     }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { BaseModal, ModalAction } from "./BaseModal";
-import { colors, typography } from "../../constants/theme";
+import { colors, typography } from '../../constants/theme';
 
 interface ConfirmModalProps {
   visible: boolean;

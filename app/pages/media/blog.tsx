@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { BlogArticle } from "../../../types/media";
+import { BlogArticle } from '@/types/media';
 
 // Mock blog articles
 const mockArticles: BlogArticle[] = [

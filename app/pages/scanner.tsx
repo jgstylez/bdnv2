@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors, spacing, borderRadius, typography } from "../../constants/theme";
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 
 export default function QRScanner() {
   const router = useRouter();

@@ -2,8 +2,8 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AdminDataCard } from "../AdminDataCard";
-import { MerchantType } from "../../types/merchant";
-import { colors, spacing } from "../../constants/theme";
+import { MerchantType } from '../../../types/merchant';
+import { colors, spacing } from '../../../constants/theme';
 
 export interface Business {
   id: string;

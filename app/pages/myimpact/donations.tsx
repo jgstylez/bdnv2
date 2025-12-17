@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Donation, CommunityImpact } from "../../../types/impact";
+import { Donation, CommunityImpact } from '@/types/impact';
 
 // Mock donations
 const mockDonations: Donation[] = [

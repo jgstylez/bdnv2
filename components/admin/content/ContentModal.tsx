@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import { AdminModal } from "../AdminModal";
-import { ContentManagementItem } from "../../types/admin";
-import { spacing } from "../../constants/theme";
+import { ContentManagementItem } from '../../../types/admin';
+import { spacing } from '../../../constants/theme';
 
 interface ContentModalProps {
   visible: boolean;

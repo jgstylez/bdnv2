@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { OrganizationTransaction } from "../../../types/nonprofit";
+import { OrganizationTransaction } from '@/types/nonprofit';
 
 // Mock transactions
 const mockTransactions: OrganizationTransaction[] = [

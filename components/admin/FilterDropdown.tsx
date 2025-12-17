@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Modal } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, spacing, typography, borderRadius } from "../../constants/theme";
+import { colors, spacing, typography, borderRadius } from '../../constants/theme';
 
 interface FilterOption {
   value: string;

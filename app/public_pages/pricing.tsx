@@ -4,11 +4,11 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Navigation } from "../../components/Navigation";
-import { Footer } from "../../components/Footer";
-import { SUBSCRIPTION_PLANS, SubscriptionPlan } from "../../types/subscription";
-import { HeroSection } from "../../components/layouts/HeroSection";
-import { useResponsive } from "../../hooks/useResponsive";
+import { Navigation } from '@/components/Navigation';
+import { Footer } from '@/components/Footer';
+import { SUBSCRIPTION_PLANS, SubscriptionPlan } from '@/types/subscription';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { useResponsive } from '@/hooks/useResponsive';
 
 export default function Pricing() {
   const { width } = useWindowDimensions();

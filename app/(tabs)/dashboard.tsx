@@ -4,15 +4,15 @@ import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import { ImageCarousel } from '../../components/ImageCarousel';
-import { carouselItems } from '../../data/mock';
-import { LevelCard } from '../../components/dashboard/LevelCard';
-import { QuickActions } from '../../components/dashboard/QuickActions';
-import { NewlyAddedProducts } from '../../components/dashboard/NewlyAddedProducts';
-import { KeyFeatures } from '../../components/dashboard/KeyFeatures';
-import { ActivityOverview } from '../../components/dashboard/ActivityOverview';
-import { RecentActivity } from '../../components/dashboard/RecentActivity';
-import { cn } from '../../lib/utils';
+import { ImageCarousel } from '@/components/ImageCarousel';
+import { carouselItems } from '@/data/mock';
+import { LevelCard } from '@/components/dashboard/LevelCard';
+import { QuickActions } from '@/components/dashboard/QuickActions';
+import { NewlyAddedProducts } from '@/components/dashboard/NewlyAddedProducts';
+import { KeyFeatures } from '@/components/dashboard/KeyFeatures';
+import { ActivityOverview } from '@/components/dashboard/ActivityOverview';
+import { RecentActivity } from '@/components/dashboard/RecentActivity';
+import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const { width } = useWindowDimensions();

@@ -4,6 +4,7 @@ import { Wallet as WalletType, Currency } from '../types/wallet';
 import { ReviewReason, REVIEW_REASONS } from '../types/review';
 import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '../lib/fees';
 import { mockWallets, mockBusinesses, allBusinesses } from '../data/mock';
+import { logger } from '../lib/logger';
 
 export type PaymentStep = 'select-business' | 'amount' | 'payment-method' | 'review' | 'processing' | 'success';
 
@@ -126,7 +127,7 @@ export const useC2BPayment = () => {
 
   const handleSubmitFeedback = () => {
     if (feedbackRating > 0) {
-      console.log('Feedback submitted:', {
+      logger.info('Feedback submitted', {
         businessId: business?.id,
         rating: feedbackRating,
         selectedReasons,

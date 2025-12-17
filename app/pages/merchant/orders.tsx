@@ -10,15 +10,15 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal, Alert, Plat
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useBusiness } from "../../../contexts/BusinessContext";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../constants/theme";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { BusinessSwitcher } from "../../../components/BusinessSwitcher";
-import { BackButton } from "../../../components/navigation/BackButton";
-import { FilterDropdown } from "../../../components/admin/FilterDropdown";
-import { Order, OrderStatus, FulfillmentStatus, PaymentStatus, OrderType, OrderStats } from "../../../types/orders";
-import { formatCurrency } from "../../../lib/international";
+import { useBusiness } from '@/contexts/BusinessContext';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { BusinessSwitcher } from '@/components/BusinessSwitcher';
+import { BackButton } from '@/components/navigation/BackButton';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { Order, OrderStatus, FulfillmentStatus, PaymentStatus, OrderType, OrderStats } from '@/types/orders';
+import { formatCurrency } from '@/lib/international';
 
 // Major shipping carriers
 const SHIPPING_CARRIERS = [

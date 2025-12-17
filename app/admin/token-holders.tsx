@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TextInput, Platform, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
-import { FilterDropdown } from "../../components/admin/FilterDropdown";
-import { AdminDataCard } from "../../components/admin/AdminDataCard";
-import { AdminModal } from "../../components/admin/AdminModal";
-import { Pagination } from "../../components/admin/Pagination";
-import { useResponsive } from "../../hooks/useResponsive";
-import { colors, spacing, typography, borderRadius } from "../../constants/theme";
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
+import { AdminDataCard } from '@/components/admin/AdminDataCard';
+import { AdminModal } from '@/components/admin/AdminModal';
+import { Pagination } from '@/components/admin/Pagination';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, typography, borderRadius } from '@/constants/theme';
 
 interface TokenHolder {
   id: string;

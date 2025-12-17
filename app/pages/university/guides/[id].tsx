@@ -3,11 +3,11 @@ import { View, Text, ScrollView, TouchableOpacity, Platform, Alert } from "react
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Guide } from "../../../../types/education";
-import { useResponsive } from "../../../../hooks/useResponsive";
-import { colors, spacing, borderRadius, typography } from "../../../../constants/theme";
-import { BackButton } from "../../../../components/navigation/BackButton";
-import InteractiveGuideViewer from "../../../../components/guides/InteractiveGuideViewer";
+import { Guide } from '@/types/education';
+import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { BackButton } from '@/components/navigation/BackButton';
+import InteractiveGuideViewer from '@/components/guides/InteractiveGuideViewer';
 
 // Enhanced mock guides with interactive elements
 const mockGuides: Record<string, Guide> = {

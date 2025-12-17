@@ -4,9 +4,9 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { HeroSection } from "../../../components/layouts/HeroSection";
-import { Carousel } from "../../../components/layouts/Carousel";
-import { useResponsive } from "../../../hooks/useResponsive";
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { Carousel } from '@/components/layouts/Carousel';
+import { useResponsive } from '@/hooks/useResponsive';
 import { platformValues, isAndroid } from "../../../utils/platform";
 
 const categories = [
