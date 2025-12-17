@@ -3,10 +3,12 @@ import { View, Text, TextInput, TouchableOpacity, useWindowDimensions, KeyboardA
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Signup() {
   const { width } = useWindowDimensions();
   const router = useRouter();
+  const { signup } = useAuth();
   const isMobile = width < 768;
   const [formData, setFormData] = useState({
     email: "",
@@ -14,7 +16,7 @@ export default function Signup() {
     referralCode: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  
+
   // Password validation rules
   const passwordRules = {
     minLength: formData.password.length >= 8,
@@ -27,11 +29,10 @@ export default function Signup() {
   const isPasswordValid = Object.values(passwordRules).every((rule) => rule === true);
 
   const handleSignup = () => {
-    if (!formData.email || !isPasswordValid || !formData.referralCode) {
+    if (!formData.email || !isPasswordValid) {
       return;
     }
-    // TODO: Implement signup logic
-    router.push("/(auth)/verify");
+    signup(formData.email, formData.password);
   };
 
   return (
@@ -220,7 +221,7 @@ export default function Signup() {
               )}
             </View>
 
-            {/* Invite code */}
+            {/* Invite code - Note: Firebase auth doesn't handle invite codes out of the box. */}
             <View>
               <Text
                 style={{
@@ -230,12 +231,12 @@ export default function Signup() {
                   marginBottom: 8,
                 }}
               >
-                Invite code *
+                Invite code
               </Text>
               <TextInput
                 value={formData.referralCode}
                 onChangeText={(text) => setFormData({ ...formData, referralCode: text })}
-                placeholder="Enter invite code"
+                placeholder="Enter invite code (optional)"
                 placeholderTextColor="rgba(255, 255, 255, 0.4)"
                 autoCapitalize="characters"
                 style={{
@@ -254,9 +255,9 @@ export default function Signup() {
             <TouchableOpacity
               onPress={handleSignup}
               activeOpacity={0.8}
-              disabled={!formData.email || !isPasswordValid || !formData.referralCode}
+              disabled={!formData.email || !isPasswordValid}
               style={{
-                backgroundColor: formData.email && isPasswordValid && formData.referralCode ? "#ba9988" : "rgba(186, 153, 136, 0.3)",
+                backgroundColor: formData.email && isPasswordValid ? "#ba9988" : "rgba(186, 153, 136, 0.3)",
                 borderRadius: 12,
                 paddingVertical: 16,
                 alignItems: "center",
@@ -267,7 +268,7 @@ export default function Signup() {
                 style={{
                   fontSize: 16,
                   fontWeight: "600",
-                  color: formData.email && isPasswordValid && formData.referralCode ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
+                  color: formData.email && isPasswordValid ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
                 }}
               >
                 Create Account
@@ -305,4 +306,3 @@ export default function Signup() {
     </KeyboardAvoidingView>
   );
 }
-

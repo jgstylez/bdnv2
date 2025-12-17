@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, useWindowDimensions, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { LinearGradient } from "expo-linear-gradient";
+import { useAuth } from "../../hooks/useAuth"; // Corrected import path
 
 export default function Login() {
   const { width } = useWindowDimensions();
@@ -11,10 +11,10 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { login, handleBiometricAuth } = useAuth();
 
   const handleLogin = () => {
-    // TODO: Implement authentication
-    router.push("/(tabs)/dashboard");
+    login(email, password);
   };
 
   return (
@@ -191,6 +191,30 @@ export default function Login() {
               </Text>
             </TouchableOpacity>
 
+            {/* Biometric Button */}
+            <TouchableOpacity
+              onPress={handleBiometricAuth}
+              activeOpacity={0.8}
+              style={{
+                borderColor: "#ba9988",
+                borderWidth: 1,
+                borderRadius: 12,
+                paddingVertical: 16,
+                alignItems: "center",
+                marginTop: 8,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "600",
+                  color: "#ba9988",
+                }}
+              >
+                Use Biometrics
+              </Text>
+            </TouchableOpacity>
+
             {/* Sign Up Link */}
             <View
               style={{
@@ -222,4 +246,3 @@ export default function Login() {
     </KeyboardAvoidingView>
   );
 }
-

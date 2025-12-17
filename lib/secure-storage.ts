@@ -134,3 +134,17 @@ export async function clearPIN(): Promise<void> {
   await deleteSecureItem(STORAGE_KEYS.PIN);
 }
 
+/**
+ * Enable or disable biometric authentication
+ */
+export async function setBiometricEnabled(enabled: boolean): Promise<void> {
+  await setSecureItem(STORAGE_KEYS.BIOMETRIC_ENABLED, JSON.stringify(enabled));
+}
+
+/**
+ * Check if biometric authentication is enabled
+ */
+export async function isBiometricEnabled(): Promise<boolean> {
+  const value = await getSecureItem(STORAGE_KEYS.BIOMETRIC_ENABLED);
+  return value ? JSON.parse(value) : false;
+}
