@@ -15,11 +15,13 @@ import {
   onAuthStateChanged,
   signOut,
 } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,11 +30,21 @@ export function useAuth() {
         const token = await user.getIdToken();
         await storeAuthTokens(token);
         setIsAuthenticated(true);
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUser(userData);
+          if (userData.role === 'admin') {
+            setIsAdmin(true);
+          }
+        }
         const biometricsEnabled = await isBiometricEnabled();
         if (biometricsEnabled) {
           handleBiometricAuth();
         }
       } else {
+        setUser(null);
+        setIsAdmin(false);
         setIsAuthenticated(false);
       }
       setIsLoading(false);
@@ -57,6 +69,7 @@ export function useAuth() {
       await setDoc(doc(db, 'users', user.uid), {
         email: user.email,
         createdAt: new Date(),
+        role: 'user', // Assign a default role of 'user'
       });
       router.push('/(tabs)/dashboard');
     } catch (error) {
@@ -68,6 +81,8 @@ export function useAuth() {
     await signOut(auth);
     await clearAuthTokens();
     setIsAuthenticated(false);
+    setUser(null);
+    setIsAdmin(false);
     router.push('/(auth)/login');
   };
 
@@ -103,6 +118,8 @@ export function useAuth() {
   return {
     isAuthenticated,
     isLoading,
+    user,
+    isAdmin,
     login,
     logout,
     signup,

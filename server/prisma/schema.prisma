@@ -1,0 +1,234 @@
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  phoneNumber   String?
+  firstName     String?
+  lastName      String?
+  role          UserRole  @default(CUSTOMER)
+  pinHash       String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  business   Business?
+  orders     Order[]
+  reviews    Review[]
+  wallet     Wallet?
+  sessions   Session[]
+  ownedBadges UserBadge[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  expiresAt DateTime
+
+  @@map("sessions")
+}
+
+model Business {
+  id             String   @id @default(uuid())
+  owner          User     @relation(fields: [ownerId], references: [id])
+  ownerId        String   @unique
+  name           String
+  description    String?
+  category       String
+  addressLine1   String
+  addressLine2   String?
+  city           String
+  state          String
+  postalCode     String
+  country        String
+  logoUrl        String?
+  isBlackOwned   Boolean  @default(false)
+  website        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  products Product[]
+  orders   Order[]
+  menus    Menu[]
+
+  @@map("businesses")
+}
+
+model Product {
+  id           String      @id @default(uuid())
+  business     Business    @relation(fields: [businessId], references: [id])
+  businessId   String
+  name         String
+  description  String?
+  price        Float
+  currency     String      @default("USD")
+  type         ProductType
+  imageUrl     String?
+  isAvailable  Boolean     @default(true)
+  variants     Json?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  orderItems OrderItem[]
+  menuItems  MenuItem[]
+
+  @@map("products")
+}
+
+model Menu {
+  id         String   @id @default(uuid())
+  business   Business @relation(fields: [businessId], references: [id])
+  businessId String
+  name       String
+  description String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  items MenuItem[]
+
+  @@map("menus")
+}
+
+// Join table for Products and Menus
+model MenuItem {
+  menu      Menu     @relation(fields: [menuId], references: [id])
+  menuId    String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  order     Int      // To order items within a menu
+
+  @@id([menuId, productId])
+  @@map("menu_items")
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  user         User        @relation(fields: [userId], references: [id])
+  userId       String
+  business     Business    @relation(fields: [businessId], references: [id])
+  businessId   String
+  totalAmount  Float
+  status       OrderStatus @default(PENDING)
+  createdAt    DateTime    @default(now())
+
+  items        OrderItem[]
+  transaction  Transaction[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id              String  @id @default(uuid())
+  order           Order   @relation(fields: [orderId], references: [id])
+  orderId         String
+  product         Product @relation(fields: [productId], references: [id])
+  productId       String
+  quantity        Int
+  priceAtPurchase Float
+
+  @@map("order_items")
+}
+
+model Transaction {
+  id         String          @id @default(uuid())
+  order      Order           @relation(fields: [orderId], references: [id])
+  orderId    String
+  amount     Float
+  currency   String          @default("USD")
+  type       TransactionType
+  status     PaymentStatus   @default(PENDING)
+  paymentMethod String?
+  createdAt  DateTime        @default(now())
+
+  @@map("transactions")
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  @@map("reviews")
+}
+
+model Wallet {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
+  balance   Float    @default(0)
+  currency  String   @default("USD")
+  updatedAt DateTime @updatedAt
+
+  @@map("wallets")
+}
+
+model Badge {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  description String
+  iconUrl     String
+  users       UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  badgeId   String
+  assignedAt DateTime @default(now())
+
+  @@id([userId, badgeId])
+  @@map("user_badges")
+}
+
+enum UserRole {
+  CUSTOMER
+  MERCHANT
+  NONPROFIT
+  ADMIN
+}
+
+enum ProductType {
+  PHYSICAL
+  DIGITAL
+  SERVICE
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum TransactionType {
+  PAYMENT
+  C2B_PAYMENT
+  TOKEN_PURCHASE
+  DONATION
+  REFUND
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+}
