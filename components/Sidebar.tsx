@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -28,9 +28,12 @@ export const Sidebar: React.FC = () => {
   
   // Filter navigation based on feature flags
   // Show full menu while loading to avoid navigation disappearing
-  const filteredNavigationMenu = flagsLoading 
-    ? navigationMenu 
-    : filterNavigationByFeatureFlags(navigationMenu, flags);
+  // Memoize to prevent unnecessary recalculations and effect triggers
+  const filteredNavigationMenu = useMemo(() => {
+    return flagsLoading 
+      ? navigationMenu 
+      : filterNavigationByFeatureFlags(navigationMenu, flags);
+  }, [flagsLoading, flags]);
 
   // Reset navigation flag when pathname actually changes (navigation completed)
   useEffect(() => {
