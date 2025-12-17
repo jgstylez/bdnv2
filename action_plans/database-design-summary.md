@@ -195,6 +195,8 @@ db.collection("notifications")
 
 ## Required Indexes
 
+**📋 For comprehensive index planning, see:** `action_plans/database-indexes-plan.md`
+
 ### Unique Indexes
 
 - `users.email` (unique)
@@ -205,7 +207,7 @@ db.collection("notifications")
 - `transactions.transactionNumber` (unique)
 - `invoices.invoiceNumber` (unique)
 
-### Composite Indexes (Most Important)
+### Composite Indexes (Most Important - P0 Critical)
 
 - `users`: `[tier, points]`, `[status, createdAt]`
 - `businesses`: `[status, createdAt]`, `[category, status]`
@@ -214,6 +216,8 @@ db.collection("notifications")
 - `events`: `[status, startDate]`, `[organizerId, status]`
 - `reviews`: `[businessId, createdAt]`, `[businessId, rating]`
 - `notifications`: `[userId, read, createdAt]`
+
+**Note:** The full index plan includes 100+ indexes organized by priority (P0-P3) and use case (user-side, business-side, admin-side).
 
 ---
 
@@ -515,6 +519,8 @@ db.collection("notifications")
 ## Support & Resources
 
 - **Full Design Document**: `action_plans/database-design.md`
+- **Comprehensive Index Plan**: `action_plans/database-indexes-plan.md`
+- **PCI Compliance Summary**: `action_plans/database-design-pci-compliance.md`
 - **Firestore Documentation**: https://firebase.google.com/docs/firestore
 - **Security Rules Guide**: https://firebase.google.com/docs/firestore/security/get-started
 - **Indexing Guide**: https://firebase.google.com/docs/firestore/query-data/indexing
