@@ -50,6 +50,7 @@ export const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
             left: 0,
             right: 0,
             bottom: 0,
+            zIndex: 1,
           }}
           pointerEvents="none"
         >
@@ -75,6 +76,7 @@ export const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
             right: 0,
             bottom: 0,
             backgroundColor: "rgba(0, 0, 0, 0.35)",
+            zIndex: 1,
             ...(Platform.OS === "web" && {
               // @ts-ignore - Web-only CSS properties
               backdropFilter: "blur(20px)",

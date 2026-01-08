@@ -191,7 +191,7 @@ export default function AboutLegal() {
                       color: colors.text.primary,
                     }}
                   >
-                    Black Dollar Network, Inc.
+                    Black Dollar Network, LLC
                   </Text>
                 </View>
                 <View>
