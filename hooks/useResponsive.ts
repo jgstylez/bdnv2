@@ -1,4 +1,5 @@
 import { useWindowDimensions } from 'react-native';
+import { getScrollViewBottomPadding } from '../constants/layout';
 
 export const useResponsive = () => {
   const { width } = useWindowDimensions();
@@ -11,6 +12,7 @@ export const useResponsive = () => {
   // Layout values
   const paddingHorizontal = isMobile ? 20 : isTablet ? 32 : 40;
   const maxContentWidth = 1200;
+  const scrollViewBottomPadding = getScrollViewBottomPadding(isMobile);
   
   return {
     width,
@@ -19,6 +21,7 @@ export const useResponsive = () => {
     isDesktop,
     paddingHorizontal,
     maxContentWidth,
+    scrollViewBottomPadding,
     contentContainerStyle: {
       paddingHorizontal,
       maxWidth: maxContentWidth,

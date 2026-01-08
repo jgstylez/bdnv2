@@ -40,13 +40,18 @@ export function NewlyAddedProducts({ isMobile }: NewlyAddedProductsProps) {
               { 'w-[110px]': isMobile, 'w-[140px]': !isMobile }
             )}
           >
-            <View className="w-full aspect-square relative bg-dark-background">
+            <View className="w-full aspect-square relative bg-dark-background overflow-hidden">
               {product.images && product.images.length > 0 && product.images[0] ? (
                 <Image
                   source={{ uri: product.images[0] }}
-                  className="w-full h-full"
+                  style={{ width: '100%', height: '100%' }}
                   contentFit="cover"
                   cachePolicy="memory-disk"
+                  transition={200}
+                  placeholderContentFit="cover"
+                  onError={(error) => {
+                    console.log('Image load error for product:', product.name, error);
+                  }}
                 />
               ) : (
                 <ProductPlaceholder width="100%" height={isMobile ? 110 : 140} aspectRatio={1} />

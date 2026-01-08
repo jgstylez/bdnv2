@@ -530,7 +530,7 @@ export default function ProductDetail() {
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
-          paddingBottom: scrollViewBottomPadding,
+          paddingBottom: scrollViewBottomPadding + spacing["2xl"], // Extra bottom padding for product detail page
         }}
       >
         {/* Back Button */}
