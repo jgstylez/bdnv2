@@ -23,7 +23,7 @@ import {
 import { ProductPlaceholder } from '@/components/ProductPlaceholder';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { getMerchantName } from '@/lib/merchant-lookup';
-import { mockProducts as centralizedMockProducts } from '@/data/mocks/products';
+import { mockProducts as centralizedMockProducts, getProductsByType, getFeaturedProducts, getTrendingProducts } from '@/data/mocks/products';
 
 // Use centralized mock products
 const mockProducts: Product[] = centralizedMockProducts;
@@ -94,7 +94,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         nestedScrollEnabled={Platform.OS === 'android'}
         bounces={Platform.OS !== 'web'}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: spacing.lg, paddingRight: spacing.lg }}
+        contentContainerStyle={{ gap: spacing.md, paddingRight: spacing.md }}
       >
         {products.map((product) => {
           const handleBusinessPress = () => {
@@ -401,15 +401,11 @@ export default function Marketplace() {
       })
     : mockProducts;
 
-  const physicalProducts = mockProducts.filter(
-    (p) => p.productType === "physical"
-  );
-  const digitalProducts = mockProducts.filter(
-    (p) => p.productType === "digital"
-  );
-  const services = mockProducts.filter((p) => p.productType === "service");
-  const featuredProducts = mockProducts.slice(0, 6);
-  const trendingProducts = mockProducts.slice(2, 8);
+  const physicalProducts = getProductsByType("physical");
+  const digitalProducts = getProductsByType("digital");
+  const services = getProductsByType("service");
+  const featuredProducts = getFeaturedProducts();
+  const trendingProducts = getTrendingProducts();
 
   const handleProductPress = (product: Product) => {
     // Navigate to product detail page

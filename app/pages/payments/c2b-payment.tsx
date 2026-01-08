@@ -11,10 +11,22 @@ import { formatCurrency } from '@/lib/international';
 import { ReviewReason, REVIEW_REASONS } from '@/types/review';
 import { logger } from '@/lib/logger';
 
+// Extended wallet type for mock data with additional properties
+type MockWallet = WalletType & {
+  type?: string;
+  name?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+  availableBalance?: number;
+  [key: string]: any;
+};
+
 // Mock wallets
-const mockWallets: WalletType[] = [
+const mockWallets: MockWallet[] = [
   {
     id: "1",
+    userId: "user-1",
+    provider: "bdn",
     type: "primary",
     name: "Primary Wallet",
     currency: "USD",
@@ -24,6 +36,8 @@ const mockWallets: WalletType[] = [
   },
   {
     id: "2",
+    userId: "user-1",
+    provider: "bdn",
     type: "myimpact",
     name: "MyImpact Rewards",
     currency: "BLKD",
@@ -32,6 +46,8 @@ const mockWallets: WalletType[] = [
   },
   {
     id: "4",
+    userId: "user-1",
+    provider: "bdn",
     type: "bankaccount",
     name: "Chase Checking",
     currency: "USD",
@@ -41,7 +57,7 @@ const mockWallets: WalletType[] = [
     bankName: "Chase",
     accountType: "checking" as const,
     last4: "4321",
-  } as BankAccountWallet,
+  } as MockWallet,
 ];
 
 // Import centralized mock businesses
@@ -60,7 +76,7 @@ const mockBusinesses: Record<string, any> = {
 // All businesses list for search
 const allBusinesses = getAllMockBusinesses();
 
-type PaymentStep = "select-business" | "amount" | "payment-method" | "review" | "processing" | "success";
+type PaymentStep = "select-business" | "amount" | "payment-method" | "review" | "processing" | "success" | "error";
 
 export default function C2BPayment() {
   const { width } = useWindowDimensions();
@@ -70,7 +86,7 @@ export default function C2BPayment() {
   const [step, setStep] = useState<PaymentStep>(params.businessId ? "amount" : "select-business");
   const [amount, setAmount] = useState(params.amount || "0");
   const [currency, setCurrency] = useState<Currency>((params.currency as Currency) || "USD");
-  const [selectedWallet, setSelectedWallet] = useState<WalletType | null>(null);
+  const [selectedWallet, setSelectedWallet] = useState<MockWallet | null>(null);
   const [useBLKD, setUseBLKD] = useState(false);
   const [note, setNote] = useState("");
   const [transactionId, setTransactionId] = useState<string | null>(null);
@@ -78,6 +94,7 @@ export default function C2BPayment() {
   const [showBusinessModal, setShowBusinessModal] = useState(false);
   const [businessSearchQuery, setBusinessSearchQuery] = useState("");
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [feedbackRating, setFeedbackRating] = useState<number>(0);
   const [feedbackComment, setFeedbackComment] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<ReviewReason[]>([]);
@@ -106,7 +123,7 @@ export default function C2BPayment() {
   const totalAmount = feeCalculation.total;
   
   // Get BLKD wallet separately
-  const blkdWallet = mockWallets.find((w) => w.type === "myimpact" && w.currency === "BLKD");
+  const blkdWallet = mockWallets.find((w) => (w as MockWallet).type === "myimpact" && w.currency === "BLKD");
   const blkdBalance = blkdWallet ? (blkdWallet.availableBalance || blkdWallet.balance) : 0;
   
   // Calculate BLKD coverage and remaining amount
@@ -150,6 +167,8 @@ export default function C2BPayment() {
 
   const handleProcessPayment = () => {
     setStep("processing");
+    setErrorMessage(null);
+    
     // TODO: Process payment via API
     // This should:
     // 1. Deduct totalAmount (including service fee) from user's wallet
@@ -158,9 +177,23 @@ export default function C2BPayment() {
     // 4. Create transaction records with fee breakdown
     
     setTimeout(() => {
-      const newTransactionId = `TXN-${Date.now()}`;
-      setTransactionId(newTransactionId);
-      setStep("success");
+      try {
+        // Simulate potential errors (for testing - remove in production)
+        const shouldFail = false; // Set to true to test error handling
+        
+        if (shouldFail) {
+          throw new Error("Payment processing failed");
+        }
+
+        const newTransactionId = `TXN-${Date.now()}`;
+        setTransactionId(newTransactionId);
+        setStep("success");
+      } catch (error) {
+        setErrorMessage(
+          "We couldn't complete your payment right now. Please check your payment method and try again, or contact support if the issue persists."
+        );
+        setStep("error");
+      }
     }, 2000);
   };
 
@@ -516,7 +549,7 @@ export default function C2BPayment() {
         {remainingAfterBLKD > 0 && (
           <>
             {availableWallets.map((wallet) => {
-          const balance = wallet.availableBalance || wallet.balance;
+          const balance = (wallet as MockWallet).availableBalance || wallet.balance;
           const isSelected = selectedWallet?.id === wallet.id;
           return (
             <TouchableOpacity
@@ -545,11 +578,11 @@ export default function C2BPayment() {
               >
                 <MaterialIcons
                   name={
-                    wallet.type === "creditcard"
+                    (wallet as MockWallet).type === "creditcard"
                       ? "credit-card"
-                      : wallet.type === "bankaccount"
+                      : (wallet as MockWallet).type === "bankaccount"
                       ? "account-balance"
-                      : wallet.type === "myimpact"
+                      : (wallet as MockWallet).type === "myimpact"
                       ? "stars"
                       : "account-balance-wallet"
                   }
@@ -566,9 +599,9 @@ export default function C2BPayment() {
                     marginBottom: 4,
                   }}
                 >
-                  {wallet.name}
+                  {(wallet as MockWallet).name}
                 </Text>
-                {wallet.type === "creditcard" && (
+                {(wallet as MockWallet).type === "creditcard" && (
                   <Text
                     style={{
                       fontSize: 12,
@@ -578,14 +611,14 @@ export default function C2BPayment() {
                     •••• {(wallet as CreditCardWallet).last4}
                   </Text>
                 )}
-                {wallet.type === "bankaccount" && (
+                {(wallet as MockWallet).type === "bankaccount" && (
                   <Text
                     style={{
                       fontSize: 12,
                       color: "rgba(255, 255, 255, 0.6)",
                     }}
                   >
-                    •••• {(wallet as BankAccountWallet).last4}
+                    •••• {(wallet as MockWallet).last4}
                   </Text>
                 )}
               </View>
@@ -621,7 +654,7 @@ export default function C2BPayment() {
   );
 
   const renderReviewStep = () => {
-    const balance = selectedWallet ? (selectedWallet.availableBalance || selectedWallet.balance) : 0;
+    const balance = selectedWallet ? ((selectedWallet as MockWallet).availableBalance || selectedWallet.balance) : 0;
     return (
       <View style={{ gap: 24 }}>
         <View>
@@ -877,6 +910,92 @@ export default function C2BPayment() {
     </View>
   );
 
+  const renderErrorStep = () => (
+    <View style={{ alignItems: "center", paddingVertical: 60, gap: 24 }}>
+      <View
+        style={{
+          width: 80,
+          height: 80,
+          borderRadius: 40,
+          backgroundColor: "rgba(244, 67, 54, 0.2)",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <MaterialIcons name="info-outline" size={48} color="#f44336" />
+      </View>
+      <View style={{ alignItems: "center", gap: 8 }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "700",
+            color: "#ffffff",
+          }}
+        >
+          Payment Not Completed
+        </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            color: "rgba(255, 255, 255, 0.7)",
+            textAlign: "center",
+            lineHeight: 20,
+            paddingHorizontal: 20,
+          }}
+        >
+          {errorMessage || "We couldn't complete your payment right now. Please check your payment method and try again, or contact support if the issue persists."}
+        </Text>
+      </View>
+      <View style={{ flexDirection: "row", gap: 12, width: "100%", marginTop: 8 }}>
+        <TouchableOpacity
+          onPress={() => {
+            setStep("payment-method");
+            setErrorMessage(null);
+          }}
+          style={{
+            flex: 1,
+            backgroundColor: "#ba9988",
+            borderRadius: 12,
+            paddingVertical: 16,
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: "#ffffff",
+            }}
+          >
+            Try Again
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={{
+            flex: 1,
+            backgroundColor: "#232323",
+            borderRadius: 12,
+            paddingVertical: 16,
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "rgba(186, 153, 136, 0.2)",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: "#ffffff",
+            }}
+          >
+            Go Back
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
   const renderSuccessStep = () => (
     <View style={{ alignItems: "center", paddingVertical: 60, gap: 24 }}>
       <View
@@ -1011,7 +1130,7 @@ export default function C2BPayment() {
         }}
       >
         {/* Progress Steps */}
-        {step !== "processing" && step !== "success" && (
+        {step !== "processing" && step !== "success" && step !== "error" && (
           <View style={{ marginBottom: 24 }}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 12 }}>
               {[
@@ -1068,9 +1187,10 @@ export default function C2BPayment() {
         {step === "review" && renderReviewStep()}
         {step === "processing" && renderProcessingStep()}
         {step === "success" && renderSuccessStep()}
+        {step === "error" && renderErrorStep()}
 
         {/* Navigation Buttons */}
-        {step !== "processing" && step !== "success" && (
+        {step !== "processing" && step !== "success" && step !== "error" && (
           <View style={{ flexDirection: "row", gap: 12, marginTop: 24 }}>
             <TouchableOpacity
               onPress={() => {
@@ -1114,6 +1234,7 @@ export default function C2BPayment() {
               style={{
                 flex: 1,
                 paddingVertical: 16,
+                paddingHorizontal: isMobile ? 20 : 32,
                 borderRadius: 12,
                 backgroundColor:
                   (step === "amount" && numericAmount <= 0) ||

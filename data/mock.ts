@@ -69,7 +69,7 @@ export const mockNewProducts: Product[] = [
     inventory: 10,
     inventoryTracking: "manual",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=400&fit=crop&q=80"], // Hair styling with African American woman
+    images: ["https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=400&h=400&fit=crop&q=80"], // Hair styling with African American woman
     shippingRequired: false,
     tags: ["beauty", "service"],
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
@@ -289,7 +289,7 @@ export const mockBusinesses: Record<string, any> = {
     id: "5",
     name: "Crown Beauty Salon",
     category: "Beauty & Wellness",
-    imageUrl: "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&h=600&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=800&h=600&fit=crop",
   },
   "6": {
     id: "6",

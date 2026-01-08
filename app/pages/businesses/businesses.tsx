@@ -51,7 +51,7 @@ const mockBusinesses = [
     location: "Houston, TX",
     rating: 4.9,
     description: "Full-service beauty salon specializing in natural hair care.",
-    imageUrl: "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&h=450&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=800&h=450&fit=crop",
   },
   {
     id: 6,
@@ -123,7 +123,7 @@ const mockBusinesses = [
     location: "Charlotte, NC",
     rating: 4.9,
     description: "Premium natural hair care products and styling tools.",
-    imageUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&h=450&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=800&h=450&fit=crop",
   },
   {
     id: 14,

@@ -599,7 +599,7 @@ export default function Events() {
                     />
                   ) : (
                     <View style={{ width: "100%", height: "100%", backgroundColor: "#474747", justifyContent: "center", alignItems: "center" }}>
-                      <MaterialIcons name="event" size={48} color="rgba(186, 153, 136, 0.5)" />
+                      {!isMobile && <MaterialIcons name="event" size={48} color="rgba(186, 153, 136, 0.5)" />}
                     </View>
                   )}
                 </View>

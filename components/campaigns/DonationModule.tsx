@@ -9,7 +9,17 @@ import { colors, spacing, typography, borderRadius } from '../../constants/theme
 import { formatCurrency } from '../../lib/international';
 import { mockWallets } from '../../data/mocks/wallets';
 
-type DonationStep = "amount" | "payment" | "review" | "processing" | "success" | null;
+// Extended wallet type for mock data with additional properties
+type MockWallet = Wallet & {
+  type?: string;
+  name?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+  availableBalance?: number;
+  [key: string]: any;
+};
+
+type DonationStep = "amount" | "payment" | "review" | "processing" | "success" | "error" | null;
 type DonationType = "one-time" | "recurring";
 type RecurringFrequency = "weekly" | "bi-weekly" | "monthly" | "quarterly" | "annually";
 
@@ -38,16 +48,16 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
   const progress = campaign.targetAmount ? Math.min((campaign.currentAmount / campaign.targetAmount) * 100, 100) : 0;
 
   const availableWallets = mockWallets.filter(
-    (w) => w.currency === donationCurrency && (w.availableBalance || w.balance) >= numericAmount
+    (w) => w.currency === donationCurrency && ((w as MockWallet).availableBalance || w.balance) >= numericAmount
   );
 
-  const blkdWallet = mockWallets.find((w) => w.type === "myimpact" && w.currency === "BLKD");
+  const blkdWallet = mockWallets.find((w) => (w as MockWallet).type === "myimpact" && w.currency === "BLKD");
   const blkdBalance = blkdWallet?.balance || 0;
   const blkdCoverage = useBLKD && blkdBalance > 0 ? Math.min(blkdBalance, numericAmount) : 0;
   const remainingAfterBLKD = numericAmount - blkdCoverage;
 
   useEffect(() => {
-    const defaultWallet = mockWallets.find((w) => w.isDefault && w.currency === donationCurrency);
+    const defaultWallet = (mockWallets as MockWallet[]).find((w) => w.isDefault && w.currency === donationCurrency);
     if (defaultWallet) {
       setSelectedWalletId(defaultWallet.id);
     }
@@ -96,17 +106,35 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
     }
   };
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const handleProcessDonation = async () => {
     setDonationStep("processing");
     setIsProcessing(true);
+    setErrorMessage(null);
     // TODO: Process donation via API
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    const newTransactionId = `txn-${Date.now()}`;
-    setTransactionId(newTransactionId);
-    setIsProcessing(false);
-    setDonationStep("success");
-    if (onDonationComplete) {
-      onDonationComplete(newTransactionId);
+    try {
+      // Simulate potential errors (for testing - remove in production)
+      const shouldFail = false; // Set to true to test error handling
+      
+      if (shouldFail) {
+        throw new Error("Donation processing failed");
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const newTransactionId = `txn-${Date.now()}`;
+      setTransactionId(newTransactionId);
+      setIsProcessing(false);
+      setDonationStep("success");
+      if (onDonationComplete) {
+        onDonationComplete(newTransactionId);
+      }
+    } catch (error) {
+      setIsProcessing(false);
+      setErrorMessage(
+        "We couldn't complete your donation right now. Please check your payment method and try again, or contact support if the issue persists."
+      );
+      setDonationStep("error");
     }
   };
 
@@ -119,6 +147,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
     setAnonymous(false);
     setDonationMessage("");
     setTransactionId(null);
+    setErrorMessage(null);
   };
 
   const renderDonationModal = () => {
@@ -135,7 +164,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
         >
           <View
             style={{
-              backgroundColor: colors.background.primary,
+              backgroundColor: colors.background,
               borderTopLeftRadius: borderRadius.lg,
               borderTopRightRadius: borderRadius.lg,
               padding: spacing.lg,
@@ -155,6 +184,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                 {donationStep === "review" && "Review Donation"}
                 {donationStep === "processing" && "Processing..."}
                 {donationStep === "success" && "Thank You!"}
+                {donationStep === "error" && "Donation Not Completed"}
               </Text>
               {donationStep !== "processing" && donationStep !== "success" && (
                 <TouchableOpacity onPress={handleCloseDonation}>
@@ -176,7 +206,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                     onPress={handleProceedDonation}
                     disabled={numericAmount <= 0}
                     style={{
-                      backgroundColor: numericAmount > 0 ? colors.accent : colors.border.light,
+                      backgroundColor: numericAmount > 0 ? colors.accent : colors.border,
                       padding: spacing.lg,
                       borderRadius: borderRadius.md,
                       alignItems: "center",
@@ -232,13 +262,13 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                       numberOfLines={3}
                       textAlignVertical="top"
                       style={{
-                        backgroundColor: colors.secondary.bg,
+                        backgroundColor: colors.input,
                         borderRadius: borderRadius.md,
                         padding: spacing.md,
                         fontSize: typography.fontSize.base,
                         color: colors.text.primary,
                         borderWidth: 1,
-                        borderColor: colors.border.light,
+                        borderColor: colors.border,
                         minHeight: 80,
                       }}
                     />
@@ -249,7 +279,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                     disabled={remainingAfterBLKD > 0 && !selectedWalletId && !useBLKD}
                     style={{
                       backgroundColor:
-                        remainingAfterBLKD > 0 && !selectedWalletId && !useBLKD ? colors.border.light : colors.accent,
+                        remainingAfterBLKD > 0 && !selectedWalletId && !useBLKD ? colors.border : colors.accent,
                       padding: spacing.lg,
                       borderRadius: borderRadius.md,
                       alignItems: "center",
@@ -275,7 +305,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                 <View style={{ gap: spacing.lg }}>
                   <View
                     style={{
-                      backgroundColor: colors.secondary.bg,
+                      backgroundColor: colors.input,
                       borderRadius: borderRadius.md,
                       padding: spacing.md,
                     }}
@@ -302,7 +332,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                           color: colors.accent,
                         }}
                       >
-                        {formatCurrency(numericAmount, donationCurrency)}
+                        {formatCurrency(numericAmount, donationCurrency as Currency)}
                       </Text>
                     </View>
                     {donationType === "recurring" && (
@@ -342,6 +372,91 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                   </TouchableOpacity>
                 </View>
               </ScrollView>
+            )}
+
+            {donationStep === "error" && (
+              <View style={{ alignItems: "center", paddingVertical: spacing.xl, gap: spacing.md }}>
+                <View
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 32,
+                    backgroundColor: colors.status.errorLight,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <MaterialIcons name="info-outline" size={36} color={colors.status.error} />
+                </View>
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.xl,
+                    fontWeight: typography.fontWeight.bold,
+                    color: colors.text.primary,
+                    textAlign: "center",
+                  }}
+                >
+                  Donation Not Completed
+                </Text>
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.sm,
+                    color: colors.text.secondary,
+                    textAlign: "center",
+                    lineHeight: typography.lineHeight.relaxed,
+                    paddingHorizontal: spacing.md,
+                  }}
+                >
+                  {errorMessage || "We couldn't complete your donation right now. Please check your payment method and try again, or contact support if the issue persists."}
+                </Text>
+                <View style={{ flexDirection: "row", gap: spacing.md, width: "100%", marginTop: spacing.md }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDonationStep("payment");
+                      setErrorMessage(null);
+                    }}
+                    style={{
+                      flex: 1,
+                      backgroundColor: colors.accent,
+                      paddingVertical: spacing.md,
+                      borderRadius: borderRadius.md,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.base,
+                        fontWeight: typography.fontWeight.semibold,
+                        color: colors.textColors.onAccent,
+                      }}
+                    >
+                      Try Again
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleCloseDonation}
+                    style={{
+                      flex: 1,
+                      backgroundColor: colors.input,
+                      paddingVertical: spacing.md,
+                      borderRadius: borderRadius.md,
+                      alignItems: "center",
+                      borderWidth: 1,
+                      borderColor: colors.border,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.base,
+                        fontWeight: typography.fontWeight.semibold,
+                        color: colors.text.primary,
+                      }}
+                    >
+                      Close
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             )}
 
             {donationStep === "processing" && (
@@ -436,11 +551,11 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
   return (
     <View
       style={{
-        backgroundColor: colors.secondary.bg,
+        backgroundColor: colors.input,
         borderRadius: borderRadius.lg,
         padding: spacing.lg,
         borderWidth: 1,
-        borderColor: colors.border.light,
+        borderColor: colors.border,
         width: "100%",
       }}
     >
@@ -455,7 +570,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                 color: colors.text.primary,
               }}
             >
-              {formatCurrency(campaign.currentAmount, campaign.currency)}
+              {formatCurrency(campaign.currentAmount, campaign.currency as Currency)}
             </Text>
             <Text
               style={{
@@ -463,13 +578,13 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                 color: colors.text.secondary,
               }}
             >
-              of {formatCurrency(campaign.targetAmount, campaign.currency)}
+              of {formatCurrency(campaign.targetAmount || 0, campaign.currency as Currency)}
             </Text>
           </View>
           <View
             style={{
               height: 8,
-              backgroundColor: colors.background.primary,
+              backgroundColor: colors.background,
               borderRadius: borderRadius.sm,
               overflow: "hidden",
               marginBottom: spacing.sm,
@@ -499,7 +614,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
         <View
           style={{
             flexDirection: "row",
-            backgroundColor: colors.background.primary,
+            backgroundColor: colors.background,
             borderRadius: borderRadius.md,
             padding: 4,
           }}
@@ -547,7 +662,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
           <View
             style={{
               flexDirection: "row",
-              backgroundColor: colors.background.primary,
+              backgroundColor: colors.background,
               borderRadius: borderRadius.md,
               padding: 4,
               gap: 4,
@@ -603,9 +718,9 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
                 minWidth: "30%",
                 paddingVertical: spacing.sm,
                 borderRadius: borderRadius.md,
-                backgroundColor: parseFloat(donationAmount) === amount ? colors.accent : colors.background.primary,
+                backgroundColor: parseFloat(donationAmount) === amount ? colors.accent : colors.background,
                 borderWidth: 1,
-                borderColor: parseFloat(donationAmount) === amount ? colors.accent : colors.border.light,
+                borderColor: parseFloat(donationAmount) === amount ? colors.accent : colors.border,
                 alignItems: "center",
               }}
             >
@@ -638,11 +753,11 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
         <TouchableOpacity
           onPress={() => setDonationStep("amount")}
           style={{
-            backgroundColor: colors.background.primary,
+            backgroundColor: colors.background,
             borderRadius: borderRadius.md,
             padding: spacing.md,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
           }}
         >
           <Text
@@ -653,7 +768,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
               textAlign: "center",
             }}
           >
-            {formatCurrency(numericAmount || 0, donationCurrency)}
+            {formatCurrency(numericAmount || 0, donationCurrency as Currency)}
           </Text>
         </TouchableOpacity>
       </View>
@@ -675,7 +790,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
               height: 20,
               borderRadius: 4,
               borderWidth: 2,
-              borderColor: anonymous ? colors.accent : colors.border.light,
+              borderColor: anonymous ? colors.accent : colors.border,
               backgroundColor: anonymous ? colors.accent : "transparent",
               alignItems: "center",
               justifyContent: "center",
@@ -707,7 +822,7 @@ export function DonationModule({ campaign, onDonationComplete }: DonationModuleP
         }}
         disabled={numericAmount <= 0}
         style={{
-          backgroundColor: numericAmount > 0 ? colors.accent : colors.border.light,
+          backgroundColor: numericAmount > 0 ? colors.accent : colors.border,
           padding: spacing.lg,
           borderRadius: borderRadius.md,
           alignItems: "center",

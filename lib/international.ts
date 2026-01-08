@@ -2,9 +2,10 @@ import { Currency } from "../types/wallet";
 import { InternationalAddress, CountryCode } from "../types/international";
 
 export const formatCurrency = (amount: number, currency: Currency) => {
+    // Simplified to USD only for now to avoid errors
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency,
+      currency: 'USD',
     }).format(amount);
   };
 

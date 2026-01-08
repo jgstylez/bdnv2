@@ -5,7 +5,7 @@
  * Includes service fee calculation and payment processing
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Alert, Platform } from "react-native";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
@@ -18,37 +18,32 @@ import { useCart } from '@/contexts/CartContext';
 import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '@/lib/fees';
 import { formatCurrency } from '@/lib/international';
 import { Product } from '@/types/merchant';
+import { Currency } from '@/types/wallet';
 import { ProductPlaceholder } from '@/components/ProductPlaceholder';
 import { FeeBreakdown } from '@/components/FeeBreakdown';
 import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelector';
 import { Wallet, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
-import { useEffect } from "react";
 import { getMerchantName } from '@/lib/merchant-lookup';
 import { BackButton } from '@/components/navigation/BackButton';
+import { mockProducts as centralizedMockProducts, getMockProduct } from '@/data/mocks/products';
 
-// Mock product data - in production, fetch by ID
-const mockProducts: Record<string, Product> = {
-  "prod-1": {
-    id: "prod-1",
-    merchantId: "merchant-1",
-    name: "Premium Black-Owned Coffee Blend",
-    description: "Artisan roasted coffee beans from Black-owned farms",
-    productType: "physical",
-    price: 24.99,
-    currency: "USD",
-    category: "Food & Beverage",
-    inventory: 150,
-    inventoryTracking: "manual",
-    isActive: true,
-    images: ["https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&h=800&fit=crop"],
-    shippingRequired: true,
-    shippingCost: 5.99,
-    tags: ["coffee", "beverage", "premium"],
-    createdAt: "2024-01-15T10:00:00Z",
-  },
+// Extended wallet type for mock data with additional properties
+type MockWallet = Wallet & {
+  type?: string;
+  name?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+  availableBalance?: number;
+  [key: string]: any;
 };
 
-type CheckoutStep = "review" | "shipping" | "payment" | "processing" | "success";
+// Use centralized mock products - convert array to Record for lookup
+const mockProducts: Record<string, Product> = {};
+centralizedMockProducts.forEach((product) => {
+  mockProducts[product.id] = product;
+});
+
+type CheckoutStep = "review" | "shipping" | "payment" | "processing" | "success" | "error";
 
 export default function Checkout() {
   const router = useRouter();
@@ -58,14 +53,18 @@ export default function Checkout() {
   const [step, setStep] = useState<CheckoutStep>("review");
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [transactionId, setTransactionId] = useState<string | null>(null);
   const [useBLKD, setUseBLKD] = useState(true); // Preselected as true
-  const [wallets, setWallets] = useState<Wallet[]>([]);
+  const [wallets, setWallets] = useState<MockWallet[]>([]);
 
   // Mock wallets - in production, fetch from API/context
   useEffect(() => {
-    const mockWallets: Wallet[] = [
+    const mockWallets: MockWallet[] = [
       {
         id: "1",
+        userId: "user-1",
+        provider: "bdn",
         type: "primary",
         name: "Primary Wallet",
         currency: "USD",
@@ -75,6 +74,8 @@ export default function Checkout() {
       },
       {
         id: "2",
+        userId: "user-1",
+        provider: "bdn",
         type: "myimpact",
         name: "MyImpact Rewards",
         currency: "BLKD",
@@ -83,6 +84,8 @@ export default function Checkout() {
       },
       {
         id: "4",
+        userId: "user-1",
+        provider: "bdn",
         type: "bankaccount",
         name: "Chase Checking",
         currency: "USD",
@@ -92,9 +95,11 @@ export default function Checkout() {
         bankName: "Chase",
         accountType: "checking" as const,
         last4: "4321",
-      } as BankAccountWallet,
+      } as MockWallet,
       {
         id: "5",
+        userId: "user-1",
+        provider: "bdn",
         type: "creditcard",
         name: "Visa Card",
         currency: "USD",
@@ -105,7 +110,7 @@ export default function Checkout() {
         last4: "8765",
         expirationDate: "12/25",
         cardholderName: "John Doe",
-      } as CreditCardWallet,
+      } as MockWallet,
     ];
     setWallets(mockWallets);
 
@@ -120,9 +125,9 @@ export default function Checkout() {
   const buyNowProductId = params?.productId;
   const buyNowQuantity = parseInt(params?.quantity || "1", 10);
 
-  // Get buy now product if exists
-  const buyNowProduct = buyNowProductId && mockProducts[buyNowProductId] 
-    ? mockProducts[buyNowProductId] 
+  // Get buy now product if exists - try centralized first, then local fallback
+  const buyNowProduct = buyNowProductId 
+    ? (getMockProduct(buyNowProductId) || mockProducts[buyNowProductId] || null)
     : null;
 
   // Get items to checkout
@@ -214,6 +219,7 @@ export default function Checkout() {
   const handleProcessPayment = async () => {
     setIsProcessing(true);
     setStep("processing");
+    setErrorMessage(null);
 
     // Simulate payment processing
     setTimeout(async () => {
@@ -225,6 +231,17 @@ export default function Checkout() {
         // - Update inventory
         // - Send confirmation emails
 
+        // Simulate potential errors (for testing - remove in production)
+        const shouldFail = false; // Set to true to test error handling
+        
+        if (shouldFail) {
+          throw new Error("Payment processing failed");
+        }
+
+        // Generate transaction ID
+        const newTransactionId = `TXN-${Date.now()}`;
+        setTransactionId(newTransactionId);
+
         // Clear cart if not Buy Now
         if (!isBuyNow) {
           await clearCart();
@@ -232,8 +249,11 @@ export default function Checkout() {
 
         setStep("success");
       } catch (error) {
-        Alert.alert("Payment Failed", "There was an error processing your payment. Please try again.");
-        setStep("payment");
+        // Set user-friendly error message
+        setErrorMessage(
+          "We couldn't complete your payment right now. Please check your payment method and try again, or contact support if the issue persists."
+        );
+        setStep("error");
       } finally {
         setIsProcessing(false);
       }
@@ -247,7 +267,7 @@ export default function Checkout() {
   // If buy now but product doesn't exist, show error
   if (isBuyNow && !buyNowProduct) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         <StatusBar style="light" />
         <ScrollView
           contentContainerStyle={{
@@ -283,12 +303,18 @@ export default function Checkout() {
           </Text>
           <TouchableOpacity
             onPress={() => router.push("/(tabs)/marketplace")}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Browse Marketplace"
+            accessibilityHint="Navigate to marketplace to browse products"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={{
               backgroundColor: colors.accent,
-              paddingHorizontal: spacing.xl,
-              paddingVertical: spacing.md,
+              paddingHorizontal: paddingHorizontal,
+              paddingVertical: spacing.md + 2,
               borderRadius: borderRadius.md,
               marginTop: spacing.lg,
+              alignItems: "center",
             }}
           >
             <Text
@@ -308,7 +334,7 @@ export default function Checkout() {
 
   if (checkoutItems.length === 0 && !isBuyNow) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         <StatusBar style="light" />
         <ScrollView
           contentContainerStyle={{
@@ -334,12 +360,18 @@ export default function Checkout() {
           </Text>
           <TouchableOpacity
             onPress={() => router.push("/(tabs)/marketplace")}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Browse Marketplace"
+            accessibilityHint="Navigate to marketplace to browse products"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={{
               backgroundColor: colors.accent,
-              paddingHorizontal: spacing.xl,
-              paddingVertical: spacing.md,
+              paddingHorizontal: paddingHorizontal,
+              paddingVertical: spacing.md + 2,
               borderRadius: borderRadius.md,
               marginTop: spacing.lg,
+              alignItems: "center",
             }}
           >
             <Text
@@ -358,7 +390,7 @@ export default function Checkout() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <ScrollView
         scrollEventThrottle={16}
@@ -384,11 +416,11 @@ export default function Checkout() {
             {/* Order Items */}
             <View
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.lg,
                 padding: spacing.xl,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             >
               <Text
@@ -411,7 +443,7 @@ export default function Checkout() {
                       gap: spacing.md,
                       paddingBottom: spacing.md,
                       borderBottomWidth: 1,
-                      borderBottomColor: colors.border.light,
+                      borderBottomColor: colors.border,
                     }}
                   >
                     <View
@@ -420,9 +452,9 @@ export default function Checkout() {
                         height: 80,
                         borderRadius: borderRadius.md,
                         overflow: "hidden",
-                        backgroundColor: colors.secondary.bg,
+                        backgroundColor: colors.input,
                         borderWidth: 1,
-                        borderColor: colors.border.light,
+                        borderColor: colors.border,
                       }}
                     >
                       {item.images && item.images.length > 0 && item.images[0] ? (
@@ -464,7 +496,7 @@ export default function Checkout() {
                           color: colors.accent,
                         }}
                       >
-                        {formatCurrency(item.price * item.quantity, item.currency)}
+                        {formatCurrency(item.price * item.quantity, item.currency as Currency)}
                       </Text>
                     </View>
                   </View>
@@ -491,7 +523,7 @@ export default function Checkout() {
                     </Text>
                   </View>
                 )}
-                <View style={{ height: 1, backgroundColor: colors.border.light, marginVertical: spacing.sm }} />
+                <View style={{ height: 1, backgroundColor: colors.border, marginVertical: spacing.sm }} />
 
                 {/* Service Fee */}
                 <FeeBreakdown
@@ -566,7 +598,7 @@ export default function Checkout() {
                   </TouchableOpacity>
                 )}
 
-                <View style={{ height: 1, backgroundColor: colors.border.light, marginVertical: spacing.sm }} />
+                <View style={{ height: 1, backgroundColor: colors.border, marginVertical: spacing.sm }} />
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                   <Text
                     style={{
@@ -630,11 +662,11 @@ export default function Checkout() {
             {/* Payment Summary */}
             <View
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.lg,
                 padding: spacing.xl,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             >
               <Text
@@ -666,7 +698,7 @@ export default function Checkout() {
                         -{formatCurrency(blkdCoverage, "BLKD")}
                       </Text>
                     </View>
-                    <View style={{ height: 1, backgroundColor: colors.border.light, marginVertical: spacing.sm }} />
+                    <View style={{ height: 1, backgroundColor: colors.border, marginVertical: spacing.sm }} />
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                       <Text
                         style={{
@@ -697,24 +729,69 @@ export default function Checkout() {
               onPress={handleProcessPayment}
               disabled={!selectedWalletId && remainingAfterBLKD > 0}
               style={{
-                backgroundColor: selectedWalletId || remainingAfterBLKD === 0 ? colors.accent : colors.secondary.bg,
+                backgroundColor: selectedWalletId || remainingAfterBLKD === 0 ? colors.accent : colors.input,
                 paddingVertical: spacing.md + 2,
+                paddingHorizontal: paddingHorizontal,
                 borderRadius: borderRadius.md,
                 alignItems: "center",
                 opacity: selectedWalletId || remainingAfterBLKD === 0 ? 1 : 0.5,
               }}
             >
-              <Text
-                style={{
-                  fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
-                  color: colors.textColors.onAccent,
-                }}
-              >
-                {remainingAfterBLKD === 0
-                  ? "Complete Purchase (Fully Paid with BLKD)"
-                  : `Complete Purchase - ${formatCurrency(remainingAfterBLKD, "USD")}`}
-              </Text>
+              {remainingAfterBLKD === 0 ? (
+                <View style={{ alignItems: "center" }}>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.lg,
+                      fontWeight: typography.fontWeight.bold,
+                      color: colors.textColors.onAccent,
+                    }}
+                  >
+                    Complete Purchase
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.normal,
+                      color: colors.textColors.onAccent,
+                      opacity: 0.9,
+                      marginTop: spacing.xs / 2,
+                    }}
+                  >
+                    Fully Paid with BLKD
+                  </Text>
+                </View>
+              ) : (
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.lg,
+                    fontWeight: typography.fontWeight.bold,
+                    color: colors.textColors.onAccent,
+                  }}
+                >
+                  <View style={{ alignItems: "center" }}>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.lg,
+                        fontWeight: typography.fontWeight.bold,
+                        color: colors.textColors.onAccent,
+                      }}
+                    >
+                      Complete Purchase
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.sm,
+                        fontWeight: typography.fontWeight.normal,
+                        color: colors.textColors.onAccent,
+                        opacity: 0.9,
+                        marginTop: spacing.xs / 2,
+                      }}
+                    >
+                      {formatCurrency(remainingAfterBLKD, "USD")}
+                    </Text>
+                  </View>
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         )}
@@ -736,15 +813,27 @@ export default function Checkout() {
         )}
 
         {step === "success" && (
-          <View style={{ alignItems: "center", paddingVertical: spacing["4xl"] }}>
-            <MaterialIcons name="check-circle" size={64} color={colors.status.success} />
+          <View style={{ alignItems: "center", paddingVertical: spacing["4xl"], paddingHorizontal: paddingHorizontal }}>
+            <View
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 40,
+                backgroundColor: colors.status.success,
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: spacing.lg,
+              }}
+            >
+              <MaterialIcons name="check" size={48} color={colors.text.primary} />
+            </View>
             <Text
               style={{
-                fontSize: typography.fontSize.xl,
+                fontSize: typography.fontSize["2xl"],
                 fontWeight: typography.fontWeight.bold,
                 color: colors.text.primary,
-                marginTop: spacing.lg,
                 marginBottom: spacing.sm,
+                textAlign: "center",
               }}
             >
               Order Confirmed!
@@ -753,19 +842,66 @@ export default function Checkout() {
               style={{
                 fontSize: typography.fontSize.base,
                 color: colors.text.secondary,
-                marginBottom: spacing.xl,
+                marginBottom: spacing.lg,
                 textAlign: "center",
               }}
             >
               Your order has been processed successfully. You will receive a confirmation email shortly.
             </Text>
+            
+            {/* Transaction Details */}
+            {transactionId && (
+              <View
+                style={{
+                  backgroundColor: colors.input,
+                  borderRadius: borderRadius.md,
+                  padding: spacing.lg,
+                  width: "100%",
+                  marginBottom: spacing.lg,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.sm }}>
+                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    Transaction ID
+                  </Text>
+                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                    {transactionId}
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.sm }}>
+                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    Total Amount
+                  </Text>
+                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.accent }}>
+                    {formatCurrency(finalTotal, "USD")}
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                    Items
+                  </Text>
+                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                    {itemCount} {itemCount === 1 ? "item" : "items"}
+                  </Text>
+                </View>
+              </View>
+            )}
+
             <TouchableOpacity
               onPress={handleComplete}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="View Order History"
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               style={{
                 backgroundColor: colors.accent,
-                paddingHorizontal: spacing.xl,
-                paddingVertical: spacing.md,
+                paddingHorizontal: paddingHorizontal,
+                paddingVertical: spacing.md + 2,
                 borderRadius: borderRadius.md,
+                alignItems: "center",
+                width: "100%",
               }}
             >
               <Text
@@ -778,6 +914,104 @@ export default function Checkout() {
                 View Order History
               </Text>
             </TouchableOpacity>
+          </View>
+        )}
+
+        {step === "error" && (
+          <View style={{ alignItems: "center", paddingVertical: spacing["4xl"], paddingHorizontal: paddingHorizontal }}>
+            <View
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 40,
+                backgroundColor: colors.status.errorLight,
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: spacing.lg,
+              }}
+            >
+              <MaterialIcons name="info-outline" size={48} color={colors.status.error} />
+            </View>
+            <Text
+              style={{
+                fontSize: typography.fontSize.xl,
+                fontWeight: typography.fontWeight.bold,
+                color: colors.text.primary,
+                marginBottom: spacing.sm,
+                textAlign: "center",
+              }}
+            >
+              Payment Not Completed
+            </Text>
+            <Text
+              style={{
+                fontSize: typography.fontSize.base,
+                color: colors.text.secondary,
+                marginBottom: spacing.lg,
+                textAlign: "center",
+                lineHeight: typography.lineHeight.relaxed,
+              }}
+            >
+              {errorMessage || "We couldn't complete your payment right now. Please check your payment method and try again."}
+            </Text>
+            
+            <View style={{ flexDirection: "row", gap: spacing.md, width: "100%" }}>
+              <TouchableOpacity
+                onPress={() => {
+                  setStep("payment");
+                  setErrorMessage(null);
+                }}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Try Again"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                style={{
+                  flex: 1,
+                  backgroundColor: colors.accent,
+                  paddingHorizontal: paddingHorizontal,
+                  paddingVertical: spacing.md + 2,
+                  borderRadius: borderRadius.md,
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.base,
+                    fontWeight: typography.fontWeight.semibold,
+                    color: colors.textColors.onAccent,
+                  }}
+                >
+                  Try Again
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => router.back()}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Go Back"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                style={{
+                  flex: 1,
+                  backgroundColor: colors.input,
+                  paddingHorizontal: paddingHorizontal,
+                  paddingVertical: spacing.md + 2,
+                  borderRadius: borderRadius.md,
+                  alignItems: "center",
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.base,
+                    fontWeight: typography.fontWeight.semibold,
+                    color: colors.text.primary,
+                  }}
+                >
+                  Go Back
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       </ScrollView>

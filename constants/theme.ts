@@ -85,7 +85,8 @@ export const colors = {
   primary: palette.brown[500],
   secondary: palette.gray[700],
   tertiary: palette.gray[500],
-  accent: palette.brown[300],
+  accent: '#ba9988', // Updated to match design system
+  accentLight: 'rgba(186, 153, 136, 0.2)', // Light variant with opacity
   success: palette.green[500],
   error: palette.red[500],
   warning: palette.orange[500],

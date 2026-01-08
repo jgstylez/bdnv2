@@ -18,341 +18,6 @@ import { SubscriptionFrequency, SubscriptionDuration, getFrequencyLabel } from '
 import VariantSelector from '@/components/products/VariantSelector';
 import { mockProducts as centralizedMockProducts, getMockProduct } from '@/data/mocks/products';
 
-// Use centralized mock products, fallback to local mock for products not in centralized data
-const localMockProducts: Record<string, Product> = {
-  "prod-1": {
-    id: "prod-1",
-    merchantId: "merchant-1",
-    name: "Premium Black-Owned Coffee Blend",
-    description: "Artisan roasted coffee beans from Black-owned farms. This premium blend features notes of chocolate, caramel, and a smooth finish. Perfect for coffee enthusiasts who appreciate quality and support Black-owned businesses.",
-    productType: "physical",
-    price: 24.99,
-    currency: "USD",
-    category: "Food & Beverage",
-    inventory: 150,
-    inventoryTracking: "manual",
-    isActive: true,
-    images: [
-      "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&h=800&fit=crop",
-      "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&h=800&fit=crop",
-      "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&h=800&fit=crop",
-    ],
-    shippingRequired: true,
-    shippingCost: 5.99,
-    weight: 1.5,
-    tags: ["coffee", "beverage", "premium"],
-    createdAt: "2024-01-15T10:00:00Z",
-  },
-  "prod-2": {
-    id: "prod-2",
-    merchantId: "merchant-2",
-    name: "Handcrafted Leather Wallet",
-    description: "Genuine leather wallet with RFID blocking technology. Handcrafted with attention to detail, this premium wallet features multiple card slots, cash compartment, and a sleek design perfect for everyday use.",
-    productType: "physical",
-    price: 89.99,
-    currency: "USD",
-    category: "Accessories",
-    inventory: 45,
-    inventoryTracking: "manual",
-    isActive: true,
-    images: [
-      "https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&h=800&fit=crop",
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&h=800&fit=crop",
-    ],
-    shippingRequired: true,
-    shippingCost: 0,
-    weight: 0.3,
-    tags: ["leather", "accessories", "premium"],
-    createdAt: "2024-01-20T10:00:00Z",
-  },
-  "prod-3": {
-    id: "prod-3",
-    merchantId: "merchant-3",
-    name: "Natural Hair Care Bundle",
-    description: "Complete hair care set for natural hair. Includes shampoo, conditioner, leave-in treatment, and styling products. Made with natural ingredients specifically formulated for curly and coily hair textures.",
-    productType: "physical",
-    price: 49.99,
-    currency: "USD",
-    category: "Beauty & Personal Care",
-    inventory: 200,
-    inventoryTracking: "manual",
-    isActive: true,
-    images: [
-      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&h=800&fit=crop",
-      "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=800&fit=crop",
-    ],
-    shippingRequired: true,
-    shippingCost: 6.99,
-    weight: 1.2,
-    tags: ["hair", "beauty", "natural"],
-    createdAt: "2024-02-01T10:00:00Z",
-  },
-  "prod-4": {
-    id: "prod-4",
-    merchantId: "merchant-4",
-    name: "Black History E-Book Collection",
-    description: "Comprehensive collection of Black history e-books covering important events, figures, and movements. Includes biographies, historical accounts, and educational materials.",
-    productType: "digital",
-    price: 19.99,
-    currency: "USD",
-    category: "Books & Media",
-    inventory: -1,
-    inventoryTracking: "none",
-    isActive: true,
-    images: ["https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&h=800&fit=crop"],
-    shippingRequired: false,
-    downloadUrl: "https://example.com/download",
-    downloadLimit: -1,
-    tags: ["ebook", "education", "history"],
-    createdAt: "2024-01-10T10:00:00Z",
-  },
-  "prod-5": {
-    id: "prod-5",
-    merchantId: "merchant-5",
-    name: "Business Plan Template Pack",
-    description: "Professional business plan templates and guides. Includes financial projections, market analysis templates, and step-by-step guides to help you create a comprehensive business plan.",
-    productType: "digital",
-    price: 29.99,
-    currency: "USD",
-    category: "Business Tools",
-    inventory: -1,
-    inventoryTracking: "none",
-    isActive: true,
-    images: ["https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=800&fit=crop"],
-    shippingRequired: false,
-    downloadUrl: "https://example.com/download",
-    downloadLimit: 5,
-    tags: ["business", "template", "digital"],
-    createdAt: "2024-01-25T10:00:00Z",
-  },
-  "prod-6": {
-    id: "prod-6",
-    merchantId: "merchant-6",
-    name: "Professional Resume Review",
-    description: "Expert resume review and optimization service. Our professional career coaches will review your resume, provide detailed feedback, and help optimize it for your target positions.",
-    productType: "service",
-    price: 75.00,
-    currency: "USD",
-    category: "Professional Services",
-    inventory: -1,
-    inventoryTracking: "none",
-    isActive: true,
-    images: ["https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop"],
-    shippingRequired: false,
-    duration: "2-3 business days",
-    serviceLocation: "remote",
-    bookingRequired: true,
-    tags: ["career", "professional", "service"],
-    createdAt: "2024-02-05T10:00:00Z",
-  },
-  "prod-7": {
-    id: "prod-7",
-    merchantId: "merchant-7",
-    name: "Virtual Fitness Coaching",
-    description: "One-on-one virtual fitness coaching sessions. Personalized workout plans, nutrition guidance, and ongoing support to help you reach your fitness goals from the comfort of your home.",
-    productType: "service",
-    price: 60.00,
-    currency: "USD",
-    category: "Health & Fitness",
-    inventory: -1,
-    inventoryTracking: "none",
-    isActive: true,
-    images: ["https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=800&fit=crop"],
-    shippingRequired: false,
-    duration: "1 hour",
-    serviceLocation: "remote",
-    bookingRequired: true,
-    tags: ["fitness", "health", "coaching"],
-    createdAt: "2024-02-10T10:00:00Z",
-  },
-  "prod-8": {
-    id: "prod-8",
-    merchantId: "merchant-8",
-    name: "Custom Logo Design",
-    description: "Professional logo design for your business. Our experienced designers will work with you to create a unique, memorable logo that represents your brand identity and resonates with your target audience.",
-    productType: "service",
-    price: 299.99,
-    currency: "USD",
-    category: "Design Services",
-    inventory: -1,
-    inventoryTracking: "none",
-    isActive: true,
-    images: ["https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=800&fit=crop"],
-    shippingRequired: false,
-    duration: "5-7 business days",
-    serviceLocation: "remote",
-    bookingRequired: true,
-    tags: ["design", "logo", "branding"],
-    createdAt: "2024-02-15T10:00:00Z",
-  },
-  "prod-9": {
-    id: "prod-9",
-    merchantId: "merchant-2",
-    name: "Premium T-Shirt",
-    description: "High-quality cotton t-shirt available in multiple sizes and colors. Made with sustainable materials and featuring a comfortable fit perfect for everyday wear.",
-    productType: "physical",
-    price: 29.99,
-    currency: "USD",
-    category: "Clothing & Apparel",
-    inventory: 0, // Base inventory (variants handle actual inventory)
-    inventoryTracking: "manual",
-    lowStockThreshold: 10,
-    isActive: true,
-    images: [
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop",
-      "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&h=800&fit=crop",
-    ],
-    shippingRequired: true,
-    shippingCost: 5.99,
-    weight: 0.5,
-    tags: ["clothing", "apparel", "t-shirt"],
-    variantOptions: [
-      {
-        id: "opt-size",
-        name: "Size",
-        values: ["Small", "Medium", "Large", "X-Large"],
-      },
-      {
-        id: "opt-color",
-        name: "Color",
-        values: ["Black", "White", "Navy", "Red"],
-      },
-    ],
-    variants: [
-      {
-        id: "var-small-black",
-        name: "Small / Black",
-        options: { Size: "Small", Color: "Black" },
-        inventory: 25,
-        isActive: true,
-        sku: "TSH-S-BLK",
-      },
-      {
-        id: "var-small-white",
-        name: "Small / White",
-        options: { Size: "Small", Color: "White" },
-        inventory: 30,
-        isActive: true,
-        sku: "TSH-S-WHT",
-      },
-      {
-        id: "var-small-navy",
-        name: "Small / Navy",
-        options: { Size: "Small", Color: "Navy" },
-        inventory: 15,
-        isActive: true,
-        sku: "TSH-S-NVY",
-      },
-      {
-        id: "var-small-red",
-        name: "Small / Red",
-        options: { Size: "Small", Color: "Red" },
-        inventory: 8,
-        isActive: true,
-        sku: "TSH-S-RED",
-        lowStockThreshold: 10,
-      },
-      {
-        id: "var-medium-black",
-        name: "Medium / Black",
-        options: { Size: "Medium", Color: "Black" },
-        inventory: 45,
-        isActive: true,
-        sku: "TSH-M-BLK",
-      },
-      {
-        id: "var-medium-white",
-        name: "Medium / White",
-        options: { Size: "Medium", Color: "White" },
-        inventory: 50,
-        isActive: true,
-        sku: "TSH-M-WHT",
-      },
-      {
-        id: "var-medium-navy",
-        name: "Medium / Navy",
-        options: { Size: "Medium", Color: "Navy" },
-        inventory: 35,
-        isActive: true,
-        sku: "TSH-M-NVY",
-      },
-      {
-        id: "var-medium-red",
-        name: "Medium / Red",
-        options: { Size: "Medium", Color: "Red" },
-        inventory: 20,
-        isActive: true,
-        sku: "TSH-M-RED",
-      },
-      {
-        id: "var-large-black",
-        name: "Large / Black",
-        options: { Size: "Large", Color: "Black" },
-        inventory: 40,
-        isActive: true,
-        sku: "TSH-L-BLK",
-      },
-      {
-        id: "var-large-white",
-        name: "Large / White",
-        options: { Size: "Large", Color: "White" },
-        inventory: 42,
-        isActive: true,
-        sku: "TSH-L-WHT",
-      },
-      {
-        id: "var-large-navy",
-        name: "Large / Navy",
-        options: { Size: "Large", Color: "Navy" },
-        inventory: 28,
-        isActive: true,
-        sku: "TSH-L-NVY",
-      },
-      {
-        id: "var-large-red",
-        name: "Large / Red",
-        options: { Size: "Large", Color: "Red" },
-        inventory: 18,
-        isActive: true,
-        sku: "TSH-L-RED",
-      },
-      {
-        id: "var-xlarge-black",
-        name: "X-Large / Black",
-        options: { Size: "X-Large", Color: "Black" },
-        inventory: 22,
-        isActive: true,
-        sku: "TSH-XL-BLK",
-      },
-      {
-        id: "var-xlarge-white",
-        name: "X-Large / White",
-        options: { Size: "X-Large", Color: "White" },
-        inventory: 25,
-        isActive: true,
-        sku: "TSH-XL-WHT",
-      },
-      {
-        id: "var-xlarge-navy",
-        name: "X-Large / Navy",
-        options: { Size: "X-Large", Color: "Navy" },
-        inventory: 12,
-        isActive: true,
-        sku: "TSH-XL-NVY",
-      },
-      {
-        id: "var-xlarge-red",
-        name: "X-Large / Red",
-        options: { Size: "X-Large", Color: "Red" },
-        inventory: 0,
-        isActive: false,
-        sku: "TSH-XL-RED",
-      },
-    ],
-    createdAt: "2024-02-20T10:00:00Z",
-  },
-};
-
 export default function ProductDetail() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -368,11 +33,37 @@ export default function ProductDetail() {
   const [isSubscriptionEnabled, setIsSubscriptionEnabled] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // Try centralized mock products first, then fallback to local mock
+  // Use centralized mock products - they now include all products with variants
   const productId = id || "prod-1";
-  const centralizedProduct = getMockProduct(productId);
-  const localProduct = localMockProducts[productId] || localMockProducts["prod-1"];
-  const product = centralizedProduct || localProduct;
+  const product = getMockProduct(productId) || getMockProduct("prod-1") || centralizedMockProducts[0];
+  
+  if (!product) {
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.primary.bg, justifyContent: "center", alignItems: "center", padding: spacing.lg }}>
+        <MaterialIcons name="error-outline" size={64} color={colors.text.tertiary} />
+        <Text style={{ fontSize: typography.fontSize.xl, fontWeight: typography.fontWeight.bold, color: colors.text.primary, marginTop: spacing.lg, marginBottom: spacing.sm }}>
+          Product not found
+        </Text>
+        <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary, textAlign: "center", marginBottom: spacing.lg }}>
+          The product you're looking for doesn't exist.
+        </Text>
+        <TouchableOpacity
+          onPress={() => router.push("/(tabs)/marketplace")}
+          style={{
+            backgroundColor: colors.accent,
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: spacing.md + 2,
+            borderRadius: borderRadius.md,
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.textColors.onAccent }}>
+            Browse Marketplace
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
   const images = product.images || [];
   const hasMultipleImages = images.length > 1;
   const hasValidImage = images.length > 0 && images[selectedImageIndex] && !imageError;
@@ -1046,19 +737,33 @@ export default function ProductDetail() {
                       flex: 1,
                       backgroundColor: colors.accent,
                       paddingVertical: spacing.md + 2,
+                      paddingHorizontal: paddingHorizontal,
                       borderRadius: borderRadius.md,
                       alignItems: "center",
                     }}
                   >
-                    <Text
-                      style={{
-                        fontSize: typography.fontSize.lg,
-                        fontWeight: typography.fontWeight.bold,
-                        color: colors.textColors.onAccent,
-                      }}
-                    >
-                      Buy Now - {formatCurrency(finalTotal, product.currency)}
-                    </Text>
+                    <View style={{ alignItems: "center" }}>
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.lg,
+                          fontWeight: typography.fontWeight.bold,
+                          color: colors.textColors.onAccent,
+                        }}
+                      >
+                        Buy Now
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.sm,
+                          fontWeight: typography.fontWeight.normal,
+                          color: colors.textColors.onAccent,
+                          opacity: 0.9,
+                          marginTop: spacing.xs / 2,
+                        }}
+                      >
+                        {formatCurrency(finalTotal, product.currency)}
+                      </Text>
+                    </View>
                   </TouchableOpacity>
                   {product.downloadUrl && (
                     <TouchableOpacity
@@ -1099,30 +804,45 @@ export default function ProductDetail() {
                       flex: 1,
                       backgroundColor: colors.accent,
                       paddingVertical: spacing.md + 2,
+                      paddingHorizontal: paddingHorizontal,
                       borderRadius: borderRadius.md,
                       alignItems: "center",
                     }}
                   >
-                    <Text
-                      style={{
-                        fontSize: typography.fontSize.lg,
-                        fontWeight: typography.fontWeight.bold,
-                        color: colors.textColors.onAccent,
-                      }}
-                    >
-                      Buy Now - {formatCurrency(isSubscriptionEnabled ? subscriptionTotal : finalTotal, product.currency)}
-                    </Text>
-                    {isSubscriptionEnabled && (
+                    <View style={{ alignItems: "center" }}>
                       <Text
                         style={{
-                          fontSize: typography.fontSize.xs,
-                          color: colors.text.secondary,
+                          fontSize: typography.fontSize.lg,
+                          fontWeight: typography.fontWeight.bold,
+                          color: colors.textColors.onAccent,
+                        }}
+                      >
+                        Buy Now
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.sm,
+                          fontWeight: typography.fontWeight.normal,
+                          color: colors.textColors.onAccent,
+                          opacity: 0.9,
                           marginTop: spacing.xs / 2,
                         }}
                       >
-                        Per shipment
+                        {formatCurrency(isSubscriptionEnabled ? subscriptionTotal : finalTotal, product.currency)}
                       </Text>
-                    )}
+                      {isSubscriptionEnabled && (
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.xs,
+                            color: colors.textColors.onAccent,
+                            opacity: 0.8,
+                            marginTop: spacing.xs / 2,
+                          }}
+                        >
+                          Per shipment
+                        </Text>
+                      )}
+                    </View>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={handleAddToCart}
@@ -1145,6 +865,7 @@ export default function ProductDetail() {
                       flex: 1,
                       backgroundColor: colors.secondary.bg,
                       paddingVertical: spacing.md + 2,
+                      paddingHorizontal: paddingHorizontal,
                       borderRadius: borderRadius.md,
                       alignItems: "center",
                       borderWidth: 1,
@@ -1176,8 +897,8 @@ export default function ProductDetail() {
 
         {/* More from this Store */}
         {(() => {
-          // Get other products from the same merchant
-          const otherProducts = Object.values(mockProducts).filter(
+          // Use centralized mock products
+          const otherProducts = centralizedMockProducts.filter(
             (p) => p.merchantId === product.merchantId && p.id !== product.id && p.isActive
           ).slice(0, 6); // Limit to 6 products
 

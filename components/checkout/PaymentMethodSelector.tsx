@@ -238,7 +238,7 @@ export function PaymentMethodSelector({
                     <MaterialIcons
                       name={getWalletIcon(wallet.type) as any}
                       size={24}
-                      color={isSelected ? colors.text.primary : colors.accent}
+                      color={isSelected ? colors.textColors.onAccent : colors.accent}
                     />
                   </View>
                   <View style={{ flex: 1 }}>
@@ -247,7 +247,7 @@ export function PaymentMethodSelector({
                         style={{
                           fontSize: typography.fontSize.base,
                           fontWeight: typography.fontWeight.bold,
-                          color: isSelected ? colors.text.primary : colors.text.primary,
+                          color: isSelected ? colors.textColors.onAccent : colors.text.primary,
                         }}
                       >
                         {getWalletDisplayName(wallet)}
@@ -265,7 +265,7 @@ export function PaymentMethodSelector({
                             style={{
                               fontSize: typography.fontSize.xs,
                               fontWeight: typography.fontWeight.bold,
-                              color: isSelected ? colors.text.primary : colors.accent,
+                              color: isSelected ? colors.textColors.onAccent : colors.accent,
                             }}
                           >
                             DEFAULT
@@ -276,7 +276,8 @@ export function PaymentMethodSelector({
                     <Text
                       style={{
                         fontSize: typography.fontSize.sm,
-                        color: isSelected ? "rgba(255, 255, 255, 0.8)" : colors.text.secondary,
+                        color: isSelected ? colors.textColors.onAccent : colors.text.secondary,
+                        opacity: isSelected ? 0.9 : 1,
                       }}
                     >
                       Balance: {formatCurrency(balance, wallet.currency)}

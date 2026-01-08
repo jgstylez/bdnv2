@@ -62,7 +62,7 @@ export function RecentActivity({ isMobile }: RecentActivityProps) {
        <View className="flex-row justify-between items-center mb-4">
         <Text className="text-xl font-bold text-dark-foreground">Recent Activity</Text>
         <TouchableOpacity
-            onPress={() => router.push('/pages/activity')}
+            onPress={() => router.push('/pages/transactions')}
             className="flex-row items-center gap-1"
         >
             <Text className="text-sm font-semibold text-primary">View All</Text>

@@ -221,9 +221,20 @@ export const C2BPayment = () => {
               disabled={isNextDisabled()}
               className={`rounded-full p-4 items-center justify-center ${isNextDisabled() ? 'bg-zinc-700' : 'bg-primary'}`}
             >
-              <Text className={`text-lg font-bold ${isNextDisabled() ? 'text-gray-500' : 'text-white'}`}>
-                {currentStep === STEPS.length - 1 ? `Pay ${formatCurrency(remainingAfterBLKD > 0 ? remainingAfterBLKD : totalAmount, "USD")}` : 'Next'}
-              </Text>
+              {currentStep === STEPS.length - 1 ? (
+                <View className="items-center">
+                  <Text className={`text-lg font-bold ${isNextDisabled() ? 'text-gray-500' : 'text-white'}`}>
+                    Pay
+                  </Text>
+                  <Text className={`text-sm font-normal ${isNextDisabled() ? 'text-gray-400' : 'text-white/90'}`}>
+                    {formatCurrency(remainingAfterBLKD > 0 ? remainingAfterBLKD : totalAmount, "USD")}
+                  </Text>
+                </View>
+              ) : (
+                <Text className={`text-lg font-bold ${isNextDisabled() ? 'text-gray-500' : 'text-white'}`}>
+                  Next
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         )}

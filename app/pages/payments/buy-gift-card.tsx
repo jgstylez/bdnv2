@@ -11,6 +11,16 @@ import { formatCurrency } from '@/lib/international';
 import { DateTimePickerComponent } from '@/components/forms/DateTimePicker';
 import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
 
+// Extended wallet type for mock data with additional properties
+type MockWallet = Wallet & {
+  type?: string;
+  name?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+  availableBalance?: number;
+  [key: string]: any;
+};
+
 // Mock user data for recipient search
 const mockUsers = [
   { id: "user-1", name: "Jane Smith", email: "jane.smith@example.com" },
@@ -51,13 +61,16 @@ export default function BuyGiftCard() {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [useBLKD, setUseBLKD] = useState(false);
-  const [step, setStep] = useState<"form" | "review" | "processing" | "success">("form");
+  const [step, setStep] = useState<"form" | "review" | "processing" | "success" | "error">("form");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Mock wallets
   useEffect(() => {
-    const mockWallets: Wallet[] = [
+    const mockWallets: MockWallet[] = [
       {
         id: "1",
+        userId: "user-1",
+        provider: "bdn",
         type: "primary",
         name: "Primary",
         currency: "USD",
@@ -67,6 +80,8 @@ export default function BuyGiftCard() {
       },
       {
         id: "2",
+        userId: "user-1",
+        provider: "bdn",
         type: "myimpact",
         name: "MyImpact Rewards",
         currency: "BLKD",
@@ -147,11 +162,27 @@ export default function BuyGiftCard() {
   const handleConfirm = async () => {
     setIsProcessing(true);
     setStep("processing");
+    setErrorMessage(null);
     
     // Simulate API call
     setTimeout(() => {
-      setIsProcessing(false);
-      setStep("success");
+      try {
+        // Simulate potential errors (for testing - remove in production)
+        const shouldFail = false; // Set to true to test error handling
+        
+        if (shouldFail) {
+          throw new Error("Payment processing failed");
+        }
+
+        setIsProcessing(false);
+        setStep("success");
+      } catch (error) {
+        setIsProcessing(false);
+        setErrorMessage(
+          "We couldn't complete your gift card purchase right now. Please check your payment method and try again, or contact support if the issue persists."
+        );
+        setStep("error");
+      }
     }, 1500);
   };
 
@@ -159,7 +190,7 @@ export default function BuyGiftCard() {
   const totalAmountUSD = formData.amount; // Payment amount in USD (1 BLKD = 1 USD)
   
   // Calculate BLKD coverage
-  const blkdBalance = wallets.find((w) => w.type === "myimpact")?.balance || 0;
+  const blkdBalance = wallets.find((w) => (w as MockWallet).type === "myimpact")?.balance || 0;
   const blkdCoverage = useBLKD && blkdBalance > 0 ? Math.min(blkdBalance, totalAmountUSD) : 0;
   const remainingAfterBLKD = totalAmountUSD - blkdCoverage;
   
@@ -308,7 +339,7 @@ export default function BuyGiftCard() {
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                 <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Payment Method</Text>
                 <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>
-                  {selectedWallet.name}
+                  {(selectedWallet as MockWallet).name}
                 </Text>
               </View>
             </>
@@ -391,6 +422,92 @@ export default function BuyGiftCard() {
       </View>
     );
   };
+
+  const renderErrorStep = () => (
+    <View style={{ alignItems: "center", paddingVertical: 60, gap: 24 }}>
+      <View
+        style={{
+          width: 80,
+          height: 80,
+          borderRadius: 40,
+          backgroundColor: "rgba(244, 67, 54, 0.2)",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <MaterialIcons name="info-outline" size={48} color="#f44336" />
+      </View>
+      <View style={{ alignItems: "center", gap: 8 }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "700",
+            color: "#ffffff",
+          }}
+        >
+          Purchase Not Completed
+        </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            color: "rgba(255, 255, 255, 0.7)",
+            textAlign: "center",
+            lineHeight: 20,
+            paddingHorizontal: 20,
+          }}
+        >
+          {errorMessage || "We couldn't complete your gift card purchase right now. Please check your payment method and try again, or contact support if the issue persists."}
+        </Text>
+      </View>
+      <View style={{ flexDirection: "row", gap: 12, width: "100%", marginTop: 8 }}>
+        <TouchableOpacity
+          onPress={() => {
+            setStep("review");
+            setErrorMessage(null);
+          }}
+          style={{
+            flex: 1,
+            backgroundColor: "#ba9988",
+            borderRadius: 12,
+            paddingVertical: 16,
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: "#ffffff",
+            }}
+          >
+            Try Again
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={{
+            flex: 1,
+            backgroundColor: "#232323",
+            borderRadius: 12,
+            paddingVertical: 16,
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "rgba(186, 153, 136, 0.2)",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: "#ffffff",
+            }}
+          >
+            Go Back
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   const renderSuccessStep = () => {
     return (
@@ -503,6 +620,7 @@ export default function BuyGiftCard() {
         {step === "review" && renderReviewStep()}
         {step === "processing" && renderProcessingStep()}
         {step === "success" && renderSuccessStep()}
+        {step === "error" && renderErrorStep()}
         {step === "form" && (
           <>
 
@@ -1009,7 +1127,7 @@ export default function BuyGiftCard() {
             onSelectWallet={setSelectedWalletId}
             totalAmount={totalAmountUSD}
             currency="USD"
-            blkdBalance={wallets.find((w) => w.type === "myimpact")?.balance || 0}
+            blkdBalance={wallets.find((w) => (w as MockWallet).type === "myimpact")?.balance || 0}
             useBLKD={useBLKD}
             onToggleBLKD={setUseBLKD}
             onAddPaymentMethod={() => router.push("/(tabs)/pay")}

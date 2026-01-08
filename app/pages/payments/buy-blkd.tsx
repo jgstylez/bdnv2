@@ -19,6 +19,16 @@ import { Wallet } from '@/types/wallet';
 import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelector';
 import { formatCurrency } from '@/lib/international';
 
+// Extended wallet type for mock data with additional properties
+type MockWallet = Wallet & {
+  type?: string;
+  name?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+  availableBalance?: number;
+  [key: string]: any;
+};
+
 // BLKD Purchase Tiers with bulk discounts
 // Base rate: 1 BLKD = $1 USD
 // Start at 5% discount for 100 BLKD, increase by 2% per tier
@@ -49,18 +59,21 @@ export default function BuyBLKD() {
   });
   const [customAmount, setCustomAmount] = useState("");
   const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null);
-  const [wallets, setWallets] = useState<Wallet[]>([]);
+  const [wallets, setWallets] = useState<MockWallet[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [step, setStep] = useState<
-    "form" | "review" | "processing" | "success"
+    "form" | "review" | "processing" | "success" | "error"
   >("form");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Mock wallets
   useEffect(() => {
-    const mockWallets: Wallet[] = [
+    const mockWallets: MockWallet[] = [
       {
         id: "1",
+        userId: "user-1",
+        provider: "bdn",
         type: "primary",
         name: "Primary",
         currency: "USD",
@@ -70,6 +83,8 @@ export default function BuyBLKD() {
       },
       {
         id: "4",
+        userId: "user-1",
+        provider: "bdn",
         type: "bankaccount",
         name: "Chase Checking",
         currency: "USD",
@@ -82,6 +97,8 @@ export default function BuyBLKD() {
       },
       {
         id: "5",
+        userId: "user-1",
+        provider: "bdn",
         type: "creditcard",
         name: "Visa Card",
         currency: "USD",
@@ -166,11 +183,27 @@ export default function BuyBLKD() {
   const handleConfirm = async () => {
     setIsProcessing(true);
     setStep("processing");
-
+    setErrorMessage(null);
+    
     // Simulate API call
     setTimeout(() => {
-      setIsProcessing(false);
-      setStep("success");
+      try {
+        // Simulate potential errors (for testing - remove in production)
+        const shouldFail = false; // Set to true to test error handling
+        
+        if (shouldFail) {
+          throw new Error("Payment processing failed");
+        }
+
+        setIsProcessing(false);
+        setStep("success");
+      } catch (error) {
+        setIsProcessing(false);
+        setErrorMessage(
+          "We couldn't complete your BLKD purchase right now. Please check your payment method and try again, or contact support if the issue persists."
+        );
+        setStep("error");
+      }
     }, 1500);
   };
 
@@ -388,6 +421,92 @@ export default function BuyBLKD() {
     );
   };
 
+  const renderErrorStep = () => (
+    <View style={{ alignItems: "center", paddingVertical: 60, gap: 24 }}>
+      <View
+        style={{
+          width: 80,
+          height: 80,
+          borderRadius: 40,
+          backgroundColor: "rgba(244, 67, 54, 0.2)",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <MaterialIcons name="info-outline" size={48} color="#f44336" />
+      </View>
+      <View style={{ alignItems: "center", gap: 8 }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "700",
+            color: "#ffffff",
+          }}
+        >
+          Purchase Not Completed
+        </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            color: "rgba(255, 255, 255, 0.7)",
+            textAlign: "center",
+            lineHeight: 20,
+            paddingHorizontal: 20,
+          }}
+        >
+          {errorMessage || "We couldn't complete your BLKD purchase right now. Please check your payment method and try again, or contact support if the issue persists."}
+        </Text>
+      </View>
+      <View style={{ flexDirection: "row", gap: 12, width: "100%", marginTop: 8 }}>
+        <TouchableOpacity
+          onPress={() => {
+            setStep("review");
+            setErrorMessage(null);
+          }}
+          style={{
+            flex: 1,
+            backgroundColor: "#ba9988",
+            borderRadius: 12,
+            paddingVertical: 16,
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: "#ffffff",
+            }}
+          >
+            Try Again
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={{
+            flex: 1,
+            backgroundColor: "#232323",
+            borderRadius: 12,
+            paddingVertical: 16,
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "rgba(186, 153, 136, 0.2)",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: "#ffffff",
+            }}
+          >
+            Go Back
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
   const renderSuccessStep = () => {
     return (
       <View
@@ -505,6 +624,7 @@ export default function BuyBLKD() {
         {step === "review" && renderReviewStep()}
         {step === "processing" && renderProcessingStep()}
         {step === "success" && renderSuccessStep()}
+        {step === "error" && renderErrorStep()}
         {step === "form" && (
           <>
             {/* Info Banner - Collapsible */}

@@ -124,7 +124,7 @@ export default function NonprofitSettings() {
       >
         {/* Hero Section */}
         <HeroSection
-          title="Organization Settings"
+          title="Settings"
           subtitle="Manage your organization information, preferences, and visibility"
         />
 

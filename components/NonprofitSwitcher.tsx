@@ -130,7 +130,7 @@ export function NonprofitSwitcher() {
         <TouchableOpacity
           style={{
             flex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
             justifyContent: "center",
             alignItems: "center",
             padding: spacing.lg,
@@ -140,29 +140,30 @@ export function NonprofitSwitcher() {
         >
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: "#474747",
               borderRadius: borderRadius.lg,
               width: "100%",
               maxWidth: 500,
               maxHeight: 600,
-              borderWidth: 1,
-              borderColor: colors.border.light,
+              borderWidth: 2,
+              borderColor: colors.border,
               shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 8,
-              elevation: 10,
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.5,
+              shadowRadius: 16,
+              elevation: 15,
             }}
             onStartShouldSetResponder={() => true}
           >
             <View
               style={{
                 padding: spacing.lg,
-                borderBottomWidth: 1,
-                borderBottomColor: colors.border.light,
+                borderBottomWidth: 2,
+                borderBottomColor: colors.border,
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
+                backgroundColor: "#3a3a3a",
               }}
             >
               <Text
@@ -178,7 +179,10 @@ export function NonprofitSwitcher() {
                 <MaterialIcons name="close" size={24} color={colors.text.secondary} />
               </TouchableOpacity>
             </View>
-            <ScrollView style={{ maxHeight: 500 }}>
+            <ScrollView 
+              style={{ maxHeight: 500 }}
+              showsVerticalScrollIndicator={true}
+            >
               {nonprofits.map((nonprofit) => (
                 <TouchableOpacity
                   key={nonprofit.id}
@@ -190,8 +194,11 @@ export function NonprofitSwitcher() {
                     padding: spacing.lg,
                     borderBottomWidth: 1,
                     borderBottomColor: colors.border.light,
-                    backgroundColor: selectedNonprofit?.id === nonprofit.id ? colors.accent + "20" : "transparent",
+                    backgroundColor: selectedNonprofit?.id === nonprofit.id 
+                      ? colors.accent + "30" 
+                      : "transparent",
                   }}
+                  activeOpacity={0.7}
                 >
                   <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.md }}>
                     <View
@@ -253,12 +260,14 @@ export function NonprofitSwitcher() {
                 }}
                 style={{
                   padding: spacing.lg,
-                  borderTopWidth: 1,
-                  borderTopColor: colors.border.light,
+                  borderTopWidth: 2,
+                  borderTopColor: colors.border,
                   flexDirection: "row",
                   alignItems: "center",
                   gap: spacing.md,
+                  backgroundColor: "#3a3a3a",
                 }}
+                activeOpacity={0.7}
               >
                 <View
                   style={{

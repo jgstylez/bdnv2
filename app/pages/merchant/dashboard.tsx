@@ -54,7 +54,7 @@ export default function MerchantDashboard() {
 
         {/* Hero Section */}
         <HeroSection
-          title="Business Dashboard"
+          title="Business"
           subtitle={`${selectedBusiness.name} • ${selectedBusiness.level.charAt(0).toUpperCase() + selectedBusiness.level.slice(1)} Level`}
         />
 

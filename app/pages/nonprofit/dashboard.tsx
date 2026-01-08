@@ -1,55 +1,75 @@
 import React from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  useWindowDimensions,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { OrganizationAccount } from '@/types/nonprofit';
-import { HeroSection } from '@/components/layouts/HeroSection';
-import { NonprofitSwitcher } from '@/components/NonprofitSwitcher';
-import { useNonprofit } from '@/contexts/NonprofitContext';
-import { useResponsive } from '@/hooks/useResponsive';
-import { spacing } from '@/constants/theme';
-import { mockNonprofitAccounts } from '@/contexts/NonprofitContext';
+import { OrganizationAccount } from "@/types/nonprofit";
+import { HeroSection } from "@/components/layouts/HeroSection";
+import { NonprofitSwitcher } from "@/components/NonprofitSwitcher";
+import { useNonprofit } from "@/contexts/NonprofitContext";
+import { useResponsive } from "@/hooks/useResponsive";
+import { spacing } from "@/constants/theme";
+import { mockNonprofitAccounts } from "@/contexts/NonprofitContext";
 
 export default function NonprofitDashboard() {
   const { width } = useWindowDimensions();
   const router = useRouter();
-  const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
+  const { isMobile, paddingHorizontal, scrollViewBottomPadding } =
+    useResponsive();
   const { selectedNonprofit, isLoading } = useNonprofit();
 
   // Get account data for the selected nonprofit
-  const account = selectedNonprofit ? (mockNonprofitAccounts[selectedNonprofit.id] || mockNonprofitAccounts["org1"]) : null;
+  const account = selectedNonprofit
+    ? mockNonprofitAccounts[selectedNonprofit.id] ||
+      mockNonprofitAccounts["org1"]
+    : null;
 
-  const stats = account ? [
-    {
-      label: "Current Balance",
-      value: `$${Math.round(account.balance.usd).toLocaleString()}`,
-      icon: "account-balance-wallet",
-      color: "#ba9988",
-    },
-    {
-      label: "Total Raised",
-      value: `$${Math.round(account.totalRaised.usd).toLocaleString()}`,
-      icon: "trending-up",
-      color: "#4caf50",
-    },
-    {
-      label: "Total Donations",
-      value: account.totalDonations.toLocaleString(),
-      icon: "favorite",
-      color: "#f44336",
-    },
-    {
-      label: "Contributors",
-      value: account.contributors.toLocaleString(),
-      icon: "people",
-      color: "#2196f3",
-    },
-  ] : [];
+  const stats = account
+    ? [
+        {
+          label: "Current Balance",
+          value: `$${Math.round(account.balance.usd).toLocaleString()}`,
+          icon: "account-balance-wallet",
+          color: "#ba9988",
+        },
+        {
+          label: "Total Raised",
+          value: `$${Math.round(account.totalRaised.usd).toLocaleString()}`,
+          icon: "trending-up",
+          color: "#4caf50",
+        },
+        {
+          label: "Total Donations",
+          value: account.totalDonations.toLocaleString(),
+          icon: "favorite",
+          color: "#f44336",
+        },
+        {
+          label: "Contributors",
+          value: account.contributors.toLocaleString(),
+          icon: "people",
+          color: "#2196f3",
+        },
+      ]
+    : [];
 
   if (isLoading || !selectedNonprofit || !account) {
     return (
-      <View style={{ flex: 1, backgroundColor: "#232323", justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "#232323",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Text style={{ color: "#ffffff" }}>Loading...</Text>
       </View>
     );
@@ -70,7 +90,7 @@ export default function NonprofitDashboard() {
 
         {/* Hero Section */}
         <HeroSection
-          title="Organization Dashboard"
+          title="Organization"
           subtitle={`${selectedNonprofit.name} • Track your fundraising progress, manage campaigns, and view donations`}
         />
 
@@ -95,7 +115,14 @@ export default function NonprofitDashboard() {
                 borderColor: "rgba(186, 153, 136, 0.2)",
               }}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 12,
+                }}
+              >
                 <View
                   style={{
                     width: 48,
@@ -106,7 +133,11 @@ export default function NonprofitDashboard() {
                     justifyContent: "center",
                   }}
                 >
-                  <MaterialIcons name={stat.icon as any} size={24} color={stat.color} />
+                  <MaterialIcons
+                    name={stat.icon as any}
+                    size={24}
+                    color={stat.color}
+                  />
                 </View>
               </View>
               <Text
@@ -162,13 +193,19 @@ export default function NonprofitDashboard() {
                 alignItems: "center",
               }}
             >
-              <MaterialIcons name="campaign" size={24} color="#ba9988" style={{ marginBottom: 8 }} />
+              <MaterialIcons
+                name="campaign"
+                size={24}
+                color="#ba9988"
+                style={{ marginBottom: 8 }}
+              />
               <Text
                 style={{
                   fontSize: 16,
                   fontWeight: "600",
                   color: "#ffffff",
                   marginBottom: 4,
+                  textAlign: "center",
                 }}
               >
                 Manage Campaigns
@@ -196,13 +233,19 @@ export default function NonprofitDashboard() {
                 alignItems: "center",
               }}
             >
-              <MaterialIcons name="account-balance" size={24} color="#ba9988" style={{ marginBottom: 8 }} />
+              <MaterialIcons
+                name="account-balance"
+                size={24}
+                color="#ba9988"
+                style={{ marginBottom: 8 }}
+              />
               <Text
                 style={{
                   fontSize: 16,
                   fontWeight: "600",
                   color: "#ffffff",
                   marginBottom: 4,
+                  textAlign: "center",
                 }}
               >
                 Manage Account
@@ -230,13 +273,19 @@ export default function NonprofitDashboard() {
                 alignItems: "center",
               }}
             >
-              <MaterialIcons name="favorite" size={24} color="#ba9988" style={{ marginBottom: 8 }} />
+              <MaterialIcons
+                name="favorite"
+                size={24}
+                color="#ba9988"
+                style={{ marginBottom: 8 }}
+              />
               <Text
                 style={{
                   fontSize: 16,
                   fontWeight: "600",
                   color: "#ffffff",
                   marginBottom: 4,
+                  textAlign: "center",
                 }}
               >
                 View Donations
@@ -264,13 +313,19 @@ export default function NonprofitDashboard() {
                 alignItems: "center",
               }}
             >
-              <MaterialIcons name="settings" size={24} color="#ba9988" style={{ marginBottom: 8 }} />
+              <MaterialIcons
+                name="settings"
+                size={24}
+                color="#ba9988"
+                style={{ marginBottom: 8 }}
+              />
               <Text
                 style={{
                   fontSize: 16,
                   fontWeight: "600",
                   color: "#ffffff",
                   marginBottom: 4,
+                  textAlign: "center",
                 }}
               >
                 Manage Settings
@@ -325,4 +380,3 @@ export default function NonprofitDashboard() {
     </View>
   );
 }
-

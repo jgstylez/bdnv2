@@ -51,32 +51,41 @@ npm run web
 ## Project Structure
 
 ```
-bdn2.0/
-├── app/                    # Expo Router pages
-│   ├── _layout.tsx        # Root layout
-│   └── index.tsx          # Home page
-├── components/             # Reusable components
-│   ├── sections/          # Page sections
-│   │   ├── HeroSection.tsx
-│   │   ├── BentoGrid.tsx
-│   │   ├── FeatureHighlight.tsx
-│   │   └── CTASection.tsx
-│   ├── BentoCard.tsx
-│   ├── GradientBackground.tsx
-│   └── ScrollAnimatedView.tsx
+bdnv2/
+├── app/                    # Expo Router pages (174+ files)
+│   ├── (tabs)/            # Core tab navigation (Dashboard, Shop, Pay, Account)
+│   ├── (auth)/            # Authentication flows (Login, Signup, PIN)
+│   ├── pages/             # All other pages (businesses, products, events, etc.)
+│   ├── admin/             # Admin dashboard
+│   ├── developer/         # Developer dashboard
+│   └── public_pages/      # Public marketing pages
+├── components/            # Reusable components (118+ files)
+│   ├── admin/            # Admin-specific components
+│   ├── forms/            # Form components
+│   ├── header/           # Header components
+│   ├── optimized/        # Performance-optimized components
+│   └── ...               # Feature-specific components
+├── contexts/              # React Context providers (5 files)
+├── hooks/                 # Custom React hooks (9 files)
+├── lib/                   # Utility libraries (15+ files)
+├── types/                 # TypeScript type definitions (27 files)
+├── data/mocks/            # Mock data for development
 ├── action_plans/          # Documentation & planning
 ├── assets/                # Images and static assets
-└── global.css             # Global styles
+└── server/                # Backend server code
 ```
 
 ## Tech Stack
 
-- **Expo** - Cross-platform framework
-- **React Native** - UI framework
-- **TypeScript** - Type safety
-- **NativeWind** - Tailwind CSS for React Native
-- **React Native Reanimated** - Smooth animations
-- **Expo Router** - File-based routing
+- **Expo** ~51.0.0 - Cross-platform framework
+- **React Native** ^0.74.5 - UI framework
+- **TypeScript** ~5.3.3 - Type safety
+- **NativeWind** ^4.0.1 - Tailwind CSS for React Native
+- **NativeCN** ^0.3.7 - Shadcn-inspired UI components
+- **React Native Reanimated** ~3.10.0 - Smooth animations
+- **Expo Router** ~3.5.0 - File-based routing
+- **Firebase** ^12.7.0 - Authentication and Firestore
+- **React Native Toast Message** ^2.3.3 - Toast notifications
 
 ## Code Quality Standards
 

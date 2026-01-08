@@ -240,7 +240,7 @@ export default function Account() {
             >
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: "700",
                   color: USER_LEVELS[mockImpactSummary.currentLevel]?.color || "#8d8d8d",
                   marginBottom: 4,
@@ -269,7 +269,7 @@ export default function Account() {
             >
               <Text
                 style={{
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: "700",
                   color: "#4caf50",
                   marginBottom: 4,
@@ -298,7 +298,7 @@ export default function Account() {
             >
               <Text
                 style={{
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: "700",
                   color: "#ba9988",
                   marginBottom: 4,
@@ -318,9 +318,9 @@ export default function Account() {
             </View>
           </View>
 
-          {/* Badges Row - Show up to 6 on mobile, 10 on desktop */}
+          {/* Badges Row - Show up to 5 on mobile, 10 on desktop */}
           {(() => {
-            const maxBadges = isMobile ? 6 : 10;
+            const maxBadges = isMobile ? 5 : 10;
             const earnedBadges = mockUserBadges
               .filter((ub) => ub.isEarned)
               .slice(0, maxBadges)

@@ -3,10 +3,21 @@ import { View, Text, ScrollView, TouchableOpacity, Platform, Alert, ActivityIndi
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Event, TicketType, TicketOrder } from '@/types/events';
+import { Event, TicketType, TicketOrder, Ticket, TicketStatus } from '@/types/events';
+import { Currency } from '@/types/international';
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { Wallet } from '@/types/wallet';
+
+// Extended wallet type for mock data with additional properties
+type MockWallet = Wallet & {
+  type?: string;
+  name?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+  availableBalance?: number;
+  [key: string]: any;
+};
 import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '@/lib/fees';
 import { getMockEvent } from '@/data/mocks/events';
 import { mockWallets } from '@/data/mocks/wallets';
@@ -16,9 +27,10 @@ import {
   EventCheckoutPaymentStep,
   EventCheckoutProcessingStep,
   EventCheckoutSuccessStep,
+  EventCheckoutErrorStep,
 } from '@/components/checkout/EventCheckoutSteps';
 
-type CheckoutStep = "review" | "payment" | "processing" | "success";
+type CheckoutStep = "review" | "payment" | "processing" | "success" | "error";
 
 export default function EventCheckout() {
   const router = useRouter();
@@ -27,8 +39,9 @@ export default function EventCheckout() {
   const [step, setStep] = useState<CheckoutStep>("review");
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [useBLKD, setUseBLKD] = useState(false);
-  const [wallets, setWallets] = useState<Wallet[]>([]);
+  const [wallets, setWallets] = useState<MockWallet[]>([]);
   const [order, setOrder] = useState<TicketOrder | null>(null);
 
   const eventId = params.eventId || "1";
@@ -38,7 +51,7 @@ export default function EventCheckout() {
   // Early return if event not found
   if (!event) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.primary.bg, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, backgroundColor: colors.background, justifyContent: "center", alignItems: "center" }}>
         <StatusBar style="light" />
         <Text style={{ color: colors.text.primary, fontSize: 16 }}>Event not found</Text>
         <TouchableOpacity
@@ -72,22 +85,22 @@ export default function EventCheckout() {
 
   // Calculate fees
   const hasBDNPlus = checkBDNPlusSubscription("current-user-id");
-  const feeCalculation = calculateConsumerTotalWithFee(subtotal, hasBDNPlus);
+  const feeCalculation = calculateConsumerTotalWithFee(subtotal, "USD", hasBDNPlus);
   const serviceFee = feeCalculation.serviceFee;
   const finalTotal = feeCalculation.total;
 
   // Load wallets
   useEffect(() => {
-    setWallets(mockWallets);
+    setWallets(mockWallets as MockWallet[]);
 
     // Pre-select default wallet
-    const defaultWallet = mockWallets.find((w) => w.isDefault && w.currency === "USD");
+    const defaultWallet = (mockWallets as MockWallet[]).find((w) => w.isDefault && w.currency === "USD");
     if (defaultWallet) {
       setSelectedWalletId(defaultWallet.id);
     }
   }, []);
 
-  const blkdWallet = wallets.find((w) => w.type === "myimpact" && w.currency === "BLKD");
+  const blkdWallet = wallets.find((w) => (w as MockWallet).type === "myimpact" && w.currency === "BLKD");
   const blkdBalance = blkdWallet?.balance || 0;
   const blkdCoverage = useBLKD ? Math.min(blkdBalance, finalTotal) : 0;
   const remainingAfterBLKD = finalTotal - blkdCoverage;
@@ -103,6 +116,7 @@ export default function EventCheckout() {
   const handleProcessPayment = async () => {
     setIsProcessing(true);
     setStep("processing");
+    setErrorMessage(null);
 
     // Simulate payment processing
     setTimeout(async () => {
@@ -114,6 +128,13 @@ export default function EventCheckout() {
         // - Update event attendee count
         // - Send confirmation emails
 
+        // Simulate potential errors (for testing - remove in production)
+        const shouldFail = false; // Set to true to test error handling
+        
+        if (shouldFail) {
+          throw new Error("Payment processing failed");
+        }
+
         // Mock order creation
         const mockOrder: TicketOrder = {
           id: `order-${Date.now()}`,
@@ -121,7 +142,7 @@ export default function EventCheckout() {
           eventId: event.id,
           eventTitle: event.title,
           tickets: ticketDetails.flatMap((detail) => {
-            const tickets = [];
+            const tickets: Ticket[] = [];
             for (let i = 0; i < detail.quantity; i++) {
               tickets.push({
                 id: `ticket-${Date.now()}-${i}`,
@@ -133,8 +154,8 @@ export default function EventCheckout() {
                 userName: "John Doe",
                 userEmail: "john.doe@example.com",
                 purchasePrice: detail.ticketType!.price,
-                currency: detail.ticketType!.currency,
-                status: "purchased",
+                currency: detail.ticketType!.currency as Currency,
+                status: "purchased" as TicketStatus,
                 qrCode: `BDN-TICKET-${event.id}-${Date.now()}-${i}`,
                 purchaseDate: new Date().toISOString(),
                 orderId: `order-${Date.now()}`,
@@ -154,8 +175,10 @@ export default function EventCheckout() {
         setOrder(mockOrder);
         setStep("success");
       } catch (error) {
-        Alert.alert("Payment Failed", "There was an error processing your payment. Please try again.");
-        setStep("payment");
+        setErrorMessage(
+          "We couldn't complete your ticket purchase right now. Please check your payment method and try again, or contact support if the issue persists."
+        );
+        setStep("error");
       } finally {
         setIsProcessing(false);
       }
@@ -173,7 +196,7 @@ export default function EventCheckout() {
   // Review Step
   if (step === "review") {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         <StatusBar style="light" />
         <BackButton onPress={() => router.back()} />
         <EventCheckoutReviewStep
@@ -192,7 +215,7 @@ export default function EventCheckout() {
   // Payment Step
   if (step === "payment") {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         <StatusBar style="light" />
         <EventCheckoutPaymentStep
           event={event}
@@ -214,10 +237,27 @@ export default function EventCheckout() {
     );
   }
 
+  // Error Step
+  if (step === "error") {
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
+        <StatusBar style="light" />
+        <EventCheckoutErrorStep
+          errorMessage={errorMessage}
+          onTryAgain={() => {
+            setStep("payment");
+            setErrorMessage(null);
+          }}
+          onGoBack={() => router.back()}
+        />
+      </View>
+    );
+  }
+
   // Processing Step
   if (step === "processing") {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         <StatusBar style="light" />
         <EventCheckoutProcessingStep />
       </View>
@@ -227,7 +267,7 @@ export default function EventCheckout() {
   // Success Step
   if (step === "success" && order) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         <StatusBar style="light" />
         <EventCheckoutSuccessStep order={order} onViewTickets={handleViewTickets} onBackToEvent={handleBackToEvent} />
       </View>

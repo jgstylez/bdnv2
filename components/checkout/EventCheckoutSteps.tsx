@@ -10,7 +10,7 @@ import { BackButton } from "../navigation/BackButton";
 import { PaymentMethodSelector } from "./PaymentMethodSelector";
 import { formatCurrency } from '../../lib/international';
 
-type CheckoutStep = "review" | "payment" | "processing" | "success";
+type CheckoutStep = "review" | "payment" | "processing" | "success" | "error";
 
 interface TicketDetail {
   ticketType: { id: string; name: string; price: number; currency: string } | undefined;
@@ -522,7 +522,8 @@ export function EventCheckoutPaymentStep({
             backgroundColor:
               remainingAfterBLKD > 0 && !selectedWalletId && !useBLKD ? colors.border.light : colors.accent,
             borderRadius: borderRadius.md,
-            padding: spacing.lg,
+            paddingVertical: spacing.md + 2,
+            paddingHorizontal: paddingHorizontal,
             alignItems: "center",
             marginTop: spacing.lg,
             marginBottom: spacing.lg,
@@ -533,7 +534,7 @@ export function EventCheckoutPaymentStep({
             style={{
               fontSize: typography.fontSize.lg,
               fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
+              color: colors.textColors.onAccent,
             }}
           >
             Complete Purchase
@@ -558,6 +559,125 @@ export function EventCheckoutProcessingStep() {
       >
         Processing your payment...
       </Text>
+    </View>
+  );
+}
+
+export function EventCheckoutErrorStep({
+  errorMessage,
+  onTryAgain,
+  onGoBack,
+}: {
+  errorMessage?: string | null;
+  onTryAgain: () => void;
+  onGoBack: () => void;
+}) {
+  const { paddingHorizontal, scrollViewBottomPadding } = useResponsive();
+
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: paddingHorizontal,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: scrollViewBottomPadding,
+          alignItems: "center",
+        }}
+      >
+        <View style={{ alignItems: "center", marginTop: spacing["2xl"], marginBottom: spacing.xl }}>
+          <View
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 40,
+              backgroundColor: colors.status.errorLight,
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: spacing.lg,
+            }}
+          >
+            <MaterialIcons name="info-outline" size={48} color={colors.status.error} />
+          </View>
+
+          <Text
+            style={{
+              fontSize: typography.fontSize["2xl"],
+              fontWeight: typography.fontWeight.bold,
+              color: colors.text.primary,
+              marginBottom: spacing.sm,
+              textAlign: "center",
+            }}
+          >
+            Purchase Not Completed
+          </Text>
+          <Text
+            style={{
+              fontSize: typography.fontSize.base,
+              color: colors.text.secondary,
+              textAlign: "center",
+              marginBottom: spacing.xl,
+              lineHeight: typography.lineHeight.relaxed,
+            }}
+          >
+            {errorMessage || "We couldn't complete your ticket purchase right now. Please check your payment method and try again, or contact support if the issue persists."}
+          </Text>
+        </View>
+
+        <View style={{ flexDirection: "row", gap: spacing.md, width: "100%" }}>
+          <TouchableOpacity
+            onPress={onTryAgain}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Try Again"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={{
+              flex: 1,
+              backgroundColor: colors.accent,
+              paddingHorizontal: paddingHorizontal,
+              paddingVertical: spacing.md + 2,
+              borderRadius: borderRadius.md,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.semibold,
+                color: colors.textColors.onAccent,
+              }}
+            >
+              Try Again
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onGoBack}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Go Back"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={{
+              flex: 1,
+              backgroundColor: colors.secondary.bg,
+              paddingHorizontal: paddingHorizontal,
+              paddingVertical: spacing.md + 2,
+              borderRadius: borderRadius.md,
+              alignItems: "center",
+              borderWidth: 1,
+              borderColor: colors.border.light,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.semibold,
+                color: colors.text.primary,
+              }}
+            >
+              Go Back
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
   );
 }

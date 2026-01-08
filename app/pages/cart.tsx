@@ -461,6 +461,7 @@ export default function Cart() {
                 style={{
                   backgroundColor: colors.accent,
                   paddingVertical: spacing.md + 2,
+                  paddingHorizontal: paddingHorizontal,
                   borderRadius: borderRadius.md,
                   alignItems: "center",
                 }}

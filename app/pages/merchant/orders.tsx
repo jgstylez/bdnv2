@@ -382,8 +382,8 @@ export default function OrdersFulfillment() {
         <View
           style={{
             flexDirection: "row",
-            flexWrap: "wrap",
-            gap: spacing.lg,
+            flexWrap: isMobile ? "wrap" : "nowrap",
+            gap: isMobile ? spacing.md : spacing.md,
             marginBottom: spacing.xl,
           }}
         >
@@ -408,7 +408,10 @@ export default function OrdersFulfillment() {
             <View
               key={index}
               style={{
-                flex: isMobile ? "0 0 calc(50% - 8px)" : "0 0 calc(33.333% - 11px)",
+                ...(isMobile 
+                  ? { width: "calc(50% - 8px)" }
+                  : { flex: 1, minWidth: 0 }
+                ),
                 backgroundColor: colors.secondary.bg,
                 borderRadius: borderRadius.lg,
                 padding: spacing.lg,

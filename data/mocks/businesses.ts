@@ -284,10 +284,10 @@ export const mockBusinesses: Record<string, MockBusiness> = {
     name: "Crown Beauty Salon",
     category: "Beauty & Wellness",
     description: "Full-service beauty salon offering hair styling, coloring, treatments, and nail services.",
-    imageUrl: "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&h=600&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=800&h=600&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=800&h=600&fit=crop",
     ],
     address: {
       street: "321 Beauty Boulevard",
