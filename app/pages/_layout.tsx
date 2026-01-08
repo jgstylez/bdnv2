@@ -133,19 +133,16 @@ export default function PagesLayout() {
               <Stack.Screen name="university" />
               <Stack.Screen name="media" />
               <Stack.Screen name="search" />
-              <Stack.Screen name="businesses" />
               <Stack.Screen name="notifications" />
               <Stack.Screen name="nonprofit" />
               <Stack.Screen name="pay-it-forward" />
               <Stack.Screen name="events" />
               <Stack.Screen name="transactions" />
               <Stack.Screen name="bdn-plus" />
-              <Stack.Screen name="pricing" />
               <Stack.Screen name="support" />
               <Stack.Screen name="profile" />
               <Stack.Screen name="payments" />
               <Stack.Screen name="cart" />
-              <Stack.Screen name="products" />
               <Stack.Screen name="invoices" />
               <Stack.Screen name="account" />
           </Stack>

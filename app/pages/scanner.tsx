@@ -30,7 +30,7 @@ export default function QRScanner() {
     // Handle different QR code types
     if (data.startsWith("https://bdn.app/merchant/")) {
       const merchantId = data.split("/merchant/")[1];
-      router.push(`/pages/products?merchantId=${merchantId}`);
+      router.push(`/pages/products/list?merchantId=${merchantId}`);
     } else if (data.startsWith("https://bdn.app/nonprofit/")) {
       const nonprofitId = data.split("/nonprofit/")[1];
       router.push(`/pages/nonprofit/campaigns?nonprofitId=${nonprofitId}`);

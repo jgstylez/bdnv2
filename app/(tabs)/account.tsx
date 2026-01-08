@@ -275,7 +275,7 @@ export default function Account() {
                   marginBottom: 4,
                 }}
               >
-                ${mockImpactSummary.lifetimeCashback.toFixed(2)}
+                ${Math.round(mockImpactSummary.lifetimeCashback)}
               </Text>
               <Text
                 style={{

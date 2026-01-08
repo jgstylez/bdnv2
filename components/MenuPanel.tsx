@@ -30,12 +30,15 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const translateX = useSharedValue(width);
   const { flags, loading: flagsLoading } = useFeatureFlags();
   // Start with all groups collapsed (accordion behavior)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const navigatingRef = React.useRef(false);
   const previousPathnameRef = React.useRef(pathname);
+
+  // Calculate panel width consistently - memoized to prevent recalculation
+  const panelWidth = useMemo(() => Math.min(320, width * 0.85), [width]);
+  const translateX = useSharedValue(panelWidth);
 
   // Filter navigation based on feature flags
   // Show full menu while loading to avoid navigation disappearing
@@ -47,11 +50,11 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
   }, [flagsLoading, flags]);
 
   React.useEffect(() => {
-    translateX.value = withSpring(isOpen ? 0 : width, {
+    translateX.value = withSpring(isOpen ? 0 : panelWidth, {
       damping: 20,
       stiffness: 90,
     });
-  }, [isOpen, width]);
+  }, [isOpen, panelWidth, translateX]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
@@ -195,18 +198,14 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
             top: 0,
             right: 0,
             bottom: 0,
-            width: 320,
+            width: panelWidth,
             backgroundColor: "#232323",
-            borderLeftWidth: 1,
-            borderLeftColor: "#474747",
             zIndex: 999,
             shadowColor: "#000",
             shadowOffset: { width: -4, height: 0 },
             shadowOpacity: 0.3,
             shadowRadius: 8,
             elevation: 8,
-            paddingTop: Platform.OS === "web" ? 0 : insets.top,
-            paddingBottom: Platform.OS === "web" ? 0 : insets.bottom,
             ...(Platform.OS === "web" && {
               // @ts-ignore - Web-only CSS properties
               position: "fixed" as any,
@@ -216,16 +215,33 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
         ]}
         pointerEvents={isOpen ? "auto" : "none"}
       >
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          showsVerticalScrollIndicator={false}
+        <View
+          style={{
+            flex: 1,
+            borderLeftWidth: 1,
+            borderLeftColor: "#474747",
+            overflow: "hidden",
+            backgroundColor: "#232323",
+          }}
         >
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ 
+              paddingTop: Platform.OS === "ios" ? insets.top : 0,
+              paddingBottom: Platform.OS === "ios" ? Math.max(20, insets.bottom + 20) : 20,
+              paddingHorizontal: 0, // Padding handled by individual components
+            }}
+            showsVerticalScrollIndicator={false}
+            bounces={true}
+            alwaysBounceVertical={false}
+            contentInsetAdjustmentBehavior="automatic"
+          >
           {/* Header */}
           <View
             style={{
-              height: 64,
-              paddingHorizontal: 20,
+              minHeight: 64,
+              paddingHorizontal: Platform.OS === "ios" ? 24 : 20,
+              paddingVertical: 16,
               borderBottomWidth: 1,
               borderBottomColor: "#474747",
               flexDirection: "row",
@@ -268,7 +284,10 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
           </View>
 
           {/* Navigation Groups */}
-          <View style={{ paddingTop: 8 }}>
+          <View style={{ 
+            paddingTop: Platform.OS === "ios" ? 4 : 8,
+            paddingHorizontal: 0, // Padding handled by individual Pressables
+          }}>
             {filteredNavigationMenu.map(
               (group: NavGroup, groupIndex: number) => {
                 const isExpanded = isGroupExpanded(group.label);
@@ -289,11 +308,6 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                     <Pressable
                       onPress={() => toggleGroup(group.label)}
                       style={({ pressed }) => ({
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        paddingVertical: 14,
-                        paddingHorizontal: 20,
                         backgroundColor: hasActiveItem
                           ? "rgba(186, 153, 136, 0.1)"
                           : "transparent",
@@ -315,42 +329,57 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                         style={{
                           flexDirection: "row",
                           alignItems: "center",
-                          flex: 1,
-                          gap: 12,
+                          justifyContent: "space-between",
+                          paddingVertical: Platform.OS === "ios" ? 16 : 14,
+                          paddingHorizontal: Platform.OS === "ios" ? 24 : 20,
                         }}
                       >
-                        <MaterialIcons
-                          name={group.icon}
-                          size={20}
-                          color={
-                            hasActiveItem
-                              ? "#ba9988"
-                              : "rgba(255, 255, 255, 0.7)"
-                          }
-                        />
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            flex: 1,
+                            marginRight: 12,
+                          }}
+                        >
+                        <View style={{ marginRight: Platform.OS === "ios" ? 16 : 12, width: 24, alignItems: "center" }}>
+                          <MaterialIcons
+                            name={group.icon}
+                            size={20}
+                            color={
+                              hasActiveItem
+                                ? "#ba9988"
+                                : "rgba(255, 255, 255, 0.7)"
+                            }
+                          />
+                        </View>
                         <Text
                           style={{
-                            fontSize: 14,
+                            fontSize: Platform.OS === "ios" ? 15 : 14,
                             fontWeight: "600",
                             color: hasActiveItem
                               ? "#ba9988"
                               : "rgba(255, 255, 255, 0.9)",
                             textTransform: "uppercase",
                             letterSpacing: 0.5,
+                            flex: 1,
                           }}
                         >
                           {group.label}
                         </Text>
+                        </View>
+                        <View style={{ marginLeft: Platform.OS === "ios" ? 8 : 0 }}>
+                          <MaterialIcons
+                            name={
+                              isExpanded
+                                ? "keyboard-arrow-up"
+                                : "keyboard-arrow-down"
+                            }
+                            size={20}
+                            color="rgba(255, 255, 255, 0.5)"
+                          />
+                        </View>
                       </View>
-                      <MaterialIcons
-                        name={
-                          isExpanded
-                            ? "keyboard-arrow-up"
-                            : "keyboard-arrow-down"
-                        }
-                        size={20}
-                        color="rgba(255, 255, 255, 0.5)"
-                      />
                     </Pressable>
 
                     {/* Group Items */}
@@ -363,11 +392,6 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                               key={item.href + itemIndex}
                               onPress={() => handleItemPress(item.href)}
                               style={({ pressed }) => ({
-                                flexDirection: "row",
-                                alignItems: "center",
-                                paddingVertical: 12,
-                                paddingHorizontal: 20,
-                                paddingLeft: 52,
                                 backgroundColor: active
                                   ? "rgba(186, 153, 136, 0.15)"
                                   : "transparent",
@@ -385,28 +409,38 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                                 accessibilityHint: `Navigate to ${item.label}`,
                               })}
                             >
-                              <MaterialIcons
-                                name={item.icon}
-                                size={18}
-                                color={
-                                  active
-                                    ? "#ba9988"
-                                    : "rgba(255, 255, 255, 0.7)"
-                                }
-                                style={{ marginRight: 12 }}
-                              />
-                              <Text
+                              <View
                                 style={{
-                                  fontSize: 14,
-                                  fontWeight: active ? "600" : "500",
-                                  color: active
-                                    ? "#ffffff"
-                                    : "rgba(255, 255, 255, 0.8)",
-                                  flex: 1,
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  paddingVertical: Platform.OS === "ios" ? 14 : 12,
+                                  paddingHorizontal: Platform.OS === "ios" ? 24 : 20,
+                                  paddingLeft: Platform.OS === "ios" ? 64 : 52,
                                 }}
                               >
-                                {item.label}
-                              </Text>
+                                <MaterialIcons
+                                  name={item.icon}
+                                  size={18}
+                                  color={
+                                    active
+                                      ? "#ba9988"
+                                      : "rgba(255, 255, 255, 0.7)"
+                                  }
+                                  style={{ marginRight: Platform.OS === "ios" ? 14 : 12 }}
+                                />
+                                <Text
+                                  style={{
+                                    fontSize: 14,
+                                    fontWeight: active ? "600" : "500",
+                                    color: active
+                                      ? "#ffffff"
+                                      : "rgba(255, 255, 255, 0.8)",
+                                    flex: 1,
+                                  }}
+                                >
+                                  {item.label}
+                                </Text>
+                              </View>
                             </Pressable>
                           );
                         })}
@@ -418,6 +452,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
             )}
           </View>
         </ScrollView>
+        </View>
       </Animated.View>
     </>
   );

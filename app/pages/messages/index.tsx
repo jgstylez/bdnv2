@@ -138,7 +138,11 @@ export default function Messages() {
     if (diffMins < 60) return `${diffMins}m ago`;
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;
-    return date.toLocaleDateString();
+    // Format date explicitly to avoid iOS truncation issues
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
   };
 
   return (
@@ -261,14 +265,18 @@ export default function Messages() {
                     </View>
 
                     {/* Content */}
-                    <View style={{ flex: 1 }}>
-                      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+                    <View style={{ flex: 1, minWidth: 0 }}>
+                      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4, gap: 8 }}>
                         <Text
                           style={{
                             fontSize: 16,
                             fontWeight: conversation.unreadCount > 0 ? "700" : "600",
                             color: "#ffffff",
+                            flex: 1,
+                            minWidth: 0,
                           }}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
                         >
                           {conversation.participantNames.join(", ")}
                         </Text>
@@ -277,6 +285,7 @@ export default function Messages() {
                             style={{
                               fontSize: 12,
                               color: "rgba(255, 255, 255, 0.5)",
+                              flexShrink: 0,
                             }}
                           >
                             {formatTime(conversation.lastMessage.createdAt)}
@@ -284,15 +293,16 @@ export default function Messages() {
                         )}
                       </View>
                       {conversation.lastMessage && (
-                        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
                           <Text
                             style={{
                               fontSize: 14,
                               color: conversation.unreadCount > 0 ? "rgba(255, 255, 255, 0.9)" : "rgba(255, 255, 255, 0.6)",
                               flex: 1,
-                              marginRight: 8,
+                              minWidth: 0,
                             }}
                             numberOfLines={1}
+                            ellipsizeMode="tail"
                           >
                             {conversation.lastMessage.senderId === "user1" ? "You: " : ""}
                             {conversation.lastMessage.text}
@@ -307,6 +317,7 @@ export default function Messages() {
                                 alignItems: "center",
                                 justifyContent: "center",
                                 paddingHorizontal: 6,
+                                flexShrink: 0,
                               }}
                             >
                               <Text

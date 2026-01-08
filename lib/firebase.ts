@@ -51,19 +51,12 @@ if (FIREBASE_ENABLED) {
     auth = getAuth(app);
     db = getFirestore(app);
   } catch (error) {
-    console.warn("Firebase initialization failed:", error);
-    console.warn("App will run in development mode without Firebase authentication.");
+    // Firebase initialization failed - app will run in development mode
+    // Silently fail to avoid console noise in development
   }
 } else {
-  console.warn(
-    "Firebase is not configured. App will run in development mode without authentication.\n" +
-    "To enable Firebase, set the following environment variables:\n" +
-    "- EXPO_PUBLIC_FIREBASE_API_KEY\n" +
-    "- EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN\n" +
-    "- EXPO_PUBLIC_FIREBASE_PROJECT_ID\n" +
-    "- EXPO_PUBLIC_FIREBASE_APP_ID\n" +
-    "\nSee README.md for setup instructions."
-  );
+  // Firebase is not configured - app will run in development mode
+  // This is expected behavior for local development
 }
 
 export { auth, db };

@@ -31,7 +31,6 @@ export function useAuth() {
     // If Firebase is not configured, run in development mode
     if (DEV_MODE_AUTH) {
       setIsLoading(false);
-      console.log('Running in development mode without Firebase authentication');
       return;
     }
 

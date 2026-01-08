@@ -423,7 +423,7 @@ export default function MyImpact() {
                       color: "#ba9988",
                     }}
                   >
-                    ${mockImpactSummary.lifetimeCashback.toFixed(2)}
+                    ${Math.round(mockImpactSummary.lifetimeCashback)}
                   </Text>
                 </View>
                 <View

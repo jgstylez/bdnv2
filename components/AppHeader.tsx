@@ -100,7 +100,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onMenuPress }) => {
     if (pathname?.includes("/pages/checkout")) return "Checkout";
     if (pathname?.includes("/pages/transactions")) return "Transactions";
     if (pathname?.includes("/pages/bdn-plus")) return "BDN+";
-    if (pathname?.includes("/pages/pricing")) return "Pricing";
+    if (pathname?.includes("/public_pages/pricing")) return "Pricing";
     if (pathname?.includes("/pages/support")) return "Support";
     if (pathname?.includes("/pages/profile")) return "Profile";
 
@@ -373,7 +373,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onMenuPress }) => {
           {/* Notification & Messages Icons - Desktop only (before cart) */}
           {isDesktop && (
             <>
-              <NotificationBadge isDesktop={true} />
+              <NotificationBadge isDesktop={true} onPress={() => router.push("/pages/notifications")} />
               <InboxBadge isDesktop={true} />
             </>
           )}
@@ -393,7 +393,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onMenuPress }) => {
           {/* Notification & Messages Icons - Mobile (before cart) */}
           {!isDesktop && (
             <>
-              <NotificationBadge isDesktop={false} />
+              <NotificationBadge isDesktop={false} onPress={() => router.push("/pages/notifications")} />
               <InboxBadge isDesktop={false} />
             </>
           )}

@@ -224,17 +224,18 @@ export function CollapsibleSearchBar({
                 {/* Header with close button */}
                 <View style={{ 
                   marginBottom: spacing.lg,
-                  position: "relative",
+                  flexDirection: "row",
+                  alignItems: "flex-start",
                 }}>
                   <View style={{ 
                     flex: 1,
-                    paddingRight: 48, // Space for close button
+                    marginRight: 8, // Space for close button
                   }}>
                     <Text
                       style={{
                         fontSize: typography.fontSize["2xl"],
                         fontWeight: typography.fontWeight.bold,
-                        color: colors.text.primary,
+                        color: colors.text.primary || "#ffffff",
                         marginBottom: spacing.xs,
                       }}
                     >
@@ -243,8 +244,7 @@ export function CollapsibleSearchBar({
                     <Text
                       style={{
                         fontSize: typography.fontSize.sm,
-                        color: colors.text.secondary,
-                        width: "100%",
+                        color: colors.text.secondary || "rgba(255, 255, 255, 0.6)",
                       }}
                     >
                       Find businesses, products, and services
@@ -253,22 +253,20 @@ export function CollapsibleSearchBar({
                   <TouchableOpacity
                     onPress={handleCollapse}
                     style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
                       width: 40,
                       height: 40,
                       borderRadius: 20,
                       backgroundColor: "rgba(71, 71, 71, 0.6)",
                       alignItems: "center",
                       justifyContent: "center",
+                      flexShrink: 0,
                     }}
                     accessible={true}
                     accessibilityRole="button"
                     accessibilityLabel="Close search"
                     hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   >
-                    <MaterialIcons name="close" size={24} color={colors.text.primary} />
+                    <MaterialIcons name="close" size={24} color={colors.text.primary || "#ffffff"} />
                   </TouchableOpacity>
                 </View>
 
