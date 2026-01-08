@@ -32,7 +32,7 @@ export default function About() {
   ];
 
   const stats = [
-    { value: "2020", label: "Founded" },
+    { value: "2016", label: "Founded" },
     { value: "10K+", label: "Active Members" },
     { value: "500+", label: "Black-Owned Businesses" },
     { value: "$2M+", label: "Circulated" },
@@ -225,7 +225,7 @@ export default function About() {
                     lineHeight: isMobile ? 26 : 30,
                   }}
                 >
-                  Founded in 2020, Black Dollar Network was born from a vision to strengthen Black economic power through technology and community. We recognized that while Black consumers wanted to support Black businesses, finding and connecting with them was challenging.
+                  Founded in 2016, Black Dollar Network was born from a vision to strengthen Black economic power through technology and community. We recognized that while Black consumers wanted to support Black businesses, finding and connecting with them was challenging.
                 </Text>
                 <Text
                   style={{

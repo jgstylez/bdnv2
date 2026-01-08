@@ -210,7 +210,7 @@ export default function AboutLegal() {
                       color: colors.text.primary,
                     }}
                   >
-                    2020
+                    2016
                   </Text>
                 </View>
                 <View>
@@ -269,7 +269,7 @@ export default function AboutLegal() {
                   textAlign: "center",
                 }}
               >
-                © {new Date().getFullYear()} Black Dollar Network, Inc. All rights reserved.
+                © 2016 - {new Date().getFullYear()} Black Dollar Network, LLC. All rights reserved.
               </Text>
             </View>
           </View>
