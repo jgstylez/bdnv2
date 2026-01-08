@@ -16,9 +16,10 @@ import { checkMerchantHasBDNPlusBusiness, createSubscriptionBoxPlan, calculateSu
 import SubscriptionBoxSelector from '@/components/subscription/SubscriptionBoxSelector';
 import { SubscriptionFrequency, SubscriptionDuration, getFrequencyLabel } from '@/types/subscription-box';
 import VariantSelector from '@/components/products/VariantSelector';
+import { mockProducts as centralizedMockProducts, getMockProduct } from '@/data/mocks/products';
 
-// Mock product data - in production, fetch by ID
-const mockProducts: Record<string, Product> = {
+// Use centralized mock products, fallback to local mock for products not in centralized data
+const localMockProducts: Record<string, Product> = {
   "prod-1": {
     id: "prod-1",
     merchantId: "merchant-1",
@@ -367,7 +368,11 @@ export default function ProductDetail() {
   const [isSubscriptionEnabled, setIsSubscriptionEnabled] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  const product = mockProducts[id || "prod-1"] || mockProducts["prod-1"];
+  // Try centralized mock products first, then fallback to local mock
+  const productId = id || "prod-1";
+  const centralizedProduct = getMockProduct(productId);
+  const localProduct = localMockProducts[productId] || localMockProducts["prod-1"];
+  const product = centralizedProduct || localProduct;
   const images = product.images || [];
   const hasMultipleImages = images.length > 1;
   const hasValidImage = images.length > 0 && images[selectedImageIndex] && !imageError;

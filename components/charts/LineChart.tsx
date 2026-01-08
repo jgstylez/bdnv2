@@ -23,7 +23,8 @@ export const LineChart: React.FC<LineChartProps> = ({
   showDots = true,
 }) => {
   const { width } = useWindowDimensions();
-  const chartWidth = width < 768 ? width - 80 : Math.min(width - 160, 800);
+  // Use container width if available, otherwise calculate from window
+  const chartWidth = width < 768 ? Math.min(width - 80, 400) : Math.min(width - 160, 500);
   const padding = 40;
   const chartHeight = height - 60;
   const innerWidth = chartWidth - padding * 2;

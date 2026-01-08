@@ -44,48 +44,21 @@ const mockWallets: WalletType[] = [
   } as BankAccountWallet,
 ];
 
-// Mock business data
+// Import centralized mock businesses
+import { mockBusinesses as centralizedMockBusinesses, getAllMockBusinesses } from '@/data/mocks/businesses';
+
+// Use centralized mock businesses
 const mockBusinesses: Record<string, any> = {
-  "1": {
-    id: "1",
-    name: "Soul Food Kitchen",
-    category: "Restaurant",
-    imageUrl: null,
-  },
-  "2": {
-    id: "2",
-    name: "Black Excellence Barbershop",
-    category: "Services",
-    imageUrl: null,
-  },
-  "3": {
-    id: "3",
-    name: "African Heritage Books",
-    category: "Retail",
-    imageUrl: null,
-  },
-  "4": {
-    id: "4",
-    name: "Black History E-Books",
-    category: "Digital",
-    imageUrl: null,
-  },
-  "5": {
-    id: "5",
-    name: "Crown Beauty Salon",
-    category: "Beauty & Wellness",
-    imageUrl: null,
-  },
-  "6": {
-    id: "6",
-    name: "Urban Tech Solutions",
-    category: "Technology",
-    imageUrl: null,
-  },
+  "1": centralizedMockBusinesses["1"],
+  "2": centralizedMockBusinesses["2"],
+  "3": centralizedMockBusinesses["3"],
+  "4": centralizedMockBusinesses["4"],
+  "5": centralizedMockBusinesses["5"],
+  "6": centralizedMockBusinesses["6"],
 };
 
 // All businesses list for search
-const allBusinesses = Object.values(mockBusinesses);
+const allBusinesses = getAllMockBusinesses();
 
 type PaymentStep = "select-business" | "amount" | "payment-method" | "review" | "processing" | "success";
 

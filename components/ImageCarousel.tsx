@@ -53,10 +53,12 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showSwipeIndicator, setShowSwipeIndicator] = useState(true);
   const [containerWidth, setContainerWidth] = useState(screenWidth);
+  const [containerHeight, setContainerHeight] = useState(height);
   const isMobile = screenWidth < 768;
   const isTablet = screenWidth >= 768 && screenWidth < 1024;
   const gradientHeight = isMobile ? 140 : 180; // Gradient height for desktop/tablet
   const width = containerWidth; // Use container width instead of screen width
+  const actualHeight = containerHeight || height; // Use container height if available, otherwise use prop
 
   // Animation for swipe indicator
   const swipeTranslateX = useSharedValue(0);
@@ -135,11 +137,15 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
 
   return (
     <View
-      style={{ position: "relative", marginBottom: 24, width: "100%" }}
+      style={{ position: "relative", width: "100%", flex: 1 }}
       onLayout={(event) => {
-        const { width: layoutWidth } = event.nativeEvent.layout;
+        const { width: layoutWidth, height: layoutHeight } = event.nativeEvent.layout;
         if (layoutWidth > 0) {
           setContainerWidth(layoutWidth);
+        }
+        // Use container height if available, otherwise use prop height
+        if (layoutHeight > 0) {
+          setContainerHeight(layoutHeight);
         }
       }}
     >
@@ -150,7 +156,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        style={{ borderRadius: 16, overflow: "hidden", width: "100%" }}
+        style={{ borderRadius: 16, overflow: "hidden", width: "100%", height: actualHeight }}
         scrollEnabled={true}
         bounces={true}
         decelerationRate="fast"
@@ -161,11 +167,11 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
         directionalLockEnabled={true}
       >
         {items.map((item, index) => (
-          <View key={item.id} style={{ width }}>
+          <View key={item.id} style={{ width, height: actualHeight }}>
             <View
               style={{
-                width,
-                height,
+                width: "100%",
+                height: "100%",
                 position: "relative",
                 backgroundColor: "#474747",
                 overflow: "hidden",
@@ -234,13 +240,13 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
                       style={{
                         width: "50%",
                         flexDirection: "column",
-                        justifyContent: "center",
+                        justifyContent: "flex-start",
                         alignItems: "flex-start",
                         gap: isMobile ? 8 : 16,
-                        padding: isMobile ? 16 : 20,
+                        paddingTop: isMobile ? 24 : 32,
+                        paddingBottom: isMobile ? 60 : 80,
                         paddingLeft: isMobile ? 24 : 36,
                         paddingRight: isMobile ? 16 : 20,
-                        paddingBottom: 0,
                       }}
                     >
                       {/* Text Column */}
@@ -359,13 +365,13 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               position: "absolute",
-              left: 0,
+              left: "50%",
               bottom: 0,
               width: 48,
               height: 48,
               borderTopLeftRadius: 0,
               borderTopRightRadius: 16,
-              borderBottomLeftRadius: 16,
+              borderBottomLeftRadius: 0,
               borderBottomRightRadius: 0,
               backgroundColor: "rgba(0, 0, 0, 0.6)",
               alignItems: "center",

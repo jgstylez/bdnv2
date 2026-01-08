@@ -19,10 +19,12 @@ export const InboxBadge: React.FC<InboxBadgeProps> = ({ isDesktop = false, messa
   // TODO: Get actual message count from context/API
   const messageCount = overrideMessageCount !== undefined ? overrideMessageCount : 0;
 
-  const iconSize = isDesktop ? 22 : 24;
+  // Mobile: smaller icon but maintain 44x44 touch target for accessibility
+  // Desktop: larger icon with 40x40 container
+  const iconSize = isDesktop ? 22 : 20;
   const containerSize = isDesktop ? 40 : 44;
-  const badgeSize = isDesktop ? 18 : 20;
-  const badgeFontSize = isDesktop ? 10 : 11;
+  const badgeSize = isDesktop ? 18 : 16;
+  const badgeFontSize = isDesktop ? 10 : 9;
 
   return (
     <TouchableOpacity
@@ -32,7 +34,7 @@ export const InboxBadge: React.FC<InboxBadgeProps> = ({ isDesktop = false, messa
         width: containerSize,
         height: containerSize,
         borderRadius: containerSize / 2,
-        backgroundColor: isDesktop ? "rgba(71, 71, 71, 0.4)" : "rgba(71, 71, 71, 0.6)",
+        backgroundColor: isDesktop ? "rgba(71, 71, 71, 0.4)" : "rgba(40, 40, 45, 0.8)",
         alignItems: "center",
         justifyContent: "center",
         borderWidth: 1,

@@ -20,10 +20,12 @@ export const CartBadge: React.FC<CartBadgeProps> = ({ isDesktop, itemCount: over
   const { itemCount: cartItemCount } = useCart();
   const itemCount = overrideItemCount !== undefined ? overrideItemCount : cartItemCount;
 
-  const iconSize = isDesktop ? 22 : 24;
+  // Mobile: smaller icon but maintain 44x44 touch target for accessibility
+  // Desktop: larger icon with 40x40 container
+  const iconSize = isDesktop ? 22 : 20;
   const containerSize = isDesktop ? 40 : 44;
-  const badgeSize = isDesktop ? 18 : 20;
-  const badgeFontSize = isDesktop ? 10 : 11;
+  const badgeSize = isDesktop ? 18 : 16;
+  const badgeFontSize = isDesktop ? 10 : 9;
 
   return (
     <TouchableOpacity
@@ -33,12 +35,18 @@ export const CartBadge: React.FC<CartBadgeProps> = ({ isDesktop, itemCount: over
         width: containerSize,
         height: containerSize,
         borderRadius: containerSize / 2,
-        backgroundColor: isDesktop ? "rgba(71, 71, 71, 0.4)" : "rgba(71, 71, 71, 0.6)",
+        backgroundColor: isDesktop ? "rgba(71, 71, 71, 0.4)" : "rgba(40, 40, 45, 0.8)",
         alignItems: "center",
         justifyContent: "center",
         borderWidth: 1,
         borderColor: colors.border.light,
       }}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`Shopping cart${itemCount > 0 ? `, ${itemCount} items` : ""}`}
+      accessibilityHint="Double tap to view cart"
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      activeOpacity={0.7}
     >
       <MaterialIcons name="shopping-cart" size={iconSize} color="rgba(255, 255, 255, 0.9)" />
       {/* Badge */}

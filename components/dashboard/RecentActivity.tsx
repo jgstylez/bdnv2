@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Card, CardContent } from '../Card';
 import { cn } from '../../lib/utils';
+import { spacing } from '../../constants/theme';
 
 const mockActivities = [
   {
@@ -42,6 +43,19 @@ interface RecentActivityProps {
 
 export function RecentActivity({ isMobile }: RecentActivityProps) {
   const router = useRouter();
+  
+  // Calculate minimum height: header (28px) + padding (16px) + empty state (100px) + padding (16px) = ~160px
+  // With items: header (28px) + padding (16px) + 4 items (4 * 60px) + padding (16px) = ~328px
+  // Updated to match ActivityOverview height: ~420px
+  const minHeight = mockActivities.length === 0 ? 160 : undefined;
+  const cardHeight = !isMobile ? 420 : undefined; // Match ActivityOverview height on desktop
+
+  // Responsive padding: balanced on all sides, slightly more on bottom for desktop
+  // CardContent has default px-6 (24px), so we override it completely
+  const horizontalPadding = isMobile ? spacing.md : spacing.lg; // Balanced horizontal padding
+  const topPadding = isMobile ? spacing.md : spacing.lg; // Balanced top padding
+  const bottomPadding = isMobile ? spacing.md : spacing["2xl"]; // More bottom padding on desktop (40px)
+  const itemSpacing = isMobile ? spacing.md : spacing.lg;
 
   return (
     <View className={cn('flex-1', { 'min-w-[300px]': !isMobile })}>
@@ -55,10 +69,35 @@ export function RecentActivity({ isMobile }: RecentActivityProps) {
             <MaterialIcons name="chevron-right" size={20} color="#ba9988" />
         </TouchableOpacity>
         </View>
-      <Card mode="dark">
-        <CardContent className="p-4 space-y-4">
-          {mockActivities.map((activity, index) => (
-            <View key={index} className="flex-row items-center justify-between">
+      <Card 
+        mode="dark"
+        style={cardHeight ? { minHeight: cardHeight, height: cardHeight } : minHeight ? { minHeight } : undefined}
+      >
+        <CardContent 
+          className="px-0" // Override default px-6 padding
+          style={[
+            styles.cardContent,
+            {
+              paddingLeft: horizontalPadding,
+              paddingRight: horizontalPadding,
+              paddingTop: topPadding,
+              paddingBottom: bottomPadding,
+            }
+          ]}
+        >
+          {mockActivities.length === 0 ? (
+            <View className="flex-1 items-center justify-center py-8">
+              <Text className="text-sm text-dark-muted-foreground text-center">
+                No recent activity
+              </Text>
+            </View>
+          ) : (
+            mockActivities.map((activity, index) => (
+            <View 
+              key={index} 
+              className="flex-row items-center justify-between"
+              style={index > 0 ? { marginTop: itemSpacing } : undefined}
+            >
               <View className="flex-row items-center gap-3">
                 <View
                   className="w-10 h-10 rounded-full items-center justify-center"
@@ -83,9 +122,17 @@ export function RecentActivity({ isMobile }: RecentActivityProps) {
                 {activity.amount}
               </Text>
             </View>
-          ))}
+            ))
+          )}
         </CardContent>
       </Card>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  cardContent: {
+    width: "100%",
+    flex: 1,
+  },
+});
