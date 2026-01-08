@@ -580,18 +580,21 @@ export const DateTimePickerComponent: React.FC<DateTimePickerProps> = ({
           <View
             style={{
               flex: 1,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              backgroundColor: "rgba(0, 0, 0, 0.95)",
               justifyContent: "flex-end",
             }}
           >
             <View
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: "#474747",
                 borderTopLeftRadius: borderRadius.xl,
                 borderTopRightRadius: borderRadius.xl,
                 paddingTop: spacing.md,
                 paddingBottom: Platform.OS === "ios" ? 40 : spacing.lg,
                 maxHeight: Dimensions.get("window").height * 0.7,
+                borderWidth: 2,
+                borderColor: "#5a5a68",
+                borderBottomWidth: 0,
               }}
             >
               {/* Header */}

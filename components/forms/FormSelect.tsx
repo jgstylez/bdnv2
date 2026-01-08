@@ -46,11 +46,11 @@ export function FormSelect({
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: "#474747",
             borderRadius: borderRadius.lg,
             padding: spacing.md,
             borderWidth: 1,
-            borderColor: error ? colors.status.error : isOpen ? colors.accent : colors.border.light,
+            borderColor: error ? colors.status.error : isOpen ? colors.accent : "#5a5a68",
           }}
         >
           <Text
@@ -88,16 +88,16 @@ export function FormSelect({
                 left: 0,
                 right: 0,
                 marginTop: 4,
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: "#474747",
                 borderRadius: borderRadius.lg,
-                borderWidth: 1,
-                borderColor: colors.border.light,
+                borderWidth: 2,
+                borderColor: "#5a5a68",
                 maxHeight: 200,
                 zIndex: 1000,
-                elevation: 5,
+                elevation: 10,
                 shadowColor: "#000",
                 shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
+                shadowOpacity: 0.5,
                 shadowRadius: 8,
               }}
             >
@@ -112,8 +112,8 @@ export function FormSelect({
                     style={{
                       padding: spacing.md,
                       borderBottomWidth: index < options.length - 1 ? 1 : 0,
-                      borderBottomColor: colors.border.light,
-                      backgroundColor: value === option.value ? colors.accentLight : "transparent",
+                      borderBottomColor: "#5a5a68",
+                      backgroundColor: value === option.value ? "rgba(186, 153, 136, 0.3)" : "#474747",
                     }}
                   >
                     <Text

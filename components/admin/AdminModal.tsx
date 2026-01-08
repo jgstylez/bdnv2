@@ -73,7 +73,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
       <View
         style={{
           flex: 1,
-          backgroundColor: "rgba(0, 0, 0, 0.8)",
+          backgroundColor: "rgba(0, 0, 0, 0.95)",
           justifyContent: "center",
           alignItems: "center",
           padding: spacing["2xl"],
@@ -81,14 +81,14 @@ export const AdminModal: React.FC<AdminModalProps> = ({
       >
         <ScrollView
           style={{
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: "#474747",
             borderRadius: borderRadius.xl,
             padding: spacing["2xl"],
             width: "100%",
             maxWidth: isMobile ? "100%" : maxWidth,
             maxHeight: "90%",
-            borderWidth: 1,
-            borderColor: colors.border.light,
+            borderWidth: 2,
+            borderColor: "#5a5a68",
           }}
           contentContainerStyle={{ gap: spacing.lg }}
         >

@@ -130,7 +130,7 @@ export function NonprofitSwitcher() {
         <TouchableOpacity
           style={{
             flex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            backgroundColor: "rgba(0, 0, 0, 0.95)",
             justifyContent: "center",
             alignItems: "center",
             padding: spacing.lg,
@@ -146,12 +146,12 @@ export function NonprofitSwitcher() {
               maxWidth: 500,
               maxHeight: 600,
               borderWidth: 2,
-              borderColor: colors.border,
+              borderColor: "#5a5a68",
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 8 },
               shadowOpacity: 0.5,
               shadowRadius: 16,
-              elevation: 15,
+              elevation: 20,
             }}
             onStartShouldSetResponder={() => true}
           >
@@ -159,11 +159,11 @@ export function NonprofitSwitcher() {
               style={{
                 padding: spacing.lg,
                 borderBottomWidth: 2,
-                borderBottomColor: colors.border,
+                borderBottomColor: "#5a5a68",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "#3a3a3a",
+                backgroundColor: "#474747",
               }}
             >
               <Text

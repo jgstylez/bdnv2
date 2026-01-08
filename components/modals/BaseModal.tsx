@@ -43,7 +43,7 @@ export function BaseModal({
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{
           flex: 1,
-          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          backgroundColor: "rgba(0, 0, 0, 0.95)",
           alignItems: "center",
           justifyContent: "center",
           padding: spacing.md,
@@ -53,16 +53,16 @@ export function BaseModal({
           style={{
             width: "100%",
             maxWidth: isMobile ? width - 32 : maxWidth,
-            backgroundColor: colors.primary.bg,
+            backgroundColor: "#474747",
             borderRadius: borderRadius.xl,
-            borderWidth: 1,
-            borderColor: colors.border.light,
+            borderWidth: 2,
+            borderColor: "#5a5a68",
             maxHeight: "90%",
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 10 },
             shadowOpacity: 0.5,
             shadowRadius: 20,
-            elevation: 10,
+            elevation: 20,
           }}
         >
           {/* Header */}
@@ -72,8 +72,9 @@ export function BaseModal({
               alignItems: "center",
               justifyContent: "space-between",
               padding: spacing.xl,
-              borderBottomWidth: 1,
-              borderBottomColor: colors.border.light,
+              borderBottomWidth: 2,
+              borderBottomColor: "#5a5a68",
+              backgroundColor: "#474747",
             }}
           >
             <Text
@@ -90,8 +91,9 @@ export function BaseModal({
               style={{
                 padding: 4,
                 borderRadius: borderRadius.full,
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: "transparent",
               }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <MaterialIcons name="close" size={20} color={colors.text.secondary} />
             </TouchableOpacity>
@@ -113,9 +115,9 @@ export function BaseModal({
                 justifyContent: "flex-end",
                 gap: spacing.md,
                 padding: spacing.xl,
-                borderTopWidth: 1,
-                borderTopColor: colors.border.light,
-                backgroundColor: colors.secondary.bg,
+                borderTopWidth: 2,
+                borderTopColor: "#5a5a68",
+                backgroundColor: "#474747",
                 borderBottomLeftRadius: borderRadius.xl,
                 borderBottomRightRadius: borderRadius.xl,
               }}

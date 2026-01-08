@@ -409,29 +409,16 @@ export default function Analytics() {
                   borderColor: "rgba(186, 153, 136, 0.2)",
                 }}
               >
-                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                  <View style={{ flex: 1 }}>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: "rgba(255, 255, 255, 0.7)",
-                        marginBottom: 8,
-                      }}
-                    >
-                      {metric.metric}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 24,
-                        fontWeight: "700",
-                        color: "#ffffff",
-                      }}
-                    >
-                      {typeof metric.value === "number" && metric.value < 100
-                        ? `${metric.value.toFixed(1)}%`
-                        : formatCurrency(metric.value)}
-                    </Text>
-                  </View>
+                {/* Label and Trend - Side by Side */}
+                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "rgba(255, 255, 255, 0.7)",
+                    }}
+                  >
+                    {metric.metric}
+                  </Text>
                   <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                     <MaterialIcons name={getTrendIcon(metric.trend) as any} size={20} color={getTrendColor(metric.trend)} />
                     <Text
@@ -446,6 +433,18 @@ export default function Analytics() {
                     </Text>
                   </View>
                 </View>
+                {/* Value - Full Width */}
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontWeight: "700",
+                    color: "#ffffff",
+                  }}
+                >
+                  {typeof metric.value === "number" && metric.value < 100
+                    ? `${metric.value.toFixed(1)}%`
+                    : formatCurrency(metric.value)}
+                </Text>
               </View>
             ))}
           </View>

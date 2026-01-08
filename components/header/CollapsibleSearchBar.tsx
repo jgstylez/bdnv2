@@ -202,7 +202,7 @@ export function CollapsibleSearchBar({
             <View
               style={{
                 flex: 1,
-                backgroundColor: "rgba(0, 0, 0, 0.75)",
+                backgroundColor: "rgba(0, 0, 0, 0.95)",
                 justifyContent: "center",
                 alignItems: "center",
                 paddingHorizontal: spacing.lg,
@@ -214,11 +214,11 @@ export function CollapsibleSearchBar({
                 style={{
                   width: "100%",
                   maxWidth: 600,
-                  backgroundColor: colors.input || "#28282d",
+                  backgroundColor: "#474747",
                   borderRadius: borderRadius.xl,
                   padding: spacing.lg,
-                  borderWidth: 1,
-                  borderColor: colors.border || "#3e3e46",
+                  borderWidth: 2,
+                  borderColor: "#5a5a68",
                 }}
               >
                 {/* Header with close button */}

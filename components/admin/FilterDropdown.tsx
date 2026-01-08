@@ -89,7 +89,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
         <TouchableOpacity
           style={{
             flex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(0, 0, 0, 0.95)",
             justifyContent: "center",
             alignItems: "center",
             padding: spacing.lg,
@@ -99,69 +99,100 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
         >
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.md,
+              backgroundColor: "#474747",
+              borderRadius: borderRadius.lg,
               width: "100%",
               maxWidth: 400,
-              maxHeight: 400,
-              borderWidth: 1,
-              borderColor: colors.border.light,
+              maxHeight: 500,
+              borderWidth: 2,
+              borderColor: "#5a5a68",
               shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 8,
-              elevation: 10,
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.5,
+              shadowRadius: 16,
+              elevation: 20,
+              overflow: "hidden",
             }}
             onStartShouldSetResponder={() => true}
           >
             <View
               style={{
-                padding: spacing.md,
-                borderBottomWidth: 1,
-                borderBottomColor: colors.border.light,
+                padding: spacing.lg,
+                borderBottomWidth: 2,
+                borderBottomColor: "#5a5a68",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
+                backgroundColor: "#474747",
               }}
             >
               <Text
                 style={{
-                  fontSize: typography.fontSize.base,
+                  fontSize: typography.fontSize.lg,
                   fontWeight: typography.fontWeight.bold,
                   color: colors.text.primary,
                 }}
               >
                 {label}
               </Text>
-              <TouchableOpacity onPress={() => setIsOpen(false)}>
-                <MaterialIcons name="close" size={20} color={colors.text.secondary} />
+              <TouchableOpacity 
+                onPress={() => setIsOpen(false)}
+                style={{
+                  padding: spacing.xs,
+                  borderRadius: borderRadius.sm,
+                  backgroundColor: "transparent",
+                }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <MaterialIcons name="close" size={24} color={colors.text.primary} />
               </TouchableOpacity>
             </View>
-            <ScrollView style={{ maxHeight: 300 }}>
-              {options.map((option) => (
+            <ScrollView 
+              style={{ maxHeight: 400 }}
+              showsVerticalScrollIndicator={true}
+            >
+              {options.map((option, index) => (
                 <TouchableOpacity
                   key={option.value}
                   onPress={() => handleSelect(option.value)}
                   style={{
-                    paddingVertical: spacing.md,
+                    paddingVertical: spacing.lg,
                     paddingHorizontal: spacing.lg,
-                    borderBottomWidth: 1,
-                    borderBottomColor: colors.border.light,
-                    backgroundColor: value === option.value ? colors.accent + "20" : "transparent",
+                    borderBottomWidth: index < options.length - 1 ? 1 : 0,
+                    borderBottomColor: "#5a5a68",
+                    backgroundColor: value === option.value 
+                      ? "rgba(186, 153, 136, 0.3)" 
+                      : "#474747",
+                    minHeight: 52,
                   }}
+                  activeOpacity={0.7}
                 >
                   <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                     <Text
                       style={{
                         fontSize: typography.fontSize.base,
-                        fontWeight: value === option.value ? typography.fontWeight.bold : typography.fontWeight.medium,
-                        color: value === option.value ? colors.text.primary : colors.text.secondary,
+                        fontWeight: value === option.value 
+                          ? typography.fontWeight.bold 
+                          : typography.fontWeight.medium,
+                        color: value === option.value 
+                          ? colors.accent 
+                          : colors.text.primary,
+                        flex: 1,
                       }}
                     >
                       {option.label}
                     </Text>
                     {value === option.value && (
-                      <MaterialIcons name="check" size={20} color={colors.accent} />
+                      <View
+                        style={{
+                          marginLeft: spacing.md,
+                          backgroundColor: colors.accent + "20",
+                          borderRadius: borderRadius.full,
+                          padding: spacing.xs,
+                        }}
+                      >
+                        <MaterialIcons name="check-circle" size={22} color={colors.accent} />
+                      </View>
                     )}
                   </View>
                 </TouchableOpacity>

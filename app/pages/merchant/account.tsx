@@ -163,26 +163,7 @@ export default function MerchantAccount() {
                 USD
               </Text>
             </View>
-            <View style={{ flexDirection: "row", alignItems: "baseline", gap: 8 }}>
-              <Text
-                style={{
-                  fontSize: isMobile ? 36 : 48,
-                  fontWeight: "800",
-                  color: "#ba9988",
-                }}
-              >
-                {blkdBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: "rgba(186, 153, 136, 0.6)",
-                  fontWeight: "600",
-                }}
-              >
-                BLKD
-              </Text>
-            </View>
+            {/* BLKD balance display removed */}
           </View>
           <View style={{ flexDirection: "row", gap: 16 }}>
             <TouchableOpacity

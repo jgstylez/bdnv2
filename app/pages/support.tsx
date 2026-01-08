@@ -419,7 +419,7 @@ export default function Support() {
                     <TouchableOpacity
                     style={{
                       flex: 1,
-                      backgroundColor: "rgba(0, 0, 0, 0.5)",
+                      backgroundColor: "rgba(0, 0, 0, 0.95)",
                       justifyContent: "center",
                       alignItems: "center",
                       padding: 20,
@@ -434,19 +434,20 @@ export default function Support() {
                         width: "100%",
                         maxWidth: 400,
                         maxHeight: 400,
-                        borderWidth: 1,
-                        borderColor: "rgba(186, 153, 136, 0.2)",
+                        borderWidth: 2,
+                        borderColor: "#5a5a68",
                       }}
                       onStartShouldSetResponder={() => true}
                     >
                       <View
                         style={{
                           padding: 16,
-                          borderBottomWidth: 1,
-                          borderBottomColor: "rgba(186, 153, 136, 0.2)",
+                          borderBottomWidth: 2,
+                          borderBottomColor: "#5a5a68",
                           flexDirection: "row",
                           justifyContent: "space-between",
                           alignItems: "center",
+                          backgroundColor: "#474747",
                         }}
                       >
                         <Text
@@ -474,8 +475,8 @@ export default function Support() {
                               paddingVertical: 16,
                               paddingHorizontal: 20,
                               borderBottomWidth: 1,
-                              borderBottomColor: "rgba(186, 153, 136, 0.1)",
-                              backgroundColor: formData.category === category ? "rgba(186, 153, 136, 0.2)" : "transparent",
+                              borderBottomColor: "#5a5a68",
+                              backgroundColor: formData.category === category ? "rgba(186, 153, 136, 0.3)" : "#474747",
                       }}
                     >
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
