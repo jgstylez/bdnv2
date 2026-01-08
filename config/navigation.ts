@@ -89,6 +89,11 @@ export const navigationMenu: NavGroup[] = [
         icon: "shopping-cart",
       },
       {
+        label: "Bookings",
+        href: "/pages/merchant/bookings",
+        icon: "event-note",
+      },
+      {
         label: "Menu",
         href: "/pages/merchant/menu",
         icon: "restaurant-menu",
@@ -154,6 +159,11 @@ export const navigationMenu: NavGroup[] = [
         label: "Orders",
         href: "/pages/nonprofit/orders",
         icon: "shopping-cart",
+      },
+      {
+        label: "Bookings",
+        href: "/pages/nonprofit/bookings",
+        icon: "event-note",
       },
       {
         label: "Invoices",
