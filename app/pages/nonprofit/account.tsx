@@ -154,7 +154,8 @@ export default function OrganizationAccount() {
                 USD
               </Text>
             </View>
-            <View style={{ flexDirection: "row", alignItems: "baseline", gap: 8 }}>
+            {/* BLKD balance display temporarily removed */}
+            {/* <View style={{ flexDirection: "row", alignItems: "baseline", gap: 8 }}>
               <Text
                 style={{
                   fontSize: isMobile ? 36 : 48,
@@ -173,7 +174,7 @@ export default function OrganizationAccount() {
               >
                 BLKD
               </Text>
-            </View>
+            </View> */}
           </View>
           <View style={{ flexDirection: "row", gap: 16 }}>
             <TouchableOpacity

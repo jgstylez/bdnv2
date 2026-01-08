@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
@@ -7,6 +7,7 @@ import { Organization } from '@/types/nonprofit';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { useResponsive } from '@/hooks/useResponsive';
 import { spacing } from '@/constants/theme';
+import { OrganizationSearchModal } from '@/components/pay-it-forward/OrganizationSearchModal';
 
 // Mock organizations available for Pay-It-Forward
 const mockOrganizations: Organization[] = [
@@ -84,11 +85,43 @@ const mockOrganizations: Organization[] = [
 // Mock selected organization (would come from user preferences)
 const mockSelectedOrgId = "org1";
 
+// Mock recent organizations (would come from user's donation history)
+const mockRecentOrgIds = ["org2", "org3"];
+
 export default function PayItForwardPage() {
   const { width } = useWindowDimensions();
   const router = useRouter();
   const { isMobile, paddingHorizontal } = useResponsive();
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(mockSelectedOrgId);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter organizations based on search query
+  const filteredOrganizations = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return mockOrganizations;
+    }
+    const query = searchQuery.toLowerCase();
+    return mockOrganizations.filter(
+      (org) =>
+        org.name.toLowerCase().includes(query) ||
+        org.description.toLowerCase().includes(query) ||
+        org.mission.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
+
+  // Get recent organizations (excluding currently selected)
+  const recentOrganizations = useMemo(() => {
+    return mockOrganizations.filter(
+      (org) => mockRecentOrgIds.includes(org.id) && org.id !== selectedOrgId
+    );
+  }, [selectedOrgId]);
+
+  const handleSelectOrganization = (orgId: string) => {
+    setSelectedOrgId(orgId);
+    setShowSearchModal(false);
+    setSearchQuery("");
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
@@ -103,7 +136,7 @@ export default function PayItForwardPage() {
         {/* Hero Section */}
         <HeroSection
           title="Pay It Forward"
-          subtitle="Support charitable organizations with every purchase - BDN covers the donation"
+          subtitle="Support charitable organizations with every purchase"
         />
 
         {/* Info Card */}
@@ -137,7 +170,7 @@ export default function PayItForwardPage() {
                   lineHeight: 20,
                 }}
               >
-                Select a charitable organization below. Every time you make a purchase through BDN, we'll automatically donate a percentage of your purchase amount to your selected organization. There's no extra cost to you - BDN covers the donation.
+                Select a charitable organization below. Every time you make a purchase through BDN, we'll automatically donate a percentage of your purchase amount to your selected organization. There's no extra cost to you.
               </Text>
             </View>
           </View>
@@ -212,22 +245,61 @@ export default function PayItForwardPage() {
           </View>
         )}
 
-        {/* Organizations List */}
+        {/* Search Organization Button */}
         <View style={{ marginBottom: 24 }}>
-          <Text
+          <TouchableOpacity
+            onPress={() => setShowSearchModal(true)}
             style={{
-              fontSize: 20,
-              fontWeight: "700",
-              color: "#ffffff",
-              marginBottom: 16,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 16,
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 16,
             }}
           >
-            Select an Organization
-          </Text>
-          {mockOrganizations.length > 0 ? (
+            <MaterialIcons name="search" size={24} color="rgba(255, 255, 255, 0.5)" />
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "600",
+                  color: "rgba(255, 255, 255, 0.7)",
+                }}
+              >
+                Select an organization
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: "rgba(255, 255, 255, 0.5)",
+                  marginTop: 2,
+                }}
+              >
+                Tap to search and select
+              </Text>
+            </View>
+            <MaterialIcons name="arrow-forward-ios" size={16} color="rgba(255, 255, 255, 0.5)" />
+          </TouchableOpacity>
+        </View>
+
+        {/* Recent Organizations */}
+        {recentOrganizations.length > 0 && (
+          <View style={{ marginBottom: 24 }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginBottom: 16,
+              }}
+            >
+              Recent Organizations
+            </Text>
             <View style={{ gap: 16 }}>
-              {mockOrganizations.map((org) => {
-                const isSelected = selectedOrgId === org.id;
+              {recentOrganizations.map((org) => {
                 return (
                   <TouchableOpacity
                     key={org.id}
@@ -237,7 +309,7 @@ export default function PayItForwardPage() {
                       borderRadius: 16,
                       padding: 20,
                       borderWidth: 2,
-                      borderColor: isSelected ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.2)",
                     }}
                   >
                     <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 16 }}>
@@ -246,7 +318,7 @@ export default function PayItForwardPage() {
                           width: 56,
                           height: 56,
                           borderRadius: 28,
-                          backgroundColor: isSelected ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                          backgroundColor: "rgba(186, 153, 136, 0.2)",
                           alignItems: "center",
                           justifyContent: "center",
                         }}
@@ -266,26 +338,6 @@ export default function PayItForwardPage() {
                           >
                             {org.name}
                           </Text>
-                          {isSelected && (
-                            <View
-                              style={{
-                                backgroundColor: "rgba(76, 175, 80, 0.15)",
-                                paddingHorizontal: 8,
-                                paddingVertical: 4,
-                                borderRadius: 6,
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 10,
-                                  color: "#4caf50",
-                                  fontWeight: "600",
-                                }}
-                              >
-                                Selected
-                              </Text>
-                            </View>
-                          )}
                         </View>
                         <Text
                           style={{
@@ -327,31 +379,21 @@ export default function PayItForwardPage() {
                 );
               })}
             </View>
-          ) : (
-            <View
-              style={{
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: 40,
-                alignItems: "center",
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-              }}
-            >
-              <MaterialIcons name="handshake" size={48} color="rgba(186, 153, 136, 0.5)" />
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: "rgba(255, 255, 255, 0.6)",
-                  textAlign: "center",
-                  marginTop: 16,
-                }}
-              >
-                No organizations available
-              </Text>
-            </View>
-          )}
-        </View>
+          </View>
+        )}
+
+        {/* Organization Search Modal */}
+        <OrganizationSearchModal
+          visible={showSearchModal}
+          onClose={() => {
+            setShowSearchModal(false);
+            setSearchQuery("");
+          }}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          filteredOrganizations={filteredOrganizations}
+          onSelectOrganization={handleSelectOrganization}
+        />
       </ScrollView>
     </View>
   );
