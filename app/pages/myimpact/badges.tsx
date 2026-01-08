@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { Badge, BadgeCategory, UserBadge, BADGE_DEFINITIONS } from '@/types/badges';
 import { BadgeIcon } from '@/components/BadgeIcon';
 import { HeroSection } from '@/components/layouts/HeroSection';
@@ -627,6 +628,24 @@ export default function Badges() {
                       }}
                     />
                   </View>
+                </View>
+
+                {/* Featured Badge Image Placeholder */}
+                <View
+                  style={{
+                    marginTop: 24,
+                    width: "100%",
+                    height: 250,
+                    backgroundColor: "#474747",
+                    borderRadius: 20,
+                    overflow: "hidden",
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons name="workspace-premium" size={64} color="rgba(186, 153, 136, 0.5)" />
                 </View>
               </View>
 
