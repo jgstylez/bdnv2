@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -110,7 +110,7 @@ export default function University() {
               fontSize: 20,
               fontWeight: "700",
               color: "#ffffff",
-              marginBottom: 16,
+              marginBottom: Platform.OS === "ios" ? 20 : 16,
             }}
           >
             Explore Learning Resources
@@ -119,56 +119,81 @@ export default function University() {
             style={{
               flexDirection: "row",
               flexWrap: "wrap",
-              gap: 12,
             }}
           >
-            {categories.map((category) => (
+            {categories.map((category, index) => {
+              // Calculate card width and spacing for 2x2 grid on mobile
+              const isEvenIndex = index % 2 === 0;
+              const isTopRow = index < 2;
+              const gapSize = Platform.OS === "ios" ? 12 : 6;
+              
+              const cardSpacing = isMobile 
+                ? { 
+                    flexBasis: Platform.OS === "ios" ? "48%" : "50%",
+                    maxWidth: Platform.OS === "ios" ? "48%" : "50%",
+                    marginRight: isEvenIndex ? gapSize : 0,
+                    marginBottom: isTopRow ? (Platform.OS === "ios" ? 16 : 12) : 0,
+                  }
+                : { 
+                    flex: 1, 
+                    maxWidth: "25%", 
+                    marginRight: 6,
+                    marginBottom: 12,
+                  };
+              
+              return (
               <TouchableOpacity
                 key={category.id}
                 onPress={() => router.push(category.route as any)}
-                style={{
-                  flex: isMobile ? "0 0 calc(50% - 6px)" : 1,
-                  backgroundColor: "#474747",
-                  borderRadius: 16,
-                  padding: 20,
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
-                  minHeight: 140,
-                }}
+                style={[
+                  {
+                    backgroundColor: "#474747",
+                    borderRadius: 16,
+                    paddingHorizontal: Platform.OS === "ios" ? 18 : 20,
+                    paddingVertical: Platform.OS === "ios" ? 18 : 20,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    minHeight: Platform.OS === "ios" ? 150 : 140,
+                  },
+                  cardSpacing,
+                ]}
               >
                 <View
                   style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 24,
+                    width: Platform.OS === "ios" ? 52 : 48,
+                    height: Platform.OS === "ios" ? 52 : 48,
+                    borderRadius: Platform.OS === "ios" ? 26 : 24,
                     backgroundColor: `${category.color}20`,
                     alignItems: "center",
                     justifyContent: "center",
-                    marginBottom: 12,
+                    marginBottom: Platform.OS === "ios" ? 14 : 12,
                   }}
                 >
-                  <MaterialIcons name={category.icon as any} size={24} color={category.color} />
+                  <MaterialIcons name={category.icon as any} size={Platform.OS === "ios" ? 26 : 24} color={category.color} />
                 </View>
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: Platform.OS === "ios" ? 17 : 16,
                     fontWeight: "700",
                     color: "#ffffff",
-                    marginBottom: 4,
+                    marginBottom: Platform.OS === "ios" ? 6 : 4,
+                    lineHeight: Platform.OS === "ios" ? 22 : 20,
                   }}
                 >
                   {category.name}
                 </Text>
                 <Text
                   style={{
-                    fontSize: 13,
+                    fontSize: Platform.OS === "ios" ? 14 : 13,
                     color: "rgba(255, 255, 255, 0.7)",
+                    lineHeight: Platform.OS === "ios" ? 20 : 18,
                   }}
                 >
                   {category.description}
                 </Text>
               </TouchableOpacity>
-            ))}
+              );
+            })}
           </View>
         </View>
 

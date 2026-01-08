@@ -342,31 +342,31 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                             marginRight: 12,
                           }}
                         >
-                        <View style={{ marginRight: Platform.OS === "ios" ? 16 : 12, width: 24, alignItems: "center" }}>
-                          <MaterialIcons
-                            name={group.icon}
-                            size={20}
-                            color={
-                              hasActiveItem
+                          <View style={{ marginRight: Platform.OS === "ios" ? 16 : 12, width: 24, alignItems: "center" }}>
+                            <MaterialIcons
+                              name={group.icon}
+                              size={20}
+                              color={
+                                hasActiveItem
+                                  ? "#ba9988"
+                                  : "rgba(255, 255, 255, 0.7)"
+                              }
+                            />
+                          </View>
+                          <Text
+                            style={{
+                              fontSize: Platform.OS === "ios" ? 15 : 14,
+                              fontWeight: "600",
+                              color: hasActiveItem
                                 ? "#ba9988"
-                                : "rgba(255, 255, 255, 0.7)"
-                            }
-                          />
-                        </View>
-                        <Text
-                          style={{
-                            fontSize: Platform.OS === "ios" ? 15 : 14,
-                            fontWeight: "600",
-                            color: hasActiveItem
-                              ? "#ba9988"
-                              : "rgba(255, 255, 255, 0.9)",
-                            textTransform: "uppercase",
-                            letterSpacing: 0.5,
-                            flex: 1,
-                          }}
-                        >
-                          {group.label}
-                        </Text>
+                                : "rgba(255, 255, 255, 0.9)",
+                              textTransform: "uppercase",
+                              letterSpacing: 0.5,
+                              flex: 1,
+                            }}
+                          >
+                            {group.label}
+                          </Text>
                         </View>
                         <View style={{ marginLeft: Platform.OS === "ios" ? 8 : 0 }}>
                           <MaterialIcons

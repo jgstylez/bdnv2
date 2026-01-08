@@ -132,14 +132,18 @@ export default function MediaChannels() {
                   >
                     <MaterialIcons name={channel.icon as any} size={32} color="#ba9988" />
                   </View>
-                  <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
+                  <View style={{ flex: 1, minWidth: 0 }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8, gap: Platform.OS === "ios" ? 12 : 8 }}>
                       <Text
                         style={{
                           fontSize: 18,
                           fontWeight: "700",
                           color: "#ffffff",
+                          flex: 1,
+                          marginRight: Platform.OS === "ios" ? 12 : 8,
                         }}
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
                       >
                         {channel.name}
                       </Text>
@@ -147,17 +151,20 @@ export default function MediaChannels() {
                         <View
                           style={{
                             backgroundColor: "#4caf50",
-                            paddingHorizontal: 10,
-                            paddingVertical: 4,
+                            paddingHorizontal: Platform.OS === "ios" ? 12 : 10,
+                            paddingVertical: Platform.OS === "ios" ? 6 : 4,
                             borderRadius: 8,
+                            flexShrink: 0,
+                            alignSelf: "flex-start",
                           }}
                         >
                           <Text
                             style={{
-                              fontSize: 11,
+                              fontSize: Platform.OS === "ios" ? 12 : 11,
                               fontWeight: "600",
                               color: "#ffffff",
                               textTransform: "uppercase",
+                              letterSpacing: Platform.OS === "ios" ? 0.5 : 0,
                             }}
                           >
                             Subscribed
