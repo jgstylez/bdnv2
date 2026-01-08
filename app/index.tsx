@@ -50,8 +50,8 @@ export default function Home() {
           isApp,
           isAuthenticated,
           isLoading,
-          pathname: typeof window !== 'undefined' ? window.location.pathname : 'N/A',
-          search: typeof window !== 'undefined' ? window.location.search : 'N/A',
+          pathname: typeof window !== 'undefined' && window.location ? window.location.pathname : 'N/A',
+          search: typeof window !== 'undefined' && window.location ? window.location.search : 'N/A',
         });
       }
 

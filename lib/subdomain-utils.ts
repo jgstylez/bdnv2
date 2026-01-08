@@ -10,7 +10,7 @@ export function getSubdomain(searchParams?: { subdomain?: string }): string | nu
     return null; // Mobile apps don't have subdomains
   }
 
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || !window.location) {
     return null;
   }
 
@@ -28,16 +28,16 @@ export function getSubdomain(searchParams?: { subdomain?: string }): string | nu
     
     // Fallback: parse from window.location
     // Handle both encoded and non-encoded URLs
-    const searchString = window.location.search || window.location.hash.split('?')[1] || '';
+    const searchString = window.location?.search || window.location?.hash?.split('?')[1] || '';
     const urlSearchParams = new URLSearchParams(searchString);
     const testSubdomain = urlSearchParams.get('subdomain');
     
     if (__DEV__) {
       console.log('[SubdomainUtils] Checking subdomain:', {
         hostname,
-        fullUrl: window.location.href,
-        search: window.location.search,
-        hash: window.location.hash,
+        fullUrl: window.location?.href || 'N/A',
+        search: window.location?.search || 'N/A',
+        hash: window.location?.hash || 'N/A',
         searchString,
         testSubdomain,
         allParams: Object.fromEntries(urlSearchParams.entries()),
@@ -53,7 +53,7 @@ export function getSubdomain(searchParams?: { subdomain?: string }): string | nu
     }
     
     // Also check if the URL contains subdomain=app in any form (fallback for encoded URLs)
-    const urlString = window.location.href.toLowerCase();
+    const urlString = window.location?.href?.toLowerCase() || '';
     if (urlString.includes('subdomain=app') || urlString.includes('subdomain%3dapp')) {
       if (__DEV__) {
         console.log('[SubdomainUtils] ✓ Detected app subdomain via URL string match');
