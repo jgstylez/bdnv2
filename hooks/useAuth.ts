@@ -8,7 +8,7 @@ import {
   isBiometricEnabled,
   setBiometricEnabled,
 } from '../lib/secure-storage';
-import { auth, db } from '../lib/firebase';
+import { auth, db, FIREBASE_ENABLED } from '../lib/firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -17,25 +17,43 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
+// Development mode: Allow viewing app without Firebase
+const DEV_MODE_AUTH = !FIREBASE_ENABLED;
+
 export function useAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(DEV_MODE_AUTH);
+  const [isLoading, setIsLoading] = useState(!DEV_MODE_AUTH);
+  const [user, setUser] = useState<any>(DEV_MODE_AUTH ? { email: 'dev@example.com', role: 'user' } : null);
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    // If Firebase is not configured, run in development mode
+    if (DEV_MODE_AUTH) {
+      setIsLoading(false);
+      console.log('Running in development mode without Firebase authentication');
+      return;
+    }
+
+    // Firebase is configured, use normal auth flow
+    if (!auth) {
+      setIsLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const token = await user.getIdToken();
         await storeAuthTokens(token);
         setIsAuthenticated(true);
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUser(userData);
-          if (userData.role === 'admin') {
-            setIsAdmin(true);
+        if (db) {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUser(userData);
+            if (userData.role === 'admin') {
+              setIsAdmin(true);
+            }
           }
         }
         const biometricsEnabled = await isBiometricEnabled();
@@ -53,6 +71,19 @@ export function useAuth() {
   }, []);
 
   const login = async (email, password) => {
+    if (DEV_MODE_AUTH) {
+      // Development mode: auto-login
+      setIsAuthenticated(true);
+      setUser({ email, role: 'user' });
+      router.push('/(tabs)/dashboard');
+      return;
+    }
+
+    if (!auth) {
+      console.error('Firebase auth is not available');
+      return;
+    }
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/(tabs)/dashboard');
@@ -62,6 +93,19 @@ export function useAuth() {
   };
 
   const signup = async (email, password) => {
+    if (DEV_MODE_AUTH) {
+      // Development mode: auto-signup
+      setIsAuthenticated(true);
+      setUser({ email, role: 'user' });
+      router.push('/(tabs)/dashboard');
+      return;
+    }
+
+    if (!auth || !db) {
+      console.error('Firebase is not available');
+      return;
+    }
+
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -78,6 +122,25 @@ export function useAuth() {
   };
 
   const logout = async () => {
+    if (DEV_MODE_AUTH) {
+      // Development mode: just clear local state
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsAdmin(false);
+      await clearAuthTokens();
+      router.push('/(auth)/login');
+      return;
+    }
+
+    if (!auth) {
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsAdmin(false);
+      await clearAuthTokens();
+      router.push('/(auth)/login');
+      return;
+    }
+
     await signOut(auth);
     await clearAuthTokens();
     setIsAuthenticated(false);

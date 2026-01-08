@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Platform } from "react-native";
 import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { spacing } from '../../constants/theme';
@@ -191,9 +191,11 @@ export function ProductForm({ form, setForm, categories, isNonprofit }: ProductF
                 contentFit="cover"
                 cachePolicy="memory-disk"
                 transition={200}
-                accessible={true}
-                accessibilityRole="image"
-                accessibilityLabel={`Product image ${index + 1}`}
+                {...(Platform.OS !== 'web' && {
+                  accessible: true,
+                  accessibilityRole: "image" as const,
+                  accessibilityLabel: `Product image ${index + 1}`,
+                })}
               />
               <TouchableOpacity
                 onPress={() => setForm({ ...form, images: form.images.filter((_: string, i: number) => i !== index) })}

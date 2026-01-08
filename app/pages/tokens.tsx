@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, useWindowDimensions, Platform } from 'react-native';
+import { View, ScrollView, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useResponsive } from '@/hooks/useResponsive';
 import { BackButton } from '@/components/navigation/BackButton';
@@ -19,8 +19,7 @@ import { PurchaseHistoryList } from '@/components/tokens/PurchaseHistoryList';
 import { TokenLedgerEntries } from '@/components/tokens/TokenLedgerEntries';
 
 export default function Tokens() {
-  const { width } = useWindowDimensions();
-  const { isMobile, paddingHorizontal } = useResponsive();
+  const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const {
     tokenAmount, setTokenAmount,
     purchaseType, setPurchaseType,
@@ -55,10 +54,14 @@ export default function Tokens() {
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={Platform.OS === 'android'}
+        bounces={Platform.OS !== 'web'}
         contentContainerStyle={{
           paddingHorizontal: paddingHorizontal,
           paddingTop: Platform.OS === "web" ? 20 : 36,
-          paddingBottom: 40,
+          paddingBottom: scrollViewBottomPadding,
         }}
       >
         <BackButton

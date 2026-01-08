@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { View, TouchableOpacity, Platform } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -12,9 +12,18 @@ export const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
   const router = useRouter();
   const pathname = usePathname();
   const navigatingRef = useRef(false);
+  const previousPathnameRef = useRef(pathname);
   const tabBarHeight = 56;
   const bottomPadding = 30;
   const totalHeight = tabBarHeight + bottomPadding;
+
+  // Reset navigation flag when pathname actually changes (navigation completed)
+  useEffect(() => {
+    if (previousPathnameRef.current !== pathname) {
+      previousPathnameRef.current = pathname;
+      navigatingRef.current = false;
+    }
+  }, [pathname]);
 
   return (
     <View
@@ -131,12 +140,14 @@ export const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
             navigatingRef.current = true;
 
             // Use router.push for consistent navigation
-            router.push(targetRoute as any).finally(() => {
-              // Reset flag after a short delay to allow navigation to complete
-              setTimeout(() => {
-                navigatingRef.current = false;
-              }, 300);
-            });
+            // router.push() is synchronous and doesn't return a Promise
+            router.push(targetRoute as any);
+            
+            // Reset flag after a delay to allow navigation to complete
+            // The pathname change effect will also reset it, but this is a fallback
+            setTimeout(() => {
+              navigatingRef.current = false;
+            }, 300);
           };
 
           const onLongPress = () => {

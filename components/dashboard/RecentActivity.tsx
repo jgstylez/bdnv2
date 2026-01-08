@@ -72,10 +72,13 @@ export function RecentActivity({ isMobile }: RecentActivityProps) {
                 </View>
               </View>
               <Text
-                className={cn('text-sm font-bold', {
-                  'text-success': activity.amount.startsWith('+'),
-                  'text-dark-foreground': !activity.amount.startsWith('+'),
-                })}
+                style={{
+                  fontSize: 14,
+                  fontWeight: '700',
+                  color: activity.amount.startsWith('+') 
+                    ? '#9ce0a4' // Lighter green for better contrast (WCAG AA compliant)
+                    : '#ffffff',
+                }}
               >
                 {activity.amount}
               </Text>

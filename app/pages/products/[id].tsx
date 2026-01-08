@@ -355,7 +355,7 @@ const mockProducts: Record<string, Product> = {
 export default function ProductDetail() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { isMobile, paddingHorizontal } = useResponsive();
+  const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const { addToCart, isInCart, getCartItem } = useCart();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -523,10 +523,14 @@ export default function ProductDetail() {
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
       <StatusBar style="light" />
       <ScrollView
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={Platform.OS === 'android'}
+        bounces={Platform.OS !== 'web'}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingBottom: scrollViewBottomPadding,
         }}
       >
         {/* Back Button */}
@@ -575,9 +579,11 @@ export default function ProductDetail() {
                   style={{ width: "100%", height: "100%" }}
                   contentFit="cover"
                   cachePolicy="memory-disk"
-                  accessible={true}
-                  accessibilityRole="image"
-                  accessibilityLabel={`${product.name} - Main product image ${selectedImageIndex + 1} of ${images.length}`}
+                  {...(Platform.OS !== 'web' && {
+                    accessible: true,
+                    accessibilityRole: "image" as const,
+                    accessibilityLabel: `${product.name} - Main product image ${selectedImageIndex + 1} of ${images.length}`,
+                  })}
                   onError={() => setImageError(true)}
                 />
               ) : (
@@ -590,6 +596,8 @@ export default function ProductDetail() {
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
+                nestedScrollEnabled={Platform.OS === 'android'}
+                scrollEventThrottle={16}
                 contentContainerStyle={{ gap: spacing.sm }}
               >
                 {images.map((image, index) => (
@@ -754,7 +762,7 @@ export default function ProductDetail() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    color: colors.status.success,
+                    color: colors.textColors.success, // Use lighter green for better contrast
                   }}
                 >
                   Free shipping
@@ -822,7 +830,7 @@ export default function ProductDetail() {
                     <Text
                       style={{
                         fontSize: typography.fontSize.base,
-                        color: colors.status.success,
+                        color: colors.textColors.success, // Use lighter green for better contrast
                         fontWeight: typography.fontWeight.semibold,
                       }}
                     >
@@ -992,7 +1000,7 @@ export default function ProductDetail() {
                       style={{
                         fontSize: typography.fontSize.lg,
                         fontWeight: typography.fontWeight.bold,
-                        color: colors.text.primary,
+                        color: colors.textColors.onAccent,
                       }}
                     >
                       {isSubscribing ? "Processing..." : "Subscribe & Save"}
@@ -1019,7 +1027,7 @@ export default function ProductDetail() {
                     style={{
                       fontSize: typography.fontSize.lg,
                       fontWeight: typography.fontWeight.bold,
-                      color: colors.text.primary,
+                      color: colors.textColors.onAccent,
                     }}
                   >
                     Book Service
@@ -1041,7 +1049,7 @@ export default function ProductDetail() {
                       style={{
                         fontSize: typography.fontSize.lg,
                         fontWeight: typography.fontWeight.bold,
-                        color: colors.text.primary,
+                        color: colors.textColors.onAccent,
                       }}
                     >
                       Buy Now - {formatCurrency(finalTotal, product.currency)}
@@ -1094,7 +1102,7 @@ export default function ProductDetail() {
                       style={{
                         fontSize: typography.fontSize.lg,
                         fontWeight: typography.fontWeight.bold,
-                        color: colors.text.primary,
+                        color: colors.textColors.onAccent,
                       }}
                     >
                       Buy Now - {formatCurrency(isSubscriptionEnabled ? subscriptionTotal : finalTotal, product.currency)}
@@ -1214,6 +1222,8 @@ export default function ProductDetail() {
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
+                nestedScrollEnabled={Platform.OS === 'android'}
+                scrollEventThrottle={16}
                 contentContainerStyle={{ 
                   gap: isMobile ? spacing.md : spacing.lg, 
                   paddingLeft: 0,
@@ -1328,12 +1338,12 @@ cachePolicy="memory-disk"
                     style={{
                       fontSize: typography.fontSize.base,
                       fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.primary,
+                      color: colors.textColors.onAccent,
                     }}
                   >
                     View All Products
                   </Text>
-                  <MaterialIcons name="arrow-forward" size={18} color={colors.text.primary} />
+                  <MaterialIcons name="arrow-forward" size={18} color={colors.textColors.onAccent} />
                 </TouchableOpacity>
               </View>
             </View>

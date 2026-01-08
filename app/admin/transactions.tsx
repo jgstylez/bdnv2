@@ -144,15 +144,31 @@ export default function TransactionManagement() {
 
   const handleRefund = () => {
     if (!selectedTransaction || !refundAmount || !refundReason) {
-      alert("Please fill in all required fields");
+      Alert.alert("Error", "Please fill in all required fields");
       return;
     }
     // TODO: Process refund via API
-    alert(`Refund of $${refundAmount} processed successfully.`);
-    setShowRefundModal(false);
-    setRefundAmount("");
-    setRefundReason("");
-    setSelectedTransaction(null);
+    // For now, update mock data
+    setTransactions(
+      transactions.map((txn) =>
+        txn.id === selectedTransaction.id
+          ? {
+              ...txn,
+              status: "refunded" as TransactionStatus,
+              refundedAmount: parseFloat(refundAmount),
+              refundedAt: new Date().toISOString(),
+            }
+          : txn
+      )
+    );
+    Alert.alert("Success", `Refund of $${refundAmount} processed successfully.`, [
+      { text: "OK", onPress: () => {
+        setShowRefundModal(false);
+        setRefundAmount("");
+        setRefundReason("");
+        setSelectedTransaction(null);
+      }}
+    ]);
   };
 
   const formatDate = (dateString: string) => {

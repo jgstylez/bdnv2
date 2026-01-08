@@ -75,15 +75,27 @@ const Button: React.FC<ButtonProps> = ({
   // Add hitSlop for better touch targets (minimum 44x44 points)
   const hitSlop = props.hitSlop || { top: 10, bottom: 10, left: 10, right: 10 };
 
+  // Destructure and filter out invalid props that React Native doesn't recognize
+  const {
+    accessibilityLabel: _accessibilityLabel,
+    accessibilityRole: _accessibilityRole,
+    accessibilityHint,
+    hitSlop: _hitSlop,
+    title, // Remove title prop if present (use children instead)
+    asChild, // Remove asChild prop (not used in React Native)
+    textStyle, // Remove textStyle (handled via textClassName)
+    ...validProps
+  } = props;
+
   return (
     <Pressable
-      {...props}
+      {...validProps}
       disabled={disabled}
       accessible={true}
       accessibilityRole={accessibilityRole}
       accessibilityLabel={accessibilityLabel}
       accessibilityState={{ disabled }}
-      accessibilityHint={props.accessibilityHint}
+      accessibilityHint={accessibilityHint}
       hitSlop={hitSlop}
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}

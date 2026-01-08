@@ -54,6 +54,9 @@ export function FeatureFlagsProvider({ children }: FeatureFlagsProviderProps) {
       }
     );
 
+    // If unsubscribe is null (Firebase disabled), the callback was already called synchronously
+    // No need for additional handling - React will process the state update
+
     return () => {
       if (unsubscribe) {
         unsubscribe();

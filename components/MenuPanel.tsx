@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
   useWindowDimensions,
   Platform,
@@ -155,10 +155,6 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
     onClose();
   };
 
-  if (!isOpen && translateX.value === width) {
-    return null;
-  }
-
   return (
     <>
       {/* Overlay */}
@@ -172,14 +168,22 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
             bottom: 0,
             backgroundColor: "#000000",
             zIndex: 998,
+            ...(Platform.OS === "web" && {
+              // @ts-ignore - Web-only CSS properties
+              position: "fixed" as any,
+            }),
           },
           overlayStyle,
         ]}
+        pointerEvents={isOpen ? "auto" : "none"}
       >
-        <TouchableOpacity
+        <Pressable
           style={{ flex: 1 }}
-          activeOpacity={1}
           onPress={onClose}
+          {...(Platform.OS === "web" && {
+            // @ts-ignore - Web-only CSS properties
+            style: { flex: 1, cursor: "pointer" },
+          })}
         />
       </Animated.View>
 
@@ -203,9 +207,14 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
             elevation: 8,
             paddingTop: Platform.OS === "web" ? 0 : insets.top,
             paddingBottom: Platform.OS === "web" ? 0 : insets.bottom,
+            ...(Platform.OS === "web" && {
+              // @ts-ignore - Web-only CSS properties
+              position: "fixed" as any,
+            }),
           },
           animatedStyle,
         ]}
+        pointerEvents={isOpen ? "auto" : "none"}
       >
         <ScrollView
           style={{ flex: 1 }}
@@ -233,19 +242,29 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
             >
               Menu
             </Text>
-            <TouchableOpacity
+            <Pressable
               onPress={onClose}
-              accessible={true}
-              accessibilityRole="button"
-              accessibilityLabel="Close menu"
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.7 : 1,
+                padding: 8,
+                ...(Platform.OS === "web" && {
+                  cursor: "pointer",
+                  userSelect: "none",
+                }),
+              })}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              {...(Platform.OS !== 'web' && {
+                accessible: true,
+                accessibilityRole: "button" as const,
+                accessibilityLabel: "Close menu",
+              })}
             >
               <MaterialIcons
                 name="close"
                 size={24}
                 color="rgba(255, 255, 255, 0.7)"
               />
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {/* Navigation Groups */}
@@ -267,16 +286,9 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                     }}
                   >
                     {/* Group Header */}
-                    <TouchableOpacity
+                    <Pressable
                       onPress={() => toggleGroup(group.label)}
-                      accessible={true}
-                      accessibilityRole="button"
-                      accessibilityLabel={`${group.label} menu group`}
-                      accessibilityState={{ expanded: isExpanded }}
-                      accessibilityHint={
-                        isExpanded ? "Collapse group" : "Expand group"
-                      }
-                      style={{
+                      style={({ pressed }) => ({
                         flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "space-between",
@@ -285,7 +297,19 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                         backgroundColor: hasActiveItem
                           ? "rgba(186, 153, 136, 0.1)"
                           : "transparent",
-                      }}
+                        opacity: pressed ? 0.7 : 1,
+                        ...(Platform.OS === "web" && {
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }),
+                      })}
+                      {...(Platform.OS !== 'web' && {
+                        accessible: true,
+                        accessibilityRole: "button" as const,
+                        accessibilityLabel: `${group.label} menu group`,
+                        accessibilityState: { expanded: isExpanded },
+                        accessibilityHint: isExpanded ? "Collapse group" : "Expand group",
+                      })}
                     >
                       <View
                         style={{
@@ -327,7 +351,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                         size={20}
                         color="rgba(255, 255, 255, 0.5)"
                       />
-                    </TouchableOpacity>
+                    </Pressable>
 
                     {/* Group Items */}
                     {isExpanded && (
@@ -335,15 +359,10 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                         {group.items.map((item: NavItem, itemIndex: number) => {
                           const active = isActive(item.href);
                           return (
-                            <TouchableOpacity
+                            <Pressable
                               key={item.href + itemIndex}
                               onPress={() => handleItemPress(item.href)}
-                              accessible={true}
-                              accessibilityRole="button"
-                              accessibilityLabel={item.label}
-                              accessibilityState={{ selected: active }}
-                              accessibilityHint={`Navigate to ${item.label}`}
-                              style={{
+                              style={({ pressed }) => ({
                                 flexDirection: "row",
                                 alignItems: "center",
                                 paddingVertical: 12,
@@ -352,7 +371,19 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                                 backgroundColor: active
                                   ? "rgba(186, 153, 136, 0.15)"
                                   : "transparent",
-                              }}
+                                opacity: pressed ? 0.7 : 1,
+                                ...(Platform.OS === "web" && {
+                                  cursor: "pointer",
+                                  userSelect: "none",
+                                }),
+                              })}
+                              {...(Platform.OS !== 'web' && {
+                                accessible: true,
+                                accessibilityRole: "button" as const,
+                                accessibilityLabel: item.label,
+                                accessibilityState: { selected: active },
+                                accessibilityHint: `Navigate to ${item.label}`,
+                              })}
                             >
                               <MaterialIcons
                                 name={item.icon}
@@ -376,7 +407,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                               >
                                 {item.label}
                               </Text>
-                            </TouchableOpacity>
+                            </Pressable>
                           );
                         })}
                       </View>

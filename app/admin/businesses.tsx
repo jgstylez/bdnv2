@@ -281,7 +281,7 @@ export default function BusinessManagement() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
@@ -308,11 +308,11 @@ export default function BusinessManagement() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               paddingHorizontal: spacing.lg,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
             }}
           >
             <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
@@ -370,15 +370,15 @@ export default function BusinessManagement() {
         ) : (
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.input,
               borderRadius: borderRadius.lg,
               padding: spacing["4xl"],
               alignItems: "center",
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
             }}
           >
-            <MaterialIcons name="store" size={48} color={colors.accentLight} />
+            <MaterialIcons name="store" size={48} color={colors.accent} />
             <Text
               style={{
                 fontSize: typography.fontSize.lg,

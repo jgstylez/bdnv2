@@ -365,8 +365,14 @@ export const Sidebar: React.FC = () => {
                         // Set navigating flag to prevent duplicate calls
                         navigatingRef.current = true;
 
-                        // Navigate - navigatingRef will be reset by the pathname change effect
-                        router.push(item.href as any);
+                        // Navigate - router.push() is synchronous and doesn't return a Promise
+                        // The pathname change effect will reset the flag when navigation completes
+                        try {
+                          router.push(item.href as any);
+                        } catch (error) {
+                          console.error(`Navigation error to ${item.href}:`, error);
+                          navigatingRef.current = false;
+                        }
                       };
 
                       return (

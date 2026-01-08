@@ -2,3 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+/* BDN Dark Theme CSS Variables */
+:root {
+  /* Dark theme is the default for BDN */
+  --color-background: #232323;
+  --color-foreground: #ffffff;
+  --color-card: #474747;
+  --color-card-foreground: #ffffff;
+  --color-popover: #474747;
+  --color-popover-foreground: #ffffff;
+  --color-primary: #ba9988;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #474747;
+  --color-secondary-foreground: #ffffff;
+  --color-muted: #474747;
+  --color-muted-foreground: rgba(255, 255, 255, 0.7);
+  --color-accent: #ba9988;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #e13636;
+  --color-destructive-foreground: #ffffff;
+  --color-success: #9ce0a4;
+  --color-success-foreground: #ffffff;
+  --color-border: #474747;
+  --color-input: #474747;
+  --color-ring: #ba9988;
+}
+
+/* WCAG AA compliant text colors for dark backgrounds */
+.text-success {
+  color: #9ce0a4; /* Lighter green for better contrast on dark backgrounds */
+}
+
+.text-error {
+  color: #ff9b9b; /* Lighter red for better contrast */
+}
+
+.text-warning {
+  color: #ffbf82; /* Lighter orange for better contrast */
+}
+
+.text-info {
+  color: #92d0ff; /* Lighter blue for better contrast */
+}
+
+/* Base styles for web */
+html, body, #root, #__next {
+  background-color: #232323;
+  color: #ffffff;
+  min-height: 100%;
+}
+
+/* Ensure proper box model */
+*, *::before, *::after {
+  box-sizing: border-box;
+}

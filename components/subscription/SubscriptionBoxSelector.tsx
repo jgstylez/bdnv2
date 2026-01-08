@@ -261,7 +261,7 @@ export default function SubscriptionBoxSelector({
                 }}
               >
                 {savingsPercentage > 0 && (
-                  <Text style={{ color: colors.status.success, fontWeight: typography.fontWeight.semibold }}>
+                  <Text style={{ color: colors.textColors.success, fontWeight: typography.fontWeight.semibold }}>
                     Save {savingsPercentage}% • 
                   </Text>
                 )}
@@ -304,11 +304,11 @@ export default function SubscriptionBoxSelector({
               alignItems: "center",
             }}
           >
-            <MaterialIcons name="savings" size={16} color={colors.status.success} />
+            <MaterialIcons name="savings" size={16} color={colors.textColors.success} />
             <Text
               style={{
                 fontSize: typography.fontSize.xs,
-                color: colors.status.success,
+                color: colors.textColors.success,
                 marginLeft: spacing.xs,
                 fontWeight: typography.fontWeight.semibold,
               }}

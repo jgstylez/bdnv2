@@ -6,16 +6,21 @@
  */
 
 import { FeatureFlags, defaultFeatureFlags } from '@/types/feature-flags';
-import { db } from './firebase';
+import { db, FIREBASE_ENABLED } from './firebase';
 import { doc, getDoc, setDoc, onSnapshot, Unsubscribe } from 'firebase/firestore';
 
 const FEATURE_FLAGS_DOC_PATH = 'admin/featureFlags';
 
 /**
  * Get feature flags from Firestore
- * Falls back to default flags if document doesn't exist
+ * Falls back to default flags if document doesn't exist or Firebase is not configured
  */
 export async function getFeatureFlags(): Promise<FeatureFlags> {
+  if (!FIREBASE_ENABLED || !db) {
+    console.warn('Firebase not configured, using default feature flags');
+    return defaultFeatureFlags;
+  }
+
   try {
     const docRef = doc(db, FEATURE_FLAGS_DOC_PATH);
     const docSnap = await getDoc(docRef);
@@ -43,6 +48,11 @@ export async function getFeatureFlags(): Promise<FeatureFlags> {
  * Update feature flags in Firestore
  */
 export async function updateFeatureFlags(flags: Partial<FeatureFlags>): Promise<void> {
+  if (!FIREBASE_ENABLED || !db) {
+    console.warn('Firebase not configured, cannot update feature flags');
+    return;
+  }
+
   try {
     const docRef = doc(db, FEATURE_FLAGS_DOC_PATH);
     const currentFlags = await getFeatureFlags();
@@ -69,6 +79,12 @@ export function subscribeToFeatureFlags(
   callback: (flags: FeatureFlags) => void,
   onError?: (error: Error) => void
 ): Unsubscribe | null {
+  if (!FIREBASE_ENABLED || !db) {
+    // Return defaults immediately if Firebase is not configured
+    callback(defaultFeatureFlags);
+    return null;
+  }
+
   try {
     const docRef = doc(db, FEATURE_FLAGS_DOC_PATH);
     

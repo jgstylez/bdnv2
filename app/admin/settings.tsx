@@ -199,7 +199,7 @@ export default function AdminSettings() {
       <ScrollView style={{ maxHeight: 600 }}>
         <View style={{ gap: spacing.lg }}>
           <View>
-            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
               Platform Name *
             </Text>
             <TextInput
@@ -208,19 +208,19 @@ export default function AdminSettings() {
               placeholder="Enter platform name"
               placeholderTextColor={colors.text.placeholder}
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
                 fontSize: typography.fontSize.base,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             />
           </View>
 
           <View>
-            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
               Platform Email *
             </Text>
             <TextInput
@@ -230,19 +230,19 @@ export default function AdminSettings() {
               placeholderTextColor={colors.text.placeholder}
               keyboardType="email-address"
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
                 fontSize: typography.fontSize.base,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             />
           </View>
 
           <View>
-            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
               Platform URL *
             </Text>
             <TextInput
@@ -251,20 +251,20 @@ export default function AdminSettings() {
               placeholder="https://bdn.com"
               placeholderTextColor={colors.text.placeholder}
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
                 fontSize: typography.fontSize.base,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             />
           </View>
 
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Maintenance Mode
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -274,14 +274,14 @@ export default function AdminSettings() {
             <Switch
               value={platformSettings.maintenanceMode}
               onValueChange={(value) => setPlatformSettings({ ...platformSettings, maintenanceMode: value })}
-              trackColor={{ false: colors.border.light, true: colors.accent }}
+              trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor={colors.text.primary}
             />
           </View>
 
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 User Registration
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -291,14 +291,14 @@ export default function AdminSettings() {
             <Switch
               value={platformSettings.registrationEnabled}
               onValueChange={(value) => setPlatformSettings({ ...platformSettings, registrationEnabled: value })}
-              trackColor={{ false: colors.border.light, true: colors.accent }}
+              trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor={colors.text.primary}
             />
           </View>
 
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Business Applications
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -308,14 +308,14 @@ export default function AdminSettings() {
             <Switch
               value={platformSettings.businessApplicationsEnabled}
               onValueChange={(value) => setPlatformSettings({ ...platformSettings, businessApplicationsEnabled: value })}
-              trackColor={{ false: colors.border.light, true: colors.accent }}
+              trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor={colors.text.primary}
             />
           </View>
 
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Nonprofit Applications
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -325,13 +325,13 @@ export default function AdminSettings() {
             <Switch
               value={platformSettings.nonprofitApplicationsEnabled}
               onValueChange={(value) => setPlatformSettings({ ...platformSettings, nonprofitApplicationsEnabled: value })}
-              trackColor={{ false: colors.border.light, true: colors.accent }}
+              trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor={colors.text.primary}
             />
           </View>
 
           <View>
-            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
               Default Currency
             </Text>
             <TextInput
@@ -340,13 +340,13 @@ export default function AdminSettings() {
               placeholder="USD"
               placeholderTextColor={colors.text.placeholder}
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
                 fontSize: typography.fontSize.base,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             />
           </View>
@@ -358,13 +358,13 @@ export default function AdminSettings() {
                 flex: 1,
                 padding: spacing.md,
                 borderRadius: borderRadius.md,
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Cancel
               </Text>
             </TouchableOpacity>
@@ -378,7 +378,7 @@ export default function AdminSettings() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.textColors.onAccent }}>
                 Save Changes
               </Text>
             </TouchableOpacity>
@@ -426,7 +426,7 @@ export default function AdminSettings() {
                 backgroundColor: colors.accent,
               }}
             >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.textColors.onAccent }}>
                 Retry
               </Text>
             </TouchableOpacity>
@@ -465,7 +465,7 @@ export default function AdminSettings() {
           <View style={{ gap: spacing.lg }}>
             {Object.entries(flagsByCategory).map(([category, flags]) => (
               <View key={category} style={{ gap: spacing.md }}>
-                <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary, marginBottom: spacing.xs }}>
                   {categoryLabels[category] || category}
                 </Text>
                 {flags.map((meta) => {
@@ -482,19 +482,19 @@ export default function AdminSettings() {
                         paddingVertical: spacing.md,
                         paddingHorizontal: spacing.md,
                         borderBottomWidth: 1,
-                        borderBottomColor: colors.border.light,
-                        backgroundColor: isDisabled ? colors.secondary.bg + "40" : "transparent",
+                        borderBottomColor: colors.border,
+                        backgroundColor: isDisabled ? colors.input + "40" : "transparent",
                         borderRadius: borderRadius.md,
                       }}
                     >
                       <View style={{ flex: 1 }}>
                         <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xs }}>
-                          <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                          <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                             {meta.label}
                           </Text>
                           {meta.impact === 'high' && (
                             <View style={{ backgroundColor: colors.status.error + "40", paddingHorizontal: spacing.xs, paddingVertical: 2, borderRadius: borderRadius.sm }}>
-                              <Text style={{ fontSize: typography.fontSize.xs, color: colors.status.error, fontWeight: typography.fontWeight.semibold }}>
+                              <Text style={{ fontSize: typography.fontSize.xs, color: colors.status.error, fontWeight: typography.fontWeight.semibold as '600' }}>
                                 HIGH
                               </Text>
                             </View>
@@ -515,7 +515,7 @@ export default function AdminSettings() {
                         onValueChange={(newValue) => {
                           setFeatureFlags({ ...featureFlags, [meta.key]: newValue });
                         }}
-                        trackColor={{ false: colors.border.light, true: colors.accent }}
+                        trackColor={{ false: colors.border, true: colors.accent }}
                         thumbColor={colors.text.primary}
                       />
                     </View>
@@ -532,14 +532,14 @@ export default function AdminSettings() {
                   flex: 1,
                   padding: spacing.md,
                   borderRadius: borderRadius.md,
-                  backgroundColor: colors.secondary.bg,
+                  backgroundColor: colors.input,
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: colors.border,
                   alignItems: "center",
                   opacity: featureFlagsSaving ? 0.5 : 1,
                 }}
               >
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                   Cancel
                 </Text>
               </TouchableOpacity>
@@ -558,8 +558,8 @@ export default function AdminSettings() {
                   gap: spacing.sm,
                 }}
               >
-                {featureFlagsSaving && <ActivityIndicator size="small" color={colors.text.primary} />}
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                {featureFlagsSaving && <ActivityIndicator size="small" color={colors.textColors.onAccent} />}
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.textColors.onAccent }}>
                   {featureFlagsSaving ? 'Saving...' : 'Save Changes'}
                 </Text>
               </TouchableOpacity>
@@ -582,7 +582,7 @@ export default function AdminSettings() {
             <View style={{ flexDirection: "row", alignItems: "flex-start", gap: spacing.sm }}>
               <MaterialIcons name="info" size={20} color={colors.status.warning} />
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.status.warning, marginBottom: spacing.xs }}>
+                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.status.warning, marginBottom: spacing.xs }}>
                   BDN Payment Gateway
                 </Text>
                 <Text style={{ fontSize: typography.fontSize.xs, color: colors.text.secondary }}>
@@ -594,7 +594,7 @@ export default function AdminSettings() {
 
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Enable BDN Payment
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -604,14 +604,14 @@ export default function AdminSettings() {
             <Switch
               value={paymentSettings.bdnPaymentEnabled}
               onValueChange={(value) => setPaymentSettings({ ...paymentSettings, bdnPaymentEnabled: value })}
-              trackColor={{ false: colors.border.light, true: colors.accent }}
+              trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor={colors.text.primary}
             />
           </View>
 
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Sandbox Mode
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -621,13 +621,13 @@ export default function AdminSettings() {
             <Switch
               value={paymentSettings.sandboxMode}
               onValueChange={(value) => setPaymentSettings({ ...paymentSettings, sandboxMode: value })}
-              trackColor={{ false: colors.border.light, true: colors.accent }}
+              trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor={colors.text.primary}
             />
           </View>
 
           <View>
-            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
               API Key
             </Text>
             <TextInput
@@ -637,20 +637,20 @@ export default function AdminSettings() {
               placeholderTextColor={colors.text.placeholder}
               secureTextEntry
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
                 fontSize: typography.fontSize.base,
                 fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             />
           </View>
 
           <View>
-            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
               Secret Key
             </Text>
             <TextInput
@@ -660,20 +660,20 @@ export default function AdminSettings() {
               placeholderTextColor={colors.text.placeholder}
               secureTextEntry
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
                 fontSize: typography.fontSize.base,
                 fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             />
           </View>
 
           <View>
-            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
               Webhook Secret
             </Text>
             <TextInput
@@ -683,26 +683,26 @@ export default function AdminSettings() {
               placeholderTextColor={colors.text.placeholder}
               secureTextEntry
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
                 fontSize: typography.fontSize.base,
                 fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             />
           </View>
 
           <View style={{ marginTop: spacing.md }}>
-            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold, color: colors.text.primary, marginBottom: spacing.md }}>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary, marginBottom: spacing.md }}>
               Fee Configuration
             </Text>
 
             <View style={{ gap: spacing.md }}>
               <View>
-                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
                   Consumer Service Fee (%)
                 </Text>
                 <TextInput
@@ -712,20 +712,20 @@ export default function AdminSettings() {
                   placeholderTextColor={colors.text.placeholder}
                   keyboardType="numeric"
                   style={{
-                    backgroundColor: colors.secondary.bg,
+                    backgroundColor: colors.input,
                     borderRadius: borderRadius.md,
                     padding: spacing.md,
                     color: colors.text.primary,
                     fontSize: typography.fontSize.base,
                     borderWidth: 1,
-                    borderColor: colors.border.light,
+                    borderColor: colors.border,
                   }}
                 />
               </View>
 
               <View style={{ flexDirection: "row", gap: spacing.md }}>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
                     Min Fee (USD)
                   </Text>
                   <TextInput
@@ -735,18 +735,18 @@ export default function AdminSettings() {
                     placeholderTextColor={colors.text.placeholder}
                     keyboardType="numeric"
                     style={{
-                      backgroundColor: colors.secondary.bg,
+                      backgroundColor: colors.input,
                       borderRadius: borderRadius.md,
                       padding: spacing.md,
                       color: colors.text.primary,
                       fontSize: typography.fontSize.base,
                       borderWidth: 1,
-                      borderColor: colors.border.light,
+                      borderColor: colors.border,
                     }}
                   />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
                     Max Fee (USD)
                   </Text>
                   <TextInput
@@ -756,20 +756,20 @@ export default function AdminSettings() {
                     placeholderTextColor={colors.text.placeholder}
                     keyboardType="numeric"
                     style={{
-                      backgroundColor: colors.secondary.bg,
+                      backgroundColor: colors.input,
                       borderRadius: borderRadius.md,
                       padding: spacing.md,
                       color: colors.text.primary,
                       fontSize: typography.fontSize.base,
                       borderWidth: 1,
-                      borderColor: colors.border.light,
+                      borderColor: colors.border,
                     }}
                   />
                 </View>
               </View>
 
               <View>
-                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
                   Business Platform Fee (%)
                 </Text>
                 <TextInput
@@ -779,19 +779,19 @@ export default function AdminSettings() {
                   placeholderTextColor={colors.text.placeholder}
                   keyboardType="numeric"
                   style={{
-                    backgroundColor: colors.secondary.bg,
+                    backgroundColor: colors.input,
                     borderRadius: borderRadius.md,
                     padding: spacing.md,
                     color: colors.text.primary,
                     fontSize: typography.fontSize.base,
                     borderWidth: 1,
-                    borderColor: colors.border.light,
+                    borderColor: colors.border,
                   }}
                 />
               </View>
 
               <View>
-                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
                   Business Platform Fee with BDN+ (%)
                 </Text>
                 <TextInput
@@ -801,13 +801,13 @@ export default function AdminSettings() {
                   placeholderTextColor={colors.text.placeholder}
                   keyboardType="numeric"
                   style={{
-                    backgroundColor: colors.secondary.bg,
+                    backgroundColor: colors.input,
                     borderRadius: borderRadius.md,
                     padding: spacing.md,
                     color: colors.text.primary,
                     fontSize: typography.fontSize.base,
                     borderWidth: 1,
-                    borderColor: colors.border.light,
+                    borderColor: colors.border,
                   }}
                 />
               </View>
@@ -815,13 +815,13 @@ export default function AdminSettings() {
           </View>
 
           <View style={{ marginTop: spacing.md }}>
-            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold, color: colors.text.primary, marginBottom: spacing.md }}>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary, marginBottom: spacing.md }}>
               Settlement Configuration
             </Text>
 
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                   Auto Settlement
                 </Text>
                 <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -831,14 +831,14 @@ export default function AdminSettings() {
               <Switch
                 value={paymentSettings.autoSettleEnabled}
                 onValueChange={(value) => setPaymentSettings({ ...paymentSettings, autoSettleEnabled: value })}
-                trackColor={{ false: colors.border.light, true: colors.accent }}
+                trackColor={{ false: colors.border, true: colors.accent }}
                 thumbColor={colors.text.primary}
               />
             </View>
 
             {paymentSettings.autoSettleEnabled && (
               <View>
-                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
                   Settlement Period (Days)
                 </Text>
                 <TextInput
@@ -848,13 +848,13 @@ export default function AdminSettings() {
                   placeholderTextColor={colors.text.placeholder}
                   keyboardType="numeric"
                   style={{
-                    backgroundColor: colors.secondary.bg,
+                    backgroundColor: colors.input,
                     borderRadius: borderRadius.md,
                     padding: spacing.md,
                     color: colors.text.primary,
                     fontSize: typography.fontSize.base,
                     borderWidth: 1,
-                    borderColor: colors.border.light,
+                    borderColor: colors.border,
                   }}
                 />
               </View>
@@ -868,13 +868,13 @@ export default function AdminSettings() {
                 flex: 1,
                 padding: spacing.md,
                 borderRadius: borderRadius.md,
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Cancel
               </Text>
             </TouchableOpacity>
@@ -888,7 +888,7 @@ export default function AdminSettings() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.textColors.onAccent }}>
                 Save Changes
               </Text>
             </TouchableOpacity>
@@ -908,7 +908,7 @@ export default function AdminSettings() {
         <View style={{ gap: spacing.lg }}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Push Notifications
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -918,14 +918,14 @@ export default function AdminSettings() {
             <Switch
               value={notificationSettings.pushNotificationsEnabled}
               onValueChange={(value) => setNotificationSettings({ ...notificationSettings, pushNotificationsEnabled: value })}
-              trackColor={{ false: colors.border.light, true: colors.accent }}
+              trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor={colors.text.primary}
             />
           </View>
 
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Email Notifications
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -935,14 +935,14 @@ export default function AdminSettings() {
             <Switch
               value={notificationSettings.emailNotificationsEnabled}
               onValueChange={(value) => setNotificationSettings({ ...notificationSettings, emailNotificationsEnabled: value })}
-              trackColor={{ false: colors.border.light, true: colors.accent }}
+              trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor={colors.text.primary}
             />
           </View>
 
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 SMS Notifications
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -952,19 +952,19 @@ export default function AdminSettings() {
             <Switch
               value={notificationSettings.smsNotificationsEnabled}
               onValueChange={(value) => setNotificationSettings({ ...notificationSettings, smsNotificationsEnabled: value })}
-              trackColor={{ false: colors.border.light, true: colors.accent }}
+              trackColor={{ false: colors.border, true: colors.accent }}
               thumbColor={colors.text.primary}
             />
           </View>
 
           <View style={{ marginTop: spacing.md }}>
-            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold, color: colors.text.primary, marginBottom: spacing.md }}>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary, marginBottom: spacing.md }}>
               Default Notification Channels
             </Text>
             {Object.entries(notificationSettings.defaultNotificationChannels).map(([channel, enabled]) => (
-              <View key={channel} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
+              <View key={channel} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, textTransform: "capitalize" }}>
+                  <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, textTransform: "capitalize" }}>
                     {channel}
                   </Text>
                 </View>
@@ -977,7 +977,7 @@ export default function AdminSettings() {
                       [channel]: value,
                     },
                   })}
-                  trackColor={{ false: colors.border.light, true: colors.accent }}
+                  trackColor={{ false: colors.border, true: colors.accent }}
                   thumbColor={colors.text.primary}
                 />
               </View>
@@ -985,13 +985,13 @@ export default function AdminSettings() {
           </View>
 
           <View style={{ marginTop: spacing.md }}>
-            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold, color: colors.text.primary, marginBottom: spacing.md }}>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary, marginBottom: spacing.md }}>
               Quiet Hours
             </Text>
 
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: spacing.md }}>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                   Enable Quiet Hours
                 </Text>
                 <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>
@@ -1001,7 +1001,7 @@ export default function AdminSettings() {
               <Switch
                 value={notificationSettings.quietHoursEnabled}
                 onValueChange={(value) => setNotificationSettings({ ...notificationSettings, quietHoursEnabled: value })}
-                trackColor={{ false: colors.border.light, true: colors.accent }}
+                trackColor={{ false: colors.border, true: colors.accent }}
                 thumbColor={colors.text.primary}
               />
             </View>
@@ -1009,7 +1009,7 @@ export default function AdminSettings() {
             {notificationSettings.quietHoursEnabled && (
               <View style={{ flexDirection: "row", gap: spacing.md }}>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
                     Start Time
                   </Text>
                   <TextInput
@@ -1018,18 +1018,18 @@ export default function AdminSettings() {
                     placeholder="22:00"
                     placeholderTextColor={colors.text.placeholder}
                     style={{
-                      backgroundColor: colors.secondary.bg,
+                      backgroundColor: colors.input,
                       borderRadius: borderRadius.md,
                       padding: spacing.md,
                       color: colors.text.primary,
                       fontSize: typography.fontSize.base,
                       borderWidth: 1,
-                      borderColor: colors.border.light,
+                      borderColor: colors.border,
                     }}
                   />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
                     End Time
                   </Text>
                   <TextInput
@@ -1038,13 +1038,13 @@ export default function AdminSettings() {
                     placeholder="08:00"
                     placeholderTextColor={colors.text.placeholder}
                     style={{
-                      backgroundColor: colors.secondary.bg,
+                      backgroundColor: colors.input,
                       borderRadius: borderRadius.md,
                       padding: spacing.md,
                       color: colors.text.primary,
                       fontSize: typography.fontSize.base,
                       borderWidth: 1,
-                      borderColor: colors.border.light,
+                      borderColor: colors.border,
                     }}
                   />
                 </View>
@@ -1059,13 +1059,13 @@ export default function AdminSettings() {
                 flex: 1,
                 padding: spacing.md,
                 borderRadius: borderRadius.md,
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 Cancel
               </Text>
             </TouchableOpacity>
@@ -1079,7 +1079,7 @@ export default function AdminSettings() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.textColors.onAccent }}>
                 Save Changes
               </Text>
             </TouchableOpacity>
@@ -1090,7 +1090,7 @@ export default function AdminSettings() {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
@@ -1103,7 +1103,7 @@ export default function AdminSettings() {
           <Text
             style={{
               fontSize: isMobile ? typography.fontSize["2xl"] : typography.fontSize["3xl"],
-              fontWeight: typography.fontWeight.extrabold,
+              fontWeight: typography.fontWeight.extrabold as '800',
               color: colors.text.primary,
               marginBottom: spacing.sm,
             }}
@@ -1128,11 +1128,11 @@ export default function AdminSettings() {
               key={category.id}
               onPress={() => setSelectedCategory(category.id)}
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.lg,
                 padding: spacing.lg,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             >
               <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.md }}>
@@ -1141,7 +1141,7 @@ export default function AdminSettings() {
                     width: 48,
                     height: 48,
                     borderRadius: 24,
-                    backgroundColor: colors.background.primary,
+                    backgroundColor: colors.background,
                     alignItems: "center",
                     justifyContent: "center",
                   }}
@@ -1152,7 +1152,7 @@ export default function AdminSettings() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.lg,
-                      fontWeight: typography.fontWeight.bold,
+                      fontWeight: typography.fontWeight.bold as '700',
                       color: colors.text.primary,
                       marginBottom: spacing.xs,
                     }}

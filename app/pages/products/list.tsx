@@ -462,7 +462,7 @@ cachePolicy="memory-disk"
               style={{
                 fontSize: typography.fontSize.base,
                 fontWeight: typography.fontWeight.semibold,
-                color: colors.text.primary,
+                color: colors.textColors.onAccent,
               }}
             >
               View Details
@@ -555,7 +555,7 @@ cachePolicy="memory-disk"
                 style={{
                   fontSize: typography.fontSize.sm,
                   fontWeight: typography.fontWeight.semibold,
-                  color: sortBy === option.value ? colors.text.primary : colors.text.secondary,
+                  color: sortBy === option.value ? colors.textColors.onAccent : colors.text.secondary,
                 }}
               >
                 {option.label}

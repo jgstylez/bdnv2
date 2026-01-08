@@ -14,7 +14,7 @@ import { BackButton } from '@/components/navigation/BackButton';
 
 export default function Cart() {
   const router = useRouter();
-  const { isMobile, paddingHorizontal } = useResponsive();
+  const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const { 
     items: cartItems, 
     businessOrders, 
@@ -55,10 +55,14 @@ export default function Cart() {
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
       <StatusBar style="light" />
       <ScrollView
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={Platform.OS === 'android'}
+        bounces={Platform.OS !== 'web'}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingBottom: scrollViewBottomPadding,
         }}
       >
         {/* Back Button */}
@@ -106,7 +110,7 @@ export default function Cart() {
                 style={{
                   fontSize: typography.fontSize.base,
                   fontWeight: typography.fontWeight.semibold,
-                  color: colors.text.primary,
+                  color: colors.textColors.onAccent,
                 }}
               >
                 Browse Marketplace
@@ -465,7 +469,7 @@ export default function Cart() {
                   style={{
                     fontSize: typography.fontSize.lg,
                     fontWeight: typography.fontWeight.bold,
-                    color: colors.text.primary,
+                    color: colors.textColors.onAccent,
                   }}
                 >
                   Proceed to Checkout

@@ -1,23 +1,69 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
+import { getAuth, Auth } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
 import Constants from "expo-constants";
 
-const firebaseConfig = {
-  apiKey: Constants.expoConfig?.extra?.firebaseApiKey,
-  authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain,
-  projectId: Constants.expoConfig?.extra?.firebaseProjectId,
-  storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket,
-  messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId,
-  appId: Constants.expoConfig?.extra?.firebaseAppId,
+// Helper function to get Firebase config values
+// Supports both EXPO_PUBLIC_* env vars and Constants.expoConfig?.extra (for backwards compatibility)
+const getFirebaseConfigValue = (key: string): string => {
+  // Convert camelCase to UPPER_SNAKE_CASE (e.g., firebaseApiKey -> FIREBASE_API_KEY)
+  const envKey = `EXPO_PUBLIC_${key
+    .replace(/([A-Z])/g, "_$1")
+    .toUpperCase()}`;
+  return (
+    process.env[envKey] ||
+    Constants.expoConfig?.extra?.[key] ||
+    Constants.expoConfig?.extra?.[envKey] ||
+    ""
+  );
 };
 
-let app;
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
+const firebaseConfig = {
+  apiKey: getFirebaseConfigValue("firebaseApiKey"),
+  authDomain: getFirebaseConfigValue("firebaseAuthDomain"),
+  projectId: getFirebaseConfigValue("firebaseProjectId"),
+  storageBucket: getFirebaseConfigValue("firebaseStorageBucket"),
+  messagingSenderId: getFirebaseConfigValue("firebaseMessagingSenderId"),
+  appId: getFirebaseConfigValue("firebaseAppId"),
+};
+
+// Check if Firebase is configured
+const isFirebaseConfigured = (): boolean => {
+  const requiredFields = ["apiKey", "authDomain", "projectId", "appId"];
+  return requiredFields.every(
+    (field) => firebaseConfig[field as keyof typeof firebaseConfig]
+  );
+};
+
+export const FIREBASE_ENABLED = isFirebaseConfigured();
+
+let app: FirebaseApp | null = null;
+let auth: Auth | null = null;
+let db: Firestore | null = null;
+
+if (FIREBASE_ENABLED) {
+  try {
+    if (!getApps().length) {
+      app = initializeApp(firebaseConfig);
+    } else {
+      app = getApp();
+    }
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } catch (error) {
+    console.warn("Firebase initialization failed:", error);
+    console.warn("App will run in development mode without Firebase authentication.");
+  }
 } else {
-  app = getApp();
+  console.warn(
+    "Firebase is not configured. App will run in development mode without authentication.\n" +
+    "To enable Firebase, set the following environment variables:\n" +
+    "- EXPO_PUBLIC_FIREBASE_API_KEY\n" +
+    "- EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN\n" +
+    "- EXPO_PUBLIC_FIREBASE_PROJECT_ID\n" +
+    "- EXPO_PUBLIC_FIREBASE_APP_ID\n" +
+    "\nSee README.md for setup instructions."
+  );
 }
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+export { auth, db };

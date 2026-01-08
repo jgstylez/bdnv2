@@ -24,9 +24,10 @@ export default function BlogManagement() {
     <View style={{ flex: 1 }}>
       <PageTitle title="Blog Management" />
       <Button
-        title="Create New Post"
         onPress={() => router.push('/admin/blog/create')}
-      />
+      >
+        Create New Post
+      </Button>
       <FlatList
         data={MOCK_POSTS}
         renderItem={renderItem}

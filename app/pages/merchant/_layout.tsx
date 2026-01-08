@@ -21,8 +21,8 @@ export default function MerchantLayout() {
         <Stack.Screen name="menu" />
         <Stack.Screen name="menu/create" />
         <Stack.Screen name="products/integrations" />
+        <Stack.Screen name="account" />
         <Stack.Screen name="invoices" />
-        <Stack.Screen name="invoices/templates" />
         <Stack.Screen name="settings" />
       </Stack>
     </BusinessProvider>

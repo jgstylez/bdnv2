@@ -52,6 +52,7 @@ const mockGiftCardOrders: GiftCardOrder[] = [
     amount: 25,
     senderUserId: "user5",
     senderName: "Charlie Brown",
+    recipientUserId: "user6",
     recipientEmail: "recipient@example.com",
     recipientName: "Recipient Name",
     note: "Thank you!",
@@ -267,11 +268,11 @@ export default function GiftCardOrdersManagement() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               paddingHorizontal: spacing.lg,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
             }}
           >
             <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
@@ -342,13 +343,13 @@ export default function GiftCardOrdersManagement() {
                     {
                       label: order.type,
                       color: order.type === "universal" ? "#ba9988" : colors.text.secondary,
-                      backgroundColor: order.type === "universal" ? colors.accentLight : colors.secondary.bg,
+                      backgroundColor: order.type === "universal" ? colors.accent : colors.input,
                     },
                   ]}
                   actions={[
                     {
                       label: "View Details",
-                      icon: "visibility",
+                      icon: "visibility" as keyof typeof MaterialIcons.glyphMap,
                       variant: "info",
                       onPress: () => {
                         setSelectedOrder(order);
@@ -359,7 +360,7 @@ export default function GiftCardOrdersManagement() {
                       ? [
                           {
                             label: "Resend",
-                            icon: "send",
+                            icon: "send" as keyof typeof MaterialIcons.glyphMap,
                             variant: "primary" as const,
                             onPress: () => handleResend(order),
                           },
@@ -367,7 +368,7 @@ export default function GiftCardOrdersManagement() {
                       : []),
                     {
                       label: "Flag for Review",
-                      icon: "flag",
+                      icon: "flag" as keyof typeof MaterialIcons.glyphMap,
                       variant: "secondary" as const,
                       onPress: () => {
                         setSelectedOrder(order);
@@ -594,13 +595,13 @@ export default function GiftCardOrdersManagement() {
               multiline
               numberOfLines={4}
               style={{
-                backgroundColor: colors.primary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
                 fontSize: typography.fontSize.base,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
                 minHeight: 100,
                 textAlignVertical: "top",
               }}

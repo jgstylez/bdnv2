@@ -332,15 +332,16 @@ export default function OrdersFulfillment() {
   const handleCancelOrder = (orderId: string) => {
     Alert.alert(
       "Cancel Order",
-      "Are you sure you want to cancel this order?",
+      "Are you sure you want to cancel this order? This action cannot be undone.",
       [
         { text: "No", style: "cancel" },
         {
-          text: "Yes",
+          text: "Yes, Cancel Order",
           style: "destructive",
           onPress: () => {
             // TODO: Cancel order via API
             handleUpdateStatus(orderId, "cancelled");
+            Alert.alert("Success", "Order has been cancelled successfully.");
           },
         },
       ]

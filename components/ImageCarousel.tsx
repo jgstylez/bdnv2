@@ -178,14 +178,15 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
                   height: "100%",
                 }}
                 resizeMode="cover"
-                accessible={true}
-                accessibilityRole="image"
-                accessibilityLabel={
-                  item.title 
-                    ? `Carousel image: ${item.title}${item.description ? `. ${item.description}` : ""}`
-                    : `Carousel image ${index + 1} of ${items.length}`
-                }
-                accessibilityHint={item.link ? "Double tap to open link" : undefined}
+                {...(Platform.OS !== 'web' && {
+                  accessible: true,
+                  accessibilityRole: "image" as const,
+                  accessibilityLabel:
+                    item.title 
+                      ? `Carousel image: ${item.title}${item.description ? `. ${item.description}` : ""}`
+                      : `Carousel image ${index + 1} of ${items.length}`,
+                  accessibilityHint: item.link ? "Double tap to open link" : undefined,
+                })}
               />
               {/* Solid Black Overlay - Half Container */}
               {(item.title || item.description || item.link) && (

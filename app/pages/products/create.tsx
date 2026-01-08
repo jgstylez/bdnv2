@@ -56,7 +56,11 @@ export default function CreateProduct() {
   const { isMobile, paddingHorizontal } = useResponsive();
   const params = useLocalSearchParams();
   const isNonprofit = params.type === "nonprofit";
+  const productId = params.id as string | undefined;
+  const isEditing = !!productId;
   
+  // TODO: Fetch product data if editing
+  // For now, using mock data structure
   const [currentStep, setCurrentStep] = useState(1);
   const [productType, setProductType] = useState("");
   const [form, setForm] = useState({
@@ -94,9 +98,17 @@ export default function CreateProduct() {
       setCurrentStep(currentStep + 1);
     } else {
       // Submit form
-      Alert.alert("Success", "Product created successfully!", [
-        { text: "OK", onPress: () => router.back() }
-      ]);
+      if (isEditing) {
+        // TODO: Update product via API
+        Alert.alert("Success", "Product updated successfully!", [
+          { text: "OK", onPress: () => router.back() }
+        ]);
+      } else {
+        // TODO: Create product via API
+        Alert.alert("Success", "Product created successfully!", [
+          { text: "OK", onPress: () => router.back() }
+        ]);
+      }
     }
   };
 
@@ -121,10 +133,14 @@ export default function CreateProduct() {
       >
         <View style={{ marginBottom: spacing.xl }}>
           <Text style={{ fontSize: 24, fontWeight: "700", color: "#ffffff", marginBottom: 8 }}>
-            {isNonprofit ? "Create New Item" : "Add New Product"}
+            {isEditing 
+              ? (isNonprofit ? "Edit Item" : "Edit Product")
+              : (isNonprofit ? "Create New Item" : "Add New Product")}
           </Text>
           <Text style={{ fontSize: 16, color: "rgba(255, 255, 255, 0.7)" }}>
-            Fill in the details below to add a new item to your catalog.
+            {isEditing
+              ? "Update the product details below."
+              : "Fill in the details below to add a new item to your catalog."}
           </Text>
         </View>
 
@@ -198,7 +214,7 @@ export default function CreateProduct() {
               }}
             >
               <Text style={{ fontSize: 16, fontWeight: "600", color: "#ffffff" }}>
-                {currentStep === 4 ? "Publish Product" : "Continue"}
+                {currentStep === 4 ? (isEditing ? "Update Product" : "Publish Product") : "Continue"}
               </Text>
             </TouchableOpacity>
           </View>

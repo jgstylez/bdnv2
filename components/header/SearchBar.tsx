@@ -21,6 +21,7 @@ export function SearchBar({
   return (
     <View
       style={{
+        width: "100%", // Take full width of parent container
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: colors.secondary.bg,

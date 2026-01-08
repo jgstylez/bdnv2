@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Alert, Platform } from "react-native";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
@@ -53,7 +53,7 @@ type CheckoutStep = "review" | "shipping" | "payment" | "processing" | "success"
 export default function Checkout() {
   const router = useRouter();
   const params = useLocalSearchParams<{ buyNow?: string; productId?: string; quantity?: string }>();
-  const { isMobile, paddingHorizontal } = useResponsive();
+  const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const { items: cartItems, businessOrders, getSubtotal, getShippingTotal, clearCart } = useCart();
   const [step, setStep] = useState<CheckoutStep>("review");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -295,7 +295,7 @@ export default function Checkout() {
               style={{
                 fontSize: typography.fontSize.base,
                 fontWeight: typography.fontWeight.semibold,
-                color: colors.text.primary,
+                color: colors.textColors.onAccent,
               }}
             >
               Browse Marketplace
@@ -346,7 +346,7 @@ export default function Checkout() {
               style={{
                 fontSize: typography.fontSize.base,
                 fontWeight: typography.fontWeight.semibold,
-                color: colors.text.primary,
+                color: colors.textColors.onAccent,
               }}
             >
               Browse Marketplace
@@ -361,10 +361,14 @@ export default function Checkout() {
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
       <StatusBar style="light" />
       <ScrollView
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={Platform.OS === 'android'}
+        bounces={Platform.OS !== 'web'}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingBottom: scrollViewBottomPadding,
         }}
       >
         {/* Back Button */}
@@ -553,7 +557,7 @@ export default function Checkout() {
                         style={{
                           fontSize: typography.fontSize.sm,
                           fontWeight: typography.fontWeight.bold,
-                          color: colors.text.primary,
+                          color: colors.textColors.onAccent,
                         }}
                       >
                         Sign Up
@@ -600,7 +604,7 @@ export default function Checkout() {
                 style={{
                   fontSize: typography.fontSize.lg,
                   fontWeight: typography.fontWeight.bold,
-                  color: colors.text.primary,
+                  color: colors.textColors.onAccent,
                 }}
               >
                 Proceed to Payment
@@ -704,7 +708,7 @@ export default function Checkout() {
                 style={{
                   fontSize: typography.fontSize.lg,
                   fontWeight: typography.fontWeight.bold,
-                  color: colors.text.primary,
+                  color: colors.textColors.onAccent,
                 }}
               >
                 {remainingAfterBLKD === 0
@@ -768,7 +772,7 @@ export default function Checkout() {
                 style={{
                   fontSize: typography.fontSize.base,
                   fontWeight: typography.fontWeight.semibold,
-                  color: colors.text.primary,
+                  color: colors.textColors.onAccent,
                 }}
               >
                 View Order History

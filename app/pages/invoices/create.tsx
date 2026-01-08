@@ -14,7 +14,7 @@ import { BackButton } from '@/components/navigation/BackButton';
 export default function CreateInvoice() {
   const router = useRouter();
   const { type, templateId } = useLocalSearchParams<{ type: string; templateId?: string }>();
-  const { isMobile, paddingHorizontal } = useResponsive();
+  const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const issuerType = type === "nonprofit" ? "nonprofit" : "business";
   
   // Load template if templateId is provided
@@ -130,10 +130,14 @@ export default function CreateInvoice() {
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
       <StatusBar style="light" />
       <ScrollView
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={Platform.OS === 'android'}
+        bounces={Platform.OS !== 'web'}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingBottom: scrollViewBottomPadding,
         }}
       >
         {/* Back Button */}
@@ -173,13 +177,13 @@ export default function CreateInvoice() {
               <MaterialIcons
                 name="receipt"
                 size={24}
-                color={billingType === "one-time" ? colors.text.primary : colors.text.secondary}
+                color={billingType === "one-time" ? colors.textColors.onAccent : colors.text.secondary}
               />
               <Text
                 style={{
                   fontSize: typography.fontSize.base,
                   fontWeight: typography.fontWeight.semibold,
-                  color: billingType === "one-time" ? colors.text.primary : colors.text.secondary,
+                  color: billingType === "one-time" ? colors.textColors.onAccent : colors.text.secondary,
                   marginTop: spacing.xs,
                 }}
               >
@@ -201,13 +205,13 @@ export default function CreateInvoice() {
               <MaterialIcons
                 name="repeat"
                 size={24}
-                color={billingType === "recurring" ? colors.text.primary : colors.text.secondary}
+                color={billingType === "recurring" ? colors.textColors.onAccent : colors.text.secondary}
               />
               <Text
                 style={{
                   fontSize: typography.fontSize.base,
                   fontWeight: typography.fontWeight.semibold,
-                  color: billingType === "recurring" ? colors.text.primary : colors.text.secondary,
+                  color: billingType === "recurring" ? colors.textColors.onAccent : colors.text.secondary,
                   marginTop: spacing.xs,
                 }}
               >
@@ -382,12 +386,12 @@ export default function CreateInvoice() {
                 borderRadius: borderRadius.md,
               }}
             >
-              <MaterialIcons name="add" size={18} color={colors.text.primary} />
+              <MaterialIcons name="add" size={18} color={colors.textColors.onAccent} />
               <Text
                 style={{
                   fontSize: typography.fontSize.sm,
                   fontWeight: typography.fontWeight.semibold,
-                  color: colors.text.primary,
+                  color: colors.textColors.onAccent,
                 }}
               >
                 Add Item
@@ -623,7 +627,7 @@ export default function CreateInvoice() {
               style={{
                 fontSize: typography.fontSize.base,
                 fontWeight: typography.fontWeight.bold,
-                color: colors.text.primary,
+                color: colors.textColors.onAccent,
               }}
             >
               Send Invoice

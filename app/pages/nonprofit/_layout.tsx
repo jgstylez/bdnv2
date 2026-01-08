@@ -22,8 +22,8 @@ export default function NonprofitLayout() {
         <Stack.Screen name="onboarding" />
         <Stack.Screen name="products" />
         <Stack.Screen name="products/integrations" />
+        <Stack.Screen name="qrcode" />
         <Stack.Screen name="invoices" />
-        <Stack.Screen name="invoices/templates" />
       </Stack>
     </NonprofitProvider>
   );

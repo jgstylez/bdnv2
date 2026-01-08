@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Linking,
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import { useResponsive } from '@/hooks/useResponsive';
 import { MaterialIcons } from "@expo/vector-icons";
 import { ReviewForm } from '@/components/ReviewForm';
 import { ReviewCard } from '@/components/ReviewCard';
@@ -690,10 +691,9 @@ const mockReviews: BusinessReview[] = [
 ];
 
 export default function BusinessDetail() {
-  const { width } = useWindowDimensions();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const isMobile = width < 768;
+  const { isMobile, scrollViewBottomPadding } = useResponsive();
   const [activeTab, setActiveTab] = useState<"overview" | "reviews" | "photos" | "menu">("overview");
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviews, setReviews] = useState<BusinessReview[]>(mockReviews);
@@ -764,9 +764,13 @@ export default function BusinessDetail() {
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={Platform.OS === 'android'}
+        bounces={Platform.OS !== 'web'}
         style={{ flex: 1 }}
         contentContainerStyle={{
-          paddingBottom: 40,
+          paddingBottom: scrollViewBottomPadding,
         }}
       >
         {/* Hero Image */}

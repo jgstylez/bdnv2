@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { colors, spacing, borderRadius, typography } from '../../constants/theme';
+import { UserMenuItem } from '../../config/userMenu';
 
 interface UserDropdownProps {
   user?: {
@@ -11,19 +12,25 @@ interface UserDropdownProps {
     email: string;
     avatar?: string;
   };
+  isDesktop?: boolean;
+  menuItems?: UserMenuItem[];
 }
 
-export function UserDropdown({ user }: UserDropdownProps) {
+export function UserDropdown({ user, isDesktop = false, menuItems = [] }: UserDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleMenuItemPress = (href: string) => {
     setIsOpen(false);
-    // TODO: Implement logout
-    router.replace("/(auth)/login");
+    if (href === "/(auth)/login") {
+      // Handle logout
+      router.replace(href);
+    } else {
+      router.push(href as any);
+    }
   };
 
   return (
-    <View style={{ position: "relative", zIndex: 100 }}>
+    <View style={{ position: "relative", zIndex: 1004 }}>
       <TouchableOpacity
         onPress={() => setIsOpen(!isOpen)}
         style={{
@@ -70,22 +77,24 @@ export function UserDropdown({ user }: UserDropdownProps) {
         <>
           <TouchableOpacity
             style={{
-              position: "absolute",
+              position: Platform.OS === "web" ? "fixed" : "absolute",
               top: 0,
-              left: -1000,
-              right: -1000,
-              bottom: -1000,
-              zIndex: -1,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 1003,
+              backgroundColor: Platform.OS === "web" ? "transparent" : "rgba(0, 0, 0, 0.1)",
             }}
             onPress={() => setIsOpen(false)}
+            activeOpacity={1}
           />
           <View
             style={{
               position: "absolute",
               top: 48,
               right: 0,
-              width: 200,
-              backgroundColor: colors.primary.bg,
+              width: 240,
+              backgroundColor: "#232323", // Darker background color (matches main app background)
               borderRadius: borderRadius.lg,
               borderWidth: 1,
               borderColor: colors.border.light,
@@ -93,8 +102,14 @@ export function UserDropdown({ user }: UserDropdownProps) {
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,
-              elevation: 5,
+              elevation: 10,
               padding: spacing.sm,
+              maxHeight: 400,
+              zIndex: 1004,
+              ...(Platform.OS === "web" && {
+                // @ts-ignore - Web-only CSS properties
+                overflowY: "auto",
+              }),
             }}
           >
             <View style={{ padding: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border.default }}>
@@ -102,54 +117,50 @@ export function UserDropdown({ user }: UserDropdownProps) {
               <Text style={{ color: colors.text.tertiary, fontSize: 12 }}>{user?.email}</Text>
             </View>
             
-            <TouchableOpacity
-              onPress={() => {
-                setIsOpen(false);
-                router.push("/pages/profile");
-              }}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: spacing.md,
-                padding: spacing.md,
-                borderRadius: borderRadius.md,
-              }}
-            >
-              <MaterialIcons name="person" size={20} color={colors.text.secondary} />
-              <Text style={{ color: colors.text.secondary }}>Profile</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                setIsOpen(false);
-                router.push("/pages/settings");
-              }}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: spacing.md,
-                padding: spacing.md,
-                borderRadius: borderRadius.md,
-              }}
-            >
-              <MaterialIcons name="settings" size={20} color={colors.text.secondary} />
-              <Text style={{ color: colors.text.secondary }}>Settings</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={handleLogout}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: spacing.md,
-                padding: spacing.md,
-                borderRadius: borderRadius.md,
-                marginTop: spacing.xs,
-              }}
-            >
-              <MaterialIcons name="logout" size={20} color={colors.status.error} />
-              <Text style={{ color: colors.status.error }}>Log Out</Text>
-            </TouchableOpacity>
+            {/* Menu Items - Use same menu as account page */}
+            {menuItems.map((item, index) => (
+              <React.Fragment key={item.href}>
+                {item.divider && index > 0 && (
+                  <View
+                    style={{
+                      height: 1,
+                      backgroundColor: colors.border.default,
+                      marginVertical: spacing.xs,
+                    }}
+                  />
+                )}
+                <TouchableOpacity
+                  onPress={() => handleMenuItemPress(item.href)}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: spacing.md,
+                    padding: spacing.md,
+                    borderRadius: borderRadius.md,
+                    ...(Platform.OS === "web" && {
+                      // @ts-ignore - Web-only CSS properties
+                      cursor: "pointer",
+                      userSelect: "none",
+                    }),
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <MaterialIcons
+                    name={item.icon}
+                    size={20}
+                    color={item.label === "Sign Out" ? colors.status.error : colors.text.secondary}
+                  />
+                  <Text
+                    style={{
+                      color: item.label === "Sign Out" ? colors.status.error : colors.text.secondary,
+                      fontSize: typography.fontSize.sm,
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                </TouchableOpacity>
+              </React.Fragment>
+            ))}
           </View>
         </>
       )}

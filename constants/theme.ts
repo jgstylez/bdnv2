@@ -108,12 +108,26 @@ export const colors = {
   status: {
     success: palette.green[500],
     successLight: palette.green[100],
+    successText: palette.green[300], // Lighter green for text on dark backgrounds (WCAG AA compliant)
     error: palette.red[500],
     errorLight: palette.red[100],
+    errorText: palette.red[300], // Lighter red for text on dark backgrounds
     warning: palette.orange[500],
     warningLight: palette.orange[100],
+    warningText: palette.orange[300], // Lighter orange for text on dark backgrounds
     info: palette.blue[500],
     infoLight: palette.blue[100],
+    infoText: palette.blue[300], // Lighter blue for text on dark backgrounds
+  },
+  
+  // Text colors with proper contrast for dark backgrounds
+  textColors: {
+    success: palette.green[300], // #9ce0a4 - better contrast on dark backgrounds
+    error: palette.red[300], // #ff9b9b
+    warning: palette.orange[300], // #ffbf82
+    info: palette.blue[300], // #92d0ff
+    accent: palette.brown[200], // #eaddd7 - lighter brown for better contrast
+    onAccent: "#232323", // Primary background color for text overlaying accent color
   },
 };
 

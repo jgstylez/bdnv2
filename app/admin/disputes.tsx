@@ -183,7 +183,7 @@ export default function DisputeManagement() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
@@ -208,11 +208,11 @@ export default function DisputeManagement() {
           <View
             style={{
               flex: 1,
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               padding: spacing.lg,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
             }}
           >
             <Text
@@ -227,7 +227,7 @@ export default function DisputeManagement() {
           <Text
             style={{
                 fontSize: typography.fontSize["2xl"],
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as '700',
                 color: colors.text.primary,
               }}
             >
@@ -237,11 +237,11 @@ export default function DisputeManagement() {
           <View
             style={{
               flex: 1,
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               padding: spacing.lg,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
             }}
           >
             <Text
@@ -256,7 +256,7 @@ export default function DisputeManagement() {
             <Text
               style={{
                 fontSize: typography.fontSize["2xl"],
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as '700',
                 color: "#ffd700",
               }}
             >
@@ -266,11 +266,11 @@ export default function DisputeManagement() {
           <View
                 style={{
               flex: 1,
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               padding: spacing.lg,
                   borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
                 }}
               >
                 <Text
@@ -285,7 +285,7 @@ export default function DisputeManagement() {
             <Text
               style={{
                 fontSize: typography.fontSize["2xl"],
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as '700',
                 color: "#2196f3",
               }}
             >
@@ -295,11 +295,11 @@ export default function DisputeManagement() {
           <View
                 style={{
               flex: 1,
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               padding: spacing.lg,
                   borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
                 }}
               >
                 <Text
@@ -314,7 +314,7 @@ export default function DisputeManagement() {
             <Text
               style={{
                 fontSize: typography.fontSize["2xl"],
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as '700',
                 color: "#ff4444",
               }}
             >
@@ -330,11 +330,11 @@ export default function DisputeManagement() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               paddingHorizontal: spacing.lg,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
             }}
           >
             <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
@@ -405,12 +405,12 @@ export default function DisputeManagement() {
           {paginatedDisputes.length === 0 ? (
             <View
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing["2xl"],
                 alignItems: "center",
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             >
               <MaterialIcons name="inbox" size={48} color={colors.text.tertiary} />
@@ -430,11 +430,11 @@ export default function DisputeManagement() {
                 key={dispute.id}
                 onPress={() => handleViewDetails(dispute)}
                 style={{
-                  backgroundColor: colors.secondary.bg,
+                  backgroundColor: colors.input,
                   borderRadius: borderRadius.md,
                   padding: spacing.lg,
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: colors.border,
                 }}
               >
                 <View style={{ flexDirection: "row", gap: spacing.md, alignItems: "flex-start" }}>
@@ -456,7 +456,7 @@ export default function DisputeManagement() {
                         <Text
                           style={{
                             fontSize: typography.fontSize.base,
-                            fontWeight: typography.fontWeight.bold,
+                            fontWeight: typography.fontWeight.bold as '700',
                             color: colors.text.primary,
                             marginBottom: spacing.xs,
                           }}
@@ -486,7 +486,7 @@ export default function DisputeManagement() {
                       <Text
                         style={{
                               fontSize: typography.fontSize.xs,
-                              fontWeight: typography.fontWeight.semibold,
+                              fontWeight: typography.fontWeight.semibold as '600',
                           color: getPriorityColor(dispute.priority),
                           textTransform: "uppercase",
                         }}
@@ -505,7 +505,7 @@ export default function DisputeManagement() {
                     <Text
                       style={{
                               fontSize: typography.fontSize.xs,
-                              fontWeight: typography.fontWeight.semibold,
+                              fontWeight: typography.fontWeight.semibold as '600',
                               color: getStatusColor(dispute.status),
                               textTransform: "capitalize",
                             }}
@@ -592,7 +592,7 @@ export default function DisputeManagement() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.bold,
+                      fontWeight: typography.fontWeight.bold as '700',
                       color: getStatusColor(selectedDispute.status),
                       textTransform: "capitalize",
                     }}
@@ -614,7 +614,7 @@ export default function DisputeManagement() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.bold,
+                      fontWeight: typography.fontWeight.bold as '700',
                       color: getPriorityColor(selectedDispute.priority),
                       textTransform: "capitalize",
                     }}
@@ -626,10 +626,10 @@ export default function DisputeManagement() {
 
               {/* User Information */}
               <View>
-                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, marginBottom: spacing.sm }}>
+                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.secondary, marginBottom: spacing.sm }}>
                   User Information
                 </Text>
-                <View style={{ backgroundColor: colors.secondary.bg, borderRadius: borderRadius.md, padding: spacing.md }}>
+                <View style={{ backgroundColor: colors.input, borderRadius: borderRadius.md, padding: spacing.md }}>
                   <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary, marginBottom: spacing.xs }}>
                     {selectedDispute.userName}
                   </Text>
@@ -644,10 +644,10 @@ export default function DisputeManagement() {
 
               {/* Description */}
               <View>
-                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, marginBottom: spacing.sm }}>
+                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.secondary, marginBottom: spacing.sm }}>
                   Description
                 </Text>
-                <View style={{ backgroundColor: colors.secondary.bg, borderRadius: borderRadius.md, padding: spacing.md }}>
+                <View style={{ backgroundColor: colors.input, borderRadius: borderRadius.md, padding: spacing.md }}>
                   <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary, lineHeight: 22 }}>
                     {selectedDispute.description}
                   </Text>
@@ -657,10 +657,10 @@ export default function DisputeManagement() {
               {/* Related Information */}
               {(selectedDispute.relatedTransactionId || selectedDispute.relatedBusinessId) && (
                 <View>
-                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, marginBottom: spacing.sm }}>
+                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.secondary, marginBottom: spacing.sm }}>
                     Related Information
                   </Text>
-                  <View style={{ backgroundColor: colors.secondary.bg, borderRadius: borderRadius.md, padding: spacing.md, gap: spacing.sm }}>
+                  <View style={{ backgroundColor: colors.input, borderRadius: borderRadius.md, padding: spacing.md, gap: spacing.sm }}>
                     {selectedDispute.relatedTransactionId && (
                       <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
                         <MaterialIcons name="receipt" size={16} color={colors.text.tertiary} />
@@ -684,10 +684,10 @@ export default function DisputeManagement() {
               {/* Resolution Notes */}
               {selectedDispute.resolutionNotes && (
                 <View>
-                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, marginBottom: spacing.sm }}>
+                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.secondary, marginBottom: spacing.sm }}>
                     Resolution Notes
                   </Text>
-                  <View style={{ backgroundColor: colors.secondary.bg, borderRadius: borderRadius.md, padding: spacing.md }}>
+                  <View style={{ backgroundColor: colors.input, borderRadius: borderRadius.md, padding: spacing.md }}>
                     <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary, lineHeight: 22 }}>
                       {selectedDispute.resolutionNotes}
                     </Text>
@@ -697,10 +697,10 @@ export default function DisputeManagement() {
 
               {/* Timestamps */}
               <View>
-                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, marginBottom: spacing.sm }}>
+                <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.secondary, marginBottom: spacing.sm }}>
                   Timeline
                 </Text>
-                <View style={{ backgroundColor: colors.secondary.bg, borderRadius: borderRadius.md, padding: spacing.md, gap: spacing.sm }}>
+                <View style={{ backgroundColor: colors.input, borderRadius: borderRadius.md, padding: spacing.md, gap: spacing.sm }}>
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
                       Created
@@ -736,7 +736,7 @@ export default function DisputeManagement() {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                    <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                       Resolve Dispute
                     </Text>
                   </TouchableOpacity>
@@ -758,18 +758,18 @@ export default function DisputeManagement() {
       >
         <View style={{ gap: spacing.lg }}>
           {selectedDispute && (
-            <View style={{ backgroundColor: colors.secondary.bg, borderRadius: borderRadius.md, padding: spacing.md }}>
+            <View style={{ backgroundColor: colors.input, borderRadius: borderRadius.md, padding: spacing.md }}>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
                 Dispute
               </Text>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 {selectedDispute.subject}
               </Text>
             </View>
           )}
 
           <View>
-            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
                   Resolution Notes *
                 </Text>
                 <TextInput
@@ -780,13 +780,13 @@ export default function DisputeManagement() {
                   multiline
                   numberOfLines={6}
                   style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                 borderRadius: borderRadius.md,
                 padding: spacing.md,
                 color: colors.text.primary,
                 fontSize: typography.fontSize.base,
                     borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
                     textAlignVertical: "top",
                 minHeight: 120,
                   }}
@@ -803,13 +803,13 @@ export default function DisputeManagement() {
                     flex: 1,
                 padding: spacing.md,
                 borderRadius: borderRadius.md,
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.input,
                     borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
                     alignItems: "center",
                   }}
                 >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                     Cancel
                   </Text>
                 </TouchableOpacity>
@@ -823,7 +823,7 @@ export default function DisputeManagement() {
                     alignItems: "center",
                   }}
                 >
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                     Resolve
                   </Text>
                 </TouchableOpacity>
