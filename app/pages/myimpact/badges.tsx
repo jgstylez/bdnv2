@@ -107,8 +107,8 @@ export default function Badges() {
       >
         {/* Hero Section */}
         <HeroSection
-          title="Badges & Achievements"
-          subtitle="Earn badges by engaging with the BDN platform. Complete actions like making purchases, referring friends, leaving reviews, and supporting the community to unlock achievements and showcase your impact."
+          title="Badges"
+          subtitle="Unlock badges by engaging and participating on the platform"
         />
 
         {/* Two Column Layout (Desktop) or Stacked (Mobile) */}

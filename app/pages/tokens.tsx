@@ -8,14 +8,14 @@ import {
   TokenTabs,
   CertificateModal,
   RecurringConfirmModal,
+  OneTimePurchaseConfirmModal,
 } from '@/components/tokens';
 import { TokenPurchaseForm } from '@/components/tokens/TokenPurchaseForm';
 import { useTokensPage } from '@/hooks/useTokensPage';
 
 // Mock Data (to be removed)
-import { mockLedgerEntries, mockPurchases, mockRecurringPurchase } from '@/data/mocks/tokens';
+import { mockLedgerEntries, mockRecurringPurchase } from '@/data/mocks/tokens';
 import { RecurringPurchaseManager } from '@/components/tokens/RecurringPurchaseManager';
-import { PurchaseHistoryList } from '@/components/tokens/PurchaseHistoryList';
 import { TokenLedgerEntries } from '@/components/tokens/TokenLedgerEntries';
 
 export default function Tokens() {
@@ -31,6 +31,7 @@ export default function Tokens() {
     editRecurringFrequency, setEditRecurringFrequency,
     showCertificateModal, setShowCertificateModal,
     showRecurringConfirmModal, setShowRecurringConfirmModal,
+    showOneTimeConfirmModal, setShowOneTimeConfirmModal,
     totalTokens,
     handlePurchase,
     handleDownloadCertificate,
@@ -47,6 +48,7 @@ export default function Tokens() {
     handleCancelRecurring,
     handleSetupRecurringPurchase,
     handleConfirmRecurringPurchase,
+    handleConfirmOneTimePurchase,
     TOKEN_PRICE,
   } = useTokensPage();
 
@@ -117,7 +119,6 @@ export default function Tokens() {
                   getPaymentMethodDisplay={getPaymentMethodDisplay}
                   formatDate={formatDate}
                 />
-                <PurchaseHistoryList purchases={mockPurchases} />
                 <TokenLedgerEntries 
                   ledgerEntries={mockLedgerEntries} 
                   getTransactionIcon={getTransactionIcon} 
@@ -147,6 +148,13 @@ export default function Tokens() {
         onConfirm={handleConfirmRecurringPurchase}
         onCancel={() => setShowRecurringConfirmModal(false)}
         getFrequencyLabel={getFrequencyLabel}
+      />
+
+      <OneTimePurchaseConfirmModal
+        visible={showOneTimeConfirmModal}
+        tokenAmount={tokenAmount}
+        onConfirm={handleConfirmOneTimePurchase}
+        onCancel={() => setShowOneTimeConfirmModal(false)}
       />
     </View>
   );

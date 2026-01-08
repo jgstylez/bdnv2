@@ -4,25 +4,21 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 import { TOKEN_PRICE } from '../../types/token';
 
-interface RecurringConfirmModalProps {
+interface OneTimePurchaseConfirmModalProps {
   visible: boolean;
   tokenAmount: string;
-  frequency: "weekly" | "monthly" | "bi-monthly" | "quarterly" | "annually";
   onConfirm: () => void;
   onCancel: () => void;
-  getFrequencyLabel: (frequency: string) => string;
 }
 
-export function RecurringConfirmModal({
+export function OneTimePurchaseConfirmModal({
   visible,
   tokenAmount,
-  frequency,
   onConfirm,
   onCancel,
-  getFrequencyLabel,
-}: RecurringConfirmModalProps) {
-  const tokens = parseInt(tokenAmount) || 1;
-  const costPerPurchase = tokens * TOKEN_PRICE;
+}: OneTimePurchaseConfirmModalProps) {
+  const tokens = parseInt(tokenAmount) || 0;
+  const totalCost = tokens * TOKEN_PRICE;
 
   return (
     <Modal
@@ -31,7 +27,7 @@ export function RecurringConfirmModal({
       animationType="fade"
       onRequestClose={onCancel}
       accessible={true}
-      accessibilityLabel="Confirm recurring purchase modal"
+      accessibilityLabel="Confirm one-time purchase modal"
     >
       <TouchableOpacity 
         style={styles.overlay}
@@ -44,7 +40,7 @@ export function RecurringConfirmModal({
           onPress={(e) => e.stopPropagation()}
         >
           <View style={styles.header}>
-            <Text style={styles.title}>Confirm Recurring Purchase</Text>
+            <Text style={styles.title}>Confirm Token Purchase</Text>
             <TouchableOpacity
               onPress={onCancel}
               style={styles.closeButton}
@@ -57,31 +53,38 @@ export function RecurringConfirmModal({
           </View>
           
           <Text style={styles.subtitle}>
-            You're about to set up a recurring purchase that will automatically charge your payment method.
+            You're about to purchase tokens. This is a one-time purchase that will be charged immediately.
           </Text>
 
           <View style={styles.details}>
             <View style={styles.detailRow}>
               <View style={styles.detailLabelContainer}>
                 <MaterialIcons name="shopping-cart" size={18} color={colors.accent} />
-                <Text style={styles.detailLabel}>Tokens per Purchase</Text>
+                <Text style={styles.detailLabel}>Tokens</Text>
               </View>
-              <Text style={styles.detailValue}>{tokens} Tokens</Text>
+              <Text style={styles.detailValue}>{tokens} Token{tokens !== 1 ? "s" : ""}</Text>
             </View>
             <View style={styles.detailRow}>
               <View style={styles.detailLabelContainer}>
-                <MaterialIcons name="repeat" size={18} color={colors.accent} />
-                <Text style={styles.detailLabel}>Frequency</Text>
+                <MaterialIcons name="attach-money" size={18} color={colors.accent} />
+                <Text style={styles.detailLabel}>Price per Token</Text>
               </View>
-              <Text style={styles.detailValue}>{getFrequencyLabel(frequency)}</Text>
+              <Text style={styles.detailValue}>${TOKEN_PRICE.toFixed(2)}</Text>
             </View>
             <View style={[styles.detailRow, styles.lastDetailRow]}>
               <View style={styles.detailLabelContainer}>
-                <MaterialIcons name="attach-money" size={18} color={colors.accent} />
-                <Text style={styles.detailLabel}>Cost per Purchase</Text>
+                <MaterialIcons name="receipt" size={18} color={colors.accent} />
+                <Text style={styles.detailLabel}>Total Cost</Text>
               </View>
-              <Text style={styles.detailValueHighlight}>${costPerPurchase.toFixed(2)}</Text>
+              <Text style={styles.detailValueHighlight}>${totalCost.toFixed(2)}</Text>
             </View>
+          </View>
+
+          <View style={styles.warningBox}>
+            <MaterialIcons name="info" size={20} color="#ff9800" />
+            <Text style={styles.warningText}>
+              Token purchases are final and non-refundable. You will receive a certificate documenting your purchase.
+            </Text>
           </View>
 
           <View style={styles.actions}>
@@ -90,7 +93,7 @@ export function RecurringConfirmModal({
               style={styles.cancelButton}
               accessible={true}
               accessibilityRole="button"
-              accessibilityLabel="Cancel recurring purchase setup"
+              accessibilityLabel="Cancel purchase"
             >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
@@ -99,9 +102,9 @@ export function RecurringConfirmModal({
               style={styles.confirmButton}
               accessible={true}
               accessibilityRole="button"
-              accessibilityLabel="Confirm recurring purchase setup"
+              accessibilityLabel="Confirm purchase"
             >
-              <Text style={styles.confirmButtonText}>Confirm</Text>
+              <Text style={styles.confirmButtonText}>Confirm Purchase</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -158,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary.bg,
     borderRadius: borderRadius.md,
     padding: spacing.lg,
-    marginBottom: spacing.xl,
+    marginBottom: spacing.lg,
     borderWidth: 1,
     borderColor: "rgba(186, 153, 136, 0.2)",
   },
@@ -196,6 +199,23 @@ const styles = StyleSheet.create({
     fontWeight: typography.fontWeight.bold,
     color: colors.accent,
   },
+  warningBox: {
+    backgroundColor: "rgba(255, 152, 0, 0.1)",
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    marginBottom: spacing.xl,
+    borderWidth: 1,
+    borderColor: "rgba(255, 152, 0, 0.3)",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: spacing.sm,
+  },
+  warningText: {
+    flex: 1,
+    fontSize: typography.fontSize.sm,
+    color: "rgba(255, 255, 255, 0.9)",
+    lineHeight: typography.lineHeight.relaxed,
+  },
   actions: {
     flexDirection: "row",
     gap: spacing.md,
@@ -232,4 +252,3 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
 });
-

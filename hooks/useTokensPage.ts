@@ -25,6 +25,7 @@ export const useTokensPage = () => {
   const [editRecurringFrequency, setEditRecurringFrequency] = useState<"weekly" | "monthly" | "bi-monthly" | "quarterly" | "annually">("monthly");
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [showRecurringConfirmModal, setShowRecurringConfirmModal] = useState(false);
+  const [showOneTimeConfirmModal, setShowOneTimeConfirmModal] = useState(false);
 
   const totalTokens = useMemo(() => {
     return mockLedgerEntries.reduce((sum, entry) => {
@@ -36,6 +37,16 @@ export const useTokensPage = () => {
   }, [mockLedgerEntries]);
 
   const handlePurchase = () => {
+    const tokens = parseInt(tokenAmount) || 0;
+    if (tokens <= 0) {
+      alert("Please enter a valid number of tokens");
+      return;
+    }
+    setShowOneTimeConfirmModal(true);
+  };
+
+  const handleConfirmOneTimePurchase = () => {
+    setShowOneTimeConfirmModal(false);
     router.push("/pages/payments/token-purchase");
   };
 
@@ -157,12 +168,14 @@ export const useTokensPage = () => {
       return next.toISOString();
     };
 
+    const nextPurchaseDate = calculateNextDate(recurringFrequency);
+
     const newRecurringPurchase: RecurringPurchase = {
       id: `recurring-${Date.now()}`,
       userId: "user1",
       tokensPerPurchase: tokens,
       frequency: recurringFrequency,
-      nextPurchaseDate: calculateNextDate(recurringFrequency),
+      nextPurchaseDate: nextPurchaseDate,
       isActive: true,
       paymentMethodId: "pm-001",
       startDate: new Date().toISOString(),
@@ -170,8 +183,16 @@ export const useTokensPage = () => {
 
     setRecurringPurchases(newRecurringPurchase);
     setShowRecurringConfirmModal(false);
-    setActiveTab("manage");
-    alert(`Recurring purchase set up successfully!`);
+    
+    // Navigate to success page instead of showing alert
+    router.push({
+      pathname: "/pages/tokens/recurring-success",
+      params: {
+        tokens: tokens.toString(),
+        frequency: recurringFrequency,
+        nextPurchaseDate: nextPurchaseDate,
+      },
+    });
   };
 
   return {
@@ -185,6 +206,7 @@ export const useTokensPage = () => {
     editRecurringFrequency, setEditRecurringFrequency,
     showCertificateModal, setShowCertificateModal,
     showRecurringConfirmModal, setShowRecurringConfirmModal,
+    showOneTimeConfirmModal, setShowOneTimeConfirmModal,
     totalTokens,
     handlePurchase,
     handleDownloadCertificate,
@@ -201,6 +223,7 @@ export const useTokensPage = () => {
     handleCancelRecurring,
     handleSetupRecurringPurchase,
     handleConfirmRecurringPurchase,
+    handleConfirmOneTimePurchase,
     mockLedgerEntries, // will be removed after API integration
     mockPurchases, // will be removed after API integration
     TOKEN_PRICE, // will be removed after API integration

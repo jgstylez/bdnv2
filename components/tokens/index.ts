@@ -7,4 +7,5 @@ export { PurchaseHistoryList } from "./PurchaseHistoryList";
 export { TokenLedgerEntries } from "./TokenLedgerEntries";
 export { CertificateModal } from "./CertificateModal";
 export { RecurringConfirmModal } from "./RecurringConfirmModal";
+export { OneTimePurchaseConfirmModal } from "./OneTimePurchaseConfirmModal";
 
