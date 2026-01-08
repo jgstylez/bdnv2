@@ -403,36 +403,37 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onMenuPress }) => {
 
           {/* Menu Button - Mobile only */}
           {!isDesktop && (
-            <Pressable
+            <TouchableOpacity
               onPress={handleMenuPress}
-              style={({ pressed }) => ({
+              style={{
                 width: 44,
                 height: 44,
                 borderRadius: 22,
-                backgroundColor: "rgba(71, 71, 71, 0.6)",
+                backgroundColor: "#474747",
                 alignItems: "center",
                 justifyContent: "center",
                 borderWidth: 1,
                 borderColor: colors.border.light,
                 zIndex: 1001,
                 elevation: 1001,
-                opacity: pressed ? 0.7 : 1,
                 ...(Platform.OS === "web" && {
                   cursor: "pointer",
                   userSelect: "none",
                 }),
-              })}
+              }}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               accessible={true}
               accessibilityLabel="Open menu"
               accessibilityRole="button"
+              accessibilityHint="Double tap to open menu"
+              activeOpacity={0.7}
             >
               <MaterialIcons
                 name="menu"
                 size={20}
                 color={colors.text.primary}
               />
-            </Pressable>
+            </TouchableOpacity>
           )}
         </View>
       </View>
