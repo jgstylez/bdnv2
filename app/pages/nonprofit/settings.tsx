@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { Organization } from '@/types/nonprofit';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { useResponsive } from '@/hooks/useResponsive';
@@ -60,6 +61,12 @@ export default function NonprofitSettings() {
   const [showCampaigns, setShowCampaigns] = useState(true);
   const [allowVolunteers, setAllowVolunteers] = useState(true);
   const [publicProfile, setPublicProfile] = useState(true);
+
+  // Media
+  const [heroImage, setHeroImage] = useState("");
+  const [imageGallery, setImageGallery] = useState<string[]>([]);
+  const [videos, setVideos] = useState<string[]>([]);
+  const [videoUrlInput, setVideoUrlInput] = useState("");
 
   const handleSave = () => {
     if (!organizationName.trim() || !email.trim()) {
@@ -354,6 +361,267 @@ export default function NonprofitSettings() {
             </View>
           </View>
         </View>
+
+        {/* Hero Image */}
+        <View style={{ marginBottom: spacing.xl }}>
+            <Text
+              style={{
+                fontSize: typography.fontSize["2xl"],
+                fontWeight: typography.fontWeight.bold,
+                color: colors.text.primary,
+                marginBottom: spacing.md,
+              }}
+            >
+              Hero Image
+            </Text>
+            <View
+              style={{
+                backgroundColor: colors.secondary.bg,
+                borderRadius: borderRadius.lg,
+                padding: spacing.lg,
+                borderWidth: 1,
+                borderColor: colors.border.light,
+              }}
+            >
+              {heroImage ? (
+                <View style={{ marginBottom: spacing.md }}>
+                  <Image
+                    source={{ uri: heroImage }}
+                    style={{
+                      width: "100%",
+                      height: 200,
+                      borderRadius: borderRadius.md,
+                      backgroundColor: colors.primary.bg,
+                    }}
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                  />
+                  <TouchableOpacity
+                    onPress={() => setHeroImage("")}
+                    style={{
+                      marginTop: spacing.sm,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: spacing.xs,
+                    }}
+                  >
+                    <MaterialIcons name="delete" size={18} color={colors.status.error} />
+                    <Text style={{ fontSize: typography.fontSize.sm, color: colors.status.error }}>
+                      Remove Image
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+              <TouchableOpacity
+                onPress={() => {
+                  // TODO: Open image picker
+                  Alert.alert("Image Picker", "Image picker will be implemented");
+                }}
+                style={{
+                  borderWidth: 2,
+                  borderStyle: "dashed",
+                  borderColor: colors.border.light,
+                  borderRadius: borderRadius.md,
+                  padding: spacing.xl,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: heroImage ? "transparent" : colors.primary.bg,
+                }}
+              >
+                <MaterialIcons name="add-photo-alternate" size={32} color={colors.text.tertiary} />
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.base,
+                    color: colors.text.secondary,
+                    marginTop: spacing.sm,
+                  }}
+                >
+                  {heroImage ? "Change Hero Image" : "Upload Hero Image"}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.sm,
+                    color: colors.text.tertiary,
+                    marginTop: spacing.xs,
+                  }}
+                >
+                  Recommended: 1920x1080px
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+        {/* Image Gallery */}
+        <View style={{ marginBottom: spacing.xl }}>
+            <Text
+              style={{
+                fontSize: typography.fontSize["2xl"],
+                fontWeight: typography.fontWeight.bold,
+                color: colors.text.primary,
+                marginBottom: spacing.md,
+              }}
+            >
+              Image Gallery
+            </Text>
+            <View
+              style={{
+                backgroundColor: colors.secondary.bg,
+                borderRadius: borderRadius.lg,
+                padding: spacing.lg,
+                borderWidth: 1,
+                borderColor: colors.border.light,
+              }}
+            >
+              {imageGallery.length > 0 && (
+                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.md, marginBottom: spacing.md }}>
+                  {imageGallery.map((image, index) => (
+                    <View key={index} style={{ position: "relative", width: 100, height: 100 }}>
+                      <Image
+                        source={{ uri: image }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: borderRadius.md,
+                          backgroundColor: colors.primary.bg,
+                        }}
+                        contentFit="cover"
+                        cachePolicy="memory-disk"
+                      />
+                      <TouchableOpacity
+                        onPress={() => setImageGallery(imageGallery.filter((_, i) => i !== index))}
+                        style={{
+                          position: "absolute",
+                          top: -8,
+                          right: -8,
+                          backgroundColor: colors.status.error,
+                          borderRadius: 12,
+                          width: 24,
+                          height: 24,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <MaterialIcons name="close" size={16} color={colors.text.primary} />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              )}
+              <TouchableOpacity
+                onPress={() => {
+                  // TODO: Open image picker
+                  Alert.alert("Image Picker", "Image picker will be implemented");
+                }}
+                style={{
+                  borderWidth: 2,
+                  borderStyle: "dashed",
+                  borderColor: colors.border.light,
+                  borderRadius: borderRadius.md,
+                  padding: spacing.lg,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: colors.primary.bg,
+                }}
+              >
+                <MaterialIcons name="add-photo-alternate" size={24} color={colors.text.tertiary} />
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.sm,
+                    color: colors.text.secondary,
+                    marginTop: spacing.xs,
+                  }}
+                >
+                  Add Images
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+        {/* Videos */}
+        <View style={{ marginBottom: spacing.xl }}>
+            <Text
+              style={{
+                fontSize: typography.fontSize["2xl"],
+                fontWeight: typography.fontWeight.bold,
+                color: colors.text.primary,
+                marginBottom: spacing.md,
+              }}
+            >
+              Videos
+            </Text>
+            <View
+              style={{
+                backgroundColor: colors.secondary.bg,
+                borderRadius: borderRadius.lg,
+                padding: spacing.lg,
+                borderWidth: 1,
+                borderColor: colors.border.light,
+              }}
+            >
+              {videos.length > 0 && (
+                <View style={{ gap: spacing.md, marginBottom: spacing.md }}>
+                  {videos.map((video, index) => (
+                    <View
+                      key={index}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        backgroundColor: colors.primary.bg,
+                        padding: spacing.md,
+                        borderRadius: borderRadius.md,
+                      }}
+                    >
+                      <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, flex: 1 }}>
+                        <MaterialIcons name="play-circle-filled" size={24} color={colors.accent} />
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.sm,
+                            color: colors.text.secondary,
+                            flex: 1,
+                          }}
+                          numberOfLines={1}
+                        >
+                          {video}
+                        </Text>
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => setVideos(videos.filter((_, i) => i !== index))}
+                        style={{ padding: spacing.xs }}
+                      >
+                        <MaterialIcons name="delete" size={20} color={colors.status.error} />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              )}
+              <View style={{ flexDirection: "row", gap: spacing.sm }}>
+                <FormInput
+                  value={videoUrlInput}
+                  onChangeText={setVideoUrlInput}
+                  placeholder="Enter video URL (YouTube, Vimeo, etc.)"
+                  style={{ flex: 1 }}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    if (videoUrlInput.trim()) {
+                      setVideos([...videos, videoUrlInput.trim()]);
+                      setVideoUrlInput("");
+                    }
+                  }}
+                  style={{
+                    backgroundColor: colors.accent,
+                    paddingHorizontal: spacing.lg,
+                    paddingVertical: spacing.md,
+                    borderRadius: borderRadius.md,
+                    justifyContent: "center",
+                  }}
+                >
+                  <MaterialIcons name="add" size={20} color={colors.text.primary} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
 
         {/* Organization Preferences */}
         <View style={{ marginBottom: spacing.xl }}>

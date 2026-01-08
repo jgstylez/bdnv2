@@ -18,6 +18,7 @@ import {
   getStateFieldLabel,
   getPostalCodeLabel,
 } from '../../lib/international';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface InternationalAddressFormProps {
   value: Partial<InternationalAddress>;
@@ -38,6 +39,7 @@ export function InternationalAddressForm({
   editable = true,
   style,
 }: InternationalAddressFormProps) {
+  const { isMobile } = useResponsive();
   const [address, setAddress] = useState<Partial<InternationalAddress>>({
     country: defaultCountry,
     ...value,
@@ -144,8 +146,8 @@ export function InternationalAddressForm({
       </View>
 
       {/* City and State/Province Row */}
-      <View style={{ flexDirection: "row", gap: 12 }}>
-        <View style={{ flex: 2 }}>
+      <View style={{ flexDirection: isMobile ? "column" : "row", gap: 12 }}>
+        <View style={{ flex: isMobile ? undefined : 2 }}>
           <Text
             style={{
               fontSize: 14,
@@ -180,7 +182,7 @@ export function InternationalAddressForm({
         </View>
 
         {needsState && (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: isMobile ? undefined : 1 }}>
             <Text
               style={{
                 fontSize: 14,
@@ -217,8 +219,8 @@ export function InternationalAddressForm({
       </View>
 
       {/* Postal Code and Country Row */}
-      <View style={{ flexDirection: "row", gap: 12 }}>
-        <View style={{ flex: 1 }}>
+      <View style={{ flexDirection: isMobile ? "column" : "row", gap: 12 }}>
+        <View style={{ flex: isMobile ? undefined : 1 }}>
           <Text
             style={{
               fontSize: 14,
@@ -258,7 +260,7 @@ export function InternationalAddressForm({
         </View>
 
         {showCountrySelector && (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: isMobile ? undefined : 1 }}>
             <Text
               style={{
                 fontSize: 14,

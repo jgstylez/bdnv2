@@ -1,5 +1,5 @@
 import { Currency } from "../types/wallet";
-import { InternationalAddress, CountryCode } from "../types/international";
+import { InternationalAddress, CountryCode, getCountryInfo } from "../types/international";
 
 export const formatCurrency = (amount: number, currency: Currency) => {
     // Simplified to USD only for now to avoid errors
@@ -32,4 +32,28 @@ export function convertToInternationalAddress(legacyAddress: {
     postalCode: legacyAddress.postalCode || legacyAddress.zip || legacyAddress.zipCode || '',
     country: legacyAddress.country || 'US',
   };
+}
+
+/**
+ * Check if a country requires a state/province field
+ */
+export function requiresStateField(countryCode: CountryCode): boolean {
+  const countryInfo = getCountryInfo(countryCode);
+  return countryInfo?.requiresState ?? false;
+}
+
+/**
+ * Get the label for the state/province field based on country
+ */
+export function getStateFieldLabel(countryCode: CountryCode): string {
+  const countryInfo = getCountryInfo(countryCode);
+  return countryInfo?.stateLabel ?? "State/Province";
+}
+
+/**
+ * Get the label for the postal code field based on country
+ */
+export function getPostalCodeLabel(countryCode: CountryCode): string {
+  const countryInfo = getCountryInfo(countryCode);
+  return countryInfo?.postalCodeLabel ?? "Postal Code";
 }

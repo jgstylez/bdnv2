@@ -146,7 +146,7 @@ export default function BusinessSettings() {
       >
         {/* Hero Section */}
         <HeroSection
-          title="Business Settings"
+          title="Settings"
           subtitle="Manage your business information, preferences, and payment options"
         />
 
