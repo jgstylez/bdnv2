@@ -42,6 +42,7 @@ export interface BusinessOrder {
 
 interface CartContextType {
   items: CartItem[];
+  savedItems: CartItem[]; // Items saved for later
   itemCount: number;
   businessOrders: BusinessOrder[]; // Items grouped by business
   addToCart: (product: Product, quantity?: number, variantId?: string) => Promise<void>;
@@ -49,6 +50,9 @@ interface CartContextType {
   updateQuantity: (productId: string, quantity: number, variantId?: string) => Promise<void>;
   clearCart: () => Promise<void>;
   clearBusinessCart: (merchantId: string) => Promise<void>; // Clear items from a specific business
+  saveForLater: (productId: string, variantId?: string) => Promise<void>; // Move item from cart to saved
+  moveToCart: (productId: string, variantId?: string) => Promise<void>; // Move item from saved to cart
+  removeFromSaved: (productId: string, variantId?: string) => Promise<void>; // Remove from saved items
   getSubtotal: (currency?: Currency) => number;
   getShippingTotal: (currency?: Currency) => number;
   getTotal: (currency?: Currency) => number;
@@ -63,14 +67,17 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const CART_STORAGE_KEY = "@bdn_cart";
+const SAVED_ITEMS_STORAGE_KEY = "@bdn_saved_items";
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [savedItems, setSavedItems] = useState<CartItem[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load cart from storage on mount
+  // Load cart and saved items from storage on mount
   useEffect(() => {
     loadCart();
+    loadSavedItems();
   }, []);
 
   // Save cart to storage whenever items change
@@ -80,6 +87,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items, isLoaded]);
+
+  // Save saved items to storage whenever they change
+  useEffect(() => {
+    if (isLoaded) {
+      saveSavedItems();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [savedItems, isLoaded]);
 
   const loadCart = async () => {
     try {
@@ -100,6 +115,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       await AsyncStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
     } catch (error) {
       logError("Error saving cart to storage", error, { storageKey: CART_STORAGE_KEY, itemCount: items.length });
+    }
+  };
+
+  const loadSavedItems = async () => {
+    try {
+      const savedData = await AsyncStorage.getItem(SAVED_ITEMS_STORAGE_KEY);
+      if (savedData) {
+        const parsedSaved = JSON.parse(savedData);
+        setSavedItems(parsedSaved);
+      }
+    } catch (error) {
+      logError("Error loading saved items from storage", error, { storageKey: SAVED_ITEMS_STORAGE_KEY });
+    }
+  };
+
+  const saveSavedItems = async () => {
+    try {
+      await AsyncStorage.setItem(SAVED_ITEMS_STORAGE_KEY, JSON.stringify(savedItems));
+    } catch (error) {
+      logError("Error saving saved items to storage", error, { storageKey: SAVED_ITEMS_STORAGE_KEY, itemCount: savedItems.length });
     }
   };
 
@@ -198,6 +233,66 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearBusinessCart = useCallback(async (merchantId: string) => {
     setItems((currentItems) => currentItems.filter((item) => item.merchantId !== merchantId));
+  }, []);
+
+  const saveForLater = useCallback(async (productId: string, variantId?: string) => {
+    setItems((currentItems) => {
+      const itemToSave = currentItems.find(
+        (item) => item.id === productId && item.selectedVariantId === variantId
+      );
+      
+      if (!itemToSave) return currentItems;
+
+      // Add to saved items
+      setSavedItems((currentSaved) => {
+        // Check if already saved
+        const alreadySaved = currentSaved.some(
+          (item) => item.id === productId && item.selectedVariantId === variantId
+        );
+        if (alreadySaved) return currentSaved;
+        
+        return [...currentSaved, { ...itemToSave }];
+      });
+
+      // Remove from cart
+      return currentItems.filter(
+        (item) => !(item.id === productId && item.selectedVariantId === variantId)
+      );
+    });
+  }, []);
+
+  const moveToCart = useCallback(async (productId: string, variantId?: string) => {
+    setSavedItems((currentSaved) => {
+      const itemToMove = currentSaved.find(
+        (item) => item.id === productId && item.selectedVariantId === variantId
+      );
+      
+      if (!itemToMove) return currentSaved;
+
+      // Add to cart
+      setItems((currentItems) => {
+        // Check if already in cart
+        const alreadyInCart = currentItems.some(
+          (item) => item.id === productId && item.selectedVariantId === variantId
+        );
+        if (alreadyInCart) return currentItems;
+        
+        return [...currentItems, { ...itemToMove }];
+      });
+
+      // Remove from saved
+      return currentSaved.filter(
+        (item) => !(item.id === productId && item.selectedVariantId === variantId)
+      );
+    });
+  }, []);
+
+  const removeFromSaved = useCallback(async (productId: string, variantId?: string) => {
+    setSavedItems((currentSaved) =>
+      currentSaved.filter(
+        (item) => !(item.id === productId && item.selectedVariantId === variantId)
+      )
+    );
   }, []);
 
   const getSubtotal = useCallback((currency?: Currency) => {
@@ -299,6 +394,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const value: CartContextType = {
     items,
+    savedItems,
     itemCount,
     businessOrders: businessOrdersMemo,
     addToCart,
@@ -306,6 +402,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     updateQuantity,
     clearCart,
     clearBusinessCart,
+    saveForLater,
+    moveToCart,
+    removeFromSaved,
     getSubtotal,
     getShippingTotal,
     getTotal,

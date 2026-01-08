@@ -17,10 +17,14 @@ export default function Cart() {
   const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const { 
     items: cartItems, 
+    savedItems,
     businessOrders, 
     updateQuantity, 
     removeFromCart, 
     clearBusinessCart,
+    saveForLater,
+    moveToCart,
+    removeFromSaved,
     getSubtotal, 
     getShippingTotal, 
     getTotal, 
@@ -45,6 +49,18 @@ export default function Cart() {
 
   const handleRemoveBusiness = async (merchantId: string) => {
     await clearBusinessCart(merchantId);
+  };
+
+  const handleSaveForLater = async (productId: string, variantId?: string) => {
+    await saveForLater(productId, variantId);
+  };
+
+  const handleMoveToCart = async (productId: string, variantId?: string) => {
+    await moveToCart(productId, variantId);
+  };
+
+  const handleRemoveFromSaved = async (productId: string, variantId?: string) => {
+    await removeFromSaved(productId, variantId);
   };
 
   const handleCheckout = () => {
@@ -329,6 +345,38 @@ export default function Cart() {
                         {formatCurrency(item.price * item.quantity, item.currency)}
                       </Text>
                     </View>
+                    {/* Save for Later Button */}
+                    <TouchableOpacity
+                      onPress={() => handleSaveForLater(item.id, item.selectedVariantId)}
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Save ${item.name} for later`}
+                      accessibilityHint="Double tap to save this item for later"
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: spacing.xs,
+                        marginTop: spacing.sm,
+                        paddingVertical: spacing.sm,
+                        borderRadius: borderRadius.sm,
+                        borderWidth: 1,
+                        borderColor: colors.border.light,
+                        backgroundColor: colors.primary.bg,
+                      }}
+                    >
+                      <MaterialIcons name="bookmark-border" size={16} color={colors.text.secondary} />
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.sm,
+                          fontWeight: typography.fontWeight.normal,
+                          color: colors.text.secondary,
+                        }}
+                      >
+                        Save for later
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
                     ))}
@@ -477,6 +525,148 @@ export default function Cart() {
                 </Text>
               </TouchableOpacity>
             </View>
+
+            {/* Saved for Later Section */}
+            {savedItems.length > 0 && (
+              <View style={{ marginTop: spacing.xl, marginBottom: spacing.xl }}>
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.xl,
+                    fontWeight: typography.fontWeight.bold,
+                    color: colors.text.primary,
+                    marginBottom: spacing.md,
+                  }}
+                >
+                  Saved for Later ({savedItems.length} {savedItems.length === 1 ? "item" : "items"})
+                </Text>
+                <View style={{ gap: spacing.md }}>
+                  {savedItems.map((item) => (
+                    <View
+                      key={`${item.id}-${item.selectedVariantId || "default"}`}
+                      style={{
+                        flexDirection: "row",
+                        backgroundColor: colors.secondary.bg,
+                        borderRadius: borderRadius.lg,
+                        padding: spacing.md,
+                        borderWidth: 1,
+                        borderColor: colors.border.light,
+                      }}
+                    >
+                      {/* Product Image */}
+                      <View
+                        style={{
+                          width: isMobile ? 80 : 100,
+                          height: isMobile ? 80 : 100,
+                          borderRadius: borderRadius.md,
+                          overflow: "hidden",
+                          backgroundColor: colors.secondary.bg,
+                          borderWidth: 1,
+                          borderColor: colors.border.light,
+                        }}
+                      >
+                        {item.images && item.images.length > 0 && item.images[0] ? (
+                          <Image
+                            source={{ uri: item.images[0] }}
+                            style={{ width: "100%", height: "100%" }}
+                            contentFit="cover"
+                            cachePolicy="memory-disk"
+                          />
+                        ) : (
+                          <ProductPlaceholder width="100%" height={isMobile ? 80 : 100} aspectRatio={1} />
+                        )}
+                      </View>
+
+                      {/* Product Details */}
+                      <View style={{ flex: 1, paddingLeft: spacing.md, justifyContent: "space-between" }}>
+                        <View>
+                          <Text
+                            numberOfLines={2}
+                            style={{
+                              fontSize: typography.fontSize.base,
+                              fontWeight: typography.fontWeight.semibold,
+                              color: colors.text.primary,
+                              marginBottom: spacing.xs,
+                            }}
+                          >
+                            {item.name}
+                          </Text>
+                          {item.selectedVariant && (
+                            <Text
+                              style={{
+                                fontSize: typography.fontSize.sm,
+                                color: colors.text.secondary,
+                                marginBottom: spacing.xs,
+                              }}
+                            >
+                              {item.selectedVariant.name}
+                            </Text>
+                          )}
+                          <Text
+                            style={{
+                              fontSize: typography.fontSize.base,
+                              fontWeight: typography.fontWeight.bold,
+                              color: colors.accent,
+                            }}
+                          >
+                            {formatCurrency(item.price, item.currency)} each
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: typography.fontSize.sm,
+                              color: colors.text.secondary,
+                              marginTop: spacing.xs,
+                            }}
+                          >
+                            Quantity: {item.quantity}
+                          </Text>
+                        </View>
+
+                        {/* Actions */}
+                        <View style={{ flexDirection: "row", gap: spacing.sm, marginTop: spacing.md }}>
+                          <TouchableOpacity
+                            onPress={() => handleMoveToCart(item.id, item.selectedVariantId)}
+                            accessible={true}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Move ${item.name} to cart`}
+                            style={{
+                              flex: 1,
+                              backgroundColor: colors.accent,
+                              paddingVertical: spacing.sm,
+                              borderRadius: borderRadius.md,
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: typography.fontSize.sm,
+                                fontWeight: typography.fontWeight.semibold,
+                                color: colors.textColors.onAccent,
+                              }}
+                            >
+                              Move to Cart
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => handleRemoveFromSaved(item.id, item.selectedVariantId)}
+                            accessible={true}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Remove ${item.name} from saved`}
+                            style={{
+                              padding: spacing.sm,
+                              borderRadius: borderRadius.md,
+                              borderWidth: 1,
+                              borderColor: colors.border.light,
+                            }}
+                          >
+                            <MaterialIcons name="close" size={20} color={colors.text.secondary} />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
           </>
         )}
       </ScrollView>

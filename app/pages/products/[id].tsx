@@ -17,6 +17,7 @@ import SubscriptionBoxSelector from '@/components/subscription/SubscriptionBoxSe
 import { SubscriptionFrequency, SubscriptionDuration, getFrequencyLabel } from '@/types/subscription-box';
 import VariantSelector from '@/components/products/VariantSelector';
 import { mockProducts as centralizedMockProducts, getMockProduct } from '@/data/mocks/products';
+import { showSuccessToast, showErrorToast } from '@/lib/toast';
 
 export default function ProductDetail() {
   const router = useRouter();
@@ -90,7 +91,7 @@ export default function ProductDetail() {
   const handleAddToCart = async () => {
     // Validate variant selection
     if (variantRequired) {
-      Alert.alert("Selection Required", "Please select all variant options before adding to cart.");
+      showErrorToast("Selection Required", "Please select all variant options before adding to cart.");
       return;
     }
 
@@ -99,26 +100,34 @@ export default function ProductDetail() {
       const cartItem = getCartItem(product.id, selectedVariantId);
       const currentCartQuantity = cartItem?.quantity || 0;
       if (currentCartQuantity + quantity > currentInventory) {
-        Alert.alert(
+        showErrorToast(
           "Insufficient Inventory",
           `Only ${currentInventory} items available. Please adjust your quantity.`
         );
         return;
       }
     } else if (product.productType === "physical" && currentInventory <= 0) {
-      Alert.alert("Out of Stock", "This item is currently out of stock.");
+      showErrorToast("Out of Stock", "This item is currently out of stock.");
       return;
     }
 
     setIsAddingToCart(true);
     try {
       await addToCart(product, quantity, selectedVariantId);
-      Alert.alert("Success", "Item added to cart!", [
-        { text: "OK", onPress: () => router.push("/pages/cart") },
-        { text: "Continue Shopping", style: "cancel" },
-      ]);
+      // Show success toast with option to view cart
+      showSuccessToast(
+        "Added to Cart",
+        `${quantity}x ${product.name}${selectedVariant ? ` (${selectedVariant.name})` : ""}`,
+        {
+          position: "bottom",
+          visibilityTime: 4000,
+          onPress: () => {
+            router.push("/pages/cart");
+          },
+        }
+      );
     } catch (error) {
-      Alert.alert("Error", "Failed to add item to cart. Please try again.");
+      showErrorToast("Error", "Failed to add item to cart. Please try again.");
     } finally {
       setIsAddingToCart(false);
     }
@@ -334,7 +343,9 @@ export default function ProductDetail() {
                         style={{ width: "100%", height: "100%" }}
                         contentFit="cover"
                         cachePolicy="memory-disk"
-                        accessible={false}
+                        {...(Platform.OS !== 'web' && {
+                          accessible: false,
+                        })}
                         onError={() => {
                           setThumbnailErrors((prev) => new Set(prev).add(index));
                           if (selectedImageIndex === index) {
@@ -854,7 +865,7 @@ export default function ProductDetail() {
                             ? "Select options to add to cart"
                             : currentInventory <= 0 && product.productType === "physical"
                               ? "Out of stock"
-                              : `Add ${product.name} to cart`
+                              : `Add ${product.name} to cart for ${formatCurrency(finalTotal, product.currency)}`
                       }
                       accessibilityHint="Double tap to add this product to your cart"
                       accessibilityState={{ disabled: isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical") }}
@@ -871,21 +882,35 @@ export default function ProductDetail() {
                         opacity: isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical") ? 0.6 : 1,
                       }}
                     >
-                      <Text
-                        style={{
-                          fontSize: typography.fontSize.lg,
-                          fontWeight: typography.fontWeight.semibold,
-                          color: colors.text.primary,
-                        }}
-                      >
-                        {isAddingToCart
-                          ? "Adding..."
-                          : variantRequired
-                            ? "Select Options"
-                            : currentInventory <= 0 && product.productType === "physical"
-                              ? "Out of Stock"
-                              : "Add to Cart"}
-                      </Text>
+                      <View style={{ alignItems: "center" }}>
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.lg,
+                            fontWeight: typography.fontWeight.semibold,
+                            color: colors.text.primary,
+                          }}
+                        >
+                          {isAddingToCart
+                            ? "Adding..."
+                            : variantRequired
+                              ? "Select Options"
+                              : currentInventory <= 0 && product.productType === "physical"
+                                ? "Out of Stock"
+                                : "Add to Cart"}
+                        </Text>
+                        {!isAddingToCart && !variantRequired && !(currentInventory <= 0 && product.productType === "physical") && (
+                          <Text
+                            style={{
+                              fontSize: typography.fontSize.sm,
+                              fontWeight: typography.fontWeight.normal,
+                              color: colors.text.secondary,
+                              marginTop: spacing.xs / 2,
+                            }}
+                          >
+                            {formatCurrency(finalTotal, product.currency)}
+                          </Text>
+                        )}
+                      </View>
                     </TouchableOpacity>
                   </>
                 )}

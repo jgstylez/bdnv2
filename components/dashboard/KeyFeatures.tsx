@@ -23,7 +23,7 @@ const features = [
     title: 'Gift Cards',
     description: 'Send gift cards to loved ones',
     icon: 'card-giftcard' as const,
-    onPress: (router: any) => router.push('/(tabs)/pay'),
+    onPress: (router: any) => router.push('/pages/payments/buy-gift-card'),
     color: '#e91e63',
   },
   {

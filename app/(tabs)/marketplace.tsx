@@ -162,7 +162,9 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                         style={{ width: "100%", height: "100%" }}
                         contentFit="cover"
                         cachePolicy="memory-disk"
-                        accessible={false}
+                        {...(Platform.OS !== 'web' && {
+                          accessible: false,
+                        })}
                         onError={() => {
                           setImageErrors((prev) => new Set(prev).add(product.id));
                         }}
@@ -588,7 +590,9 @@ export default function Marketplace() {
                         style={{ width: "100%", height: "100%" }}
                         contentFit="cover"
                         cachePolicy="memory-disk"
-                        accessible={false}
+                        {...(Platform.OS !== 'web' && {
+                          accessible: false,
+                        })}
                         onError={() => {
                           setImageErrors((prev) => new Set(prev).add(product.id));
                         }}

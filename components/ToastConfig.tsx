@@ -17,16 +17,16 @@ export const toastConfig = {
     >
       <View style={[styles.toast, styles.successToast]}>
         <View style={[styles.iconContainer, styles.successIcon]}>
-          <MaterialIcons name="check-circle" size={24} color={colors.status.success} />
+          <MaterialIcons name="check-circle" size={24} color="#ffffff" />
         </View>
         <View style={styles.content}>
           {text1 && (
-            <Text style={styles.text1} numberOfLines={1}>
+            <Text style={styles.successText1} numberOfLines={1}>
               {text1}
             </Text>
           )}
           {text2 && (
-            <Text style={styles.text2} numberOfLines={2}>
+            <Text style={styles.successText2} numberOfLines={2}>
               {text2}
             </Text>
           )}
@@ -122,21 +122,23 @@ const styles = StyleSheet.create({
   toast: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.secondary.bg,
+    backgroundColor: colors.background,
     borderRadius: borderRadius.md,
     padding: spacing.md,
     borderWidth: 1,
-    borderColor: colors.border.light,
+    borderColor: colors.border,
     minHeight: 56,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 12,
   },
   successToast: {
+    backgroundColor: colors.status.success, // Vibrant green background (#4bb858)
     borderLeftWidth: 4,
-    borderLeftColor: colors.status.success,
+    borderLeftColor: '#6fcf7a', // Lighter green accent border
+    borderWidth: 0, // Remove default border for success toast
   },
   errorToast: {
     borderLeftWidth: 4,
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
     marginRight: spacing.md,
   },
   successIcon: {
-    backgroundColor: colors.status.successLight,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)', // Semi-transparent white for icon background
   },
   errorIcon: {
     backgroundColor: colors.status.errorLight,
@@ -183,6 +185,18 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.sm,
     fontWeight: typography.fontWeight.normal,
     color: colors.text.secondary,
+    lineHeight: typography.lineHeight.normal,
+  },
+  successText1: {
+    fontSize: typography.fontSize.base,
+    fontWeight: typography.fontWeight.bold,
+    color: '#ffffff', // White text for visibility on green background
+    marginBottom: spacing.xs / 2,
+  },
+  successText2: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.normal,
+    color: 'rgba(255, 255, 255, 0.9)', // Slightly transparent white for subtitle
     lineHeight: typography.lineHeight.normal,
   },
 });
