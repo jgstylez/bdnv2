@@ -610,7 +610,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           <Text
             style={{
               fontSize: typography.sizes.md,
-              color: colors.accent,
+              color: colors.textColors.accent,
               fontWeight: typography.weights.semibold as any,
             }}
           >
@@ -620,6 +620,9 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       </View>
       <ScrollView
         horizontal
+        scrollEventThrottle={16}
+        nestedScrollEnabled={Platform.OS === 'android'}
+        bounces={Platform.OS !== 'web'}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: spacing.lg, paddingRight: spacing.lg }}
       >
@@ -818,7 +821,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   <Text
                     style={{
                       fontSize: typography.sizes.xs,
-                      color: colors.accent,
+                      color: colors.textColors.accent,
                       fontWeight: typography.weights.semibold as any,
                     }}
                   >
@@ -863,7 +866,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                     style={{
                       fontSize: typography.sizes.lg,
                       fontWeight: typography.weights.bold as any,
-                      color: colors.accent,
+                      color: colors.textColors.accent,
                     }}
                   >
                     ${product.price.toFixed(2)}
@@ -947,6 +950,10 @@ export default function Marketplace() {
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <ScrollView
+        scrollEventThrottle={16}
+        nestedScrollEnabled={Platform.OS === 'android'}
+        bounces={Platform.OS !== 'web'}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
@@ -962,6 +969,9 @@ export default function Marketplace() {
         {/* Category Filters */}
         <ScrollView
           horizontal
+          scrollEventThrottle={16}
+          nestedScrollEnabled={Platform.OS === 'android'}
+          bounces={Platform.OS !== 'web'}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
             gap: spacing.sm,
@@ -1160,7 +1170,7 @@ export default function Marketplace() {
                       <Text
                         style={{
                           fontSize: typography.sizes.xs,
-                          color: colors.accent,
+                          color: colors.textColors.accent,
                           fontWeight: typography.weights.semibold as any,
                         }}
                       >

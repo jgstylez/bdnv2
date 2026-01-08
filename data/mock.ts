@@ -265,37 +265,37 @@ export const mockBusinesses: Record<string, any> = {
     id: "1",
     name: "Soul Food Kitchen",
     category: "Restaurant",
-    imageUrl: null,
+    imageUrl: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=600&fit=crop",
   },
   "2": {
     id: "2",
     name: "Black Excellence Barbershop",
     category: "Services",
-    imageUrl: null,
+    imageUrl: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&h=600&fit=crop",
   },
   "3": {
     id: "3",
     name: "African Heritage Books",
     category: "Retail",
-    imageUrl: null,
+    imageUrl: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&h=600&fit=crop",
   },
   "4": {
     id: "4",
     name: "Black History E-Books",
     category: "Digital",
-    imageUrl: null,
+    imageUrl: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=800&h=600&fit=crop",
   },
   "5": {
     id: "5",
     name: "Crown Beauty Salon",
     category: "Beauty & Wellness",
-    imageUrl: null,
+    imageUrl: "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&h=600&fit=crop",
   },
   "6": {
     id: "6",
     name: "Urban Tech Solutions",
     category: "Technology",
-    imageUrl: null,
+    imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
   },
 };
 

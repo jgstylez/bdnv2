@@ -7,4 +7,6 @@ export * from "./events";
 export * from "./wallets";
 export * from "./campaigns";
 export * from "./organizations";
+export * from "./products";
+export * from "./businesses";
 

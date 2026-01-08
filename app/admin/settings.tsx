@@ -7,6 +7,7 @@ import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, typography, borderRadius } from '@/constants/theme';
 import { FeatureFlags, featureFlagMetadata } from '@/types/feature-flags';
 import { getFeatureFlags, updateFeatureFlags } from '@/lib/feature-flags';
+import { logger } from '@/lib/logger';
 
 const settingsCategories = [
   {
@@ -149,7 +150,7 @@ export default function AdminSettings() {
       const flags = await getFeatureFlags();
       setFeatureFlags(flags);
     } catch (error) {
-      console.error('Failed to load feature flags:', error);
+      logger.error('Failed to load feature flags', error);
       Alert.alert('Error', 'Failed to load feature flags. Please try again.');
     } finally {
       setFeatureFlagsLoading(false);
@@ -171,7 +172,7 @@ export default function AdminSettings() {
       Alert.alert('Success', 'Feature flags saved successfully');
       setSelectedCategory(null);
     } catch (error) {
-      console.error('Failed to save feature flags:', error);
+      logger.error('Failed to save feature flags', error);
       Alert.alert('Error', 'Failed to save feature flags. Please try again.');
     } finally {
       setFeatureFlagsSaving(false);

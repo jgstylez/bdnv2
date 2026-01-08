@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 48,
     fontWeight: "800",
-    color: colors.accent,
+    color: colors.textColors.accent,
     letterSpacing: -1,
   },
   mobileAmount: {

@@ -486,7 +486,7 @@ export default function SubscriptionBoxSelector({
             <Text
               style={{
                 fontSize: typography.fontSize.sm,
-                color: colors.status.success,
+                color: colors.textColors.success,
               }}
             >
               Discount ({plan.discountPercentage}%)
@@ -494,7 +494,7 @@ export default function SubscriptionBoxSelector({
             <Text
               style={{
                 fontSize: typography.fontSize.sm,
-                color: colors.status.success,
+                color: colors.textColors.success,
                 fontWeight: typography.fontWeight.bold,
               }}
             >
@@ -587,11 +587,11 @@ export default function SubscriptionBoxSelector({
             borderRadius: borderRadius.sm,
           }}
         >
-          <MaterialIcons name="check-circle" size={16} color={colors.status.success} />
+          <MaterialIcons name="check-circle" size={16} color={colors.textColors.success} />
           <Text
             style={{
               fontSize: typography.fontSize.xs,
-              color: colors.status.success,
+              color: colors.textColors.success,
               marginLeft: spacing.xs,
             }}
           >

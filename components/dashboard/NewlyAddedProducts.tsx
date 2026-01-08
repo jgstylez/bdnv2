@@ -49,8 +49,8 @@ export function NewlyAddedProducts({ isMobile }: NewlyAddedProductsProps) {
                   cachePolicy="memory-disk"
                   transition={200}
                   placeholderContentFit="cover"
-                  onError={(error) => {
-                    console.log('Image load error for product:', product.name, error);
+                  onError={() => {
+                    // Image load error - silently fail, placeholder will show
                   }}
                 />
               ) : (

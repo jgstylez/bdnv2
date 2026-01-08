@@ -13,6 +13,7 @@ import { BlurView } from "expo-blur";
 import { navigationMenu, NavGroup, NavItem } from "@/config/navigation";
 import { useFeatureFlags } from "@/hooks/useFeatureFlags";
 import { filterNavigationByFeatureFlags } from "@/lib/navigation-utils";
+import { logger } from "@/lib/logger";
 
 export const Sidebar: React.FC = () => {
   const router = useRouter();
@@ -370,7 +371,7 @@ export const Sidebar: React.FC = () => {
                         try {
                           router.push(item.href as any);
                         } catch (error) {
-                          console.error(`Navigation error to ${item.href}:`, error);
+                          logger.error(`Navigation error to ${item.href}`, error);
                           navigatingRef.current = false;
                         }
                       };

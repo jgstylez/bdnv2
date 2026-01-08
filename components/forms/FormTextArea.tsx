@@ -61,7 +61,7 @@ export function FormTextArea({
         <Text
           style={{
             fontSize: typography.fontSize.xs,
-            color: colors.status.error,
+            color: colors.textColors.error,
           }}
         >
           {error}

@@ -22,7 +22,7 @@ export const mockCampaigns: Record<string, PayItForward> = {
     startDate: "2024-02-01T00:00:00Z",
     endDate: "2024-03-01T00:00:00Z",
     tags: ["food", "community", "holiday"],
-    imageUrl: null,
+    imageUrl: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=400&fit=crop",
     createdAt: "2024-02-01T00:00:00Z",
   },
 };
@@ -47,7 +47,7 @@ export const mockCampaignsList: PayItForward[] = [
     startDate: "2024-02-01T00:00:00Z",
     endDate: "2024-03-01T00:00:00Z",
     tags: ["food", "community", "holiday"],
-    imageUrl: null,
+    imageUrl: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=400&fit=crop",
     createdAt: "2024-02-01T00:00:00Z",
   },
 ];
