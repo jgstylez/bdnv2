@@ -32,6 +32,7 @@ export default function ProductDetail() {
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [isSubscriptionEnabled, setIsSubscriptionEnabled] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [thumbnailErrors, setThumbnailErrors] = useState<Set<number>>(new Set());
 
   // Use centralized mock products - they now include all products with variants
   const productId = id || "prod-1";
@@ -66,7 +67,8 @@ export default function ProductDetail() {
   }
   const images = product.images || [];
   const hasMultipleImages = images.length > 1;
-  const hasValidImage = images.length > 0 && images[selectedImageIndex] && !imageError;
+  const currentImage = images[selectedImageIndex];
+  const hasValidImage = currentImage && currentImage.trim() !== "" && !imageError;
 
   // Get selected variant
   const selectedVariant = selectedVariantId
@@ -302,6 +304,12 @@ export default function ProductDetail() {
                     onPress={() => {
                       setSelectedImageIndex(index);
                       setImageError(false);
+                      // Clear thumbnail error when selecting a new image
+                      setThumbnailErrors((prev) => {
+                        const newSet = new Set(prev);
+                        newSet.delete(index);
+                        return newSet;
+                      });
                     }}
                     accessible={true}
                     accessibilityRole="button"
@@ -320,7 +328,7 @@ export default function ProductDetail() {
                       backgroundColor: colors.secondary.bg,
                     }}
                   >
-                    {image ? (
+                    {image && image.trim() !== "" && !thumbnailErrors.has(index) ? (
                       <Image
                         source={{ uri: image }}
                         style={{ width: "100%", height: "100%" }}
@@ -328,6 +336,7 @@ export default function ProductDetail() {
                         cachePolicy="memory-disk"
                         accessible={false}
                         onError={() => {
+                          setThumbnailErrors((prev) => new Set(prev).add(index));
                           if (selectedImageIndex === index) {
                             setImageError(true);
                           }
@@ -706,76 +715,160 @@ export default function ProductDetail() {
               </View>
             )}
 
-            {/* Action Buttons */}
-            <View style={{ flexDirection: "row", gap: spacing.md, marginTop: spacing.lg }}>
-              {product.productType === "service" ? (
-                <TouchableOpacity
-                  onPress={handleBookService}
-                  style={{
-                    flex: 1,
-                    backgroundColor: colors.accent,
-                    paddingVertical: spacing.md + 2,
-                    borderRadius: borderRadius.md,
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.lg,
-                      fontWeight: typography.fontWeight.bold,
-                      color: colors.textColors.onAccent,
-                    }}
-                  >
-                    Book Service
-                  </Text>
-                </TouchableOpacity>
-              ) : product.productType === "digital" ? (
-                <>
+            {/* Action Buttons - Only show when subscription is disabled */}
+            {!isSubscriptionEnabled && (
+              <View style={{ flexDirection: "row", gap: spacing.md, marginTop: spacing.lg }}>
+                {product.productType === "service" ? (
                   <TouchableOpacity
-                    onPress={handleBuyNow}
+                    onPress={handleBookService}
                     style={{
                       flex: 1,
                       backgroundColor: colors.accent,
                       paddingVertical: spacing.md + 2,
-                      paddingHorizontal: paddingHorizontal,
                       borderRadius: borderRadius.md,
                       alignItems: "center",
                     }}
                   >
-                    <View style={{ alignItems: "center" }}>
-                      <Text
-                        style={{
-                          fontSize: typography.fontSize.lg,
-                          fontWeight: typography.fontWeight.bold,
-                          color: colors.textColors.onAccent,
-                        }}
-                      >
-                        Buy Now
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: typography.fontSize.sm,
-                          fontWeight: typography.fontWeight.normal,
-                          color: colors.textColors.onAccent,
-                          opacity: 0.9,
-                          marginTop: spacing.xs / 2,
-                        }}
-                      >
-                        {formatCurrency(finalTotal, product.currency)}
-                      </Text>
-                    </View>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.lg,
+                        fontWeight: typography.fontWeight.bold,
+                        color: colors.textColors.onAccent,
+                      }}
+                    >
+                      Book Service
+                    </Text>
                   </TouchableOpacity>
-                  {product.downloadUrl && (
+                ) : product.productType === "digital" ? (
+                  <>
                     <TouchableOpacity
-                      onPress={handleDownload}
+                      onPress={handleBuyNow}
+                      style={{
+                        flex: 1,
+                        backgroundColor: colors.accent,
+                        paddingVertical: spacing.md + 2,
+                        paddingHorizontal: paddingHorizontal,
+                        borderRadius: borderRadius.md,
+                        alignItems: "center",
+                      }}
+                    >
+                      <View style={{ alignItems: "center" }}>
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.lg,
+                            fontWeight: typography.fontWeight.bold,
+                            color: colors.textColors.onAccent,
+                          }}
+                        >
+                          Buy Now
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.sm,
+                            fontWeight: typography.fontWeight.normal,
+                            color: colors.textColors.onAccent,
+                            opacity: 0.9,
+                            marginTop: spacing.xs / 2,
+                          }}
+                        >
+                          {formatCurrency(finalTotal, product.currency)}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    {product.downloadUrl && (
+                      <TouchableOpacity
+                        onPress={handleDownload}
+                        style={{
+                          flex: 1,
+                          backgroundColor: colors.secondary.bg,
+                          paddingVertical: spacing.md + 2,
+                          borderRadius: borderRadius.md,
+                          alignItems: "center",
+                          borderWidth: 1,
+                          borderColor: colors.border.light,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.lg,
+                            fontWeight: typography.fontWeight.semibold,
+                            color: colors.text.primary,
+                          }}
+                        >
+                          Preview Download
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      onPress={handleBuyNow}
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={`Buy now for ${formatCurrency(finalTotal, product.currency)}`}
+                      accessibilityHint="Double tap to buy now"
+                      accessibilityState={{ disabled: variantRequired || (currentInventory <= 0 && product.productType === "physical") }}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                      style={{
+                        flex: 1,
+                        backgroundColor: colors.accent,
+                        paddingVertical: spacing.md + 2,
+                        paddingHorizontal: paddingHorizontal,
+                        borderRadius: borderRadius.md,
+                        alignItems: "center",
+                      }}
+                    >
+                      <View style={{ alignItems: "center" }}>
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.lg,
+                            fontWeight: typography.fontWeight.bold,
+                            color: colors.textColors.onAccent,
+                          }}
+                        >
+                          Buy Now
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.sm,
+                            fontWeight: typography.fontWeight.normal,
+                            color: colors.textColors.onAccent,
+                            opacity: 0.9,
+                            marginTop: spacing.xs / 2,
+                          }}
+                        >
+                          {formatCurrency(finalTotal, product.currency)}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={handleAddToCart}
+                      disabled={isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical")}
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        isAddingToCart
+                          ? "Adding to cart"
+                          : variantRequired
+                            ? "Select options to add to cart"
+                            : currentInventory <= 0 && product.productType === "physical"
+                              ? "Out of stock"
+                              : `Add ${product.name} to cart`
+                      }
+                      accessibilityHint="Double tap to add this product to your cart"
+                      accessibilityState={{ disabled: isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical") }}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                       style={{
                         flex: 1,
                         backgroundColor: colors.secondary.bg,
                         paddingVertical: spacing.md + 2,
+                        paddingHorizontal: paddingHorizontal,
                         borderRadius: borderRadius.md,
                         alignItems: "center",
                         borderWidth: 1,
                         borderColor: colors.border.light,
+                        opacity: isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical") ? 0.6 : 1,
                       }}
                     >
                       <Text
@@ -785,113 +878,19 @@ export default function ProductDetail() {
                           color: colors.text.primary,
                         }}
                       >
-                        Preview Download
+                        {isAddingToCart
+                          ? "Adding..."
+                          : variantRequired
+                            ? "Select Options"
+                            : currentInventory <= 0 && product.productType === "physical"
+                              ? "Out of Stock"
+                              : "Add to Cart"}
                       </Text>
                     </TouchableOpacity>
-                  )}
-                </>
-              ) : (
-                <>
-                  <TouchableOpacity
-                    onPress={handleBuyNow}
-                    accessible={true}
-                    accessibilityRole="button"
-                    accessibilityLabel={`Buy now for ${formatCurrency(isSubscriptionEnabled ? subscriptionTotal : finalTotal, product.currency)}`}
-                    accessibilityHint={isSubscriptionEnabled ? "Double tap to buy now with subscription" : "Double tap to buy now"}
-                    accessibilityState={{ disabled: variantRequired || (currentInventory <= 0 && product.productType === "physical") }}
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                    style={{
-                      flex: 1,
-                      backgroundColor: colors.accent,
-                      paddingVertical: spacing.md + 2,
-                      paddingHorizontal: paddingHorizontal,
-                      borderRadius: borderRadius.md,
-                      alignItems: "center",
-                    }}
-                  >
-                    <View style={{ alignItems: "center" }}>
-                      <Text
-                        style={{
-                          fontSize: typography.fontSize.lg,
-                          fontWeight: typography.fontWeight.bold,
-                          color: colors.textColors.onAccent,
-                        }}
-                      >
-                        Buy Now
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: typography.fontSize.sm,
-                          fontWeight: typography.fontWeight.normal,
-                          color: colors.textColors.onAccent,
-                          opacity: 0.9,
-                          marginTop: spacing.xs / 2,
-                        }}
-                      >
-                        {formatCurrency(isSubscriptionEnabled ? subscriptionTotal : finalTotal, product.currency)}
-                      </Text>
-                      {isSubscriptionEnabled && (
-                        <Text
-                          style={{
-                            fontSize: typography.fontSize.xs,
-                            color: colors.textColors.onAccent,
-                            opacity: 0.8,
-                            marginTop: spacing.xs / 2,
-                          }}
-                        >
-                          Per shipment
-                        </Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={handleAddToCart}
-                    disabled={isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical")}
-                    accessible={true}
-                    accessibilityRole="button"
-                    accessibilityLabel={
-                      isAddingToCart
-                        ? "Adding to cart"
-                        : variantRequired
-                          ? "Select options to add to cart"
-                          : currentInventory <= 0 && product.productType === "physical"
-                            ? "Out of stock"
-                            : `Add ${product.name} to cart`
-                    }
-                    accessibilityHint="Double tap to add this product to your cart"
-                    accessibilityState={{ disabled: isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical") }}
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                    style={{
-                      flex: 1,
-                      backgroundColor: colors.secondary.bg,
-                      paddingVertical: spacing.md + 2,
-                      paddingHorizontal: paddingHorizontal,
-                      borderRadius: borderRadius.md,
-                      alignItems: "center",
-                      borderWidth: 1,
-                      borderColor: colors.border.light,
-                      opacity: isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical") ? 0.6 : 1,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: typography.fontSize.lg,
-                        fontWeight: typography.fontWeight.semibold,
-                        color: colors.text.primary,
-                      }}
-                    >
-                      {isAddingToCart
-                        ? "Adding..."
-                        : variantRequired
-                          ? "Select Options"
-                          : currentInventory <= 0 && product.productType === "physical"
-                            ? "Out of Stock"
-                            : "Add to Cart"}
-                    </Text>
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
+                  </>
+                )}
+              </View>
+            )}
           </View>
         </View>
 
@@ -971,15 +970,15 @@ export default function ProductDetail() {
                   >
                     {/* Product Image */}
                     <View style={{ width: "100%", height: isMobile ? 160 : 200, backgroundColor: colors.secondary.bg }}>
-                      {otherProduct.images && otherProduct.images.length > 0 ? (
+                      {otherProduct.images && otherProduct.images.length > 0 && otherProduct.images[0] && otherProduct.images[0].trim() !== "" ? (
                         <Image
                           source={{ uri: otherProduct.images[0] }}
                           style={{ width: "100%", height: "100%" }}
                           contentFit="cover"
-cachePolicy="memory-disk"
+                          cachePolicy="memory-disk"
                         />
                       ) : (
-                        <ProductPlaceholder width="100%" height="100%" />
+                        <ProductPlaceholder width="100%" height={isMobile ? 160 : 200} aspectRatio={1} />
                       )}
                     </View>
 

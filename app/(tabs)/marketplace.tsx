@@ -43,6 +43,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
 }) => {
   const { isMobile } = useResponsive();
   const router = useRouter();
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   if (products.length === 0) return null;
 
@@ -153,14 +154,18 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   >
                     {product.images &&
                     product.images.length > 0 &&
-                    product.images[0] ? (
+                    product.images[0] &&
+                    product.images[0].trim() !== "" &&
+                    !imageErrors.has(product.id) ? (
                       <Image
                         source={{ uri: product.images[0] }}
                         style={{ width: "100%", height: "100%" }}
                         contentFit="cover"
                         cachePolicy="memory-disk"
                         accessible={false}
-                        onError={() => {}}
+                        onError={() => {
+                          setImageErrors((prev) => new Set(prev).add(product.id));
+                        }}
                       />
                     ) : (
                       <ProductPlaceholder
@@ -369,6 +374,7 @@ export default function Marketplace() {
   const { width } = useWindowDimensions();
   const isDesktop = width >= 1024 && Platform.OS === "web";
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   // Tab bar height is 56px on mobile, 0 on desktop
   const tabBarHeight = isDesktop ? 0 : 56;
@@ -574,14 +580,18 @@ export default function Marketplace() {
                   >
                     {product.images &&
                     product.images.length > 0 &&
-                    product.images[0] ? (
+                    product.images[0] &&
+                    product.images[0].trim() !== "" &&
+                    !imageErrors.has(product.id) ? (
                       <Image
                         source={{ uri: product.images[0] }}
                         style={{ width: "100%", height: "100%" }}
                         contentFit="cover"
                         cachePolicy="memory-disk"
                         accessible={false}
-                        onError={() => {}}
+                        onError={() => {
+                          setImageErrors((prev) => new Set(prev).add(product.id));
+                        }}
                       />
                     ) : (
                       <ProductPlaceholder

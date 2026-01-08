@@ -3,8 +3,13 @@ import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { colors, spacing, borderRadius, typography } from '../../constants/theme';
-import { UserMenuItem } from '../../config/userMenu';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+} from "../../constants/theme";
+import { UserMenuItem } from "../../config/userMenu";
 
 interface UserDropdownProps {
   user?: {
@@ -16,7 +21,11 @@ interface UserDropdownProps {
   menuItems?: UserMenuItem[];
 }
 
-export function UserDropdown({ user, isDesktop = false, menuItems = [] }: UserDropdownProps) {
+export function UserDropdown({
+  user,
+  isDesktop = false,
+  menuItems = [],
+}: UserDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMenuItemPress = (href: string) => {
@@ -54,9 +63,9 @@ export function UserDropdown({ user, isDesktop = false, menuItems = [] }: UserDr
           }}
         >
           {user?.avatar ? (
-            <Image 
-              source={{ uri: user.avatar }} 
-              style={{ width: 32, height: 32 }} 
+            <Image
+              source={{ uri: user.avatar }}
+              style={{ width: 32, height: 32 }}
               contentFit="cover"
               cachePolicy="memory-disk"
             />
@@ -83,7 +92,8 @@ export function UserDropdown({ user, isDesktop = false, menuItems = [] }: UserDr
               right: 0,
               bottom: 0,
               zIndex: 1003,
-              backgroundColor: Platform.OS === "web" ? "transparent" : "rgba(0, 0, 0, 0.1)",
+              backgroundColor:
+                Platform.OS === "web" ? "transparent" : "rgba(0, 0, 0, 0.1)",
             }}
             onPress={() => setIsOpen(false)}
             activeOpacity={1}
@@ -94,38 +104,44 @@ export function UserDropdown({ user, isDesktop = false, menuItems = [] }: UserDr
               top: 48,
               right: 0,
               width: 240,
-              backgroundColor: "#232323", // Darker background color (matches main app background)
+              backgroundColor: "#474747", // Match account page menu background
               borderRadius: borderRadius.lg,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)", // Match account page border
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,
               elevation: 10,
-              padding: spacing.sm,
-              maxHeight: 400,
+              overflow: "hidden", // Match account page overflow
               zIndex: 1004,
-              ...(Platform.OS === "web" && {
-                // @ts-ignore - Web-only CSS properties
-                overflowY: "auto",
-              }),
             }}
           >
-            <View style={{ padding: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border.default }}>
-              <Text style={{ color: colors.text.primary, fontWeight: "600" }}>{user?.name}</Text>
-              <Text style={{ color: colors.text.tertiary, fontSize: 12 }}>{user?.email}</Text>
+            <View
+              style={{
+                paddingVertical: 16,
+                paddingHorizontal: 20,
+                borderBottomWidth: 1,
+                borderBottomColor: "rgba(186, 153, 136, 0.2)",
+              }}
+            >
+              <Text style={{ color: "#ffffff", fontWeight: "600" }}>
+                {user?.name}
+              </Text>
+              <Text style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: 12 }}>
+                {user?.email}
+              </Text>
             </View>
-            
+
             {/* Menu Items - Use same menu as account page */}
             {menuItems.map((item, index) => (
               <React.Fragment key={item.href}>
-                {item.divider && index > 0 && (
+                {item.divider && (
                   <View
                     style={{
                       height: 1,
-                      backgroundColor: colors.border.default,
-                      marginVertical: spacing.xs,
+                      backgroundColor: "rgba(186, 153, 136, 0.2)",
+                      marginHorizontal: 20,
                     }}
                   />
                 )}
@@ -134,9 +150,9 @@ export function UserDropdown({ user, isDesktop = false, menuItems = [] }: UserDr
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    gap: spacing.md,
-                    padding: spacing.md,
-                    borderRadius: borderRadius.md,
+                    paddingVertical: 16,
+                    paddingHorizontal: 20,
+                    gap: 16,
                     ...(Platform.OS === "web" && {
                       // @ts-ignore - Web-only CSS properties
                       cursor: "pointer",
@@ -147,13 +163,22 @@ export function UserDropdown({ user, isDesktop = false, menuItems = [] }: UserDr
                 >
                   <MaterialIcons
                     name={item.icon}
-                    size={20}
-                    color={item.label === "Sign Out" ? colors.status.error : colors.text.secondary}
+                    size={24}
+                    color={
+                      item.label === "Sign Out"
+                        ? "#ba9988"
+                        : "rgba(255, 255, 255, 0.7)"
+                    }
                   />
                   <Text
                     style={{
-                      color: item.label === "Sign Out" ? colors.status.error : colors.text.secondary,
-                      fontSize: typography.fontSize.sm,
+                      fontSize: 16,
+                      fontWeight: "500",
+                      color:
+                        item.label === "Sign Out"
+                          ? "#ba9988"
+                          : "#ffffff",
+                      flex: 1,
                     }}
                   >
                     {item.label}

@@ -22,6 +22,7 @@ export default function ProductList() {
   const { isMobile, paddingHorizontal } = useResponsive();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<"price-asc" | "price-desc" | "newest" | "rating">("newest");
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   // Filter products based on section
   const filteredProducts = useMemo(() => {
@@ -124,13 +125,15 @@ export default function ProductList() {
           borderColor: "rgba(255, 255, 255, 0.1)",
         }}
       >
-        {product.images && product.images.length > 0 && product.images[0] ? (
+        {product.images && product.images.length > 0 && product.images[0] && product.images[0].trim() !== "" && !imageErrors.has(product.id) ? (
           <Image
             source={{ uri: product.images[0] }}
             style={{ width: "100%", height: "100%" }}
             contentFit="cover"
-cachePolicy="memory-disk"
-            onError={() => {}}
+            cachePolicy="memory-disk"
+            onError={() => {
+              setImageErrors((prev) => new Set(prev).add(product.id));
+            }}
           />
         ) : (
           <ProductPlaceholder width="100%" height="100%" aspectRatio={1} />

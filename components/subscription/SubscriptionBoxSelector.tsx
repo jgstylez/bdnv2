@@ -86,7 +86,7 @@ function CompactSelect<T>({ value, options, onSelect, onOpen, isOpen }: CompactS
             left: 0,
             right: 0,
             marginTop: spacing.xs,
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.input,
             borderRadius: borderRadius.md,
             maxHeight: 200,
             zIndex: 1002,
