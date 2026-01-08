@@ -809,7 +809,7 @@ export default function NonprofitBookingsManagement() {
                 paddingVertical: spacing.sm,
                 paddingHorizontal: spacing.md,
                 borderRadius: borderRadius.md,
-                backgroundColor: currentPage === 1 ? colors.background.input : colors.secondary.bg,
+                backgroundColor: currentPage === 1 ? colors.input : colors.input,
                 borderWidth: 1,
                 borderColor: colors.border.light,
                 opacity: currentPage === 1 ? 0.6 : 1,
