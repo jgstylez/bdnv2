@@ -1,12 +1,11 @@
 import React from "react";
-import { View, Text, ScrollView, TouchableOpacity, Linking, Alert } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Linking } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Invoice } from '@/types/invoices';
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
-import { logger } from '@/lib/logger';
 
 // Mock invoice data - in production, fetch by ID
 const mockInvoices: Record<string, Invoice> = {
@@ -90,8 +89,9 @@ export default function InvoiceDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { isMobile, paddingHorizontal } = useResponsive();
 
-  // For now, let's assume the user is the issuer
-  const isIssuer = true; 
+  // This page is for recipients viewing invoices they've received
+  // Users cannot create/edit/delete invoices from this page
+  const isRecipient = true; 
 
   const invoice = mockInvoices[id || "inv-1"] || mockInvoices["inv-1"];
 
@@ -128,29 +128,6 @@ export default function InvoiceDetail() {
     alert("PDF download functionality coming soon!");
   };
 
-  const handleEdit = () => {
-    router.push(`/pages/invoices/edit/${invoice.id}`);
-  };
-
-  const handleDelete = () => {
-    Alert.alert(
-      "Delete Invoice",
-      "Are you sure you want to delete this invoice? This action cannot be undone.",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: () => {
-            // TODO: Implement actual deletion logic
-            logger.info("Deleting invoice", { invoiceId: invoice.id });
-            router.back();
-          },
-        },
-      ]
-    );
-  };
-
   const statusColors = getStatusColor(invoice.status);
 
   return (
@@ -185,16 +162,10 @@ export default function InvoiceDetail() {
               </Text>
             </TouchableOpacity>
             
-            {isIssuer && (
-              <View style={{ flexDirection: 'row', gap: spacing.md }}>
-                <TouchableOpacity onPress={handleEdit} style={{ padding: spacing.xs }}>
-                  <MaterialIcons name="edit" size={24} color={colors.accent} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleDelete} style={{ padding: spacing.xs }}>
-                  <MaterialIcons name="delete" size={24} color={colors.status.error} />
-                </TouchableOpacity>
-              </View>
-            )}
+            {/* Download PDF option available for recipients */}
+            <TouchableOpacity onPress={handleDownloadPDF} style={{ padding: spacing.xs }}>
+              <MaterialIcons name="download" size={24} color={colors.accent} />
+            </TouchableOpacity>
           </View>
 
           {/* ... rest of the component ... */}

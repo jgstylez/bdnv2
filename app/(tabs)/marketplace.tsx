@@ -41,11 +41,29 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   onProductPress,
   section,
 }) => {
-  const { isMobile } = useResponsive();
+  const { isMobile, paddingHorizontal } = useResponsive();
+  const { width } = useWindowDimensions();
   const router = useRouter();
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   if (products.length === 0) return null;
+
+  // Calculate card width to show at least 2.5 cards on mobile
+  const getCardWidth = () => {
+    if (!isMobile) return 200;
+    
+    // Available width = screen width - left padding - right padding (spacing.md)
+    const availableWidth = width - paddingHorizontal - spacing.md;
+    // For 2.5 cards: 2.5 * cardWidth + 1.5 * gap = availableWidth
+    // gap = spacing.sm (typically 8px)
+    const gap = spacing.sm;
+    const cardWidth = (availableWidth - (1.5 * gap)) / 2.5;
+    
+    // Ensure minimum width and round to avoid fractional pixels
+    return Math.max(120, Math.floor(cardWidth));
+  };
+
+  const cardWidth = getCardWidth();
 
   const handleSeeAll = () => {
     router.push(`/pages/products/list?section=${section || "all"}`);
@@ -107,7 +125,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
             <View
               key={product.id}
               style={{
-                width: isMobile ? 130 : 200,
+                width: cardWidth,
                 backgroundColor: colors.secondary,
                 borderRadius: borderRadius.lg,
                 overflow: "hidden",

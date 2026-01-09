@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -7,7 +7,7 @@ import { Invoice, InvoiceStatus } from '@/types/invoices';
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { HeroSection } from '@/components/layouts/HeroSection';
-import { AdminFilterBar } from '@/components/admin/AdminFilterBar';
+import { FilterDropdown } from '@/components/admin/FilterDropdown';
 
 // Mock invoices - in production, fetch from API
 const mockInvoices: Invoice[] = [
@@ -167,6 +167,20 @@ export default function Invoices() {
     });
   };
 
+  const getStatusDisplayText = (invoice: Invoice) => {
+    if (invoice.status === "sent") {
+      const dueDate = new Date(invoice.dueDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      dueDate.setHours(0, 0, 0, 0);
+      
+      if (dueDate >= today) {
+        return "not due";
+      }
+    }
+    return invoice.status;
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
       <StatusBar style="light" />
@@ -183,36 +197,75 @@ export default function Invoices() {
           subtitle="View and manage invoices you've received"
         />
 
+        {/* Search */}
+        <View style={{ marginBottom: spacing.md }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: colors.secondary.bg,
+              borderRadius: borderRadius.md,
+              paddingHorizontal: spacing.md,
+              paddingVertical: spacing.sm,
+              borderWidth: 1,
+              borderColor: colors.border.light,
+              gap: spacing.sm,
+            }}
+          >
+            <MaterialIcons name="search" size={20} color={colors.text.secondary} />
+            <TextInput
+              placeholder="Search by invoice number or issuer..."
+              placeholderTextColor={colors.text.tertiary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              style={{
+                flex: 1,
+                fontSize: typography.fontSize.base,
+                color: colors.text.primary,
+              }}
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity
+                onPress={() => setSearchQuery("")}
+                style={{ padding: spacing.xs }}
+              >
+                <MaterialIcons name="close" size={18} color={colors.text.secondary} />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+
         {/* Filters */}
-        <AdminFilterBar
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          searchPlaceholder="Search by invoice number or issuer..."
-          filterGroups={[
-            {
-              key: "status",
-              options: [
-                { key: "all", label: "All Status" },
-                { key: "draft", label: "Draft" },
-                { key: "sent", label: "Sent" },
-                { key: "paid", label: "Paid" },
-                { key: "overdue", label: "Overdue" },
-              ],
-              selected: statusFilter,
-              onSelect: (key) => setStatusFilter(key as InvoiceStatus | "all"),
-            },
-            {
-              key: "type",
-              options: [
-                { key: "all", label: "All Types" },
-                { key: "one-time", label: "One-Time" },
-                { key: "recurring", label: "Recurring" },
-              ],
-              selected: typeFilter,
-              onSelect: (key) => setTypeFilter(key as "all" | "one-time" | "recurring"),
-            },
-          ]}
-        />
+        <View style={{ marginBottom: spacing.lg }}>
+          <View
+            style={{
+              flexDirection: isMobile ? "column" : "row",
+              gap: spacing.md,
+            }}
+          >
+            <FilterDropdown
+              label="Status"
+              options={[
+                { value: "all", label: "All Status" },
+                { value: "sent", label: "Sent" },
+                { value: "paid", label: "Paid" },
+                { value: "overdue", label: "Overdue" },
+              ]}
+              value={statusFilter}
+              onSelect={(value) => setStatusFilter(value as InvoiceStatus | "all")}
+            />
+            <FilterDropdown
+              label="Type"
+              options={[
+                { value: "all", label: "All Types" },
+                { value: "one-time", label: "One-Time" },
+                { value: "recurring", label: "Recurring" },
+              ]}
+              value={typeFilter}
+              onSelect={(value) => setTypeFilter(value as "all" | "one-time" | "recurring")}
+            />
+          </View>
+        </View>
 
         {/* Invoice List */}
         <View style={{ gap: spacing.md }}>
@@ -250,6 +303,7 @@ export default function Invoices() {
           ) : (
             filteredInvoices.map((invoice) => {
               const statusColors = getStatusColor(invoice.status);
+              const statusDisplayText = getStatusDisplayText(invoice);
               return (
                 <TouchableOpacity
                   key={invoice.id}
@@ -314,7 +368,7 @@ export default function Invoices() {
                             textTransform: "uppercase",
                           }}
                         >
-                          {invoice.status}
+                          {statusDisplayText}
                         </Text>
                       </View>
                       <Text

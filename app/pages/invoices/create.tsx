@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform, Modal, Dimensions } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -10,6 +10,14 @@ import { HeroSection } from '@/components/layouts/HeroSection';
 import { FormInput, FormTextArea, FormSelect, FormToggle, DateTimePickerComponent } from '@/components/forms';
 import { FilterDropdown } from '@/components/admin/FilterDropdown';
 import { BackButton } from '@/components/navigation/BackButton';
+
+// Mock user data for recipient search
+const mockUsers = [
+  { id: "user-1", name: "Jane Smith", email: "jane.smith@example.com" },
+  { id: "user-2", name: "Michael Johnson", email: "michael.j@example.com" },
+  { id: "user-3", name: "Sarah Williams", email: "sarah.w@example.com" },
+  { id: "user-4", name: "David Brown", email: "david.brown@example.com" },
+];
 
 export default function CreateInvoice() {
   const router = useRouter();
@@ -34,6 +42,10 @@ export default function CreateInvoice() {
   const [billingType, setBillingType] = useState<BillingType>("one-time");
   const [recipientEmail, setRecipientEmail] = useState("");
   const [recipientName, setRecipientName] = useState("");
+  const [recipientUserId, setRecipientUserId] = useState<string | undefined>(undefined);
+  const [showRecipientModal, setShowRecipientModal] = useState(false);
+  const [recipientSearchQuery, setRecipientSearchQuery] = useState("");
+  const [recipientEmailInput, setRecipientEmailInput] = useState("");
   const [issueDate, setIssueDate] = useState(new Date().toISOString().split("T")[0]);
   const [dueDate, setDueDate] = useState(() => {
     const date = new Date();
@@ -107,6 +119,34 @@ export default function CreateInvoice() {
 
   const { subtotal, tax, discount, total } = calculateTotals();
 
+  const filteredRecipientsForModal = mockUsers.filter(
+    (user) =>
+      user.name.toLowerCase().includes(recipientSearchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(recipientSearchQuery.toLowerCase())
+  );
+
+  const isValidEmail = recipientEmailInput.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmailInput.trim());
+
+  const handleSelectRecipient = (userId: string, name: string, email: string) => {
+    setRecipientUserId(userId);
+    setRecipientName(name);
+    setRecipientEmail(email);
+    setRecipientSearchQuery("");
+    setShowRecipientModal(false);
+    setRecipientEmailInput("");
+  };
+
+  const handleAddEmailRecipient = () => {
+    if (recipientEmailInput.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmailInput.trim())) {
+      setRecipientUserId(undefined);
+      setRecipientName("");
+      setRecipientEmail(recipientEmailInput.trim());
+      setRecipientSearchQuery("");
+      setShowRecipientModal(false);
+      setRecipientEmailInput("");
+    }
+  };
+
   const handleSaveDraft = () => {
     // TODO: Save as draft
     alert("Invoice saved as draft!");
@@ -114,9 +154,17 @@ export default function CreateInvoice() {
 
   const handleSendInvoice = () => {
     // TODO: Validate and send invoice
-    if (!recipientEmail || !recipientName) {
-      alert("Please fill in recipient details");
+    if (!recipientUserId && !recipientEmail) {
+      alert("Please select a recipient");
       return;
+    }
+    if (recipientUserId && !recipientName) {
+      // Set recipient name from selected user
+      const selectedUser = mockUsers.find((u) => u.id === recipientUserId);
+      if (selectedUser) {
+        setRecipientName(selectedUser.name);
+        setRecipientEmail(selectedUser.email);
+      }
     }
     if (lineItems.some((item) => !item.description || item.unitPrice <= 0)) {
       alert("Please fill in all line items with valid amounts");
@@ -231,24 +279,106 @@ export default function CreateInvoice() {
               marginBottom: spacing.md,
             }}
           >
-            Recipient Information
+            Recipient
           </Text>
-          <FormInput
-            label="Recipient Name"
-            value={recipientName}
-            onChangeText={setRecipientName}
-            required
-            placeholder="Enter recipient name"
-          />
-          <FormInput
-            label="Recipient Email"
-            value={recipientEmail}
-            onChangeText={setRecipientEmail}
-            required
-            placeholder="recipient@example.com"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+          {recipientUserId || recipientEmail ? (
+            <View
+              style={{
+                backgroundColor: "rgba(71, 71, 71, 0.3)",
+                borderRadius: 12,
+                padding: 12,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
+              <MaterialIcons name="person" size={40} color="rgba(255, 255, 255, 0.5)" />
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "700",
+                    color: "#ffffff",
+                    marginBottom: 2,
+                  }}
+                >
+                  {recipientUserId
+                    ? mockUsers.find((u) => u.id === recipientUserId)?.name || recipientName
+                    : recipientEmail || ""}
+                </Text>
+                {recipientUserId && (
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      color: "rgba(255, 255, 255, 0.6)",
+                    }}
+                  >
+                    {mockUsers.find((u) => u.id === recipientUserId)?.email || recipientEmail}
+                  </Text>
+                )}
+                {!recipientUserId && recipientEmail && (
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      color: "rgba(255, 255, 255, 0.6)",
+                    }}
+                  >
+                    Email invitation
+                  </Text>
+                )}
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  setRecipientUserId(undefined);
+                  setRecipientName("");
+                  setRecipientEmail("");
+                  setRecipientSearchQuery("");
+                }}
+                style={{ padding: 4 }}
+              >
+                <MaterialIcons name="close" size={18} color="rgba(255, 255, 255, 0.5)" />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              onPress={() => setShowRecipientModal(true)}
+              style={{
+                backgroundColor: "#474747",
+                borderRadius: 16,
+                padding: 16,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 16,
+              }}
+            >
+              <MaterialIcons name="person-add" size={24} color="rgba(255, 255, 255, 0.5)" />
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "600",
+                    color: "rgba(255, 255, 255, 0.7)",
+                  }}
+                >
+                  Select recipient
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "rgba(255, 255, 255, 0.5)",
+                    marginTop: 2,
+                  }}
+                >
+                  Tap to search users or add email
+                </Text>
+              </View>
+              <MaterialIcons name="arrow-forward-ios" size={16} color="rgba(255, 255, 255, 0.5)" />
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Invoice Details */}
@@ -635,6 +765,272 @@ export default function CreateInvoice() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Recipient Selection Modal */}
+      <Modal
+        visible={showRecipientModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => {
+          setShowRecipientModal(false);
+          setRecipientSearchQuery("");
+          setRecipientEmailInput("");
+        }}
+      >
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => {
+            setShowRecipientModal(false);
+            setRecipientSearchQuery("");
+            setRecipientEmailInput("");
+          }}
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0, 0, 0, 0.95)",
+            justifyContent: "flex-end",
+          }}
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: "#474747",
+              borderTopLeftRadius: 24,
+              borderTopRightRadius: 24,
+              paddingTop: spacing.md,
+              paddingBottom: Platform.OS === "ios" ? 40 : spacing.lg,
+              maxHeight: Dimensions.get("window").height * 0.9,
+              borderWidth: 2,
+              borderColor: "#5a5a68",
+              borderBottomWidth: 0,
+            }}
+          >
+            {/* Header */}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingHorizontal: spacing.lg,
+                paddingBottom: spacing.md,
+                borderBottomWidth: 1,
+                borderBottomColor: colors.border.light,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: typography.fontSize.xl,
+                  fontWeight: typography.fontWeight.bold,
+                  color: colors.text.primary,
+                }}
+              >
+                Select Recipient
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowRecipientModal(false);
+                  setRecipientSearchQuery("");
+                  setRecipientEmailInput("");
+                }}
+                style={{ padding: 4 }}
+              >
+                <MaterialIcons name="close" size={24} color="rgba(255, 255, 255, 0.7)" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Search Input */}
+            <View
+              style={{
+                padding: 20,
+                borderBottomWidth: 1,
+                borderBottomColor: "rgba(186, 153, 136, 0.2)",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  backgroundColor: "#474747",
+                  borderRadius: 12,
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  gap: 12,
+                }}
+              >
+                <MaterialIcons name="search" size={20} color="rgba(255, 255, 255, 0.5)" />
+                <TextInput
+                  placeholder="Search by name or email..."
+                  placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                  value={recipientSearchQuery}
+                  onChangeText={setRecipientSearchQuery}
+                  style={{
+                    flex: 1,
+                    fontSize: 16,
+                    color: "#ffffff",
+                  }}
+                  autoFocus
+                />
+                {recipientSearchQuery.length > 0 && (
+                  <TouchableOpacity
+                    onPress={() => setRecipientSearchQuery("")}
+                    style={{ padding: 4 }}
+                  >
+                    <MaterialIcons name="close" size={18} color="rgba(255, 255, 255, 0.5)" />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+
+            {/* Add Email Section */}
+            <View
+              style={{
+                padding: 20,
+                borderBottomWidth: 1,
+                borderBottomColor: "rgba(186, 153, 136, 0.2)",
+                gap: 12,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                }}
+              >
+                Or send to email address
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 8,
+                }}
+              >
+                <TextInput
+                  placeholder="Enter email address..."
+                  placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                  value={recipientEmailInput}
+                  onChangeText={setRecipientEmailInput}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  style={{
+                    flex: 1,
+                    backgroundColor: "#474747",
+                    borderRadius: 12,
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    fontSize: 16,
+                    color: "#ffffff",
+                    borderWidth: 1,
+                    borderColor: isValidEmail ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={handleAddEmailRecipient}
+                  disabled={!isValidEmail}
+                  style={{
+                    backgroundColor: isValidEmail ? "#ba9988" : "#474747",
+                    borderRadius: 12,
+                    paddingHorizontal: 20,
+                    paddingVertical: 12,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    opacity: isValidEmail ? 1 : 0.5,
+                  }}
+                >
+                  <MaterialIcons name="add" size={24} color="#ffffff" />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* User List */}
+            <ScrollView
+              style={{ maxHeight: 300 }}
+              showsVerticalScrollIndicator={false}
+            >
+              {filteredRecipientsForModal.length === 0 ? (
+                <View
+                  style={{
+                    padding: 40,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <MaterialIcons name="people-outline" size={48} color="rgba(255, 255, 255, 0.3)" />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: "rgba(255, 255, 255, 0.5)",
+                      marginTop: 16,
+                      textAlign: "center",
+                    }}
+                  >
+                    No users found
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "rgba(255, 255, 255, 0.4)",
+                      marginTop: 8,
+                      textAlign: "center",
+                    }}
+                  >
+                    Try a different search term or add an email address
+                  </Text>
+                </View>
+              ) : (
+                filteredRecipientsForModal.map((user) => (
+                  <TouchableOpacity
+                    key={user.id}
+                    onPress={() => handleSelectRecipient(user.id, user.name, user.email)}
+                    style={{
+                      padding: 16,
+                      borderBottomWidth: 1,
+                      borderBottomColor: "rgba(186, 153, 136, 0.1)",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 16,
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: 25,
+                        backgroundColor: "rgba(186, 153, 136, 0.2)",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <MaterialIcons name="person" size={24} color="#ba9988" />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "600",
+                          color: "#ffffff",
+                          marginBottom: 4,
+                        }}
+                      >
+                        {user.name}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "rgba(255, 255, 255, 0.6)",
+                        }}
+                      >
+                        {user.email}
+                      </Text>
+                    </View>
+                    <MaterialIcons name="chevron-right" size={20} color="rgba(255, 255, 255, 0.5)" />
+                  </TouchableOpacity>
+                ))
+              )}
+            </ScrollView>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 }

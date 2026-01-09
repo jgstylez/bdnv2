@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -13,6 +13,31 @@ interface NewlyAddedProductsProps {
 
 export function NewlyAddedProducts({ isMobile }: NewlyAddedProductsProps) {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  
+  // Calculate card width to show exactly 2.5 cards on mobile
+  const getCardWidth = () => {
+    if (!isMobile) return 140;
+    
+    // Dashboard has paddingHorizontal of 20px on mobile
+    const paddingHorizontal = 20;
+    // Gap between cards (8px = spacing.sm)
+    const gap = 8;
+    // Right padding in ScrollView contentContainerStyle
+    const paddingRight = 20;
+    
+    // Available width = screen width - left padding - right padding
+    const availableWidth = width - paddingHorizontal - paddingRight;
+    
+    // For 2.5 cards: 2.5 * cardWidth + 1.5 * gap = availableWidth
+    // Solving for cardWidth: cardWidth = (availableWidth - 1.5 * gap) / 2.5
+    const cardWidth = (availableWidth - (1.5 * gap)) / 2.5;
+    
+    // Round down to ensure we show at least 2.5 cards (slightly more is okay)
+    return Math.floor(cardWidth);
+  };
+
+  const cardWidth = getCardWidth();
 
   return (
     <View className="mb-8">
@@ -29,16 +54,16 @@ export function NewlyAddedProducts({ isMobile }: NewlyAddedProductsProps) {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: isMobile ? 8 : 10, paddingRight: 20 }}
+        contentContainerStyle={{ gap: 8, paddingRight: 20 }}
       >
         {mockNewProducts.map((product) => (
           <TouchableOpacity
             key={product.id}
             onPress={() => router.push(`/pages/products/${product.id}`)}
-            className={cn(
-              'bg-dark-card border border-primary/20 rounded-xl overflow-hidden',
-              { 'w-[110px]': isMobile, 'w-[140px]': !isMobile }
-            )}
+            className="bg-dark-card border border-primary/20 rounded-xl overflow-hidden"
+            style={{
+              width: isMobile ? cardWidth : 140,
+            }}
           >
             <View className="w-full aspect-square relative bg-dark-background overflow-hidden">
               {product.images && product.images.length > 0 && product.images[0] ? (
