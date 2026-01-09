@@ -38,6 +38,24 @@ export function UserDropdown({
     }
   };
 
+  // Split menu items into columns for desktop mega menu
+  const getColumns = () => {
+    if (!isDesktop) {
+      return [menuItems]; // Single column for mobile
+    }
+
+    // For desktop, split into 2 columns
+    // Column 1: First 6 items
+    // Column 2: Remaining items
+    const midPoint = Math.ceil(menuItems.length / 2);
+    return [
+      menuItems.slice(0, midPoint),
+      menuItems.slice(midPoint),
+    ];
+  };
+
+  const columns = getColumns();
+
   return (
     <View style={{ position: "relative", zIndex: 1004 }}>
       <TouchableOpacity
@@ -103,7 +121,7 @@ export function UserDropdown({
               position: "absolute",
               top: 48,
               right: 0,
-              width: 240,
+              width: isDesktop ? 480 : 240, // Wider for desktop to accommodate columns
               backgroundColor: "#474747", // Match account page menu background
               borderRadius: borderRadius.lg,
               borderWidth: 1,
@@ -133,59 +151,78 @@ export function UserDropdown({
               </Text>
             </View>
 
-            {/* Menu Items - Use same menu as account page */}
-            {menuItems.map((item, index) => (
-              <React.Fragment key={item.href}>
-                {item.divider && (
-                  <View
-                    style={{
-                      height: 1,
-                      backgroundColor: "rgba(186, 153, 136, 0.2)",
-                      marginHorizontal: 20,
-                    }}
-                  />
-                )}
-                <TouchableOpacity
-                  onPress={() => handleMenuItemPress(item.href)}
+            {/* Menu Items - Multi-column layout for desktop */}
+            <View
+              style={{
+                flexDirection: isDesktop ? "row" : "column",
+              }}
+            >
+              {columns.map((columnItems, columnIndex) => (
+                <View
+                  key={columnIndex}
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    paddingVertical: 16,
-                    paddingHorizontal: 20,
-                    gap: 16,
-                    ...(Platform.OS === "web" && {
-                      // @ts-ignore - Web-only CSS properties
-                      cursor: "pointer",
-                      userSelect: "none",
+                    flex: isDesktop ? 1 : undefined,
+                    ...(isDesktop && columnIndex > 0 && {
+                      borderLeftWidth: 1,
+                      borderLeftColor: "rgba(186, 153, 136, 0.2)",
                     }),
                   }}
-                  activeOpacity={0.7}
                 >
-                  <MaterialIcons
-                    name={item.icon}
-                    size={24}
-                    color={
-                      item.label === "Sign Out"
-                        ? "#ba9988"
-                        : "rgba(255, 255, 255, 0.7)"
-                    }
-                  />
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "500",
-                      color:
-                        item.label === "Sign Out"
-                          ? "#ba9988"
-                          : "#ffffff",
-                      flex: 1,
-                    }}
-                  >
-                    {item.label}
-                  </Text>
-                </TouchableOpacity>
-              </React.Fragment>
-            ))}
+                  {columnItems.map((item, index) => (
+                    <React.Fragment key={item.href}>
+                      {item.divider && (
+                        <View
+                          style={{
+                            height: 1,
+                            backgroundColor: "rgba(186, 153, 136, 0.2)",
+                            marginHorizontal: 20,
+                          }}
+                        />
+                      )}
+                      <TouchableOpacity
+                        onPress={() => handleMenuItemPress(item.href)}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          paddingVertical: 16,
+                          paddingHorizontal: 20,
+                          gap: 16,
+                          ...(Platform.OS === "web" && {
+                            // @ts-ignore - Web-only CSS properties
+                            cursor: "pointer",
+                            userSelect: "none",
+                          }),
+                        }}
+                        activeOpacity={0.7}
+                      >
+                        <MaterialIcons
+                          name={item.icon}
+                          size={24}
+                          color={
+                            item.label === "Sign Out"
+                              ? "#ba9988"
+                              : "rgba(255, 255, 255, 0.7)"
+                          }
+                        />
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "500",
+                            color:
+                              item.label === "Sign Out"
+                                ? "#ba9988"
+                                : "#ffffff",
+                            flex: 1,
+                          }}
+                        >
+                          {item.label}
+                        </Text>
+                      </TouchableOpacity>
+                    </React.Fragment>
+                  ))}
+                </View>
+              ))}
+            </View>
           </View>
         </>
       )}
