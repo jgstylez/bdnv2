@@ -10,6 +10,7 @@ export default function InvoicesLayout() {
       }}
     >
       <Stack.Screen name="index" />
+      <Stack.Screen name="user" />
       <Stack.Screen name="create" />
       <Stack.Screen name="[id]" />
       <Stack.Screen name="edit/[id]" />

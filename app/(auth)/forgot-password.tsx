@@ -2,38 +2,19 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, useWindowDimensions, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useAuth } from "../../hooks/useAuth";
 import Svg, { G, Path } from "react-native-svg";
 
-export default function Signup() {
+export default function ForgotPassword() {
   const { width } = useWindowDimensions();
   const router = useRouter();
-  const { signup } = useAuth();
   const isMobile = width < 768;
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    referralCode: "",
-  });
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Password validation rules
-  const passwordRules = {
-    minLength: formData.password.length >= 8,
-    hasUpperCase: /[A-Z]/.test(formData.password),
-    hasLowerCase: /[a-z]/.test(formData.password),
-    hasNumber: /\d/.test(formData.password),
-    hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(formData.password),
-  };
-
-  const isPasswordValid = Object.values(passwordRules).every((rule) => rule === true);
-
-  const handleSignup = () => {
-    if (!formData.email || !isPasswordValid) {
-      return;
-    }
-    signup(formData.email, formData.password);
+  const handleSubmit = () => {
+    if (!email) return;
+    // TODO: Implement password reset API call
+    setIsSubmitted(true);
   };
 
   return (
@@ -45,19 +26,20 @@ export default function Signup() {
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
+          justifyContent: "center",
           paddingHorizontal: isMobile ? 20 : 40,
           paddingVertical: 40,
         }}
       >
         <View
           style={{
-            maxWidth: 500,
+            maxWidth: 450,
             width: "100%",
             alignSelf: "center",
           }}
         >
-          {/* Header */}
-          <View style={{ alignItems: "center", marginBottom: 32 }}>
+          {/* Logo */}
+          <View style={{ alignItems: "center", marginBottom: 40 }}>
             <View
               style={{
                 width: 64,
@@ -87,7 +69,7 @@ export default function Signup() {
                 letterSpacing: -1,
               }}
             >
-              Join BDN
+              Reset Password
             </Text>
             <Text
               style={{
@@ -96,64 +78,34 @@ export default function Signup() {
                 textAlign: "center",
               }}
             >
-              Start building economic power with your community
+              {isSubmitted
+                ? "Check your email for password reset instructions"
+                : "Enter your email address and we'll send you a link to reset your password"}
             </Text>
           </View>
 
-          {/* Form Fields */}
-          <View style={{ gap: 20 }}>
-            {/* Email */}
-            <View>
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: "600",
-                  color: "#ffffff",
-                  marginBottom: 8,
-                }}
-              >
-                Email Address *
-              </Text>
-              <TextInput
-                value={formData.email}
-                onChangeText={(text) => setFormData({ ...formData, email: text })}
-                placeholder="Enter your email"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-                style={{
-                  backgroundColor: "#474747",
-                  borderRadius: 12,
-                  padding: 16,
-                  fontSize: 16,
-                  color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: formData.email ? "rgba(186, 153, 136, 0.2)" : "rgba(186, 153, 136, 0.2)",
-                }}
-              />
-            </View>
-
-            {/* Password */}
-            <View>
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: "600",
-                  color: "#ffffff",
-                  marginBottom: 8,
-                }}
-              >
-                Password *
-              </Text>
-              <View style={{ position: "relative" }}>
+          {!isSubmitted ? (
+            <View style={{ gap: 20 }}>
+              {/* Email Input */}
+              <View>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: "#ffffff",
+                    marginBottom: 8,
+                  }}
+                >
+                  Email Address
+                </Text>
                 <TextInput
-                  value={formData.password}
-                  onChangeText={(text) => setFormData({ ...formData, password: text })}
-                  placeholder="Create a password"
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder="Enter your email"
                   placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                  secureTextEntry={!showPassword}
+                  keyboardType="email-address"
                   autoCapitalize="none"
+                  autoComplete="email"
                   style={{
                     backgroundColor: "#474747",
                     borderRadius: 12,
@@ -161,153 +113,77 @@ export default function Signup() {
                     fontSize: 16,
                     color: "#ffffff",
                     borderWidth: 1,
-                    borderColor: formData.password && isPasswordValid ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                    paddingRight: 50,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
                   }}
                 />
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                  style={{
-                    position: "absolute",
-                    right: 16,
-                    top: 16,
-                  }}
-                >
-                  <MaterialIcons 
-                    name={showPassword ? "visibility-off" : "visibility"} 
-                    size={20} 
-                    color="rgba(255, 255, 255, 0.6)" 
-                  />
-                </TouchableOpacity>
               </View>
-              
-              {/* Password Validation */}
-              {formData.password.length > 0 && (
-                <View
-                  style={{
-                    marginTop: 12,
-                    backgroundColor: "#232323",
-                    borderRadius: 8,
-                    padding: 12,
-                    gap: 8,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      fontWeight: "600",
-                      color: "rgba(255, 255, 255, 0.7)",
-                      marginBottom: 4,
-                    }}
-                  >
-                    Password must contain:
-                  </Text>
-                  {[
-                    { label: "At least 8 characters", valid: passwordRules.minLength },
-                    { label: "One uppercase letter", valid: passwordRules.hasUpperCase },
-                    { label: "One lowercase letter", valid: passwordRules.hasLowerCase },
-                    { label: "One number", valid: passwordRules.hasNumber },
-                    { label: "One special character", valid: passwordRules.hasSpecialChar },
-                  ].map((rule, index) => (
-                    <View key={index} style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-                      <MaterialIcons
-                        name={rule.valid ? "check-circle" : "radio-button-unchecked"}
-                        size={16}
-                        color={rule.valid ? "#ba9988" : "rgba(255, 255, 255, 0.3)"}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: rule.valid ? "rgba(255, 255, 255, 0.8)" : "rgba(255, 255, 255, 0.4)",
-                        }}
-                      >
-                        {rule.label}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-              )}
-            </View>
 
-            {/* Invite code - Note: Firebase auth doesn't handle invite codes out of the box. */}
-            <View>
-              <Text
+              {/* Submit Button */}
+              <TouchableOpacity
+                onPress={handleSubmit}
+                activeOpacity={0.8}
+                disabled={!email}
                 style={{
-                  fontSize: 14,
-                  fontWeight: "600",
-                  color: "#ffffff",
-                  marginBottom: 8,
-                }}
-              >
-                Invite code
-              </Text>
-              <TextInput
-                value={formData.referralCode}
-                onChangeText={(text) => setFormData({ ...formData, referralCode: text })}
-                placeholder="Enter invite code (optional)"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                autoCapitalize="characters"
-                style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: email ? "#ba9988" : "rgba(186, 153, 136, 0.3)",
                   borderRadius: 12,
-                  padding: 16,
-                  fontSize: 16,
-                  color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
-                }}
-              />
-            </View>
-
-            {/* Sign Up Button */}
-            <TouchableOpacity
-              onPress={handleSignup}
-              activeOpacity={0.8}
-              disabled={!formData.email || !isPasswordValid}
-              style={{
-                backgroundColor: formData.email && isPasswordValid ? "#ba9988" : "rgba(186, 153, 136, 0.3)",
-                borderRadius: 12,
-                paddingVertical: 16,
-                alignItems: "center",
-                marginTop: 8,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: "600",
-                  color: formData.email && isPasswordValid ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
+                  paddingVertical: 16,
+                  alignItems: "center",
+                  marginTop: 8,
                 }}
               >
-                Create Account
-              </Text>
-            </TouchableOpacity>
-
-            {/* Login Link */}
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 8,
-                marginTop: 8,
-              }}
-            >
-              <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>
-                Already have an account?
-              </Text>
-              <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
                 <Text
                   style={{
-                    fontSize: 14,
-                    color: "#ba9988",
+                    fontSize: 16,
                     fontWeight: "600",
+                    color: email ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
                   }}
                 >
-                  Sign In
+                  Send Reset Link
                 </Text>
               </TouchableOpacity>
             </View>
+          ) : (
+            <View style={{ gap: 20, alignItems: "center" }}>
+              <View
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 40,
+                  backgroundColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: 16,
+                }}
+              >
+                <Text style={{ fontSize: 40, color: "#ba9988" }}>✓</Text>
+              </View>
+            </View>
+          )}
+
+          {/* Back to Login Link */}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 8,
+              marginTop: 24,
+            }}
+          >
+            <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>
+              Remember your password?
+            </Text>
+            <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "#ba9988",
+                  fontWeight: "600",
+                }}
+              >
+                Sign In
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>

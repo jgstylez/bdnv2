@@ -154,10 +154,14 @@ export default function Pay() {
     (wallet) => !wallet.isDefault && wallet.type !== "business" && wallet.type !== "organization"
   );
 
-  const totalBalance = filteredWallets.reduce((sum, wallet) => {
-    const balance = wallet.availableBalance ?? wallet.balance;
-    return sum + balance;
-  }, 0);
+  // Calculate total balance from ALL wallets (not just filtered by currency)
+  // Sum all USD balances for USD total, all BLKD balances for BLKD total
+  const totalBalance = wallets
+    .filter((wallet) => wallet.currency === selectedCurrency && (wallet.isActive !== false))
+    .reduce((sum, wallet) => {
+      const balance = wallet.availableBalance ?? wallet.balance;
+      return sum + balance;
+    }, 0);
 
   const handleAddPaymentMethod = () => {
     setShowAddModal(true);
@@ -309,7 +313,7 @@ export default function Pay() {
               marginBottom: 8,
             }}
           >
-            Total {selectedCurrency} Balance
+            Total Balance ({selectedCurrency})
           </Text>
           <Text
             style={{
@@ -330,7 +334,7 @@ export default function Pay() {
           <View
             style={{
               flexDirection: "row",
-              gap: 12,
+              gap: isMobile ? 8 : 12,
               marginBottom: 24,
             }}
           >

@@ -63,7 +63,7 @@ export default function Referrals() {
           >
             <View
               style={{
-                flexDirection: isMobile ? "column" : "row",
+                flexDirection: "row",
                 gap: 24,
               }}
             >

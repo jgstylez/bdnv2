@@ -43,11 +43,37 @@ const getWalletColor = (type: WalletType): string => {
     case "organization":
       return "#8b6f9d";
     case "bankaccount":
+    case "bank":
       return "#5a7a8a";
     case "creditcard":
+    case "card":
       return "#837a5a";
     default:
       return "#ba9988";
+  }
+};
+
+// Get background color for card based on account type
+const getWalletBackgroundColor = (type: WalletType): string => {
+  switch (type) {
+    case "primary":
+      return "rgba(186, 153, 136, 0.15)"; // Brown/tan tint
+    case "business":
+      return "rgba(107, 142, 159, 0.15)"; // Blue tint
+    case "organization":
+      return "rgba(139, 111, 157, 0.15)"; // Purple tint
+    case "myimpact":
+      return "rgba(255, 215, 0, 0.15)"; // Gold tint
+    case "giftcard":
+      return "rgba(157, 139, 111, 0.15)"; // Beige tint
+    case "bankaccount":
+    case "bank":
+      return "rgba(90, 122, 138, 0.15)"; // Dark blue tint
+    case "creditcard":
+    case "card":
+      return "rgba(131, 122, 90, 0.15)"; // Olive tint
+    default:
+      return "#474747";
   }
 };
 
@@ -64,24 +90,77 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
     if (currency === "BLKD") {
       return `${amount.toLocaleString()} BLKD`;
     }
+    // For compact cards, show integers only (no decimals)
+    if (compact) {
+      return `$${Math.round(amount).toLocaleString()}`;
+    }
     return `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
-  const padding = compact ? 10 : 14;
-  const iconSize = compact ? 16 : 20;
-  const iconContainerSize = compact ? 32 : 40;
-  const titleFontSize = compact ? 12 : 14;
-  const subtitleFontSize = compact ? 10 : 11;
-  const balanceFontSize = compact ? (isMobile ? 14 : 16) : (isMobile ? 16 : 18);
+  const padding = compact ? (isMobile ? 12 : 14) : 14;
+  const iconSize = compact ? (isMobile ? 14 : 16) : 20;
+  const iconContainerSize = compact ? (isMobile ? 24 : 28) : 40;
+  const titleFontSize = compact ? (isMobile ? 12 : 13) : 14;
+  const subtitleFontSize = compact ? (isMobile ? 10 : 11) : 12;
+  const balanceFontSize = compact ? (isMobile ? 13 : 15) : (isMobile ? 16 : 18);
   const badgeFontSize = compact ? 8 : 9;
   const badgePadding = compact ? { paddingHorizontal: 4, paddingVertical: 1 } : { paddingHorizontal: 5, paddingVertical: 1 };
+
+  // Get account type label
+  const getAccountTypeLabel = (type: WalletType): string => {
+    switch (type) {
+      case "primary":
+        return "Primary";
+      case "business":
+        return "Business";
+      case "organization":
+        return "Nonprofit";
+      case "myimpact":
+        return "MyImpact";
+      case "giftcard":
+        return "Gift Card";
+      case "bank":
+      case "bankaccount":
+        return "Bank Account";
+      case "card":
+      case "creditcard":
+        return "Credit Card";
+      default:
+        return wallet.name || "Account";
+    }
+  };
+
+  // Get account name/subtitle
+  const getAccountSubtitle = (): string => {
+    if (wallet.type === "bank" || wallet.type === "bankaccount") {
+      const bankWallet = wallet as BankAccountWallet & { bankName?: string; last4?: string };
+      return `${bankWallet.bankName || "Bank"} •••• ${bankWallet.last4 || "****"}`;
+    }
+    if (wallet.type === "card" || wallet.type === "creditcard") {
+      const cardWallet = wallet as CreditCardWallet & { cardBrand?: string; last4?: string };
+      return `${cardWallet.cardBrand || "Card"} •••• ${cardWallet.last4 || "****"}`;
+    }
+    if (wallet.type === "giftcard") {
+      return "Universal";
+    }
+    if (wallet.type === "primary") {
+      return username;
+    }
+    if (wallet.type === "business") {
+      return "Soul Food Kitchen";
+    }
+    if (wallet.type === "organization") {
+      return "Community Empowerment Foundation";
+    }
+    return wallet.name || "";
+  };
 
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.8}
       style={{
-        backgroundColor: "#474747",
+        backgroundColor: compact ? getWalletBackgroundColor(wallet.type) : "#474747",
         borderRadius: 12,
         padding: padding,
         borderWidth: wallet.isBackup ? 1 : 0,
@@ -112,70 +191,119 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
           </Text>
         </View>
       )}
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: compact ? 8 : 10, flex: 1 }}>
+      {compact ? (
+        // Vertical layout for compact cards - account type, balance, name, icon on right
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <View style={{ flex: 1, minWidth: 0 }}>
+            {/* Account Type */}
+            <Text
+              style={{
+                fontSize: titleFontSize,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginBottom: 4,
+              }}
+              numberOfLines={1}
+            >
+              {getAccountTypeLabel(wallet.type)}
+            </Text>
+            {/* Balance */}
+            <Text
+              style={{
+                fontSize: balanceFontSize,
+                fontWeight: "700",
+                color: iconColor,
+                marginBottom: 4,
+              }}
+              numberOfLines={1}
+            >
+              {formatBalance((wallet as any).availableBalance ?? wallet.balance, wallet.currency)}
+            </Text>
+            {/* Account Name */}
+            <Text
+              style={{
+                fontSize: subtitleFontSize,
+                color: "rgba(255, 255, 255, 0.7)",
+                fontWeight: "500",
+              }}
+              numberOfLines={1}
+            >
+              {getAccountSubtitle()}
+            </Text>
+          </View>
+          {/* Icon on the right */}
           <View
             style={{
               width: iconContainerSize,
               height: iconContainerSize,
-              borderRadius: compact ? 8 : 10,
-              backgroundColor: `${iconColor}20`,
+              borderRadius: 6,
+              backgroundColor: `${iconColor}25`,
               alignItems: "center",
               justifyContent: "center",
+              marginLeft: 8,
+              flexShrink: 0,
             }}
           >
             <MaterialIcons name={iconName} size={iconSize} color={iconColor} />
           </View>
-          <View style={{ flex: 1, minWidth: 0 }}>
-            <Text
+        </View>
+      ) : (
+        // Horizontal layout for full-size cards
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 12, flex: 1 }}>
+            <View
               style={{
-                fontSize: titleFontSize,
-                fontWeight: "600",
-                color: "#ffffff",
-                marginBottom: compact ? 1 : 2,
+                width: iconContainerSize,
+                height: iconContainerSize,
+                borderRadius: 10,
+                backgroundColor: `${iconColor}20`,
+                alignItems: "center",
+                justifyContent: "center",
               }}
-              numberOfLines={1}
             >
-              {wallet.name}
-            </Text>
-            <Text
-              style={{
-                fontSize: subtitleFontSize,
-                color: "rgba(255, 255, 255, 0.6)",
-              }}
-              numberOfLines={1}
-            >
-              {wallet.type === "bankaccount"
-                ? `${(wallet as BankAccountWallet).bankName} •••• ${(wallet as BankAccountWallet).last4}`
-                : wallet.type === "creditcard"
-                ? `${(wallet as CreditCardWallet).cardBrand} •••• ${(wallet as CreditCardWallet).last4}`
-                : wallet.type === "giftcard"
-                ? "Universal"
-                : wallet.type === "primary"
-                ? username
-                : wallet.type === "business"
-                ? "Soul Food Kitchen"
-                : wallet.type === "organization"
-                ? "Community Empowerment Foundation"
-                : wallet.type.charAt(0).toUpperCase() + wallet.type.slice(1)}
-            </Text>
+              <MaterialIcons name={iconName} size={iconSize} color={iconColor} />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text
+                style={{
+                  fontSize: titleFontSize,
+                  fontWeight: "700",
+                  color: "#ffffff",
+                  marginBottom: 3,
+                }}
+                numberOfLines={1}
+              >
+                {getAccountTypeLabel(wallet.type)}
+              </Text>
+              <Text
+                style={{
+                  fontSize: subtitleFontSize,
+                  color: "rgba(255, 255, 255, 0.7)",
+                  fontWeight: "500",
+                }}
+                numberOfLines={1}
+              >
+                {getAccountSubtitle()}
+              </Text>
+            </View>
           </View>
+          {/* Show balance for all accounts */}
+          {(
+            <View style={{ alignItems: "flex-end", marginLeft: 8, flexShrink: 0 }}>
+              <Text
+                style={{
+                  fontSize: balanceFontSize,
+                  fontWeight: "700",
+                  color: iconColor,
+                }}
+                numberOfLines={1}
+              >
+                {formatBalance((wallet as any).availableBalance ?? wallet.balance, wallet.currency)}
+              </Text>
+            </View>
+          )}
         </View>
-        {/* Only show balance for non-bank/credit card accounts */}
-        {(wallet.type !== "bankaccount" && wallet.type !== "creditcard") && (
-        <View style={{ alignItems: "flex-end", marginLeft: compact ? 4 : 8 }}>
-          <Text
-            style={{
-              fontSize: balanceFontSize,
-              fontWeight: "700",
-              color: iconColor,
-            }}
-          >
-            {formatBalance(wallet.balance, wallet.currency)}
-          </Text>
-        </View>
-        )}
-      </View>
+      )}
     </TouchableOpacity>
   );
 };

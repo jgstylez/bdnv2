@@ -17,7 +17,7 @@ export const userMenuItems: UserMenuItem[] = [
   { label: "Edit Profile", href: "/pages/profile", icon: "edit" },
   { label: "Wallet", href: "/(tabs)/pay", icon: "account-balance-wallet" },
   { label: "Inbox", href: "/pages/messages", icon: "inbox" },
-  { label: "Invoices", href: "/pages/invoices", icon: "receipt" },
+  { label: "Invoices", href: "/pages/invoices/user", icon: "receipt" },
   { label: "Bookings", href: "/pages/my-bookings", icon: "event-note" },
   { label: "Notifications", href: "/pages/notifications", icon: "notifications" },
   { label: "Transactions", href: "/pages/transactions", icon: "receipt" },
