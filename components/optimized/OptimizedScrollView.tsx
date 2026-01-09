@@ -9,7 +9,7 @@
  * - Optional back-to-top button for long content
  */
 
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { View, ScrollView, ScrollViewProps, Platform, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { useResponsive } from '@/hooks/useResponsive';
 import { BackToTopButton } from '@/components/navigation/BackToTopButton';
@@ -33,6 +33,13 @@ export const OptimizedScrollView: React.FC<OptimizedScrollViewProps> = ({
   const { scrollViewBottomPadding, paddingHorizontal } = useResponsive();
   const scrollViewRef = useRef<ScrollView>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
+  const onScrollRef = useRef(onScroll);
+  const lastScrollOffsetRef = useRef(0);
+
+  // Keep onScroll ref up to date without causing re-renders
+  useEffect(() => {
+    onScrollRef.current = onScroll;
+  }, [onScroll]);
 
   // Track scroll position using state - works reliably on all platforms
   // IMPORTANT: On iOS, during bounce, offsetY can exceed contentHeight - layoutHeight
@@ -41,14 +48,23 @@ export const OptimizedScrollView: React.FC<OptimizedScrollViewProps> = ({
   const handleScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     
-    // Use actual scroll offset (not clamped) so button can appear during iOS bounce
-    setScrollOffset(offsetY);
-    
-    // Call custom handler if provided
-    if (onScroll) {
-      onScroll(event);
+    // Only update state if value changed significantly (avoid unnecessary re-renders)
+    // Update if difference is > 1px to reduce state updates
+    if (Math.abs(offsetY - lastScrollOffsetRef.current) > 1) {
+      setScrollOffset(offsetY);
+      lastScrollOffsetRef.current = offsetY;
     }
-  }, [onScroll]);
+    
+    // Call custom handler if provided (using ref to avoid dependency)
+    if (onScrollRef.current) {
+      onScrollRef.current(event);
+    }
+  }, []);
+
+  const onScrollEndDragRef = useRef(onScrollEndDrag);
+  useEffect(() => {
+    onScrollEndDragRef.current = onScrollEndDrag;
+  }, [onScrollEndDrag]);
 
   // Handle scroll end events - clamp only when scroll settles (after bounce completes)
   const handleScrollEndDrag = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -62,11 +78,17 @@ export const OptimizedScrollView: React.FC<OptimizedScrollViewProps> = ({
     
     // Update with clamped value after scroll ends
     setScrollOffset(clampedOffsetY);
+    lastScrollOffsetRef.current = clampedOffsetY;
     
-    if (onScrollEndDrag) {
-      onScrollEndDrag(event);
+    if (onScrollEndDragRef.current) {
+      onScrollEndDragRef.current(event);
     }
-  }, [onScrollEndDrag]);
+  }, []);
+
+  const onMomentumScrollEndRef = useRef(onMomentumScrollEnd);
+  useEffect(() => {
+    onMomentumScrollEndRef.current = onMomentumScrollEnd;
+  }, [onMomentumScrollEnd]);
 
   const handleMomentumScrollEnd = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -79,11 +101,12 @@ export const OptimizedScrollView: React.FC<OptimizedScrollViewProps> = ({
     
     // Update with clamped value after momentum scroll ends
     setScrollOffset(clampedOffsetY);
+    lastScrollOffsetRef.current = clampedOffsetY;
     
-    if (onMomentumScrollEnd) {
-      onMomentumScrollEnd(event);
+    if (onMomentumScrollEndRef.current) {
+      onMomentumScrollEndRef.current(event);
     }
-  }, [onMomentumScrollEnd]);
+  }, []);
 
   // Scroll to top handler - works on all platforms
   const scrollToTop = useCallback(() => {

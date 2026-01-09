@@ -46,6 +46,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={{
+          flex: 1,
           justifyContent: "center",
           alignItems: "center",
           paddingHorizontal: spacing.xl,
