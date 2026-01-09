@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, useWindowDimensions, Platform } from "react-native";
-import { Tabs } from "expo-router";
+import { Tabs, usePathname } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Sidebar } from '@/components/Sidebar';
 import { AppHeader } from '@/components/AppHeader';
@@ -11,8 +11,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function TabsLayout() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const pathname = usePathname();
   const isDesktop = width >= 1024 && Platform.OS === "web";
   const [menuOpen, setMenuOpen] = useState(false);
+  
+  // Only render header if we're on a tabs route, not a pages route
+  const isTabsRoute = pathname?.startsWith("/(tabs)/") || pathname === "/" || !pathname?.startsWith("/pages/");
 
   const headerHeight = 64;
   const tabBarHeight = 56;
@@ -46,11 +50,11 @@ export default function TabsLayout() {
         </View>
       )}
       <View style={{ flex: 1, flexDirection: "column", position: "relative" }}>
-        <AppHeader onMenuPress={() => setMenuOpen(true)} />
+        {isTabsRoute && <AppHeader key="tabs-header" onMenuPress={() => setMenuOpen(true)} />}
         <View
           style={{
             flex: 1,
-            paddingTop: headerTotalHeight,
+            paddingTop: isTabsRoute ? headerTotalHeight : 0,
             paddingBottom: 0,
           }}
         >

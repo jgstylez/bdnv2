@@ -24,7 +24,7 @@ import { userMenuItems } from "../config/userMenu";
 import Svg, { G, Path } from "react-native-svg";
 
 interface AppHeaderProps {
-  onMenuPress: () => void;
+  onMenuPress?: () => void;
 }
 
 // Mock user data
@@ -69,7 +69,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onMenuPress }) => {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   const handleMenuPress = () => {
-    onMenuPress();
+    onMenuPress?.();
   };
 
   const getPageTitle = () => {

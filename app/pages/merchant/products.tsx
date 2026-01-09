@@ -256,7 +256,12 @@ export default function Products() {
               }}
             />
           </View>
-          <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ flexDirection: "row", gap: 8, paddingRight: 20 }}
+            style={{ flexGrow: 0 }}
+          >
             {(["all", "physical", "digital", "service"] as const).map((type) => (
               <TouchableOpacity
                 key={type}
@@ -271,6 +276,7 @@ export default function Products() {
                   flexDirection: "row",
                   alignItems: "center",
                   gap: 6,
+                  flexShrink: 0,
                 }}
               >
                 {type !== "all" && (
@@ -292,7 +298,7 @@ export default function Products() {
                 </Text>
               </TouchableOpacity>
             ))}
-          </View>
+          </ScrollView>
         </View>
 
         {/* Products List - 3 Column Grid */}

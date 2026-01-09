@@ -118,8 +118,8 @@ export default function PagesLayout() {
         </View>
       )}
       <View style={{ flex: 1, flexDirection: "column", position: "relative" }}>
-        <AppHeader onMenuPress={() => setMenuOpen(true)} />
-        <View style={{ flex: 1, paddingTop: headerTotalHeight, paddingBottom: isMobile ? 86 : 0 }}>
+        <AppHeader key="pages-header" onMenuPress={() => setMenuOpen(true)} />
+        <View style={{ flex: 1, paddingTop: headerTotalHeight, paddingBottom: isMobile ? 86 : 0, position: "relative" }}>
           <Stack
             screenOptions={{
               headerShown: false,

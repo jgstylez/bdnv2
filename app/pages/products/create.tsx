@@ -3,7 +3,6 @@ import { View, Text, ScrollView, TouchableOpacity, Alert, Platform } from "react
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import { AppHeader } from "@/components/AppHeader";
 import { useResponsive } from "@/hooks/useResponsive";
 import { colors, spacing } from "@/constants/theme";
 import { ProductStepIndicator } from "@/components/products/ProductStepIndicator";
@@ -123,8 +122,6 @@ export default function CreateProduct() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
       <StatusBar style="light" />
-      <AppHeader />
-      
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal,
