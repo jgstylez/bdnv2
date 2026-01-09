@@ -18,6 +18,52 @@ const mockImpactSummary: ImpactSummary = {
   pointsToNextLevel: 3750,
 };
 
+// Mock recent activity data
+const mockRecentActivity = [
+  {
+    icon: 'shopping-cart' as const,
+    description: 'Purchase at Soul Food Kitchen',
+    timestamp: '2h ago',
+    amount: '-$45.00',
+    color: '#ba9988',
+  },
+  {
+    icon: 'event' as const,
+    description: 'Event RSVP: Jazz & Soul Food Night',
+    timestamp: 'Yesterday',
+    amount: '-$22.00',
+    color: '#e91e63',
+  },
+  {
+    icon: 'people' as const,
+    description: 'Referral: Sarah M. joined',
+    timestamp: '3 days ago',
+    amount: '+$5.00',
+    color: '#4caf50',
+  },
+  {
+    icon: 'card-giftcard' as const,
+    description: 'Sent Gift Card to John D.',
+    timestamp: '5 days ago',
+    amount: '-$50.00',
+    color: '#9c27b0',
+  },
+  {
+    icon: 'favorite' as const,
+    description: 'Donation to Black Art Collective',
+    timestamp: '1 week ago',
+    amount: '-$25.00',
+    color: '#f44336',
+  },
+  {
+    icon: 'account-balance-wallet' as const,
+    description: 'Tokens Purchased',
+    timestamp: '1 week ago',
+    amount: '+$100.00',
+    color: '#ffd700',
+  },
+];
+
 const USER_LEVELS = {
   Basic: { color: "#8d8d8d", minPoints: 0 },
   Bronze: { color: "#cd7f32", minPoints: 1000 },
@@ -867,16 +913,75 @@ export default function MyImpact() {
               borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(255, 255, 255, 0.6)",
-                textAlign: "center",
-                paddingVertical: 20,
-              }}
-            >
-              No recent activity. Start making purchases and referrals to see your impact!
-            </Text>
+            {mockRecentActivity.length === 0 ? (
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "rgba(255, 255, 255, 0.6)",
+                  textAlign: "center",
+                  paddingVertical: 20,
+                }}
+              >
+                No recent activity. Start making purchases and referrals to see your impact!
+              </Text>
+            ) : (
+              <View style={{ gap: 16 }}>
+                {mockRecentActivity.map((activity, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 12, flex: 1 }}>
+                      <View
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 20,
+                          backgroundColor: `${activity.color}20`,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <MaterialIcons name={activity.icon} size={20} color={activity.color} />
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: "600",
+                            color: "#ffffff",
+                            marginBottom: 4,
+                          }}
+                        >
+                          {activity.description}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: "rgba(255, 255, 255, 0.5)",
+                          }}
+                        >
+                          {activity.timestamp}
+                        </Text>
+                      </View>
+                    </View>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: "700",
+                        color: activity.amount.startsWith('+') ? '#9ce0a4' : '#ffffff',
+                      }}
+                    >
+                      {activity.amount}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
