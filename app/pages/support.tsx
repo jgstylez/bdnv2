@@ -45,6 +45,8 @@ export default function Support() {
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [attachments, setAttachments] = useState<MessageAttachment[]>([]);
   const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
+  const [formAttachments, setFormAttachments] = useState<MessageAttachment[]>([]);
+  const [showFormAttachmentMenu, setShowFormAttachmentMenu] = useState(false);
 
   const categories = [
     "Account Issues",
@@ -60,7 +62,7 @@ export default function Support() {
       alert("Please fill in all required fields");
       return;
     }
-    // TODO: Submit form to API
+    // TODO: Submit form to API with formAttachments
     alert("Your message has been sent! We'll get back to you within 24 hours.");
     setFormData({
       subject: "",
@@ -69,6 +71,108 @@ export default function Support() {
       email: mockAuthenticatedUser.email,
       name: mockAuthenticatedUser.name,
     });
+    setFormAttachments([]);
+  };
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+
+  const handlePickFormDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "*/*",
+        copyToCacheDirectory: true,
+        multiple: true,
+      });
+
+      if (!result.canceled && result.assets) {
+        const validAttachments: MessageAttachment[] = [];
+        const invalidFiles: string[] = [];
+
+        result.assets.forEach((asset, index) => {
+          if (asset.size && asset.size > MAX_FILE_SIZE) {
+            invalidFiles.push(asset.name || `File ${index + 1}`);
+          } else {
+            validAttachments.push({
+              id: `form-doc-${Date.now()}-${index}`,
+              type: "document",
+              url: asset.uri,
+              fileName: asset.name,
+              fileSize: asset.size,
+              mimeType: asset.mimeType || "application/octet-stream",
+            });
+          }
+        });
+
+        if (invalidFiles.length > 0) {
+          Alert.alert(
+            "File Size Limit Exceeded",
+            `The following files exceed the 5MB limit:\n${invalidFiles.join("\n")}\n\nPlease select smaller files.`
+          );
+        }
+
+        if (validAttachments.length > 0) {
+          setFormAttachments([...formAttachments, ...validAttachments]);
+        }
+        setShowFormAttachmentMenu(false);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to pick document");
+    }
+  };
+
+  const handlePickFormImage = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission Required", "We need access to your photos to attach images.");
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        quality: 0.8,
+        allowsMultipleSelection: true,
+      });
+
+      if (!result.canceled && result.assets) {
+        const validAttachments: MessageAttachment[] = [];
+        const invalidFiles: string[] = [];
+
+        result.assets.forEach((asset, index) => {
+          if (asset.fileSize && asset.fileSize > MAX_FILE_SIZE) {
+            invalidFiles.push(asset.fileName || `Image ${index + 1}`);
+          } else {
+            validAttachments.push({
+              id: `form-img-${Date.now()}-${index}`,
+              type: "image",
+              url: asset.uri,
+              fileName: asset.fileName || `image-${index}.jpg`,
+              fileSize: asset.fileSize,
+              mimeType: asset.mimeType || "image/jpeg",
+            });
+          }
+        });
+
+        if (invalidFiles.length > 0) {
+          Alert.alert(
+            "File Size Limit Exceeded",
+            `The following images exceed the 5MB limit:\n${invalidFiles.join("\n")}\n\nPlease select smaller files.`
+          );
+        }
+
+        if (validAttachments.length > 0) {
+          setFormAttachments([...formAttachments, ...validAttachments]);
+        }
+        setShowFormAttachmentMenu(false);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to pick image");
+    }
+  };
+
+  const handleRemoveFormAttachment = (attachmentId: string) => {
+    setFormAttachments(formAttachments.filter((a) => a.id !== attachmentId));
   };
 
   const handlePickImage = async () => {
@@ -565,6 +669,112 @@ export default function Support() {
                 />
               </View>
 
+              {/* File Attachment Section */}
+              <View>
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                    }}
+                  >
+                    Attachments
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: "rgba(255, 255, 255, 0.6)",
+                    }}
+                  >
+                    Max 5MB per file
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => setShowFormAttachmentMenu(true)}
+                  style={{
+                    backgroundColor: "#232323",
+                    borderRadius: 12,
+                    padding: 16,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    borderStyle: "dashed",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 8,
+                  }}
+                >
+                  <MaterialIcons name="attach-file" size={20} color="#ba9988" />
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "#ba9988",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Attach File
+                  </Text>
+                </TouchableOpacity>
+                
+                {/* Attached Files Preview */}
+                {formAttachments.length > 0 && (
+                  <View style={{ marginTop: 12, gap: 8 }}>
+                    {formAttachments.map((attachment) => (
+                      <View
+                        key={attachment.id}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 12,
+                          backgroundColor: "#232323",
+                          borderRadius: 8,
+                          padding: 12,
+                          borderWidth: 1,
+                          borderColor: "rgba(186, 153, 136, 0.2)",
+                        }}
+                      >
+                        <MaterialIcons
+                          name={attachment.type === "image" ? "image" : "description"}
+                          size={20}
+                          color="#ba9988"
+                        />
+                        <View style={{ flex: 1 }}>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              color: "#ffffff",
+                              fontWeight: "500",
+                            }}
+                            numberOfLines={1}
+                          >
+                            {attachment.fileName || "File"}
+                          </Text>
+                          {attachment.fileSize && (
+                            <Text
+                              style={{
+                                fontSize: 11,
+                                color: "rgba(255, 255, 255, 0.6)",
+                              }}
+                            >
+                              {formatFileSize(attachment.fileSize)}
+                            </Text>
+                          )}
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => handleRemoveFormAttachment(attachment.id)}
+                          style={{
+                            padding: 4,
+                          }}
+                        >
+                          <MaterialIcons name="close" size={18} color="rgba(255, 255, 255, 0.6)" />
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+
               {/* Submit Button */}
               <TouchableOpacity
                 onPress={handleSubmitForm}
@@ -587,6 +797,123 @@ export default function Support() {
                 </Text>
               </TouchableOpacity>
             </View>
+
+            {/* Form Attachment Menu Modal */}
+            <Modal
+              visible={showFormAttachmentMenu}
+              transparent
+              animationType="slide"
+              onRequestClose={() => setShowFormAttachmentMenu(false)}
+            >
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  justifyContent: "flex-end",
+                }}
+                activeOpacity={1}
+                onPress={() => setShowFormAttachmentMenu(false)}
+              >
+                <View
+                  style={{
+                    backgroundColor: "#474747",
+                    borderTopLeftRadius: 20,
+                    borderTopRightRadius: 20,
+                    padding: 24,
+                    paddingBottom: Platform.OS === "ios" ? 40 : 24,
+                  }}
+                  onStartShouldSetResponder={() => true}
+                >
+                  <View
+                    style={{
+                      width: 40,
+                      height: 4,
+                      backgroundColor: "rgba(255, 255, 255, 0.3)",
+                      borderRadius: 2,
+                      alignSelf: "center",
+                      marginBottom: 24,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "700",
+                      color: "#ffffff",
+                      marginBottom: 20,
+                    }}
+                  >
+                    Attach File (Max 5MB)
+                  </Text>
+                  <View style={{ gap: 12 }}>
+                    <TouchableOpacity
+                      onPress={handlePickFormImage}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 16,
+                        padding: 16,
+                        backgroundColor: "#232323",
+                        borderRadius: 12,
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: 24,
+                          backgroundColor: "rgba(186, 153, 136, 0.2)",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <MaterialIcons name="image" size={24} color="#ba9988" />
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 16, fontWeight: "600", color: "#ffffff" }}>
+                          Photo or Image
+                        </Text>
+                        <Text style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.6)" }}>
+                          Choose from gallery
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={handlePickFormDocument}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 16,
+                        padding: 16,
+                        backgroundColor: "#232323",
+                        borderRadius: 12,
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: 24,
+                          backgroundColor: "rgba(186, 153, 136, 0.2)",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <MaterialIcons name="description" size={24} color="#ba9988" />
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 16, fontWeight: "600", color: "#ffffff" }}>
+                          Document
+                        </Text>
+                        <Text style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.6)" }}>
+                          PDF, Word, Excel, etc. (Max 5MB)
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </Modal>
 
             {/* Helpful Links */}
             <View
