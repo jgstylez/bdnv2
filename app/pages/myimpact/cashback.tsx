@@ -100,7 +100,7 @@ export default function CashbackPage() {
         {/* Cashback Summary */}
         <View
           style={{
-            flexDirection: isMobile ? "column" : "row",
+            flexDirection: "row",
             gap: 12,
             marginBottom: 24,
           }}
