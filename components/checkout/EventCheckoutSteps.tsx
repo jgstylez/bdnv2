@@ -707,7 +707,7 @@ export function EventCheckoutSuccessStep({
               width: 80,
               height: 80,
               borderRadius: 40,
-              backgroundColor: colors.accent,
+              backgroundColor: colors.status.success,
               alignItems: "center",
               justifyContent: "center",
               marginBottom: spacing.lg,

@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Event, EventCategory } from '@/types/events';
 import { HeroSection } from '@/components/layouts/HeroSection';
+import { EventPlaceholder } from '@/components/EventPlaceholder';
 
 // Mock events data with real placeholder images
 const mockEvents: Event[] = [
@@ -457,6 +458,7 @@ export default function Events() {
   const isTablet = width >= 768 && width < 1024;
   const [selectedCategory, setSelectedCategory] = useState<EventCategory | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   // Calculate card width for 3-column layout
   const getCardWidth = () => {
@@ -589,18 +591,31 @@ export default function Events() {
                   borderColor: "rgba(186, 153, 136, 0.2)",
                 }}
               >
-                <View style={{ width: "100%", height: 200, overflow: "hidden", backgroundColor: "#232323" }}>
-                  {event.imageUrl ? (
-                    <Image
-                      source={{ uri: event.imageUrl }}
-                      style={{ width: "100%", height: "100%" }}
-                      contentFit="cover"
-                      cachePolicy="memory-disk"
-                    />
+                <View style={{ width: "100%", height: 200, overflow: "hidden", backgroundColor: "#232323", position: "relative" }}>
+                  {event.imageUrl && event.imageUrl.trim() !== "" ? (
+                    imageErrors.has(event.id) ? (
+                      <EventPlaceholder width="100%" height={200} />
+                    ) : (
+                      <Image
+                        source={{ uri: event.imageUrl }}
+                        style={{ 
+                          width: "100%", 
+                          height: "100%",
+                        }}
+                        contentFit="cover"
+                        cachePolicy="memory-disk"
+                        transition={200}
+                        priority="high"
+                        {...(Platform.OS !== 'web' && {
+                          accessible: false,
+                        })}
+                        onError={() => {
+                          setImageErrors((prev) => new Set(prev).add(event.id));
+                        }}
+                      />
+                    )
                   ) : (
-                    <View style={{ width: "100%", height: "100%", backgroundColor: "#474747", justifyContent: "center", alignItems: "center" }}>
-                      {!isMobile && <MaterialIcons name="event" size={48} color="rgba(186, 153, 136, 0.5)" />}
-                    </View>
+                    <EventPlaceholder width="100%" height={200} />
                   )}
                 </View>
                 <View style={{ padding: 20 }}>
