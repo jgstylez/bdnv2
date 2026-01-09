@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
+import React from "react";
+import { View, Text, ScrollView, useWindowDimensions, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Donation } from '@/types/nonprofit';
@@ -57,15 +57,9 @@ const mockDonations: Donation[] = [
 export default function NonprofitDonations() {
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
-  const [filter, setFilter] = useState<"all" | "USD" | "BLKD">("all");
 
-  const filteredDonations = mockDonations.filter((donation) => {
-    if (filter === "all") return true;
-    return donation.currency === filter;
-  });
-
-  const totalDonations = filteredDonations.reduce((sum, d) => sum + d.amount, 0);
-  const totalContributors = new Set(filteredDonations.map((d) => d.donorId)).size;
+  const totalDonations = mockDonations.reduce((sum, d) => sum + d.amount, 0);
+  const totalContributors = new Set(mockDonations.map((d) => d.donorId)).size;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -85,7 +79,7 @@ export default function NonprofitDonations() {
         {/* Summary Cards */}
         <View
           style={{
-            flexDirection: isMobile ? "column" : "row",
+            flexDirection: "row",
             gap: 16,
             marginBottom: 32,
           }}
@@ -150,48 +144,20 @@ export default function NonprofitDonations() {
           </View>
         </View>
 
-        {/* Filter */}
-        <View style={{ marginBottom: 24 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              backgroundColor: "#474747",
-              borderRadius: 12,
-              padding: 4,
-              borderWidth: 1,
-              borderColor: "rgba(186, 153, 136, 0.2)",
-            }}
-          >
-            {(["all", "USD", "BLKD"] as const).map((option) => (
-              <TouchableOpacity
-                key={option}
-                onPress={() => setFilter(option)}
-                style={{
-                  flex: 1,
-                  backgroundColor: filter === option ? "#ba9988" : "transparent",
-                  paddingVertical: 10,
-                  borderRadius: 8,
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: filter === option ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                  }}
-                >
-                  {option === "all" ? "All" : option}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
         {/* Donations List */}
-        {filteredDonations.length > 0 ? (
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "700",
+            color: "#ffffff",
+            marginBottom: 16,
+          }}
+        >
+          Recent Donations
+        </Text>
+        {mockDonations.length > 0 ? (
           <View style={{ gap: 12 }}>
-            {filteredDonations.map((donation) => (
+            {mockDonations.map((donation) => (
               <View
                 key={donation.id}
                 style={{
