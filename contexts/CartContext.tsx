@@ -9,19 +9,7 @@ import { Product, ProductVariant } from "../types/merchant";
 import { Currency } from "../types/international";
 import { getMerchantName } from "../lib/merchant-lookup";
 import { logError } from "../lib/logger";
-
-// AsyncStorage import with fallback for web
-let AsyncStorage: any;
-try {
-  AsyncStorage = require("@react-native-async-storage/async-storage").default;
-} catch {
-  // Fallback for web or if AsyncStorage is not installed
-  AsyncStorage = {
-    getItem: async () => null,
-    setItem: async () => {},
-    removeItem: async () => {},
-  };
-}
+import { getStorageItem, setStorageItem } from "../lib/storage";
 
 export interface CartItem extends Product {
   quantity: number;
@@ -98,7 +86,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const loadCart = async () => {
     try {
-      const cartData = await AsyncStorage.getItem(CART_STORAGE_KEY);
+      const cartData = await getStorageItem(CART_STORAGE_KEY);
       if (cartData) {
         const parsedCart = JSON.parse(cartData);
         setItems(parsedCart);
@@ -112,7 +100,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const saveCart = async () => {
     try {
-      await AsyncStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+      await setStorageItem(CART_STORAGE_KEY, JSON.stringify(items));
     } catch (error) {
       logError("Error saving cart to storage", error, { storageKey: CART_STORAGE_KEY, itemCount: items.length });
     }
@@ -120,7 +108,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const loadSavedItems = async () => {
     try {
-      const savedData = await AsyncStorage.getItem(SAVED_ITEMS_STORAGE_KEY);
+      const savedData = await getStorageItem(SAVED_ITEMS_STORAGE_KEY);
       if (savedData) {
         const parsedSaved = JSON.parse(savedData);
         setSavedItems(parsedSaved);
@@ -132,7 +120,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const saveSavedItems = async () => {
     try {
-      await AsyncStorage.setItem(SAVED_ITEMS_STORAGE_KEY, JSON.stringify(savedItems));
+      await setStorageItem(SAVED_ITEMS_STORAGE_KEY, JSON.stringify(savedItems));
     } catch (error) {
       logError("Error saving saved items to storage", error, { storageKey: SAVED_ITEMS_STORAGE_KEY, itemCount: savedItems.length });
     }

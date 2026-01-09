@@ -1,21 +1,33 @@
 import { Notification, NotificationPreferences, PushNotificationToken, NotificationBadge } from "../types/notifications";
 import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
 import { logError, logInfo } from "./logger";
 
-// Configure notification handler
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
+// Check if running in Expo Go (where push notifications are limited)
+const isExpoGo = Constants.executionEnvironment === "storeClient";
+
+// Configure notification handler (only if not in Expo Go or if local notifications are supported)
+if (!isExpoGo) {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+}
 
 /**
  * Request push notification permissions
+ * Note: Push notifications require a development build, not Expo Go
  */
 export async function requestPushPermissions(): Promise<boolean> {
   try {
+    // In Expo Go, push notifications are not fully supported
+    if (isExpoGo) {
+      logInfo("Push notifications not available in Expo Go. Use a development build for full functionality.");
+      return false;
+    }
     const { status } = await Notifications.requestPermissionsAsync();
     return status === "granted";
   } catch (error) {
@@ -26,9 +38,16 @@ export async function requestPushPermissions(): Promise<boolean> {
 
 /**
  * Get push notification token
+ * Note: Push notifications require a development build, not Expo Go
  */
 export async function getPushToken(): Promise<string | null> {
   try {
+    // In Expo Go, push notifications are not fully supported
+    if (isExpoGo) {
+      logInfo("Push notifications not available in Expo Go. Use a development build for full functionality.");
+      return null;
+    }
+    
     const hasPermission = await requestPushPermissions();
     if (!hasPermission) {
       return null;
@@ -176,11 +195,18 @@ export async function sendEmailNotification(
 
 /**
  * Setup notification listeners
+ * Note: Push notifications require a development build, not Expo Go
  */
 export function setupNotificationListeners(
   onNotificationReceived: (notification: Notification) => void,
   onNotificationTapped: (notification: Notification) => void
 ) {
+  // In Expo Go, push notifications are not fully supported
+  if (isExpoGo) {
+    logInfo("Push notification listeners not available in Expo Go. Use a development build for full functionality.");
+    return;
+  }
+
   // Foreground notification handler
   Notifications.addNotificationReceivedListener((notification) => {
     // Convert Expo notification to our Notification type

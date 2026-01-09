@@ -1,32 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { Organization } from "../types/nonprofit";
 import { logger } from "../lib/logger";
-
-// AsyncStorage import with fallback for web
-let AsyncStorage: any;
-try {
-  AsyncStorage = require("@react-native-async-storage/async-storage").default;
-} catch {
-  // Fallback for web or if AsyncStorage is not installed
-  AsyncStorage = {
-    getItem: async (key: string) => {
-      if (typeof window !== "undefined") {
-        return window.localStorage.getItem(key);
-      }
-      return null;
-    },
-    setItem: async (key: string, value: string) => {
-      if (typeof window !== "undefined") {
-        window.localStorage.setItem(key, value);
-      }
-    },
-    removeItem: async (key: string) => {
-      if (typeof window !== "undefined") {
-        window.localStorage.removeItem(key);
-      }
-    },
-  };
-}
+import { getStorageItem, setStorageItem } from "../lib/storage";
 
 interface NonprofitContextType {
   nonprofits: Organization[];
@@ -142,7 +117,7 @@ export function NonprofitProvider({ children }: { children: React.ReactNode }) {
       setNonprofits(mockNonprofits);
       
       // Load selected nonprofit from storage
-      const selectedId = await AsyncStorage.getItem(SELECTED_NONPROFIT_KEY);
+      const selectedId = await getStorageItem(SELECTED_NONPROFIT_KEY);
       if (selectedId) {
         const nonprofit = mockNonprofits.find(n => n.id === selectedId);
         if (nonprofit) {
@@ -150,12 +125,12 @@ export function NonprofitProvider({ children }: { children: React.ReactNode }) {
         } else if (mockNonprofits.length > 0) {
           // If stored ID doesn't exist, select first nonprofit
           setSelectedNonprofit(mockNonprofits[0]);
-          await AsyncStorage.setItem(SELECTED_NONPROFIT_KEY, mockNonprofits[0].id);
+          await setStorageItem(SELECTED_NONPROFIT_KEY, mockNonprofits[0].id);
         }
       } else if (mockNonprofits.length > 0) {
         // No stored selection, use first nonprofit
         setSelectedNonprofit(mockNonprofits[0]);
-        await AsyncStorage.setItem(SELECTED_NONPROFIT_KEY, mockNonprofits[0].id);
+        await setStorageItem(SELECTED_NONPROFIT_KEY, mockNonprofits[0].id);
       }
     } catch (error) {
       logger.error("Error loading nonprofits", error);
@@ -168,7 +143,7 @@ export function NonprofitProvider({ children }: { children: React.ReactNode }) {
     const nonprofit = nonprofits.find(n => n.id === nonprofitId);
     if (nonprofit) {
       setSelectedNonprofit(nonprofit);
-      await AsyncStorage.setItem(SELECTED_NONPROFIT_KEY, nonprofitId);
+      await setStorageItem(SELECTED_NONPROFIT_KEY, nonprofitId);
     }
   }, [nonprofits]);
 

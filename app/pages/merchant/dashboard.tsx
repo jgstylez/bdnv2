@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HeroSection } from '@/components/layouts/HeroSection';
@@ -40,12 +41,12 @@ export default function MerchantDashboard() {
   const metrics = mockBusinessMetrics[selectedBusiness.id] || mockBusinessMetrics["1"];
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#232323" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#232323" }} edges={Platform.OS === "web" ? [] : ["top"]}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: paddingHorizontal,
-          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingTop: Platform.OS === "web" ? 20 : 16,
           paddingBottom: scrollViewBottomPadding,
         }}
       >
@@ -63,8 +64,8 @@ export default function MerchantDashboard() {
           style={{
             flexDirection: "row",
             flexWrap: "wrap",
-            gap: 16,
             marginBottom: 24,
+            gap: isMobile ? 12 : 16,
           }}
         >
           {[
@@ -96,14 +97,21 @@ export default function MerchantDashboard() {
             <View
               key={index}
               style={{
-                flex: isMobile ? "0 0 calc(50% - 8px)" : "0 0 calc(25% - 12px)",
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
+                flex: isMobile ? 1 : 1,
+                minWidth: isMobile ? "48%" : "23%",
+                maxWidth: isMobile ? "48%" : "23%",
+                marginBottom: 16,
               }}
             >
+              <View
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                }}
+              >
               <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                 <View
                   style={{
@@ -136,6 +144,7 @@ export default function MerchantDashboard() {
               >
                 {stat.label}
               </Text>
+              </View>
             </View>
           ))}
         </View>
@@ -159,19 +168,20 @@ export default function MerchantDashboard() {
               gap: 12,
             }}
           >
-            <TouchableOpacity
-              onPress={() => router.push("/pages/merchant/products")}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: isMobile ? 16 : 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/merchant/products")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: isMobile ? 16 : 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 110 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons name="inventory" size={isMobile ? 20 : 24} color="#ba9988" style={{ marginBottom: 8 }} />
               <Text
                 style={{
@@ -182,20 +192,22 @@ export default function MerchantDashboard() {
               >
                 Products
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => router.push("/pages/merchant/qrcode")}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: isMobile ? 16 : 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/merchant/qrcode")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: isMobile ? 16 : 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 110 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons name="qr-code" size={isMobile ? 20 : 24} color="#ba9988" style={{ marginBottom: 8 }} />
               <Text
                 style={{
@@ -206,20 +218,22 @@ export default function MerchantDashboard() {
               >
                 QR Code
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => router.push("/pages/merchant/orders")}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: isMobile ? 16 : 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/merchant/orders")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: isMobile ? 16 : 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 110 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons name="shopping-cart" size={isMobile ? 20 : 24} color="#ba9988" style={{ marginBottom: 8 }} />
               <Text
                 style={{
@@ -230,20 +244,22 @@ export default function MerchantDashboard() {
               >
                 Orders
               </Text>
-            </TouchableOpacity>
-             <TouchableOpacity
-              onPress={() => router.push("/pages/merchant/subscriptions")}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: isMobile ? 16 : 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/merchant/subscriptions")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: isMobile ? 16 : 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 110 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons name="subscriptions" size={isMobile ? 20 : 24} color="#ba9988" style={{ marginBottom: 8 }} />
               <Text
                 style={{
@@ -254,20 +270,22 @@ export default function MerchantDashboard() {
               >
                 Subscriptions
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => router.push("/pages/merchant/analytics")}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: isMobile ? 16 : 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/merchant/analytics")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: isMobile ? 16 : 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 110 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons name="analytics" size={isMobile ? 20 : 24} color="#ba9988" style={{ marginBottom: 8 }} />
               <Text
                 style={{
@@ -278,20 +296,22 @@ export default function MerchantDashboard() {
               >
                 Analytics
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => router.push("/pages/merchant/settings")}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: isMobile ? 16 : 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/merchant/settings")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: isMobile ? 16 : 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 110 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons name="settings" size={isMobile ? 20 : 24} color="#ba9988" style={{ marginBottom: 8 }} />
               <Text
                 style={{
@@ -302,7 +322,8 @@ export default function MerchantDashboard() {
               >
                 Settings
               </Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -340,6 +361,6 @@ export default function MerchantDashboard() {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

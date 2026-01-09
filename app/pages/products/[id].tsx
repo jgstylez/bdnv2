@@ -1025,6 +1025,11 @@ export default function ProductDetail() {
               >
                 <TouchableOpacity
                   onPress={() => router.push(`/pages/businesses/${businessId}`)}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Visit Business Details"
+                  accessibilityHint="Navigates to the business profile page"
+                  hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
                   style={{
                     flex: 1,
                     flexDirection: "row",
@@ -1032,25 +1037,32 @@ export default function ProductDetail() {
                     justifyContent: "center",
                     gap: spacing.xs,
                     paddingVertical: isMobile ? spacing.md : spacing.lg,
+                    paddingHorizontal: isMobile ? spacing.sm : spacing.md,
                     backgroundColor: colors.secondary.bg,
                     borderRadius: borderRadius.md,
                     borderWidth: 1,
                     borderColor: colors.border.light,
+                    minHeight: isMobile ? 44 : undefined, // Minimum touch target size
                   }}
                 >
                   <Text
                     style={{
-                      fontSize: typography.fontSize.base,
+                      fontSize: isMobile ? typography.fontSize.xs : typography.fontSize.base,
                       fontWeight: typography.fontWeight.semibold,
                       color: colors.accent,
                     }}
                   >
                     Visit Business Details
                   </Text>
-                  <MaterialIcons name="arrow-forward" size={18} color={colors.accent} />
+                  <MaterialIcons name="arrow-forward" size={isMobile ? 14 : 18} color={colors.accent} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => router.push(`/pages/products/list?merchant=${product.merchantId}`)}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="View All Products"
+                  accessibilityHint="Shows all products from this business"
+                  hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
                   style={{
                     flex: 1,
                     flexDirection: "row",
@@ -1058,20 +1070,22 @@ export default function ProductDetail() {
                     justifyContent: "center",
                     gap: spacing.xs,
                     paddingVertical: isMobile ? spacing.md : spacing.lg,
+                    paddingHorizontal: isMobile ? spacing.sm : spacing.md,
                     backgroundColor: colors.accent,
                     borderRadius: borderRadius.md,
+                    minHeight: isMobile ? 44 : undefined, // Minimum touch target size
                   }}
                 >
                   <Text
                     style={{
-                      fontSize: typography.fontSize.base,
+                      fontSize: isMobile ? typography.fontSize.xs : typography.fontSize.base,
                       fontWeight: typography.fontWeight.semibold,
                       color: colors.textColors.onAccent,
                     }}
                   >
                     View All Products
                   </Text>
-                  <MaterialIcons name="arrow-forward" size={18} color={colors.textColors.onAccent} />
+                  <MaterialIcons name="arrow-forward" size={isMobile ? 14 : 18} color={colors.textColors.onAccent} />
                 </TouchableOpacity>
               </View>
             </View>

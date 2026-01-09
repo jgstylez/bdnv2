@@ -107,13 +107,13 @@ export default function ProductList() {
         overflow: "hidden",
         borderWidth: 1,
         borderColor: colors.border.light,
-        marginBottom: spacing.md,
+        marginBottom: isMobile ? spacing.sm : spacing.md,
       }}
     >
       {/* Product Image - Square, bleeding to top, left, bottom */}
       <View
         style={{
-          width: isMobile ? 120 : 150,
+          width: isMobile ? 100 : 150,
           aspectRatio: 1,
           position: "relative",
           backgroundColor: colors.secondary.bg,
@@ -128,7 +128,15 @@ export default function ProductList() {
         {product.images && product.images.length > 0 && product.images[0] && product.images[0].trim() !== "" && !imageErrors.has(product.id) ? (
           <Image
             source={{ uri: product.images[0] }}
-            style={{ width: "100%", height: "100%" }}
+            style={{ 
+              width: "100%", 
+              height: "100%",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
             contentFit="cover"
             cachePolicy="memory-disk"
             onError={() => {
@@ -210,52 +218,27 @@ export default function ProductList() {
       </View>
 
       {/* Product Details */}
-      <View style={{ flex: 1, padding: spacing.md, justifyContent: "space-between" }}>
+      <View style={{ flex: 1, padding: isMobile ? spacing.md : spacing.lg, justifyContent: "space-between" }}>
         <View>
           <Text
-            numberOfLines={2}
+            numberOfLines={1}
             ellipsizeMode="tail"
             style={{
-              fontSize: typography.fontSize.lg,
+              fontSize: isMobile ? typography.fontSize.base : typography.fontSize.lg,
               fontWeight: typography.fontWeight.bold,
               color: colors.text.primary,
-              marginBottom: spacing.xs,
-              ...(Platform.OS === "web" && {
-                // @ts-ignore - Web-only CSS properties
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                lineHeight: 24,
-              }),
+              marginBottom: isMobile ? spacing.xs : spacing.sm,
             }}
           >
             {product.name}
           </Text>
-          <Text
-            numberOfLines={2}
-            ellipsizeMode="tail"
-            style={{
-              fontSize: typography.fontSize.sm,
-              color: colors.text.secondary,
-              marginBottom: spacing.sm,
-              ...(Platform.OS === "web" && {
-                // @ts-ignore - Web-only CSS properties
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                lineHeight: 18,
-              }),
-            }}
-          >
-            {product.description}
-          </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: spacing.xs }}>
-            <MaterialIcons name="star" size={16} color={colors.accent} />
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: isMobile ? spacing.sm : spacing.md }}>
+            <MaterialIcons name="star" size={isMobile ? 14 : 16} color={colors.accent} />
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
+                fontSize: isMobile ? typography.fontSize.xs : typography.fontSize.sm,
                 color: colors.text.secondary,
-                marginLeft: spacing.xs,
+                marginLeft: spacing.xs / 2,
               }}
             >
               4.5
@@ -264,7 +247,7 @@ export default function ProductList() {
               style={{
                 fontSize: typography.fontSize.xs,
                 color: colors.text.tertiary,
-                marginLeft: spacing.sm,
+                marginLeft: spacing.xs,
               }}
             >
               (123)
@@ -275,7 +258,7 @@ export default function ProductList() {
           <View>
             <Text
               style={{
-                fontSize: typography.fontSize.xl,
+                fontSize: isMobile ? typography.fontSize.lg : typography.fontSize.xl,
                 fontWeight: typography.fontWeight.bold,
                 color: colors.accent,
               }}
@@ -287,7 +270,7 @@ export default function ProductList() {
                 style={{
                   fontSize: typography.fontSize.xs,
                   color: colors.text.tertiary,
-                  marginTop: spacing.xs,
+                  marginTop: spacing.xs / 2,
                 }}
               >
                 {product.duration}
@@ -299,14 +282,14 @@ export default function ProductList() {
             activeOpacity={0.8}
             style={{
               backgroundColor: colors.accent,
-              paddingHorizontal: spacing.lg,
-              paddingVertical: spacing.sm,
+              paddingHorizontal: isMobile ? spacing.md : spacing.lg,
+              paddingVertical: isMobile ? spacing.xs + 2 : spacing.sm,
               borderRadius: borderRadius.md,
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.base,
+                fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
                 fontWeight: typography.fontWeight.semibold,
                 color: colors.textColors.onAccent,
               }}

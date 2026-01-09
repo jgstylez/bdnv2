@@ -8,6 +8,7 @@ import {
   Platform,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { OrganizationAccount } from "@/types/nonprofit";
@@ -76,12 +77,12 @@ export default function NonprofitDashboard() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#232323" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#232323" }} edges={Platform.OS === "web" ? [] : ["top"]}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: paddingHorizontal,
-          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingTop: Platform.OS === "web" ? 20 : 16,
           paddingBottom: scrollViewBottomPadding,
         }}
       >
@@ -99,22 +100,29 @@ export default function NonprofitDashboard() {
           style={{
             flexDirection: "row",
             flexWrap: "wrap",
-            gap: 16,
             marginBottom: 32,
+            gap: isMobile ? 12 : 16,
           }}
         >
           {stats.map((stat, index) => (
             <View
               key={index}
               style={{
-                flex: isMobile ? "0 0 calc(50% - 8px)" : "0 0 calc(25% - 12px)",
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
+                flex: 1,
+                minWidth: isMobile ? "48%" : "23%",
+                maxWidth: isMobile ? "48%" : "23%",
+                marginBottom: 16,
               }}
             >
+              <View
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                }}
+              >
               <View
                 style={{
                   flexDirection: "row",
@@ -158,6 +166,7 @@ export default function NonprofitDashboard() {
               >
                 {stat.label}
               </Text>
+              </View>
             </View>
           ))}
         </View>
@@ -181,18 +190,20 @@ export default function NonprofitDashboard() {
               gap: 12,
             }}
           >
-            <TouchableOpacity
-              onPress={() => router.push("/pages/nonprofit/campaigns")}
-              style={{
-                flex: isMobile ? "0 0 calc(50% - 6px)" : "0 0 calc(25% - 9px)",
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/nonprofit/campaigns")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 130 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons
                 name="campaign"
                 size={24}
@@ -219,20 +230,23 @@ export default function NonprofitDashboard() {
               >
                 {account.activeCampaigns} active
               </Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity
-              onPress={() => router.push("/pages/nonprofit/account")}
-              style={{
-                flex: isMobile ? "0 0 calc(50% - 6px)" : "0 0 calc(25% - 9px)",
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/nonprofit/account")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 130 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons
                 name="account-balance"
                 size={24}
@@ -259,20 +273,23 @@ export default function NonprofitDashboard() {
               >
                 View funding & transactions
               </Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity
-              onPress={() => router.push("/pages/nonprofit/donations")}
-              style={{
-                flex: isMobile ? "0 0 calc(50% - 6px)" : "0 0 calc(25% - 9px)",
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/nonprofit/donations")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 130 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons
                 name="favorite"
                 size={24}
@@ -299,20 +316,23 @@ export default function NonprofitDashboard() {
               >
                 {account.totalDonations} total
               </Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity
-              onPress={() => router.push("/pages/nonprofit/settings")}
-              style={{
-                flex: isMobile ? "0 0 calc(50% - 6px)" : "0 0 calc(25% - 9px)",
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: 20,
-                borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
-                alignItems: "center",
-              }}
-            >
+            <View style={{ flex: 1, minWidth: isMobile ? "48%" : "23%", maxWidth: isMobile ? "48%" : "23%", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => router.push("/pages/nonprofit/settings")}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  alignItems: "center",
+                  minHeight: isMobile ? 130 : undefined,
+                  justifyContent: "center",
+                }}
+              >
               <MaterialIcons
                 name="settings"
                 size={24}
@@ -339,7 +359,8 @@ export default function NonprofitDashboard() {
               >
                 Manage organization details
               </Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -377,6 +398,6 @@ export default function NonprofitDashboard() {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

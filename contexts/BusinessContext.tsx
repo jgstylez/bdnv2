@@ -1,32 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { Merchant } from "../types/merchant";
 import { logger } from "../lib/logger";
-
-// AsyncStorage import with fallback for web
-let AsyncStorage: any;
-try {
-  AsyncStorage = require("@react-native-async-storage/async-storage").default;
-} catch {
-  // Fallback for web or if AsyncStorage is not installed
-  AsyncStorage = {
-    getItem: async (key: string) => {
-      if (typeof window !== "undefined") {
-        return window.localStorage.getItem(key);
-      }
-      return null;
-    },
-    setItem: async (key: string, value: string) => {
-      if (typeof window !== "undefined") {
-        window.localStorage.setItem(key, value);
-      }
-    },
-    removeItem: async (key: string) => {
-      if (typeof window !== "undefined") {
-        window.localStorage.removeItem(key);
-      }
-    },
-  };
-}
+import { getStorageItem, setStorageItem } from "../lib/storage";
 
 interface BusinessContextType {
   businesses: Merchant[];
@@ -144,7 +119,7 @@ export function BusinessProvider({ children }: { children: React.ReactNode }) {
       setBusinesses(mockBusinesses);
       
       // Load selected business from storage
-      const selectedId = await AsyncStorage.getItem(SELECTED_BUSINESS_KEY);
+      const selectedId = await getStorageItem(SELECTED_BUSINESS_KEY);
       if (selectedId) {
         const business = mockBusinesses.find(b => b.id === selectedId);
         if (business) {
@@ -152,12 +127,12 @@ export function BusinessProvider({ children }: { children: React.ReactNode }) {
         } else if (mockBusinesses.length > 0) {
           // If stored ID doesn't exist, select first business
           setSelectedBusiness(mockBusinesses[0]);
-          await AsyncStorage.setItem(SELECTED_BUSINESS_KEY, mockBusinesses[0].id);
+          await setStorageItem(SELECTED_BUSINESS_KEY, mockBusinesses[0].id);
         }
       } else if (mockBusinesses.length > 0) {
         // No stored selection, use first business
         setSelectedBusiness(mockBusinesses[0]);
-        await AsyncStorage.setItem(SELECTED_BUSINESS_KEY, mockBusinesses[0].id);
+        await setStorageItem(SELECTED_BUSINESS_KEY, mockBusinesses[0].id);
       }
     } catch (error) {
       logger.error("Error loading businesses", error);
@@ -170,7 +145,7 @@ export function BusinessProvider({ children }: { children: React.ReactNode }) {
     const business = businesses.find(b => b.id === businessId);
     if (business) {
       setSelectedBusiness(business);
-      await AsyncStorage.setItem(SELECTED_BUSINESS_KEY, businessId);
+      await setStorageItem(SELECTED_BUSINESS_KEY, businessId);
     }
   }, [businesses]);
 

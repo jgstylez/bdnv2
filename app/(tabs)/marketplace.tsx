@@ -578,6 +578,7 @@ export default function Marketplace() {
                       aspectRatio: 1,
                       overflow: "hidden",
                       backgroundColor: colors.secondary,
+                      position: "relative",
                     }}
                   >
                     {product.images &&
@@ -587,7 +588,15 @@ export default function Marketplace() {
                     !imageErrors.has(product.id) ? (
                       <Image
                         source={{ uri: product.images[0] }}
-                        style={{ width: "100%", height: "100%" }}
+                        style={{ 
+                          width: "100%", 
+                          height: "100%",
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                        }}
                         contentFit="cover"
                         cachePolicy="memory-disk"
                         {...(Platform.OS !== 'web' && {

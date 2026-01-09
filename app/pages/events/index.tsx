@@ -680,12 +680,12 @@ export default function Events() {
                       onPress={() => router.push(`/pages/events/${event.id}`)}
                       style={{
                         backgroundColor: "#ba9988",
-                        paddingHorizontal: 16,
-                        paddingVertical: 8,
+                        paddingHorizontal: isMobile ? 12 : 16,
+                        paddingVertical: isMobile ? 6 : 8,
                         borderRadius: 8,
                       }}
                     >
-                      <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>View Details</Text>
+                      <Text style={{ fontSize: isMobile ? 13 : 14, fontWeight: "600", color: "#ffffff" }}>View Details</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
