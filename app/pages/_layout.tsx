@@ -7,6 +7,8 @@ import { MenuPanel } from '@/components/MenuPanel';
 import { CustomTabBar } from '@/components/CustomTabBar';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
+import { BusinessProvider } from '@/contexts/BusinessContext';
+import { NonprofitProvider } from '@/contexts/NonprofitContext';
 
 export default function PagesLayout() {
   const { width } = useWindowDimensions();
@@ -91,71 +93,76 @@ export default function PagesLayout() {
   } as any);
 
   return (
-    <View 
-      style={{ 
-        flex: 1, 
-        flexDirection: isDesktop ? "row" : "column", 
-        overflow: isDesktop ? "visible" : "hidden",
-        ...(isDesktop && Platform.OS === "web" && {
-          // @ts-ignore - Web-only CSS properties
-          overflow: "visible",
-          isolation: "isolate",
-        }),
-      }}
-    >
-      {isDesktop && (
+    <BusinessProvider>
+      <NonprofitProvider>
         <View 
           style={{ 
-            overflow: "visible",
-            ...(Platform.OS === "web" && {
+            flex: 1, 
+            flexDirection: isDesktop ? "row" : "column", 
+            overflow: isDesktop ? "visible" : "hidden",
+            ...(isDesktop && Platform.OS === "web" && {
               // @ts-ignore - Web-only CSS properties
               overflow: "visible",
-              position: "relative" as any,
+              isolation: "isolate",
             }),
           }}
         >
-          <Sidebar />
+          {isDesktop && (
+            <View 
+              style={{ 
+                overflow: "visible",
+                ...(Platform.OS === "web" && {
+                  // @ts-ignore - Web-only CSS properties
+                  overflow: "visible",
+                  position: "relative" as any,
+                }),
+              }}
+            >
+              <Sidebar />
+            </View>
+          )}
+          <View style={{ flex: 1, flexDirection: "column", position: "relative" }}>
+            <AppHeader key="pages-header" onMenuPress={() => setMenuOpen(true)} />
+            <View style={{ flex: 1, paddingTop: headerTotalHeight, paddingBottom: isMobile ? 86 : 0, position: "relative" }}>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: { backgroundColor: "#232323" },
+                }}
+              >
+                  <Stack.Screen name="referrals" />
+                  <Stack.Screen name="merchant" />
+                  <Stack.Screen name="myimpact" />
+                  <Stack.Screen name="university" />
+                  <Stack.Screen name="media" />
+                  <Stack.Screen name="search" />
+                  <Stack.Screen name="notifications" />
+                  <Stack.Screen name="nonprofit" />
+                  <Stack.Screen name="pay-it-forward" />
+                  <Stack.Screen name="events" />
+                  <Stack.Screen name="transactions" />
+                  <Stack.Screen name="bdn-plus" />
+                  <Stack.Screen name="support" />
+                  <Stack.Screen name="profile" />
+                  <Stack.Screen name="payments" />
+                  <Stack.Screen name="cart" />
+                  <Stack.Screen name="invoices" />
+                  <Stack.Screen name="account" />
+                  <Stack.Screen name="orders" />
+              </Stack>
+            </View>
+            {!isDesktop && (
+              <CustomTabBar
+                state={createTabBarState()}
+                descriptors={createTabBarDescriptors()}
+                navigation={createTabBarNavigation()}
+              />
+            )}
+          </View>
+          <MenuPanel isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
         </View>
-      )}
-      <View style={{ flex: 1, flexDirection: "column", position: "relative" }}>
-        <AppHeader key="pages-header" onMenuPress={() => setMenuOpen(true)} />
-        <View style={{ flex: 1, paddingTop: headerTotalHeight, paddingBottom: isMobile ? 86 : 0, position: "relative" }}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              contentStyle: { backgroundColor: "#232323" },
-            }}
-          >
-              <Stack.Screen name="referrals" />
-              <Stack.Screen name="merchant" />
-              <Stack.Screen name="myimpact" />
-              <Stack.Screen name="university" />
-              <Stack.Screen name="media" />
-              <Stack.Screen name="search" />
-              <Stack.Screen name="notifications" />
-              <Stack.Screen name="nonprofit" />
-              <Stack.Screen name="pay-it-forward" />
-              <Stack.Screen name="events" />
-              <Stack.Screen name="transactions" />
-              <Stack.Screen name="bdn-plus" />
-              <Stack.Screen name="support" />
-              <Stack.Screen name="profile" />
-              <Stack.Screen name="payments" />
-              <Stack.Screen name="cart" />
-              <Stack.Screen name="invoices" />
-              <Stack.Screen name="account" />
-          </Stack>
-        </View>
-        {!isDesktop && (
-          <CustomTabBar
-            state={createTabBarState()}
-            descriptors={createTabBarDescriptors()}
-            navigation={createTabBarNavigation()}
-          />
-        )}
-      </View>
-      <MenuPanel isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
-    </View>
+      </NonprofitProvider>
+    </BusinessProvider>
   );
 }
 
