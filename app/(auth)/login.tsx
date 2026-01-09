@@ -12,7 +12,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { login, handleBiometricAuth } = useAuth();
+  const { login } = useAuth();
 
   const handleLogin = () => {
     login(email, password);
@@ -199,30 +199,6 @@ export default function Login() {
                 }}
               >
                 Sign In
-              </Text>
-            </TouchableOpacity>
-
-            {/* Biometric Button */}
-            <TouchableOpacity
-              onPress={handleBiometricAuth}
-              activeOpacity={0.8}
-              style={{
-                borderColor: "#ba9988",
-                borderWidth: 1,
-                borderRadius: 12,
-                paddingVertical: 16,
-                alignItems: "center",
-                marginTop: 8,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: "600",
-                  color: "#ba9988",
-                }}
-              >
-                Use Biometrics
               </Text>
             </TouchableOpacity>
 
