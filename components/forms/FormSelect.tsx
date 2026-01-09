@@ -104,12 +104,6 @@ export function FormSelect({
       <View 
         style={{ position: "relative" }} 
         ref={buttonRef}
-        onLayout={(event) => {
-          if (Platform.OS !== "web") {
-            const { x, y, width, height } = event.nativeEvent.layout;
-            setButtonLayout({ x, y, width, height });
-          }
-        }}
       >
         <TouchableOpacity
           onPress={handleOpen}
