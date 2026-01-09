@@ -30,7 +30,6 @@ export default function ProductDetail() {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [subscriptionFrequency, setSubscriptionFrequency] = useState<SubscriptionFrequency | null>(null);
   const [subscriptionDuration, setSubscriptionDuration] = useState<SubscriptionDuration | null>(null);
-  const [isSubscribing, setIsSubscribing] = useState(false);
   const [isSubscriptionEnabled, setIsSubscriptionEnabled] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [thumbnailErrors, setThumbnailErrors] = useState<Set<number>>(new Set());
@@ -190,38 +189,17 @@ export default function ProductDetail() {
     subscriptionTotal = subscriptionPricing.totalPerShipment;
   }
 
-  const handleSubscribe = async () => {
-    if (!subscriptionPlan || !subscriptionFrequency || !subscriptionDuration) {
-      Alert.alert("Error", "Please select subscription options");
+  const handleSubscribe = () => {
+    if (!subscriptionFrequency || !subscriptionDuration) {
+      Alert.alert("Selection Required", "Please select the number of shipments before subscribing.");
       return;
     }
 
-    setIsSubscribing(true);
-    try {
-      // TODO: Navigate to subscription checkout/setup page
-      // For now, show alert
-      Alert.alert(
-        "Subscribe & Save",
-        `You'll receive ${subscriptionDuration === -1 ? "ongoing" : subscriptionDuration} shipments of ${product.name} ${getFrequencyLabel(subscriptionFrequency).toLowerCase()}.`,
-        [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Continue",
-            onPress: () => {
-              // TODO: Navigate to subscription checkout
-              router.push(`/pages/subscription-checkout?productId=${product.id}&frequency=${subscriptionFrequency}&duration=${subscriptionDuration}&quantity=${quantity}`);
-            },
-          },
-        ]
-      );
-    } catch (error) {
-      Alert.alert("Error", "Failed to create subscription. Please try again.");
-    } finally {
-      setIsSubscribing(false);
-    }
+    // Navigate directly to subscription checkout
+    router.push(`/pages/subscription-checkout?productId=${product.id}&frequency=${subscriptionFrequency}&duration=${subscriptionDuration}&quantity=${quantity}`);
   };
 
-  const handleSubscriptionSelect = (frequency: SubscriptionFrequency, duration: SubscriptionDuration) => {
+  const handleSubscriptionSelect = (frequency: SubscriptionFrequency, duration: SubscriptionDuration | null) => {
     setSubscriptionFrequency(frequency);
     setSubscriptionDuration(duration);
   };
@@ -699,17 +677,17 @@ export default function ProductDetail() {
                   onSubscriptionToggle={setIsSubscriptionEnabled}
                   isSubscriptionEnabled={isSubscriptionEnabled}
                 />
-                {isSubscriptionEnabled && subscriptionFrequency && subscriptionDuration && (
+                {isSubscriptionEnabled && (
                   <TouchableOpacity
                     onPress={handleSubscribe}
-                    disabled={isSubscribing}
+                    disabled={!subscriptionDuration}
                     style={{
                       marginTop: spacing.md,
-                      backgroundColor: colors.accent,
+                      backgroundColor: subscriptionDuration ? colors.accent : colors.text.tertiary,
                       paddingVertical: spacing.md + 2,
                       borderRadius: borderRadius.md,
                       alignItems: "center",
-                      opacity: isSubscribing ? 0.6 : 1,
+                      opacity: subscriptionDuration ? 1 : 0.6,
                     }}
                   >
                     <Text
@@ -719,7 +697,7 @@ export default function ProductDetail() {
                         color: colors.textColors.onAccent,
                       }}
                     >
-                      {isSubscribing ? "Processing..." : "Subscribe & Save"}
+                      {subscriptionDuration ? "Subscribe & Save" : "Select # of Shipments"}
                     </Text>
                   </TouchableOpacity>
                 )}

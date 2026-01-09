@@ -26,6 +26,7 @@ function CompactSelect<T>({ value, options, onSelect, onOpen, isOpen }: CompactS
   const [showList, setShowList] = useState(false);
   const selectedOption = options.find((opt) => opt.value === value);
   const isDropdownOpen = isOpen !== undefined ? isOpen : showList;
+  const isPlaceholder = value === null || value === undefined;
 
   const handleToggle = () => {
     const newState = !isDropdownOpen;
@@ -66,10 +67,10 @@ function CompactSelect<T>({ value, options, onSelect, onOpen, isOpen }: CompactS
           style={{
             fontSize: typography.fontSize.sm,
             fontWeight: typography.fontWeight.medium,
-            color: colors.text.primary,
+            color: isPlaceholder ? colors.text.tertiary : colors.text.primary,
           }}
         >
-          {selectedOption?.label || "Select"}
+          {selectedOption?.label || "Select..."}
         </Text>
         <MaterialIcons
           name={isDropdownOpen ? "keyboard-arrow-up" : "keyboard-arrow-down"}
@@ -149,11 +150,12 @@ interface SubscriptionBoxSelectorProps {
   plan: SubscriptionBoxPlan;
   quantity: number;
   userId: string;
-  onSelect: (frequency: SubscriptionFrequency, duration: SubscriptionDuration) => void;
+  onSelect: (frequency: SubscriptionFrequency, duration: SubscriptionDuration | null) => void;
   selectedFrequency?: SubscriptionFrequency;
-  selectedDuration?: SubscriptionDuration;
+  selectedDuration?: SubscriptionDuration | null;
   onSubscriptionToggle?: (enabled: boolean) => void;
   isSubscriptionEnabled?: boolean;
+  requireDurationSelection?: boolean; // Force user to select duration
 }
 
 const FREQUENCY_OPTIONS: SubscriptionFrequency[] = [
@@ -175,30 +177,38 @@ export default function SubscriptionBoxSelector({
   selectedDuration,
   onSubscriptionToggle,
   isSubscriptionEnabled = false,
+  requireDurationSelection = true, // Default to requiring selection
 }: SubscriptionBoxSelectorProps) {
   const [frequency, setFrequency] = useState<SubscriptionFrequency>(
     selectedFrequency || plan.frequency
   );
-  const [duration, setDuration] = useState<SubscriptionDuration>(
-    selectedDuration || plan.duration
+  // Start with null if requireDurationSelection is true to force user to select
+  const [duration, setDuration] = useState<SubscriptionDuration | null>(
+    selectedDuration !== undefined ? selectedDuration : (requireDurationSelection ? null : plan.duration)
   );
   const [openDropdown, setOpenDropdown] = useState<"frequency" | "duration" | null>(null);
   const [isExpanded, setIsExpanded] = useState(isSubscriptionEnabled);
+  
+  // Check if duration has been selected
+  const isDurationSelected = duration !== null;
 
+  // Only calculate pricing if duration is selected
   const updatedPlan: SubscriptionBoxPlan = {
     ...plan,
     frequency,
-    duration,
+    duration: duration || plan.duration, // Use plan.duration as fallback for pricing calculation
   };
 
-  const pricing = calculateSubscriptionBoxPricing(updatedPlan, quantity, userId);
+  const pricing = isDurationSelected 
+    ? calculateSubscriptionBoxPricing(updatedPlan, quantity, userId)
+    : null;
 
   const handleFrequencySelect = (freq: SubscriptionFrequency) => {
     setFrequency(freq);
     onSelect(freq, duration);
   };
 
-  const handleDurationSelect = (dur: SubscriptionDuration) => {
+  const handleDurationSelect = (dur: SubscriptionDuration | null) => {
     setDuration(dur);
     onSelect(frequency, dur);
   };
@@ -217,8 +227,8 @@ export default function SubscriptionBoxSelector({
   const oneTimeFee = calculateConsumerServiceFee(oneTimeSubtotal, plan.currency, hasBDNPlus);
   const oneTimeTotal = oneTimeSubtotal + oneTimeFee;
   
-  // Calculate savings
-  const savings = Math.max(0, oneTimeTotal - pricing.totalPerShipment);
+  // Calculate savings (only when pricing is available)
+  const savings = pricing ? Math.max(0, oneTimeTotal - pricing.totalPerShipment) : 0;
   const savingsPercentage = plan.discountPercentage || 0;
 
   // Collapsed view
@@ -393,190 +403,221 @@ export default function SubscriptionBoxSelector({
             style={{
               fontSize: typography.fontSize.xs,
               fontWeight: typography.fontWeight.semibold,
-              color: colors.text.secondary,
+              color: !isDurationSelected ? colors.accent : colors.text.secondary,
               marginBottom: spacing.xs,
             }}
           >
-            Duration
+            # of Shipments {!isDurationSelected && "*"}
           </Text>
           <CompactSelect
-            value={duration}
-            options={DURATION_OPTIONS.map((dur) => ({
-              value: dur,
-              label: getDurationLabel(dur),
-            }))}
-            onSelect={(dur) => handleDurationSelect(dur as SubscriptionDuration)}
+            value={duration as SubscriptionDuration}
+            options={[
+              { value: null as any, label: "Select shipments..." },
+              ...DURATION_OPTIONS.map((dur) => ({
+                value: dur,
+                label: getDurationLabel(dur),
+              })),
+            ]}
+            onSelect={(dur) => handleDurationSelect(dur as SubscriptionDuration | null)}
             onOpen={() => setOpenDropdown(openDropdown === "duration" ? null : "duration")}
             isOpen={openDropdown === "duration"}
           />
         </View>
       </View>
 
-      {/* Pricing Breakdown */}
-      <View
-        style={{
-          backgroundColor: colors.background.primary,
-          borderRadius: borderRadius.md,
-          padding: spacing.md,
-          marginTop: spacing.md,
-        }}
-      >
+      {/* Prompt to select duration */}
+      {!isDurationSelected && (
         <View
           style={{
+            backgroundColor: colors.accent + "15",
+            borderRadius: borderRadius.md,
+            padding: spacing.md,
+            marginTop: spacing.md,
             flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: spacing.xs,
+            alignItems: "center",
           }}
         >
+          <MaterialIcons name="info-outline" size={20} color={colors.accent} />
           <Text
             style={{
               fontSize: typography.fontSize.sm,
-              color: colors.text.secondary,
-            }}
-          >
-            Price per shipment
-          </Text>
-          <Text
-            style={{
-              fontSize: typography.fontSize.sm,
-              color: colors.text.primary,
-              fontWeight: typography.fontWeight.medium,
-            }}
-          >
-            {formatCurrency(pricing.pricePerShipment, pricing.currency)}
-          </Text>
-        </View>
-
-        {pricing.shippingPerShipment > 0 && (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: spacing.xs,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.secondary,
-              }}
-            >
-              Shipping per shipment
-            </Text>
-            <Text
-              style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.primary,
-                fontWeight: typography.fontWeight.medium,
-              }}
-            >
-              {formatCurrency(pricing.shippingPerShipment, pricing.currency)}
-            </Text>
-          </View>
-        )}
-
-        {pricing.discountAmount && pricing.discountAmount > 0 && (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: spacing.xs,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.textColors.success,
-              }}
-            >
-              Discount ({plan.discountPercentage}%)
-            </Text>
-            <Text
-              style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.textColors.success,
-                fontWeight: typography.fontWeight.bold,
-              }}
-            >
-              -{formatCurrency(pricing.discountAmount, pricing.currency)}
-            </Text>
-          </View>
-        )}
-
-        {pricing.serviceFeePerShipment > 0 && (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: spacing.xs,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.secondary,
-              }}
-            >
-              Service fee
-            </Text>
-            <Text
-              style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.primary,
-                fontWeight: typography.fontWeight.medium,
-              }}
-            >
-              {formatCurrency(pricing.serviceFeePerShipment, pricing.currency)}
-            </Text>
-          </View>
-        )}
-
-        <View
-          style={{
-            borderTopWidth: 1,
-            borderTopColor: colors.border.light,
-            marginTop: spacing.sm,
-            paddingTop: spacing.sm,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: typography.fontSize.base,
-              fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
-            }}
-          >
-            Total per shipment
-          </Text>
-          <Text
-            style={{
-              fontSize: typography.fontSize.base,
-              fontWeight: typography.fontWeight.bold,
               color: colors.accent,
+              marginLeft: spacing.sm,
+              flex: 1,
             }}
           >
-            {formatCurrency(pricing.totalPerShipment, pricing.currency)}
+            Please select the number of shipments to see pricing and subscribe
           </Text>
         </View>
+      )}
 
-        {duration !== -1 && (
-          <Text
+      {/* Pricing Breakdown - Only show when duration is selected */}
+      {isDurationSelected && pricing && (
+        <View
+          style={{
+            backgroundColor: colors.background.primary,
+            borderRadius: borderRadius.md,
+            padding: spacing.md,
+            marginTop: spacing.md,
+          }}
+        >
+          <View
             style={{
-              fontSize: typography.fontSize.xs,
-              color: colors.text.secondary,
-              marginTop: spacing.xs,
-              textAlign: "center",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: spacing.xs,
             }}
           >
-            {duration} shipments × {formatCurrency(pricing.totalPerShipment, pricing.currency)} ={" "}
-            {formatCurrency(pricing.totalPerShipment * duration, pricing.currency)} total
-          </Text>
-        )}
-      </View>
+            <Text
+              style={{
+                fontSize: typography.fontSize.sm,
+                color: colors.text.secondary,
+              }}
+            >
+              Price per shipment
+            </Text>
+            <Text
+              style={{
+                fontSize: typography.fontSize.sm,
+                color: colors.text.primary,
+                fontWeight: typography.fontWeight.medium,
+              }}
+            >
+              {formatCurrency(pricing.pricePerShipment, pricing.currency)}
+            </Text>
+          </View>
 
-      {pricing.hasBDNPlus && (
+          {pricing.shippingPerShipment > 0 && (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: spacing.xs,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.secondary,
+                }}
+              >
+                Shipping per shipment
+              </Text>
+              <Text
+                style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.primary,
+                  fontWeight: typography.fontWeight.medium,
+                }}
+              >
+                {formatCurrency(pricing.shippingPerShipment, pricing.currency)}
+              </Text>
+            </View>
+          )}
+
+          {pricing.discountAmount && pricing.discountAmount > 0 && (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: spacing.xs,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.textColors.success,
+                }}
+              >
+                Discount ({plan.discountPercentage}%)
+              </Text>
+              <Text
+                style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.textColors.success,
+                  fontWeight: typography.fontWeight.bold,
+                }}
+              >
+                -{formatCurrency(pricing.discountAmount, pricing.currency)}
+              </Text>
+            </View>
+          )}
+
+          {pricing.serviceFeePerShipment > 0 && (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: spacing.xs,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.secondary,
+                }}
+              >
+                Service fee
+              </Text>
+              <Text
+                style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.primary,
+                  fontWeight: typography.fontWeight.medium,
+                }}
+              >
+                {formatCurrency(pricing.serviceFeePerShipment, pricing.currency)}
+              </Text>
+            </View>
+          )}
+
+          <View
+            style={{
+              borderTopWidth: 1,
+              borderTopColor: colors.border.light,
+              marginTop: spacing.sm,
+              paddingTop: spacing.sm,
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.bold,
+                color: colors.text.primary,
+              }}
+            >
+              Total per shipment
+            </Text>
+            <Text
+              style={{
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.bold,
+                color: colors.accent,
+              }}
+            >
+              {formatCurrency(pricing.totalPerShipment, pricing.currency)}
+            </Text>
+          </View>
+
+          {duration !== -1 && (
+            <Text
+              style={{
+                fontSize: typography.fontSize.xs,
+                color: colors.text.secondary,
+                marginTop: spacing.xs,
+                textAlign: "center",
+              }}
+            >
+              {duration} shipments × {formatCurrency(pricing.totalPerShipment, pricing.currency)} ={" "}
+              {formatCurrency(pricing.totalPerShipment * (duration as number), pricing.currency)} total
+            </Text>
+          )}
+        </View>
+      )}
+
+      {isDurationSelected && pricing?.hasBDNPlus && (
         <View
           style={{
             flexDirection: "row",

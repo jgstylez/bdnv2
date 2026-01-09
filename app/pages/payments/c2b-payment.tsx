@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform, TextInput, Modal } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
@@ -98,9 +98,24 @@ export default function C2BPayment() {
   const [feedbackRating, setFeedbackRating] = useState<number>(0);
   const [feedbackComment, setFeedbackComment] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<ReviewReason[]>([]);
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const feedbackScrollViewRef = useRef<ScrollView>(null);
 
   const business = selectedBusinessId ? mockBusinesses[selectedBusinessId] : null;
   const numericAmount = parseFloat(amount) || 0;
+
+  // Scroll feedback modal to top when it opens and reset success state
+  useEffect(() => {
+    if (showFeedbackModal) {
+      setFeedbackSubmitted(false);
+      if (feedbackScrollViewRef.current) {
+        // Small delay to ensure the modal is rendered
+        setTimeout(() => {
+          feedbackScrollViewRef.current?.scrollTo({ y: 0, animated: false });
+        }, 100);
+      }
+    }
+  }, [showFeedbackModal]);
 
   // Filter businesses based on search query
   const filteredBusinesses = allBusinesses.filter((b) =>
@@ -1476,6 +1491,8 @@ export default function C2BPayment() {
             setShowFeedbackModal(false);
             setFeedbackRating(0);
             setFeedbackComment("");
+            setSelectedReasons([]);
+            setFeedbackSubmitted(false);
           }}
         >
           <View
@@ -1484,6 +1501,7 @@ export default function C2BPayment() {
               borderRadius: 16,
               width: "100%",
               maxWidth: 500,
+              maxHeight: "90%",
               borderWidth: 1,
               borderColor: "rgba(186, 153, 136, 0.2)",
               shadowColor: "#000",
@@ -1515,299 +1533,385 @@ export default function C2BPayment() {
                 Rate Your Experience
               </Text>
               <TouchableOpacity
-                onPress={() => {
-                  setShowFeedbackModal(false);
-                  setFeedbackRating(0);
-                  setFeedbackComment("");
-                }}
+          onPress={() => {
+            setShowFeedbackModal(false);
+            setFeedbackRating(0);
+            setFeedbackComment("");
+            setSelectedReasons([]);
+            setFeedbackSubmitted(false);
+          }}
                 style={{ padding: 4 }}
               >
                 <MaterialIcons name="close" size={24} color="rgba(255, 255, 255, 0.7)" />
               </TouchableOpacity>
             </View>
 
-            {/* Content */}
-            <View style={{ padding: 20, gap: 20 }}>
-              {business && (
-                <View style={{ alignItems: "center", gap: 8 }}>
-                  <BusinessPlaceholder width={60} height={60} aspectRatio={1} />
-                  <Text
+            {/* Content - Scrollable */}
+            <ScrollView
+              ref={feedbackScrollViewRef}
+              style={{ maxHeight: isMobile ? 500 : 600 }}
+              contentContainerStyle={{ padding: 20, gap: 20 }}
+              showsVerticalScrollIndicator={true}
+              bounces={true}
+            >
+              {feedbackSubmitted ? (
+                /* Success Confirmation */
+                <View
+                  style={{
+                    alignItems: "center",
+                    gap: 24,
+                    paddingVertical: 20,
+                  }}
+                >
+                  <View
                     style={{
-                      fontSize: 16,
-                      fontWeight: "600",
-                      color: "#ffffff",
-                      textAlign: "center",
+                      width: 80,
+                      height: 80,
+                      borderRadius: 40,
+                      backgroundColor: "#4caf50",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    How was your experience with {business.name}?
-                  </Text>
+                    <MaterialIcons name="check" size={48} color="#ffffff" />
+                  </View>
+                  <View style={{ alignItems: "center", gap: 12 }}>
+                    <Text
+                      style={{
+                        fontSize: 24,
+                        fontWeight: "700",
+                        color: "#ffffff",
+                        textAlign: "center",
+                      }}
+                    >
+                      Thank You!
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: "rgba(255, 255, 255, 0.8)",
+                        textAlign: "center",
+                        lineHeight: 22,
+                        paddingHorizontal: 20,
+                      }}
+                    >
+                      Your feedback helps us improve and helps other customers make better choices.
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowFeedbackModal(false);
+                      setFeedbackRating(0);
+                      setFeedbackComment("");
+                      setSelectedReasons([]);
+                      setFeedbackSubmitted(false);
+                    }}
+                    style={{
+                      marginTop: 8,
+                      backgroundColor: "#ba9988",
+                      borderRadius: 12,
+                      paddingVertical: 16,
+                      paddingHorizontal: 32,
+                      width: "100%",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: "600",
+                        color: "#ffffff",
+                      }}
+                    >
+                      Close
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-              )}
+              ) : (
+                <>
+                  {business && (
+                    <View style={{ alignItems: "center", gap: 8 }}>
+                      <BusinessPlaceholder width={60} height={60} aspectRatio={1} />
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "600",
+                          color: "#ffffff",
+                          textAlign: "center",
+                        }}
+                      >
+                        How was your experience with {business.name}?
+                      </Text>
+                    </View>
+                  )}
 
-              {/* Star Rating */}
-              <View style={{ alignItems: "center", gap: 12 }}>
-                <View style={{ flexDirection: "row", gap: 8 }}>
-                  {[1, 2, 3, 4, 5].map((star) => (
+                  {/* Star Rating */}
+                  <View style={{ alignItems: "center", gap: 12 }}>
+                    <View style={{ flexDirection: "row", gap: 8 }}>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <TouchableOpacity
+                          key={star}
+                          onPress={() => {
+                            setFeedbackRating(star);
+                            // Clear reasons when rating changes to avoid mismatched selections
+                            if ((star >= 4 && feedbackRating < 4) || (star <= 2 && feedbackRating > 2)) {
+                              setSelectedReasons([]);
+                            }
+                          }}
+                          style={{ padding: 4 }}
+                        >
+                          <MaterialIcons
+                            name={star <= feedbackRating ? "star" : "star-border"}
+                            size={40}
+                            color={star <= feedbackRating ? "#ffd700" : "rgba(255, 255, 255, 0.3)"}
+                          />
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                    {feedbackRating > 0 && (
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: "rgba(255, 255, 255, 0.7)",
+                        }}
+                      >
+                        {feedbackRating === 5 && "Excellent!"}
+                        {feedbackRating === 4 && "Great!"}
+                        {feedbackRating === 3 && "Good"}
+                        {feedbackRating === 2 && "Fair"}
+                        {feedbackRating === 1 && "Poor"}
+                      </Text>
+                    )}
+                  </View>
+
+                  {/* Reason Pills */}
+                  {feedbackRating > 0 && (
+                    <View>
+                      {feedbackRating >= 3 && (
+                        <View style={{ marginBottom: 12 }}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: "rgba(255, 255, 255, 0.7)",
+                              marginBottom: 12,
+                            }}
+                          >
+                            What did you like? (Select all that apply)
+                          </Text>
+                          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+                            {REVIEW_REASONS.filter((r) => r.category === "positive").map((reason) => (
+                              <TouchableOpacity
+                                key={reason.id}
+                                onPress={() => {
+                                  if (selectedReasons.includes(reason.id)) {
+                                    setSelectedReasons(selectedReasons.filter((r) => r !== reason.id));
+                                  } else {
+                                    setSelectedReasons([...selectedReasons, reason.id]);
+                                  }
+                                }}
+                                style={{
+                                  paddingHorizontal: 16,
+                                  paddingVertical: 8,
+                                  borderRadius: 20,
+                                  backgroundColor: selectedReasons.includes(reason.id)
+                                    ? "#ba9988"
+                                    : "rgba(186, 153, 136, 0.15)",
+                                  borderWidth: 1,
+                                  borderColor: selectedReasons.includes(reason.id)
+                                    ? "#ba9988"
+                                    : "rgba(186, 153, 136, 0.2)",
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  gap: 6,
+                                }}
+                              >
+                                {reason.icon && (
+                                  <MaterialIcons
+                                    name={reason.icon as any}
+                                    size={16}
+                                    color={selectedReasons.includes(reason.id) ? "#ffffff" : "#ba9988"}
+                                  />
+                                )}
+                                <Text
+                                  style={{
+                                    fontSize: 13,
+                                    fontWeight: "600",
+                                    color: selectedReasons.includes(reason.id) ? "#ffffff" : "#ba9988",
+                                  }}
+                                >
+                                  {reason.label}
+                                </Text>
+                              </TouchableOpacity>
+                            ))}
+                          </View>
+                        </View>
+                      )}
+                      {feedbackRating <= 3 && (
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: "rgba(255, 255, 255, 0.7)",
+                              marginBottom: 12,
+                            }}
+                          >
+                            What could be improved? (Select all that apply)
+                          </Text>
+                          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+                            {REVIEW_REASONS.filter((r) => r.category === "negative").map((reason) => (
+                              <TouchableOpacity
+                                key={reason.id}
+                                onPress={() => {
+                                  if (selectedReasons.includes(reason.id)) {
+                                    setSelectedReasons(selectedReasons.filter((r) => r !== reason.id));
+                                  } else {
+                                    setSelectedReasons([...selectedReasons, reason.id]);
+                                  }
+                                }}
+                                style={{
+                                  paddingHorizontal: 16,
+                                  paddingVertical: 8,
+                                  borderRadius: 20,
+                                  backgroundColor: selectedReasons.includes(reason.id)
+                                    ? "#ba9988"
+                                    : "rgba(186, 153, 136, 0.15)",
+                                  borderWidth: 1,
+                                  borderColor: selectedReasons.includes(reason.id)
+                                    ? "#ba9988"
+                                    : "rgba(186, 153, 136, 0.2)",
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  gap: 6,
+                                }}
+                              >
+                                {reason.icon && (
+                                  <MaterialIcons
+                                    name={reason.icon as any}
+                                    size={16}
+                                    color={selectedReasons.includes(reason.id) ? "#ffffff" : "#ba9988"}
+                                  />
+                                )}
+                                <Text
+                                  style={{
+                                    fontSize: 13,
+                                    fontWeight: "600",
+                                    color: selectedReasons.includes(reason.id) ? "#ffffff" : "#ba9988",
+                                  }}
+                                >
+                                  {reason.label}
+                                </Text>
+                              </TouchableOpacity>
+                            ))}
+                          </View>
+                        </View>
+                      )}
+                    </View>
+                  )}
+
+                  {/* Comment */}
+                  <View>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: "600",
+                        color: "#ffffff",
+                        marginBottom: 8,
+                      }}
+                    >
+                      Add a comment (optional)
+                    </Text>
+                    <TextInput
+                      value={feedbackComment}
+                      onChangeText={setFeedbackComment}
+                      placeholder="Share your experience..."
+                      placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                      multiline
+                      numberOfLines={4}
+                      style={{
+                        backgroundColor: "#474747",
+                        borderRadius: 12,
+                        padding: 16,
+                        color: "#ffffff",
+                        fontSize: 14,
+                        minHeight: 100,
+                        textAlignVertical: "top",
+                        borderWidth: 1,
+                        borderColor: "rgba(186, 153, 136, 0.2)",
+                      }}
+                    />
+                  </View>
+
+                  {/* Actions */}
+                  <View style={{ flexDirection: "row", gap: 12 }}>
                     <TouchableOpacity
-                      key={star}
                       onPress={() => {
-                        setFeedbackRating(star);
-                        // Clear reasons when rating changes to avoid mismatched selections
-                        if ((star >= 4 && feedbackRating < 4) || (star <= 2 && feedbackRating > 2)) {
-                          setSelectedReasons([]);
+                        setShowFeedbackModal(false);
+                        setFeedbackRating(0);
+                        setFeedbackComment("");
+                        setSelectedReasons([]);
+                        setFeedbackSubmitted(false);
+                      }}
+                      style={{
+                        flex: 1,
+                        paddingVertical: 14,
+                        borderRadius: 12,
+                        backgroundColor: "#474747",
+                        borderWidth: 1,
+                        borderColor: "rgba(186, 153, 136, 0.2)",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "600",
+                          color: "#ffffff",
+                        }}
+                      >
+                        Skip
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (feedbackRating > 0) {
+                          // TODO: Submit feedback to API
+                          logger.info("Feedback submitted", {
+                            businessId: business?.id,
+                            rating: feedbackRating,
+                            selectedReasons,
+                            comment: feedbackComment,
+                          });
+                          setFeedbackSubmitted(true);
+                          // Scroll to top to show success message
+                          setTimeout(() => {
+                            feedbackScrollViewRef.current?.scrollTo({ y: 0, animated: true });
+                          }, 100);
                         }
                       }}
-                      style={{ padding: 4 }}
+                      disabled={feedbackRating === 0}
+                      style={{
+                        flex: 1,
+                        paddingVertical: 14,
+                        borderRadius: 12,
+                        backgroundColor: feedbackRating > 0 ? "#ba9988" : "#474747",
+                        alignItems: "center",
+                        opacity: feedbackRating > 0 ? 1 : 0.5,
+                      }}
                     >
-                      <MaterialIcons
-                        name={star <= feedbackRating ? "star" : "star-border"}
-                        size={40}
-                        color={star <= feedbackRating ? "#ffd700" : "rgba(255, 255, 255, 0.3)"}
-                      />
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "600",
+                          color: "#ffffff",
+                        }}
+                      >
+                        Submit
+                      </Text>
                     </TouchableOpacity>
-                  ))}
-                </View>
-                {feedbackRating > 0 && (
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: "rgba(255, 255, 255, 0.7)",
-                    }}
-                  >
-                    {feedbackRating === 5 && "Excellent!"}
-                    {feedbackRating === 4 && "Great!"}
-                    {feedbackRating === 3 && "Good"}
-                    {feedbackRating === 2 && "Fair"}
-                    {feedbackRating === 1 && "Poor"}
-                  </Text>
-                )}
-              </View>
-
-              {/* Reason Pills */}
-              {feedbackRating > 0 && (
-                <View>
-                  {feedbackRating >= 3 && (
-                    <View style={{ marginBottom: 12 }}>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: "rgba(255, 255, 255, 0.7)",
-                          marginBottom: 12,
-                        }}
-                      >
-                        What did you like? (Select all that apply)
-                      </Text>
-                      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                        {REVIEW_REASONS.filter((r) => r.category === "positive").map((reason) => (
-                          <TouchableOpacity
-                            key={reason.id}
-                            onPress={() => {
-                              if (selectedReasons.includes(reason.id)) {
-                                setSelectedReasons(selectedReasons.filter((r) => r !== reason.id));
-                              } else {
-                                setSelectedReasons([...selectedReasons, reason.id]);
-                              }
-                            }}
-                            style={{
-                              paddingHorizontal: 16,
-                              paddingVertical: 8,
-                              borderRadius: 20,
-                              backgroundColor: selectedReasons.includes(reason.id)
-                                ? "#ba9988"
-                                : "rgba(186, 153, 136, 0.15)",
-                              borderWidth: 1,
-                              borderColor: selectedReasons.includes(reason.id)
-                                ? "#ba9988"
-                                : "rgba(186, 153, 136, 0.2)",
-                              flexDirection: "row",
-                              alignItems: "center",
-                              gap: 6,
-                            }}
-                          >
-                            {reason.icon && (
-                              <MaterialIcons
-                                name={reason.icon as any}
-                                size={16}
-                                color={selectedReasons.includes(reason.id) ? "#ffffff" : "#ba9988"}
-                              />
-                            )}
-                            <Text
-                              style={{
-                                fontSize: 13,
-                                fontWeight: "600",
-                                color: selectedReasons.includes(reason.id) ? "#ffffff" : "#ba9988",
-                              }}
-                            >
-                              {reason.label}
-                            </Text>
-                          </TouchableOpacity>
-                        ))}
-                      </View>
-                    </View>
-                  )}
-                  {feedbackRating <= 3 && (
-                    <View>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: "rgba(255, 255, 255, 0.7)",
-                          marginBottom: 12,
-                        }}
-                      >
-                        What could be improved? (Select all that apply)
-                      </Text>
-                      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                        {REVIEW_REASONS.filter((r) => r.category === "negative").map((reason) => (
-                          <TouchableOpacity
-                            key={reason.id}
-                            onPress={() => {
-                              if (selectedReasons.includes(reason.id)) {
-                                setSelectedReasons(selectedReasons.filter((r) => r !== reason.id));
-                              } else {
-                                setSelectedReasons([...selectedReasons, reason.id]);
-                              }
-                            }}
-                            style={{
-                              paddingHorizontal: 16,
-                              paddingVertical: 8,
-                              borderRadius: 20,
-                              backgroundColor: selectedReasons.includes(reason.id)
-                                ? "#ba9988"
-                                : "rgba(186, 153, 136, 0.15)",
-                              borderWidth: 1,
-                              borderColor: selectedReasons.includes(reason.id)
-                                ? "#ba9988"
-                                : "rgba(186, 153, 136, 0.2)",
-                              flexDirection: "row",
-                              alignItems: "center",
-                              gap: 6,
-                            }}
-                          >
-                            {reason.icon && (
-                              <MaterialIcons
-                                name={reason.icon as any}
-                                size={16}
-                                color={selectedReasons.includes(reason.id) ? "#ffffff" : "#ba9988"}
-                              />
-                            )}
-                            <Text
-                              style={{
-                                fontSize: 13,
-                                fontWeight: "600",
-                                color: selectedReasons.includes(reason.id) ? "#ffffff" : "#ba9988",
-                              }}
-                            >
-                              {reason.label}
-                            </Text>
-                          </TouchableOpacity>
-                        ))}
-                      </View>
-                    </View>
-                  )}
-                </View>
+                  </View>
+                </>
               )}
-
-              {/* Comment */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Add a comment (optional)
-                </Text>
-                <TextInput
-                  value={feedbackComment}
-                  onChangeText={setFeedbackComment}
-                  placeholder="Share your experience..."
-                  placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                  multiline
-                  numberOfLines={4}
-                  style={{
-                    backgroundColor: "#474747",
-                    borderRadius: 12,
-                    padding: 16,
-                    color: "#ffffff",
-                    fontSize: 14,
-                    minHeight: 100,
-                    textAlignVertical: "top",
-                    borderWidth: 1,
-                    borderColor: "rgba(186, 153, 136, 0.2)",
-                  }}
-                />
-              </View>
-
-              {/* Actions */}
-              <View style={{ flexDirection: "row", gap: 12 }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setShowFeedbackModal(false);
-                    setFeedbackRating(0);
-                    setFeedbackComment("");
-                    setSelectedReasons([]);
-                  }}
-                  style={{
-                    flex: 1,
-                    paddingVertical: 14,
-                    borderRadius: 12,
-                    backgroundColor: "#474747",
-                    borderWidth: 1,
-                    borderColor: "rgba(186, 153, 136, 0.2)",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "600",
-                      color: "#ffffff",
-                    }}
-                  >
-                    Skip
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (feedbackRating > 0) {
-                      // TODO: Submit feedback to API
-                      logger.info("Feedback submitted", {
-                        businessId: business?.id,
-                        rating: feedbackRating,
-                        selectedReasons,
-                        comment: feedbackComment,
-                      });
-                      alert("Thank you for your feedback!");
-                    }
-                    setShowFeedbackModal(false);
-                    setFeedbackRating(0);
-                    setFeedbackComment("");
-                    setSelectedReasons([]);
-                  }}
-                  disabled={feedbackRating === 0}
-                  style={{
-                    flex: 1,
-                    paddingVertical: 14,
-                    borderRadius: 12,
-                    backgroundColor: feedbackRating > 0 ? "#ba9988" : "#474747",
-                    alignItems: "center",
-                    opacity: feedbackRating > 0 ? 1 : 0.5,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "600",
-                      color: "#ffffff",
-                    }}
-                  >
-                    Submit
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            </ScrollView>
           </View>
         </TouchableOpacity>
       </Modal>
