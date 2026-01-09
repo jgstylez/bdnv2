@@ -425,7 +425,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onMenuPress }) => {
               accessible={true}
               accessibilityLabel="Open menu"
               accessibilityRole="button"
-              accessibilityHint="Double tap to open menu"
+              accessibilityHint="Tap to open menu"
               activeOpacity={0.7}
             >
               <MaterialIcons

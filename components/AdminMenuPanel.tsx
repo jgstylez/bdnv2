@@ -251,7 +251,8 @@ export const AdminMenuPanel: React.FC<AdminMenuPanelProps> = ({ isOpen, onClose 
             right: 0,
             bottom: 0,
             backgroundColor: "#000000",
-            zIndex: 998,
+            zIndex: 1100,
+            elevation: 1100,
           },
           overlayStyle,
         ]}
@@ -275,7 +276,8 @@ export const AdminMenuPanel: React.FC<AdminMenuPanelProps> = ({ isOpen, onClose 
             backgroundColor: "#232323",
             borderLeftWidth: 1,
             borderLeftColor: "#474747",
-            zIndex: 999,
+            zIndex: 1101,
+            elevation: 1101,
           },
           animatedStyle,
         ]}

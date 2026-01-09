@@ -1,30 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Alert, Platform } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { BarCodeScanner } from "expo-barcode-scanner";
+import { CameraView, useCameraPermissions, BarcodeScanningResult } from "expo-camera";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 
 export default function QRScanner() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
 
-  useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
-
-    getBarCodeScannerPermissions();
-  }, []);
-
-  const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
+  const handleBarCodeScanned = (result: BarcodeScanningResult) => {
     if (scanned) return;
     
+    const { data } = result;
     setScanned(true);
     
     // Handle different QR code types
@@ -47,7 +39,7 @@ export default function QRScanner() {
     }
   };
 
-  if (hasPermission === null) {
+  if (!permission) {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <StatusBar style="light" />
@@ -59,7 +51,7 @@ export default function QRScanner() {
     );
   }
 
-  if (hasPermission === false) {
+  if (!permission.granted) {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <StatusBar style="light" />
@@ -67,6 +59,9 @@ export default function QRScanner() {
           <MaterialIcons name="camera-alt" size={64} color={colors.text.tertiary} />
           <Text style={styles.message}>Camera permission is required to scan QR codes</Text>
           <Text style={styles.subMessage}>Please enable camera access in your device settings</Text>
+          <TouchableOpacity style={styles.permissionButton} onPress={requestPermission}>
+            <Text style={styles.permissionButtonText}>Grant Permission</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -75,9 +70,13 @@ export default function QRScanner() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar style="light" />
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+      <CameraView
         style={StyleSheet.absoluteFillObject}
+        facing="back"
+        barcodeScannerSettings={{
+          barcodeTypes: ["qr", "pdf417", "aztec", "ean13", "ean8", "upc_a", "upc_e", "code39", "code93", "code128", "codabar", "itf14", "datamatrix"],
+        }}
+        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
       />
       
       {/* Overlay */}
@@ -105,6 +104,16 @@ export default function QRScanner() {
           </View>
           <Text style={styles.instruction}>Position the QR code within the frame</Text>
         </View>
+
+        {/* Scan Again Button */}
+        {scanned && (
+          <View style={styles.scanAgainContainer}>
+            <TouchableOpacity style={styles.scanAgainButton} onPress={() => setScanned(false)}>
+              <MaterialIcons name="refresh" size={24} color={colors.text.primary} />
+              <Text style={styles.scanAgainText}>Scan Again</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -133,6 +142,18 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     marginTop: spacing.sm,
     textAlign: "center",
+  },
+  permissionButton: {
+    marginTop: spacing.xl,
+    backgroundColor: colors.accent,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.md,
+  },
+  permissionButtonText: {
+    color: colors.text.primary,
+    fontSize: typography.fontSize.base,
+    fontWeight: typography.fontWeight.semibold,
   },
   overlay: {
     flex: 1,
@@ -207,5 +228,22 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     borderRadius: borderRadius.md,
   },
+  scanAgainContainer: {
+    paddingBottom: spacing.xl,
+    alignItems: "center",
+  },
+  scanAgainButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.accent,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.md,
+    gap: spacing.sm,
+  },
+  scanAgainText: {
+    color: colors.text.primary,
+    fontSize: typography.fontSize.base,
+    fontWeight: typography.fontWeight.semibold,
+  },
 });
-

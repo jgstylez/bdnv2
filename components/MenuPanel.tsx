@@ -170,7 +170,8 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
             right: 0,
             bottom: 0,
             backgroundColor: "#000000",
-            zIndex: 998,
+            zIndex: 1100,
+            elevation: 1100,
             ...(Platform.OS === "web" && {
               // @ts-ignore - Web-only CSS properties
               position: "fixed" as any,
@@ -200,12 +201,12 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
             bottom: 0,
             width: panelWidth,
             backgroundColor: "#232323",
-            zIndex: 999,
+            zIndex: 1101,
+            elevation: 1101,
             shadowColor: "#000",
             shadowOffset: { width: -4, height: 0 },
             shadowOpacity: 0.3,
             shadowRadius: 8,
-            elevation: 8,
             ...(Platform.OS === "web" && {
               // @ts-ignore - Web-only CSS properties
               position: "fixed" as any,
