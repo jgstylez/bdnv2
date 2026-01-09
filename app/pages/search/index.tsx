@@ -225,7 +225,11 @@ export default function Search() {
           >
             Quick Filters
           </Text>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 8, paddingRight: 20 }}
+          >
             {[
               { key: "businesses", label: "Businesses", icon: "store" },
               { key: "products", label: "Products", icon: "shopping-bag" },
@@ -265,7 +269,7 @@ export default function Search() {
                 </Text>
               </TouchableOpacity>
             ))}
-          </View>
+          </ScrollView>
         </View>
 
         {/* Recent Searches - Pill Carousel */}

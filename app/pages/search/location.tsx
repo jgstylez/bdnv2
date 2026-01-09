@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
+import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SearchResult } from '@/types/search';
 import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
 
 // Mock nearby businesses
-const mockNearbyBusinesses: SearchResult[] = [
+const mockNearbyBusinesses: (SearchResult & { imageUrl?: string })[] = [
   {
     id: "1",
     type: "business",
     title: "Soul Food Kitchen",
     description: "Authentic Southern cuisine",
+    imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=450&fit=crop",
     metadata: {
       category: "Restaurant",
       location: {
@@ -31,6 +33,7 @@ const mockNearbyBusinesses: SearchResult[] = [
     type: "business",
     title: "Black Beauty Salon",
     description: "Professional hair styling and beauty services",
+    imageUrl: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=800&h=450&fit=crop",
     metadata: {
       category: "Beauty & Wellness",
       location: {
@@ -49,6 +52,7 @@ const mockNearbyBusinesses: SearchResult[] = [
     type: "business",
     title: "Community Bookstore",
     description: "Books by Black authors and community events",
+    imageUrl: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&h=450&fit=crop",
     metadata: {
       category: "Retail",
       location: {
@@ -71,6 +75,7 @@ export default function LocationSearch() {
   const [radius, setRadius] = useState(5); // miles
   const [useCurrentLocation, setUseCurrentLocation] = useState(true);
   const [locationQuery, setLocationQuery] = useState("");
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   const sortedBusinesses = [...mockNearbyBusinesses].sort(
     (a, b) => (a.metadata.distance || Infinity) - (b.metadata.distance || Infinity)
@@ -198,8 +203,22 @@ export default function LocationSearch() {
                   borderColor: "rgba(186, 153, 136, 0.2)",
                 }}
               >
-                {/* Business Image Placeholder */}
-                <BusinessPlaceholder width="100%" height={isMobile ? 180 : 200} aspectRatio={16 / 9} />
+                {/* Business Image */}
+                <View style={{ width: "100%", height: isMobile ? 180 : 200, backgroundColor: "#3f3f46" }}>
+                  {business.imageUrl && !imageErrors.has(business.id) ? (
+                    <Image
+                      source={{ uri: business.imageUrl }}
+                      style={{ width: "100%", height: "100%" }}
+                      contentFit="cover"
+                      cachePolicy="memory-disk"
+                      onError={() => {
+                        setImageErrors((prev) => new Set(prev).add(business.id));
+                      }}
+                    />
+                  ) : (
+                    <BusinessPlaceholder width="100%" height={isMobile ? 180 : 200} aspectRatio={16 / 9} />
+                  )}
+                </View>
                 
                 <View style={{ padding: 20 }}>
                   <Text
