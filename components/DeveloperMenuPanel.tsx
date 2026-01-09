@@ -31,9 +31,8 @@ export const DeveloperMenuPanel: React.FC<DeveloperMenuPanelProps> = ({ isOpen, 
   const translateX = useSharedValue(width);
 
   React.useEffect(() => {
-    translateX.value = withSpring(isOpen ? 0 : width, {
-      damping: 20,
-      stiffness: 90,
+    translateX.value = withTiming(isOpen ? 0 : width, {
+      duration: 300,
     });
   }, [isOpen, width]);
 

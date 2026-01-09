@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Video } from '@/types/education';
 import { platformValues, isAndroid } from "../../../utils/platform";
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock videos
 const mockVideos: Video[] = [
@@ -81,11 +82,8 @@ export default function Videos() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={isAndroid}
-        bounces={platformValues.scrollViewBounces}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: platformValues.scrollViewPaddingTop,
@@ -300,7 +298,7 @@ cachePolicy="memory-disk"
             </Text>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

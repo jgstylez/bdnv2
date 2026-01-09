@@ -11,6 +11,7 @@ import { MenuDisplay } from '@/components/MenuDisplay';
 import { BusinessReview, ReviewReason } from '@/types/review';
 import { Menu, isFoodBusiness } from '@/types/menu';
 import { BackButton } from '@/components/navigation/BackButton';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock business data - in production, this would come from an API
 const mockBusinessData: Record<string, any> = {
@@ -770,11 +771,8 @@ export default function BusinessDetail() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={Platform.OS === 'android'}
-        bounces={Platform.OS !== 'web'}
+      <OptimizedScrollView
+        showBackToTop={true}
         style={{ flex: 1 }}
         contentContainerStyle={{
           paddingBottom: scrollViewBottomPadding,
@@ -1661,7 +1659,7 @@ cachePolicy="memory-disk"
             </View>
           )}
         </View>
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

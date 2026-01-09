@@ -67,7 +67,8 @@ export default function Docs() {
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <Navigation />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: isMobile ? insets.bottom + 40 : 40,
@@ -269,7 +270,7 @@ export default function Docs() {
         </ScrollAnimatedView>
 
         <Footer />
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

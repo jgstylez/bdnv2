@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Guide } from '@/types/education';
 import { useResponsive } from '@/hooks/useResponsive';
 import { platformValues, isAndroid } from "../../../utils/platform";
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock guides
 const mockGuides: Guide[] = [
@@ -95,11 +96,8 @@ export default function Guides() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={isAndroid}
-        bounces={platformValues.scrollViewBounces}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: paddingHorizontal,
           paddingTop: platformValues.scrollViewPaddingTop,
@@ -307,7 +305,7 @@ export default function Guides() {
             </Text>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

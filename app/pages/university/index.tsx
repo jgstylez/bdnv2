@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { Carousel } from '@/components/layouts/Carousel';
 import { useResponsive } from '@/hooks/useResponsive';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 const categories = [
   {
@@ -83,11 +84,8 @@ export default function University() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={Platform.OS === 'android'}
-        bounces={Platform.OS !== 'web'}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -564,7 +562,7 @@ export default function University() {
             </View>
           )}
         </View>
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

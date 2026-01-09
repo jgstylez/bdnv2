@@ -18,6 +18,7 @@ import { SubscriptionFrequency, SubscriptionDuration, getFrequencyLabel } from '
 import VariantSelector from '@/components/products/VariantSelector';
 import { mockProducts as centralizedMockProducts, getMockProduct } from '@/data/mocks/products';
 import { showSuccessToast, showErrorToast } from '@/lib/toast';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 export default function ProductDetail() {
   const router = useRouter();
@@ -207,11 +208,8 @@ export default function ProductDetail() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={Platform.OS === 'android'}
-        bounces={Platform.OS !== 'web'}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
@@ -1091,7 +1089,7 @@ export default function ProductDetail() {
             </View>
           );
         })()}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

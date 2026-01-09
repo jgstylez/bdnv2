@@ -50,9 +50,8 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
   }, [flagsLoading, flags]);
 
   React.useEffect(() => {
-    translateX.value = withSpring(isOpen ? 0 : panelWidth, {
-      damping: 20,
-      stiffness: 90,
+    translateX.value = withTiming(isOpen ? 0 : panelWidth, {
+      duration: 300,
     });
   }, [isOpen, panelWidth, translateX]);
 

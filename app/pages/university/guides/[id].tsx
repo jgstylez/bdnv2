@@ -8,6 +8,7 @@ import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { BackButton } from '@/components/navigation/BackButton';
 import InteractiveGuideViewer from '@/components/guides/InteractiveGuideViewer';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Enhanced mock guides with interactive elements
 const mockGuides: Record<string, Guide> = {
@@ -257,7 +258,8 @@ export default function GuideDetail() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: paddingHorizontal,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -452,7 +454,7 @@ export default function GuideDetail() {
         >
           <InteractiveGuideViewer guide={guide} onComplete={handleComplete} />
         </View>
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { BlogPost } from '@/types/education';
 import { platformValues, isAndroid } from "../../../utils/platform";
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock blog posts
 const mockBlogPosts: BlogPost[] = [
@@ -101,11 +102,8 @@ export default function Blog() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={isAndroid}
-        bounces={platformValues.scrollViewBounces}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: platformValues.scrollViewPaddingTop,
@@ -303,7 +301,7 @@ cachePolicy="memory-disk"
             </Text>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

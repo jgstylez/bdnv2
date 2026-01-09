@@ -52,22 +52,39 @@ npm run web
 
 ```
 bdnv2/
-├── app/                    # Expo Router pages (174+ files)
-│   ├── (tabs)/            # Core tab navigation (Dashboard, Shop, Pay, Account)
-│   ├── (auth)/            # Authentication flows (Login, Signup, PIN)
-│   ├── pages/             # All other pages (businesses, products, events, etc.)
-│   ├── admin/             # Admin dashboard
-│   ├── developer/         # Developer dashboard
-│   └── public_pages/      # Public marketing pages
-├── components/            # Reusable components (118+ files)
+├── app/                    # Expo Router pages (183 files)
+│   ├── (tabs)/            # Core tab navigation (Dashboard, Marketplace, Pay, Account)
+│   ├── (auth)/            # Authentication flows (Login, Signup, PIN, Onboarding)
+│   ├── pages/             # All other pages (~120+ files)
+│   │   ├── businesses/    # Business pages
+│   │   ├── products/      # Product pages
+│   │   ├── events/        # Event pages
+│   │   ├── merchant/      # Merchant platform
+│   │   ├── nonprofit/      # Nonprofit pages
+│   │   ├── myimpact/      # MyImpact rewards
+│   │   ├── university/     # BDN University
+│   │   ├── media/         # Media/BDN TV
+│   │   ├── search/         # Search functionality
+│   │   └── ...            # Other feature pages
+│   ├── admin/             # Admin dashboard (30 files)
+│   ├── developer/         # Developer dashboard (8 files)
+│   └── public_pages/      # Public marketing pages (13 files)
+├── components/            # Reusable components (154 files)
 │   ├── admin/            # Admin-specific components
-│   ├── forms/            # Form components
-│   ├── header/           # Header components
-│   ├── optimized/        # Performance-optimized components
+│   ├── forms/            # Form components (11 files)
+│   ├── header/           # Header components (7 files)
+│   ├── optimized/        # Performance-optimized components (6 files)
+│   ├── tokens/           # Token-related components (11 files)
+│   ├── c2b-payment/      # C2B payment components (8 files)
 │   └── ...               # Feature-specific components
 ├── contexts/              # React Context providers (5 files)
+│   ├── AuthContext.tsx
+│   ├── CartContext.tsx
+│   ├── FeatureFlagsContext.tsx
+│   ├── BusinessContext.tsx
+│   └── NonprofitContext.tsx
 ├── hooks/                 # Custom React hooks (9 files)
-├── lib/                   # Utility libraries (15+ files)
+├── lib/                   # Utility libraries (20+ files)
 ├── types/                 # TypeScript type definitions (27 files)
 ├── data/mocks/            # Mock data for development
 ├── action_plans/          # Documentation & planning
@@ -77,15 +94,17 @@ bdnv2/
 
 ## Tech Stack
 
-- **Expo** ~51.0.0 - Cross-platform framework
-- **React Native** ^0.74.5 - UI framework
-- **TypeScript** ~5.3.3 - Type safety
+- **Expo** ~54.0.0 - Cross-platform framework
+- **React Native** 0.81.5 - UI framework
+- **React** ^19.1.0 - UI library
+- **TypeScript** ~5.9.2 - Type safety
 - **NativeWind** ^4.0.1 - Tailwind CSS for React Native
 - **NativeCN** ^0.3.7 - Shadcn-inspired UI components
-- **React Native Reanimated** ~3.10.0 - Smooth animations
-- **Expo Router** ~3.5.0 - File-based routing
+- **React Native Reanimated** ~4.1.1 - Smooth animations
+- **Expo Router** ~6.0.21 - File-based routing
 - **Firebase** ^12.7.0 - Authentication and Firestore
 - **React Native Toast Message** ^2.3.3 - Toast notifications
+- **expo-image** ~3.0.11 - Optimized image component
 
 ## Code Quality Standards
 

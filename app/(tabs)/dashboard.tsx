@@ -13,6 +13,7 @@ import { KeyFeatures } from "@/components/dashboard/KeyFeatures";
 import { ActivityOverview } from "@/components/dashboard/ActivityOverview";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { cn } from "@/lib/utils";
+import { OptimizedScrollView } from "@/components/optimized/OptimizedScrollView";
 
 export default function Dashboard() {
   const { width } = useWindowDimensions();
@@ -36,16 +37,16 @@ export default function Dashboard() {
       const swipeThreshold = 100;
       const velocityThreshold = 500;
 
-      // Swipe left to right (opens QR scanner)
+      // Swipe left to right → navigate to Pay Business page
       if (translationX > swipeThreshold || velocityX > velocityThreshold) {
-        router.push("/pages/scanner");
+        router.push("/(tabs)/pay");
       }
-      // Swipe right to left (opens account page)
+      // Swipe right to left → navigate to Shop page
       else if (
         translationX < -swipeThreshold ||
         velocityX < -velocityThreshold
       ) {
-        router.push("/(tabs)/account");
+        router.push("/(tabs)/marketplace");
       }
     });
 
@@ -53,7 +54,8 @@ export default function Dashboard() {
     <GestureDetector gesture={swipeGesture}>
       <View className="flex-1 bg-dark-background">
         <StatusBar style="light" />
-        <ScrollView
+        <OptimizedScrollView
+          showBackToTop={true}
           contentContainerStyle={{
             paddingHorizontal: isMobile ? 20 : 40,
             paddingTop: 20,
@@ -95,7 +97,7 @@ export default function Dashboard() {
             <ActivityOverview isMobile={isMobile} />
             <RecentActivity isMobile={isMobile} />
           </View>
-        </ScrollView>
+        </OptimizedScrollView>
       </View>
     </GestureDetector>
   );

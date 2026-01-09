@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { ImpactSummary } from '@/types/impact';
 import { HeroSection } from '@/components/layouts/HeroSection';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock impact summary
 const mockImpactSummary: ImpactSummary = {
@@ -84,7 +85,8 @@ export default function MyImpact() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -984,7 +986,7 @@ export default function MyImpact() {
             )}
           </View>
         </View>
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

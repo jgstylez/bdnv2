@@ -7,6 +7,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 export default function About() {
   const { width } = useWindowDimensions();
@@ -42,7 +43,8 @@ export default function About() {
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <Navigation />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: isMobile ? insets.bottom + 40 : 40,
@@ -251,7 +253,7 @@ export default function About() {
         </ScrollAnimatedView>
 
         <Footer />
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

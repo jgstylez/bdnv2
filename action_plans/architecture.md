@@ -20,14 +20,16 @@ bdn2.0/
 
 ## Technology Stack
 
-- **Expo** (~51.0.0) - Cross-platform framework
-- **React Native** (^0.74.5) - UI framework
-- **TypeScript** - Type safety
-- **Expo Router** (~3.5.0) - File-based routing
+- **Expo** (~54.0.0) - Cross-platform framework
+- **React Native** (0.81.5) - UI framework
+- **React** (^19.1.0) - UI library
+- **TypeScript** (~5.9.2) - Type safety
+- **Expo Router** (~6.0.21) - File-based routing
 - **NativeWind** (^4.0.1) - Tailwind CSS for RN
-- **NativeCN** - Shadcn-inspired UI components for React Native
-- **React Native Reanimated** (~3.10.0) - Animations
-- **Expo Linear Gradient** (~13.0.2) - Gradients
+- **NativeCN** (@nativecn/cli ^0.3.7) - Shadcn-inspired UI components for React Native
+- **React Native Reanimated** (~4.1.1) - Animations
+- **expo-image** (~3.0.11) - Optimized image component
+- **Expo Linear Gradient** (~15.0.8) - Gradients
 
 ## Design System
 

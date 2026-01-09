@@ -39,6 +39,7 @@ This folder contains all project documentation, planning documents, and architec
 - **[navigation-freeze-fix.md](./navigation-freeze-fix.md)** - Navigation freeze issues and fixes
 - **[scrollview-tabbar-fix.md](./scrollview-tabbar-fix.md)** - ScrollView/TabBar interaction fixes
 - **[scroll-touch-optimizations.md](./scroll-touch-optimizations.md)** - Scroll and touch performance optimizations
+- **[back-to-top-button.md](./back-to-top-button.md)** - Back-to-top button feature documentation and iOS fix
 
 ### Feature Specifications
 - **[admin-pages-specification.md](./admin-pages-specification.md)** - Admin pages specification
@@ -117,3 +118,6 @@ These documents contain historical information and have been consolidated into *
 ---
 
 **Last Updated:** 2025-01-XX
+
+### Recent Updates
+- **[CODEBASE-REVIEW-UPDATE-2025.md](./CODEBASE-REVIEW-UPDATE-2025.md)** - Comprehensive codebase review and documentation update (January 2025)

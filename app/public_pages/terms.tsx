@@ -6,6 +6,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 const sections = [
   {
@@ -94,7 +95,8 @@ export default function Terms() {
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <Navigation />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: isMobile ? insets.bottom + 40 : 40,
@@ -199,7 +201,7 @@ export default function Terms() {
         </ScrollAnimatedView>
 
         <Footer />
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

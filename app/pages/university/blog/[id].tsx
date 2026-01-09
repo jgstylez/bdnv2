@@ -16,6 +16,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { BlogPost, BlogContentBlock } from '@/types/education';
 import RichContentRenderer from '@/components/blog/RichContentRenderer';
 import { logger } from '@/lib/logger';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock blog posts with rich content
 const mockBlogPosts: BlogPost[] = [
@@ -341,7 +342,7 @@ export default function BlogDetail() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<any>(null);
   const [readingProgress, setReadingProgress] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
 
@@ -446,10 +447,10 @@ export default function BlogDetail() {
         </View>
       )}
 
-      <ScrollView
+      <OptimizedScrollView
         ref={scrollViewRef}
+        showBackToTop={true}
         onScroll={handleScroll}
-        scrollEventThrottle={16}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -1001,7 +1002,7 @@ export default function BlogDetail() {
             </View>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

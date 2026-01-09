@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Constants from "expo-constants";
 import { userMenuItems } from "../../config/userMenu";
 import { UserBadge, BADGE_DEFINITIONS } from '@/types/badges';
 import { BadgeIcon } from '@/components/BadgeIcon';
@@ -468,6 +469,21 @@ export default function Account() {
                 </TouchableOpacity>
               </React.Fragment>
             ))}
+          </View>
+          
+          {/* Version and Build Number */}
+          <View style={{ alignItems: "center", marginTop: 16 }}>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.3)",
+                textAlign: "center",
+              }}
+            >
+              v{Constants.expoConfig?.version || "2.0.0"} (Build {Platform.OS === "ios" 
+                ? Constants.expoConfig?.ios?.buildNumber || "1"
+                : Constants.expoConfig?.android?.versionCode || "1"})
+            </Text>
           </View>
         </View>
       </ScrollView>
