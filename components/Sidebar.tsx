@@ -362,8 +362,9 @@ export const Sidebar: React.FC = () => {
                           return;
                         }
 
-                        // Check if we're already on the target route
-                        if (pathname === item.href || pathname?.includes(item.href)) {
+                        // Check if we're already on the exact target route
+                        // Use exact match to allow navigation from sub-routes to parent routes
+                        if (pathname === item.href) {
                           return;
                         }
 
@@ -384,6 +385,7 @@ export const Sidebar: React.FC = () => {
                         <TouchableOpacity
                           key={item.href + itemIndex}
                           onPress={handleItemPress}
+                          activeOpacity={0.7}
                           style={{
                             flexDirection: "row",
                             alignItems: "center",
@@ -395,6 +397,11 @@ export const Sidebar: React.FC = () => {
                               : "transparent",
                             marginBottom:
                               itemIndex < group.items.length - 1 ? 2 : 0,
+                            ...(Platform.OS === "web" && {
+                              // @ts-ignore - Web-only CSS properties
+                              cursor: "pointer",
+                              userSelect: "none",
+                            }),
                           }}
                         >
                           <MaterialIcons

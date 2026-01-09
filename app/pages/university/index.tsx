@@ -1,13 +1,11 @@
 import React from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { Carousel } from '@/components/layouts/Carousel';
 import { useResponsive } from '@/hooks/useResponsive';
-import { platformValues, isAndroid } from "../../../utils/platform";
 
 const categories = [
   {
@@ -79,9 +77,8 @@ const featuredVideos = [
 ];
 
 export default function University() {
-  const { width } = useWindowDimensions();
   const router = useRouter();
-  const { isMobile, isDesktop } = useResponsive();
+  const { isMobile, isDesktop, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
 
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
@@ -89,120 +86,164 @@ export default function University() {
       <ScrollView
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={isAndroid}
-        bounces={platformValues.scrollViewBounces}
+        nestedScrollEnabled={Platform.OS === 'android'}
+        bounces={Platform.OS !== 'web'}
         contentContainerStyle={{
-          paddingHorizontal: isMobile ? 20 : 40,
-          paddingTop: platformValues.scrollViewPaddingTop,
-          paddingBottom: 40,
+          paddingHorizontal,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: scrollViewBottomPadding,
         }}
       >
         {/* Hero Section */}
         <HeroSection
           title="BDN University"
-          subtitle="Learn, grow, and master the BDN platform with guides, tutorials, and resources"
+          subtitle="Learn, grow, and get the most out of using the BDN platform."
         />
 
         {/* Categories */}
         <View style={{ marginBottom: 32 }}>
           <Text
             style={{
-              fontSize: 20,
+              fontSize: isMobile ? 20 : 24,
               fontWeight: "700",
               color: "#ffffff",
-              marginBottom: Platform.OS === "ios" ? 20 : 16,
+              marginBottom: 20,
             }}
           >
             Explore Learning Resources
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-            }}
-          >
-            {categories.map((category, index) => {
-              // Calculate card width and spacing for 2x2 grid on mobile
-              const isEvenIndex = index % 2 === 0;
-              const isTopRow = index < 2;
-              const gapSize = Platform.OS === "ios" ? 12 : 6;
-              
-              const cardSpacing = isMobile 
-                ? { 
-                    flexBasis: Platform.OS === "ios" ? "48%" : "50%",
-                    maxWidth: Platform.OS === "ios" ? "48%" : "50%",
-                    marginRight: isEvenIndex ? gapSize : 0,
-                    marginBottom: isTopRow ? (Platform.OS === "ios" ? 16 : 12) : 0,
-                  }
-                : { 
-                    flex: 1, 
-                    maxWidth: "25%", 
-                    marginRight: 6,
-                    marginBottom: 12,
-                  };
-              
-              return (
-              <TouchableOpacity
-                key={category.id}
-                onPress={() => router.push(category.route as any)}
-                style={[
-                  {
+          {isMobile ? (
+            // Mobile: 2x2 Grid - Two rows of two cards each
+            <View>
+              {/* First Row */}
+              <View style={{ flexDirection: "row", marginBottom: 16 }}>
+                {categories.slice(0, 2).map((category, index) => (
+                  <TouchableOpacity
+                    key={category.id}
+                    onPress={() => router.push(category.route as any)}
+                    style={{
+                      flex: 1,
+                      marginRight: index === 0 ? 8 : 0,
+                      marginLeft: index === 1 ? 8 : 0,
+                      backgroundColor: "#474747",
+                      borderRadius: 16,
+                      padding: 16,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      minHeight: 160,
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 12,
+                        backgroundColor: `${category.color}20`,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginBottom: 12,
+                      }}
+                    >
+                      <MaterialIcons name={category.icon as any} size={24} color={category.color} />
+                    </View>
+                    <Text style={{ fontSize: 16, fontWeight: "700", color: "#ffffff", marginBottom: 6 }}>
+                      {category.name}
+                    </Text>
+                    <Text style={{ fontSize: 13, color: "rgba(255, 255, 255, 0.8)", lineHeight: 18 }}>
+                      {category.description}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              {/* Second Row */}
+              <View style={{ flexDirection: "row" }}>
+                {categories.slice(2, 4).map((category, index) => (
+                  <TouchableOpacity
+                    key={category.id}
+                    onPress={() => router.push(category.route as any)}
+                    style={{
+                      flex: 1,
+                      marginRight: index === 0 ? 8 : 0,
+                      marginLeft: index === 1 ? 8 : 0,
+                      backgroundColor: "#474747",
+                      borderRadius: 16,
+                      padding: 16,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      minHeight: 160,
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 12,
+                        backgroundColor: `${category.color}20`,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginBottom: 12,
+                      }}
+                    >
+                      <MaterialIcons name={category.icon as any} size={24} color={category.color} />
+                    </View>
+                    <Text style={{ fontSize: 16, fontWeight: "700", color: "#ffffff", marginBottom: 6 }}>
+                      {category.name}
+                    </Text>
+                    <Text style={{ fontSize: 13, color: "rgba(255, 255, 255, 0.8)", lineHeight: 18 }}>
+                      {category.description}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          ) : (
+            // Desktop: All 4 cards in one row
+            <View style={{ flexDirection: "row", gap: 20 }}>
+              {categories.map((category) => (
+                <TouchableOpacity
+                  key={category.id}
+                  onPress={() => router.push(category.route as any)}
+                  style={{
+                    flex: 1,
                     backgroundColor: "#474747",
-                    borderRadius: 16,
-                    paddingHorizontal: Platform.OS === "ios" ? 18 : 20,
-                    paddingVertical: Platform.OS === "ios" ? 18 : 20,
+                    borderRadius: 20,
+                    padding: 24,
                     borderWidth: 1,
                     borderColor: "rgba(186, 153, 136, 0.2)",
-                    minHeight: Platform.OS === "ios" ? 150 : 140,
-                  },
-                  cardSpacing,
-                ]}
-              >
-                <View
-                  style={{
-                    width: Platform.OS === "ios" ? 52 : 48,
-                    height: Platform.OS === "ios" ? 52 : 48,
-                    borderRadius: Platform.OS === "ios" ? 26 : 24,
-                    backgroundColor: `${category.color}20`,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: Platform.OS === "ios" ? 14 : 12,
+                    minHeight: 180,
                   }}
                 >
-                  <MaterialIcons name={category.icon as any} size={Platform.OS === "ios" ? 26 : 24} color={category.color} />
-                </View>
-                <Text
-                  style={{
-                    fontSize: Platform.OS === "ios" ? 17 : 16,
-                    fontWeight: "700",
-                    color: "#ffffff",
-                    marginBottom: Platform.OS === "ios" ? 6 : 4,
-                    lineHeight: Platform.OS === "ios" ? 22 : 20,
-                  }}
-                >
-                  {category.name}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: Platform.OS === "ios" ? 14 : 13,
-                    color: "rgba(255, 255, 255, 0.7)",
-                    lineHeight: Platform.OS === "ios" ? 20 : 18,
-                  }}
-                >
-                  {category.description}
-                </Text>
-              </TouchableOpacity>
-              );
-            })}
-          </View>
+                  <View
+                    style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: 16,
+                      backgroundColor: `${category.color}20`,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: 16,
+                    }}
+                  >
+                    <MaterialIcons name={category.icon as any} size={28} color={category.color} />
+                  </View>
+                  <Text style={{ fontSize: 20, fontWeight: "700", color: "#ffffff", marginBottom: 8 }}>
+                    {category.name}
+                  </Text>
+                  <Text style={{ fontSize: 15, color: "rgba(255, 255, 255, 0.8)", lineHeight: 22 }}>
+                    {category.description}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
         </View>
 
         {/* Featured Guides */}
         <View style={{ marginBottom: 32 }}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
             <Text
               style={{
-                fontSize: 20,
+                fontSize: isMobile ? 20 : 24,
                 fontWeight: "700",
                 color: "#ffffff",
               }}
@@ -221,8 +262,13 @@ export default function University() {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={{ gap: 12 }}>
-            {featuredGuides.map((guide) => (
+          <View 
+            style={Platform.OS === "web" 
+              ? {} 
+              : { gap: 16 }
+            }
+          >
+            {featuredGuides.map((guide, index) => (
               <TouchableOpacity
                 key={guide.id}
                 onPress={() => router.push(`/pages/university/guides/${guide.id}`)}
@@ -232,37 +278,61 @@ export default function University() {
                   padding: 20,
                   borderWidth: 1,
                   borderColor: "rgba(186, 153, 136, 0.2)",
+                  ...(Platform.OS === "web" && index < featuredGuides.length - 1 && {
+                    marginBottom: 16,
+                  }),
                 }}
               >
-                <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
-                  <MaterialIcons name="menu-book" size={24} color="#ba9988" />
+                <View 
+                  style={{ 
+                    flexDirection: "row", 
+                    alignItems: "flex-start",
+                    ...(Platform.OS === "web" ? { marginHorizontal: -8 } : { gap: 16 })
+                  }}
+                >
+                  <View style={Platform.OS === "web" ? { marginHorizontal: 8 } : {}}>
+                    <MaterialIcons name="menu-book" size={28} color="#ba9988" />
+                  </View>
                   <View style={{ flex: 1 }}>
                     <Text
                       style={{
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: "700",
                         color: "#ffffff",
-                        marginBottom: 4,
+                        marginBottom: 6,
                       }}
                     >
                       {guide.title}
                     </Text>
                     <Text
                       style={{
-                        fontSize: 14,
-                        color: "rgba(255, 255, 255, 0.7)",
-                        marginBottom: 8,
+                        fontSize: 15,
+                        color: "rgba(255, 255, 255, 0.8)",
+                        marginBottom: 12,
+                        lineHeight: 22,
                       }}
                     >
                       {guide.description}
                     </Text>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-                      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                        <MaterialIcons name="schedule" size={14} color="rgba(255, 255, 255, 0.5)" />
+                    <View 
+                      style={{ 
+                        flexDirection: "row", 
+                        alignItems: "center",
+                        ...(Platform.OS === "web" ? { marginHorizontal: -3 } : { gap: 16 })
+                      }}
+                    >
+                      <View 
+                        style={{ 
+                          flexDirection: "row", 
+                          alignItems: "center",
+                          ...(Platform.OS === "web" ? { marginHorizontal: 3 } : { gap: 6 })
+                        }}
+                      >
+                        <MaterialIcons name="schedule" size={16} color="rgba(255, 255, 255, 0.6)" />
                         <Text
                           style={{
-                            fontSize: 12,
-                            color: "rgba(255, 255, 255, 0.6)",
+                            fontSize: 13,
+                            color: "rgba(255, 255, 255, 0.7)",
                           }}
                         >
                           {guide.estimatedTime}
@@ -278,10 +348,10 @@ export default function University() {
 
         {/* Featured Videos */}
         <View>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
             <Text
               style={{
-                fontSize: 20,
+                fontSize: isMobile ? 20 : 24,
                 fontWeight: "700",
                 color: "#ffffff",
               }}
@@ -301,81 +371,7 @@ export default function University() {
             </TouchableOpacity>
           </View>
           {isDesktop ? (
-            <Carousel itemsPerView={3} gap={16}>
-              {featuredVideos.map((video) => (
-                <TouchableOpacity
-                  key={video.id}
-                  onPress={() => router.push(`/pages/university/videos/${video.id}`)}
-                  style={{
-                    backgroundColor: "#474747",
-                    borderRadius: 16,
-                    overflow: "hidden",
-                    borderWidth: 1,
-                    borderColor: "rgba(186, 153, 136, 0.2)",
-                  }}
-                >
-                  <View
-                    style={{
-                      height: 100,
-                      backgroundColor: "#232323",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <MaterialIcons name="play-circle-filled" size={40} color="#4caf50" />
-                  </View>
-                  <View style={{ padding: 12 }}>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        fontWeight: "700",
-                        color: "#ffffff",
-                        marginBottom: 4,
-                      }}
-                      numberOfLines={2}
-                    >
-                      {video.title}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "rgba(255, 255, 255, 0.7)",
-                        marginBottom: 8,
-                      }}
-                      numberOfLines={2}
-                    >
-                      {video.description}
-                    </Text>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-                      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                        <MaterialIcons name="schedule" size={12} color="rgba(255, 255, 255, 0.5)" />
-                        <Text
-                          style={{
-                            fontSize: 11,
-                            color: "rgba(255, 255, 255, 0.6)",
-                          }}
-                        >
-                          {video.duration}
-                        </Text>
-                      </View>
-                      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                        <MaterialIcons name="visibility" size={12} color="rgba(255, 255, 255, 0.5)" />
-                        <Text
-                          style={{
-                            fontSize: 11,
-                            color: "rgba(255, 255, 255, 0.6)",
-                          }}
-                        >
-                          {video.views.toLocaleString()} views
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </Carousel>
-          ) : (
-            <View style={{ gap: 12 }}>
+            <Carousel itemsPerView={3} gap={16} showControls={true} showIndicators={true}>
               {featuredVideos.map((video) => (
                 <TouchableOpacity
                   key={video.id}
@@ -404,38 +400,158 @@ export default function University() {
                         fontSize: 16,
                         fontWeight: "700",
                         color: "#ffffff",
-                        marginBottom: 4,
+                        marginBottom: 6,
                       }}
+                      numberOfLines={2}
                     >
                       {video.title}
                     </Text>
                     <Text
                       style={{
                         fontSize: 14,
-                        color: "rgba(255, 255, 255, 0.7)",
-                        marginBottom: 8,
+                        color: "rgba(255, 255, 255, 0.8)",
+                        marginBottom: 12,
+                        lineHeight: 20,
                       }}
+                      numberOfLines={2}
                     >
                       {video.description}
                     </Text>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
-                      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                        <MaterialIcons name="schedule" size={14} color="rgba(255, 255, 255, 0.5)" />
+                    <View 
+                      style={{ 
+                        flexDirection: "row", 
+                        alignItems: "center",
+                        ...(Platform.OS === "web" ? { marginHorizontal: -3 } : { gap: 16 })
+                      }}
+                    >
+                      <View 
+                        style={{ 
+                          flexDirection: "row", 
+                          alignItems: "center",
+                          ...(Platform.OS === "web" ? { marginHorizontal: 3 } : { gap: 6 })
+                        }}
+                      >
+                        <MaterialIcons name="schedule" size={16} color="rgba(255, 255, 255, 0.6)" />
                         <Text
                           style={{
-                            fontSize: 12,
-                            color: "rgba(255, 255, 255, 0.6)",
+                            fontSize: 13,
+                            color: "rgba(255, 255, 255, 0.7)",
                           }}
                         >
                           {video.duration}
                         </Text>
                       </View>
-                      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                        <MaterialIcons name="visibility" size={14} color="rgba(255, 255, 255, 0.5)" />
+                      <View 
+                        style={{ 
+                          flexDirection: "row", 
+                          alignItems: "center",
+                          ...(Platform.OS === "web" ? { marginHorizontal: 3 } : { gap: 6 })
+                        }}
+                      >
+                        <MaterialIcons name="visibility" size={16} color="rgba(255, 255, 255, 0.6)" />
                         <Text
                           style={{
-                            fontSize: 12,
-                            color: "rgba(255, 255, 255, 0.6)",
+                            fontSize: 13,
+                            color: "rgba(255, 255, 255, 0.7)",
+                          }}
+                        >
+                          {video.views.toLocaleString()} views
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </Carousel>
+          ) : (
+            <View 
+              style={Platform.OS === "web" 
+                ? {} 
+                : { gap: 16 }
+              }
+            >
+              {featuredVideos.map((video, index) => (
+                <TouchableOpacity
+                  key={video.id}
+                  onPress={() => router.push(`/pages/university/videos/${video.id}`)}
+                  style={{
+                    backgroundColor: "#474747",
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    ...(Platform.OS === "web" && index < featuredVideos.length - 1 && {
+                      marginBottom: 16,
+                    }),
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 180,
+                      backgroundColor: "#232323",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <MaterialIcons name="play-circle-filled" size={64} color="#4caf50" />
+                  </View>
+                  <View style={{ padding: 20 }}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "700",
+                        color: "#ffffff",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {video.title}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: "rgba(255, 255, 255, 0.8)",
+                        marginBottom: 12,
+                        lineHeight: 22,
+                      }}
+                    >
+                      {video.description}
+                    </Text>
+                    <View 
+                      style={{ 
+                        flexDirection: "row", 
+                        alignItems: "center",
+                        ...(Platform.OS === "web" ? { marginHorizontal: -3 } : { gap: 20 })
+                      }}
+                    >
+                      <View 
+                        style={{ 
+                          flexDirection: "row", 
+                          alignItems: "center",
+                          ...(Platform.OS === "web" ? { marginHorizontal: 3 } : { gap: 6 })
+                        }}
+                      >
+                        <MaterialIcons name="schedule" size={16} color="rgba(255, 255, 255, 0.6)" />
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            color: "rgba(255, 255, 255, 0.7)",
+                          }}
+                        >
+                          {video.duration}
+                        </Text>
+                      </View>
+                      <View 
+                        style={{ 
+                          flexDirection: "row", 
+                          alignItems: "center",
+                          ...(Platform.OS === "web" ? { marginHorizontal: 3 } : { gap: 6 })
+                        }}
+                      >
+                        <MaterialIcons name="visibility" size={16} color="rgba(255, 255, 255, 0.6)" />
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            color: "rgba(255, 255, 255, 0.7)",
                           }}
                         >
                           {video.views.toLocaleString()} views

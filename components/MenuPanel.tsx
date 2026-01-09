@@ -143,8 +143,9 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
       return;
     }
 
-    // Check if we're already on the target route
-    if (pathname === href || pathname?.includes(href)) {
+    // Check if we're already on the exact target route
+    // Use exact match to allow navigation from sub-routes to parent routes
+    if (pathname === href) {
       onClose();
       return;
     }
