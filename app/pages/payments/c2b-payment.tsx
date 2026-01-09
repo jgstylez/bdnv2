@@ -1375,7 +1375,7 @@ export default function C2BPayment() {
                     fontSize: 16,
                     color: "#ffffff",
                   }}
-                  autoFocus
+                  autoFocus={Platform.OS === "web"}
                 />
                 {businessSearchQuery.length > 0 && (
                   <TouchableOpacity

@@ -1331,7 +1331,7 @@ export default function BuyGiftCard() {
                     fontSize: 16,
                     color: "#ffffff",
                   }}
-                  autoFocus
+                  autoFocus={Platform.OS === "web"}
                 />
                 {merchantSearchQuery.length > 0 && (
                   <TouchableOpacity

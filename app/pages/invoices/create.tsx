@@ -868,7 +868,7 @@ export default function CreateInvoice() {
                     fontSize: 16,
                     color: "#ffffff",
                   }}
-                  autoFocus
+                  autoFocus={Platform.OS === "web"}
                 />
                 {recipientSearchQuery.length > 0 && (
                   <TouchableOpacity

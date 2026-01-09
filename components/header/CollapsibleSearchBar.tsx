@@ -91,8 +91,9 @@ export function CollapsibleSearchBar({
       friction: 8,
     }).start();
 
-    if (isExpanded && inputRef.current) {
-      // Focus input when expanded
+    // Only auto-focus on web, not on native mobile devices
+    if (isExpanded && inputRef.current && Platform.OS === "web") {
+      // Focus input when expanded (web only)
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
@@ -202,7 +203,7 @@ export function CollapsibleSearchBar({
             <View
               style={{
                 flex: 1,
-                backgroundColor: "rgba(0, 0, 0, 0.95)",
+                backgroundColor: "rgba(0, 0, 0, 0.85)",
                 justifyContent: "center",
                 alignItems: "center",
                 paddingHorizontal: spacing.lg,
@@ -292,7 +293,7 @@ export function CollapsibleSearchBar({
                     placeholder={searchValue.length === 0 ? placeholderExamples[currentPlaceholderIndex] : placeholder}
                     placeholderTextColor={colors.text.placeholder}
                     onSubmitEditing={handleSubmit}
-                    autoFocus={true}
+                    autoFocus={Platform.OS === "web"}
                     style={{
                       flex: 1,
                       fontSize: typography.fontSize.base,
