@@ -47,8 +47,8 @@ export default function AboutLegal() {
 
         {/* Hero Section */}
         <HeroSection
-          title="About & Legal"
-          subtitle="Learn more about BDN and our legal information"
+          title="About BDN"
+          subtitle="Learn more about Black Dollar Network"
         />
 
         {/* Tabs */}

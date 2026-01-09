@@ -293,7 +293,7 @@ export default function TransactionHistory() {
       >
         {/* Hero Section */}
         <HeroSection
-          title="Transaction History"
+          title="Transactions"
           subtitle="View and manage all your transactions"
         />
 

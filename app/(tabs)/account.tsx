@@ -124,16 +124,16 @@ export default function Account() {
         >
           <View
             style={{
-              width: 100,
-              height: 100,
-              borderRadius: 50,
+              width: 80,
+              height: 80,
+              borderRadius: 40,
               backgroundColor: "#ba9988",
               alignItems: "center",
               justifyContent: "center",
               marginBottom: 16,
             }}
           >
-            <Text style={{ fontSize: 48, fontWeight: "700", color: "#ffffff" }}>
+            <Text style={{ fontSize: 36, fontWeight: "700", color: "#ffffff" }}>
               {mockUser.name.charAt(0)}
             </Text>
           </View>
