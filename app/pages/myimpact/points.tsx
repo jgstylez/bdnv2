@@ -54,6 +54,9 @@ export default function ImpactPoints() {
     : mockPoints.filter((point) => point.source === selectedFilter);
 
   const totalPoints = mockPoints.reduce((sum, point) => sum + point.points, 0);
+  
+  // Mock total cashback (in production, this would come from API/context)
+  const totalCashback = 7.50;
 
   const getSourceIcon = (source: string) => {
     switch (source) {
@@ -123,38 +126,113 @@ export default function ImpactPoints() {
           paddingBottom: 40,
         }}
       >
-        {/* Total Points */}
-        <View
-          style={{
-            backgroundColor: "#474747",
-            borderRadius: 20,
-            padding: 24,
-            marginBottom: 24,
-            borderWidth: 1,
-            borderColor: "rgba(186, 153, 136, 0.2)",
-            alignItems: "center",
-          }}
-        >
-          <Text
+        {/* Total Points and Cashback */}
+        {width < 768 ? (
+          <View
             style={{
-              fontSize: 14,
-              color: "rgba(255, 255, 255, 0.7)",
-              marginBottom: 8,
+              flexDirection: "row",
+              gap: 12,
+              marginBottom: 24,
             }}
           >
-            Total Points Earned
-          </Text>
-          <Text
+            {/* Total Points */}
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: "#474747",
+                borderRadius: 20,
+                padding: 24,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "rgba(255, 255, 255, 0.7)",
+                  marginBottom: 8,
+                }}
+              >
+                Total Points Earned
+              </Text>
+              <Text
+                style={{
+                  fontSize: 36,
+                  fontWeight: "800",
+                  color: "#ba9988",
+                  letterSpacing: -1,
+                }}
+              >
+                {totalPoints.toLocaleString()}
+              </Text>
+            </View>
+            {/* Total Cashback */}
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: "#474747",
+                borderRadius: 20,
+                padding: 24,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "rgba(255, 255, 255, 0.7)",
+                  marginBottom: 8,
+                }}
+              >
+                Total Cashback
+              </Text>
+              <Text
+                style={{
+                  fontSize: 36,
+                  fontWeight: "800",
+                  color: "#4caf50",
+                  letterSpacing: -1,
+                }}
+              >
+                ${totalCashback.toFixed(2)}
+              </Text>
+            </View>
+          </View>
+        ) : (
+          <View
             style={{
-              fontSize: isMobile ? 36 : 48,
-              fontWeight: "800",
-              color: "#ba9988",
-              letterSpacing: -1,
+              backgroundColor: "#474747",
+              borderRadius: 20,
+              padding: 24,
+              marginBottom: 24,
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+              alignItems: "center",
             }}
           >
-            {totalPoints.toLocaleString()}
-          </Text>
-        </View>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
+              }}
+            >
+              Total Points Earned
+            </Text>
+            <Text
+              style={{
+                fontSize: 48,
+                fontWeight: "800",
+                color: "#ba9988",
+                letterSpacing: -1,
+              }}
+            >
+              {totalPoints.toLocaleString()}
+            </Text>
+          </View>
+        )}
 
         {/* Filters */}
         <ScrollView
