@@ -217,7 +217,7 @@ export default function MyImpact() {
                       color: "rgba(255, 255, 255, 0.7)",
                     }}
                   >
-                    Lifetime Cashback
+                    Cashback
                   </Text>
                 </View>
                 <Text
@@ -248,7 +248,7 @@ export default function MyImpact() {
                       color: "rgba(255, 255, 255, 0.7)",
                     }}
                   >
-                    Total Donations
+                    Donations
                   </Text>
                 </View>
                 <Text
@@ -316,7 +316,7 @@ export default function MyImpact() {
                       flex: 1,
                     }}
                   >
-                    Sponsorship Earnings
+                    Sponsorship
                   </Text>
                 </View>
                 <Text
@@ -459,7 +459,7 @@ export default function MyImpact() {
                         color: "rgba(255, 255, 255, 0.7)",
                       }}
                     >
-                      Lifetime Cashback
+                      Cashback
                     </Text>
                   </View>
                   <Text
@@ -490,7 +490,7 @@ export default function MyImpact() {
                         color: "rgba(255, 255, 255, 0.7)",
                       }}
                     >
-                      Total Donations
+                      Donations
                     </Text>
                   </View>
                   <Text
@@ -558,7 +558,7 @@ export default function MyImpact() {
                         flex: 1,
                       }}
                     >
-                      Sponsorship Earnings
+                      Sponsorship
                     </Text>
                   </View>
                   <Text

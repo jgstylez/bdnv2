@@ -61,7 +61,7 @@ export function ActivityOverview({ isMobile }: ActivityOverviewProps) {
         })}
         style={!isMobile ? { height: 420 } : undefined}
       >
-        <CardContent 
+        <CardContent
           className="px-0" // Override default px-6 padding
           style={[
             styles.cardContent,
@@ -70,15 +70,15 @@ export function ActivityOverview({ isMobile }: ActivityOverviewProps) {
               paddingRight: horizontalPadding,
               paddingTop: topPadding,
               paddingBottom: bottomPadding,
-            }
+            },
           ]}
         >
-          <View 
+          <View
             style={[
               styles.chartContainer,
               {
                 paddingHorizontal: chartContainerPadding,
-              }
+              },
             ]}
           >
             <BarChart

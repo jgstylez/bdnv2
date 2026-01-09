@@ -222,7 +222,7 @@ export default function Leaderboard() {
     return "rgba(255, 255, 255, 0.5)";
   };
 
-  const renderAvatar = (entry: LeaderboardEntry, size: number = 48) => {
+  const renderAvatar = (entry: LeaderboardEntry, size: number = 40) => {
     if (entry.avatarUrl) {
       return (
         <Image
@@ -453,7 +453,7 @@ export default function Leaderboard() {
                     </View>
 
                     {/* Avatar */}
-                    {renderAvatar(entry, 48)}
+                    {renderAvatar(entry, 40)}
 
                     {/* User Info */}
                     <View style={{ flex: 1 }}>
@@ -748,7 +748,7 @@ export default function Leaderboard() {
                           </View>
 
                           {/* Avatar */}
-                          {renderAvatar(entry, 48)}
+                          {renderAvatar(entry, 40)}
 
                           {/* User Info */}
                           <View style={{ flex: 1 }}>
