@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, Platform } from "r
 import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { spacing } from '../../constants/theme';
+import { FormSelect } from '../forms/FormSelect';
 
 interface ProductFormProps {
   form: any;
@@ -78,39 +79,18 @@ export function ProductForm({ form, setForm, categories, isNonprofit }: ProductF
             <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff", marginBottom: 8 }}>
               Category *
             </Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 8 }} contentContainerStyle={{ gap: 8 }}>
-              {categories.map((cat) => (
-                <TouchableOpacity
-                  key={cat}
-                  onPress={() => setForm({ ...form, category: cat })}
-                  accessible={true}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Category ${cat}${form.category === cat ? ", selected" : ""}`}
-                  accessibilityState={{ selected: form.category === cat }}
-                  accessibilityHint={`Select ${cat} as product category`}
-                  activeOpacity={0.7}
-                  hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}
-                  style={{
-                    paddingHorizontal: 16,
-                    paddingVertical: 10,
-                    borderRadius: 12,
-                    backgroundColor: form.category === cat ? "#ba9988" : "#232323",
-                    borderWidth: 1,
-                    borderColor: form.category === cat ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontWeight: "600",
-                      color: form.category === cat ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                    }}
-                  >
-                    {cat}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+            <FormSelect
+              value={form.category}
+              options={categories.map((cat) => ({ label: cat, value: cat }))}
+              onSelect={(value) => setForm({ ...form, category: value })}
+              placeholder="Select a category"
+              buttonStyle={{
+                backgroundColor: "#232323",
+                borderRadius: 12,
+                padding: 14,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+              }}
+            />
           </View>
         </View>
       </View>
