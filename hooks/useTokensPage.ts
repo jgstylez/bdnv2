@@ -6,10 +6,11 @@ import {
   RecurringPurchase, 
   TOKEN_PRICE 
 } from '../types/token';
+import { mockLedgerEntries as importedMockLedgerEntries } from '../data/mocks/tokens';
 
 // Mock data that will be replaced with API calls
 const mockPurchases: TokenPurchase[] = [];
-const mockLedgerEntries: TokenLedgerEntry[] = [];
+const mockLedgerEntries: TokenLedgerEntry[] = importedMockLedgerEntries;
 const mockPaymentMethods: Record<string, { name: string; type: "creditcard" | "bankaccount"; last4: string; brand?: string }> = {};
 const mockRecurringPurchase: RecurringPurchase | null = null;
 
@@ -28,12 +29,10 @@ export const useTokensPage = () => {
   const [showOneTimeConfirmModal, setShowOneTimeConfirmModal] = useState(false);
 
   const totalTokens = useMemo(() => {
-    return mockLedgerEntries.reduce((sum, entry) => {
-      if (entry.transactionType === "purchase" || entry.transactionType === "reward") {
-        return sum + entry.tokens;
-      }
-      return sum - entry.tokens;
-    }, 0);
+    if (mockLedgerEntries.length === 0) return 0;
+    // Since all entries are purchases now, use the highest balance
+    // which represents the current total after all transactions
+    return Math.max(...mockLedgerEntries.map(entry => entry.balance), 0);
   }, [mockLedgerEntries]);
 
   const handlePurchase = () => {

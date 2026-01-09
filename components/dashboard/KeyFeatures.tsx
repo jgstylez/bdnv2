@@ -20,7 +20,7 @@ const features = [
     color: "#ffd700",
   },
   {
-    title: "Gift Cards",
+    title: "Buy Gift Cards",
     description: "Send gift cards to loved ones",
     icon: "card-giftcard" as const,
     onPress: (router: any) => router.push("/pages/payments/buy-gift-card"),
@@ -28,7 +28,7 @@ const features = [
   },
   {
     title: "BDN University",
-    description: "Learn & master the platform",
+    description: "Learn more about the platform & culture",
     icon: "school" as const,
     onPress: (router: any) => router.push("/pages/university"),
     color: "#9c27b0",

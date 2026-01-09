@@ -597,7 +597,7 @@ export default function ConversationDetail() {
                                 backgroundColor: "#232323",
                               }}
                               contentFit="cover"
-cachePolicy="memory-disk"
+                              cachePolicy="memory-disk"
                             />
                           )}
                           {attachment.type === "video" && (
@@ -738,7 +738,7 @@ cachePolicy="memory-disk"
                       source={{ uri: attachment.url }}
                       style={{ width: "100%", height: "100%" }}
                       contentFit="cover"
-cachePolicy="memory-disk"
+                      cachePolicy="memory-disk"
                     />
                   )}
                   {(attachment.type === "video" || attachment.type === "document" || attachment.type === "audio") && (

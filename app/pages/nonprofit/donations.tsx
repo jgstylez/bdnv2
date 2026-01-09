@@ -79,7 +79,7 @@ export default function NonprofitDonations() {
         {/* Summary Cards */}
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: isMobile ? "column" : "row",
             gap: 16,
             marginBottom: 32,
           }}

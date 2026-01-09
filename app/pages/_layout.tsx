@@ -126,7 +126,6 @@ export default function PagesLayout() {
               contentStyle: { backgroundColor: "#232323" },
             }}
           >
-              <Stack.Screen name="tokens" />
               <Stack.Screen name="referrals" />
               <Stack.Screen name="merchant" />
               <Stack.Screen name="myimpact" />

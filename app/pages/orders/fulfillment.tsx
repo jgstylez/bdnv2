@@ -1,7 +1,7 @@
 /**
- * Shared Invoices List Page
+ * Shared Orders Fulfillment Page
  * 
- * Displays invoices for both businesses and nonprofits
+ * Displays orders for both businesses and nonprofits
  * Determines entity type from route params
  */
 
@@ -9,11 +9,11 @@ import React from "react";
 import { View, ScrollView, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useLocalSearchParams } from "expo-router";
-import { InvoiceList } from "@/components/invoices/InvoiceList";
+import { OrderFulfillment } from "@/components/orders/OrderFulfillment";
 import { useResponsive } from "@/hooks/useResponsive";
 import { colors, spacing } from "@/constants/theme";
 
-export default function InvoicesListPage() {
+export default function OrdersFulfillmentPage() {
   const params = useLocalSearchParams<{ entityType?: string }>();
   const { paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   
@@ -30,7 +30,7 @@ export default function InvoicesListPage() {
           paddingBottom: scrollViewBottomPadding,
         }}
       >
-        <InvoiceList entityType={entityType} />
+        <OrderFulfillment entityType={entityType} />
       </ScrollView>
     </View>
   );

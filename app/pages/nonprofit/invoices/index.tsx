@@ -1,7 +1,7 @@
 /**
- * Merchant Invoice Templates Page (Legacy Route)
+ * Nonprofit Invoices Page (Legacy Route)
  * 
- * Redirects to shared invoice templates page with business entity type
+ * Redirects to shared invoices list page with nonprofit entity type
  * Maintained for backward compatibility
  */
 
@@ -10,11 +10,11 @@ import { useRouter } from "expo-router";
 import { View, Text } from "react-native";
 import { colors } from "@/constants/theme";
 
-export default function MerchantInvoiceTemplates() {
+export default function NonprofitInvoices() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/pages/invoices/templates?entityType=business");
+    router.replace("/pages/invoices/index?entityType=nonprofit");
   }, [router]);
 
   return (

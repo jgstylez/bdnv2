@@ -44,7 +44,13 @@ export function TokenBalanceCard({
           accessibilityHint="View your certificate of token holdings"
         >
           <MaterialIcons name="visibility" size={isMobile ? 18 : typography.fontSize.xl} color={colors.accent} />
-          <Text style={[styles.buttonText, isMobile && styles.mobileButtonText]}>View Certificate</Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[styles.buttonText, isMobile && styles.mobileButtonText]}
+          >
+            View Certificate
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={onDownloadCertificate}
@@ -54,8 +60,14 @@ export function TokenBalanceCard({
           accessibilityLabel="Download Certificate"
           accessibilityHint="Download your certificate of token holdings as a PDF"
         >
-          <MaterialIcons name="download" size={isMobile ? 18 : typography.fontSize.xl} color={colors.text.primary} />
-          <Text style={[styles.buttonText, styles.downloadButtonText, isMobile && styles.mobileButtonText]}>Download</Text>
+          <MaterialIcons name="download" size={isMobile ? 18 : typography.fontSize.xl} color={colors.accent} />
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[styles.buttonText, styles.secondaryButtonText, isMobile && styles.mobileButtonText]}
+          >
+            Download
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -105,12 +117,14 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   mobileActions: {
-    flexDirection: "column",
+    flexDirection: "row",
     gap: spacing.sm,
     marginTop: spacing.lg,
   },
   viewButton: {
     backgroundColor: colors.background.input,
+    borderWidth: 1,
+    borderColor: colors.border.light,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderRadius: borderRadius.md,
@@ -121,7 +135,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   downloadButton: {
-    backgroundColor: colors.accent,
+    backgroundColor: colors.background.input,
+    borderWidth: 1,
+    borderColor: colors.border.light,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderRadius: borderRadius.md,
@@ -132,18 +148,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mobileButton: {
-    width: "100%",
     paddingVertical: spacing.md,
   },
   buttonText: {
     fontSize: typography.fontSize.base,
     fontWeight: typography.fontWeight.semibold,
     color: colors.text.primary,
+    flexShrink: 1,
   },
   mobileButtonText: {
-    fontSize: typography.fontSize.sm,
+    fontSize: 12,
   },
-  downloadButtonText: {
+  secondaryButtonText: {
     color: colors.text.primary,
   },
 });
