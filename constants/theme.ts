@@ -83,7 +83,7 @@ const palette = {
 
 export const colors = {
   primary: palette.brown[500],
-  secondary: palette.gray[700],
+  secondary: '#474747', // Updated to match brand card color
   tertiary: palette.gray[500],
   accent: '#ba9988', // Updated to match design system
   accentLight: 'rgba(186, 153, 136, 0.2)', // Light variant with opacity

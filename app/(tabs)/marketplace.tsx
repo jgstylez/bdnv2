@@ -95,7 +95,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         nestedScrollEnabled={Platform.OS === 'android'}
         bounces={Platform.OS !== 'web'}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: spacing.md, paddingRight: spacing.md }}
+        contentContainerStyle={{ gap: isMobile ? spacing.sm : spacing.md, paddingRight: spacing.md }}
       >
         {products.map((product) => {
           const handleBusinessPress = () => {
@@ -107,7 +107,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
             <View
               key={product.id}
               style={{
-                width: isMobile ? 160 : 200,
+                width: isMobile ? 130 : 200,
                 backgroundColor: colors.secondary,
                 borderRadius: borderRadius.lg,
                 overflow: "hidden",
@@ -131,7 +131,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                     aspectRatio: 1,
                     position: "relative",
                     overflow: "hidden",
-                    backgroundColor: colors.secondary,
+                    backgroundColor: "#474747",
                     marginTop: -1,
                     marginLeft: -1,
                     marginBottom: -1,
@@ -297,8 +297,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                 >
                   <Text
                     style={{
-                      fontSize: typography.sizes.xs,
-                      color: colors.textColors.accent,
+                      fontSize: 10,
+                      color: "#9f9fb0",
                       fontWeight: typography.weights.semibold as any,
                     }}
                   >
@@ -343,23 +343,12 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                     style={{
                       fontSize: typography.sizes.lg,
                       fontWeight: typography.weights.bold as any,
-                      color: colors.textColors.accent,
+                      color: colors.accent,
                     }}
                   >
                     ${product.price.toFixed(2)}
                   </Text>
                 </View>
-                {product.productType === "service" && product.duration && (
-                  <Text
-                    style={{
-                      fontSize: typography.sizes.xs,
-                      color: colors.text.tertiary,
-                      marginTop: spacing.xs,
-                    }}
-                  >
-                    {product.duration}
-                  </Text>
-                )}
               </View>
             </View>
           );
@@ -448,7 +437,7 @@ export default function Marketplace() {
           bounces={Platform.OS !== 'web'}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
-            gap: spacing.sm,
+            gap: isMobile ? spacing.xs : spacing.sm,
             marginBottom: spacing["2xl"],
           }}
         >
@@ -459,14 +448,14 @@ export default function Marketplace() {
                 setSelectedCategory(category === "All" ? null : category)
               }
               style={{
-                paddingHorizontal: spacing.lg,
-                paddingVertical: spacing.sm,
+                paddingHorizontal: isMobile ? spacing.md : spacing.lg,
+                paddingVertical: isMobile ? spacing.xs : spacing.sm,
                 borderRadius: borderRadius.full,
                 backgroundColor:
                   selectedCategory === category ||
                   (category === "All" && selectedCategory === null)
                     ? colors.accent
-                    : colors.secondary,
+                    : "#232323",
                 borderWidth: 1,
                 borderColor:
                   selectedCategory === category ||
@@ -477,7 +466,7 @@ export default function Marketplace() {
             >
               <Text
                 style={{
-                  fontSize: typography.sizes.md,
+                  fontSize: isMobile ? typography.sizes.sm : typography.sizes.md,
                   fontWeight: typography.weights.semibold as any,
                   color:
                     selectedCategory === category ||
@@ -564,7 +553,7 @@ export default function Marketplace() {
                     flexBasis: cardWidth,
                     maxWidth: cardWidth,
                     minWidth: 0,
-                    backgroundColor: colors.secondary,
+                    backgroundColor: "#474747",
                     borderRadius: borderRadius.lg,
                     overflow: "hidden",
                     borderWidth: 1,
@@ -577,7 +566,7 @@ export default function Marketplace() {
                       width: "100%",
                       aspectRatio: 1,
                       overflow: "hidden",
-                      backgroundColor: colors.secondary,
+                      backgroundColor: "#474747",
                       position: "relative",
                     }}
                   >

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { View, Text, TouchableOpacity, Platform, Modal, ScrollView, Dimensions, Animated } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, spacing, borderRadius, typography } from '../../constants/theme';
@@ -65,6 +66,7 @@ export const DateTimePickerComponent: React.FC<DateTimePickerProps> = ({
   const scrollViewRef = useRef<ScrollView>(null);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const insets = useSafeAreaInsets();
 
   const handleOpenPicker = () => {
     if (disabled) return;
@@ -574,27 +576,32 @@ export const DateTimePickerComponent: React.FC<DateTimePickerProps> = ({
         <Modal
           visible={showPicker}
           transparent={true}
-          animationType="slide"
+          animationType={Platform.OS === "ios" ? "fade" : "slide"}
           onRequestClose={handleCancel}
         >
           <View
             style={{
               flex: 1,
               backgroundColor: "rgba(0, 0, 0, 0.95)",
-              justifyContent: "flex-end",
+              justifyContent: Platform.OS === "web" ? "flex-end" : "flex-start",
             }}
           >
             <View
               style={{
                 backgroundColor: "#474747",
-                borderTopLeftRadius: borderRadius.xl,
-                borderTopRightRadius: borderRadius.xl,
-                paddingTop: spacing.md,
-                paddingBottom: Platform.OS === "ios" ? 40 : spacing.lg,
-                maxHeight: Dimensions.get("window").height * 0.7,
+                borderTopLeftRadius: Platform.OS === "web" ? borderRadius.xl : 0,
+                borderTopRightRadius: Platform.OS === "web" ? borderRadius.xl : 0,
+                borderBottomLeftRadius: Platform.OS === "web" ? 0 : borderRadius.xl,
+                borderBottomRightRadius: Platform.OS === "web" ? 0 : borderRadius.xl,
+                paddingTop: Platform.OS !== "web" ? insets.top + spacing.md : spacing.md,
+                paddingBottom: Platform.OS === "ios" ? insets.bottom + spacing.lg : spacing.lg,
+                height: Platform.OS !== "web" ? Dimensions.get("window").height : undefined,
+                maxHeight: Platform.OS === "web" ? Dimensions.get("window").height * 0.7 : Dimensions.get("window").height,
                 borderWidth: 2,
                 borderColor: "#5a5a68",
-                borderBottomWidth: 0,
+                borderBottomWidth: Platform.OS === "web" ? 0 : 2,
+                borderTopWidth: Platform.OS === "web" ? 2 : 0,
+                width: "100%",
               }}
             >
               {/* Header */}
@@ -643,16 +650,21 @@ export const DateTimePickerComponent: React.FC<DateTimePickerProps> = ({
               </View>
 
               {/* Picker Content */}
-              <View style={{ position: "relative", flex: 1 }}>
+              <View style={{ position: "relative", flex: 1, minHeight: 0 }}>
                 <ScrollView
                   ref={scrollViewRef}
                   style={{
                     paddingHorizontal: spacing.lg,
                     paddingTop: spacing.lg,
+                    flex: 1,
                   }}
-                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingBottom: Platform.OS === "ios" ? insets.bottom + spacing.xl : spacing.xl,
+                  }}
+                  showsVerticalScrollIndicator={Platform.OS === "ios"}
                   onScroll={handleScroll}
                   scrollEventThrottle={16}
+                  nestedScrollEnabled={true}
                   onContentSizeChange={() => {
                     // Auto-scroll slightly to show there's more content
                     if (mode !== "time" && (mode === "datetime" || mode === "date")) {
