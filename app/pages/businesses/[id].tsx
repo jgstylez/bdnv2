@@ -694,7 +694,7 @@ export default function BusinessDetail() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { isMobile, scrollViewBottomPadding } = useResponsive();
-  const [activeTab, setActiveTab] = useState<"overview" | "reviews" | "photos" | "menu">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "reviews" | "photos" | "videos" | "menu">("overview");
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviews, setReviews] = useState<BusinessReview[]>(mockReviews);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
@@ -754,6 +754,13 @@ export default function BusinessDetail() {
   const handleDirections = () => {
     const { lat, lng } = business.location.coordinates;
     Linking.openURL(`https://maps.google.com/?q=${lat},${lng}`);
+  };
+
+  const handleMessage = () => {
+    // Navigate to messages with the business
+    // In production, this would create or find the conversation ID for this business
+    const conversationId = `business-${business.id}`;
+    router.push(`/pages/messages/${conversationId}`);
   };
 
   const formatAddress = () => {
@@ -873,7 +880,34 @@ cachePolicy="memory-disk"
             </Text>
 
             {/* Quick Actions */}
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: 8, paddingRight: isMobile ? 0 : 20 }}
+            >
+              <TouchableOpacity
+                onPress={() => router.push(`/pages/payments/c2b-payment?businessId=${business.id}`)}
+                style={{
+                  backgroundColor: "#ba9988",
+                  paddingHorizontal: 16,
+                  paddingVertical: 10,
+                  borderRadius: 12,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <MaterialIcons name="payment" size={18} color="#ffffff" />
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: "#ffffff",
+                  }}
+                >
+                  Pay
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleCall}
                 style={{
@@ -900,7 +934,7 @@ cachePolicy="memory-disk"
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={handleDirections}
+                onPress={handleMessage}
                 style={{
                   backgroundColor: "#474747",
                   paddingHorizontal: 16,
@@ -913,7 +947,7 @@ cachePolicy="memory-disk"
                   borderColor: "rgba(186, 153, 136, 0.2)",
                 }}
               >
-                <MaterialIcons name="directions" size={18} color="#ba9988" />
+                <MaterialIcons name="message" size={18} color="#ba9988" />
                 <Text
                   style={{
                     fontSize: 14,
@@ -921,7 +955,7 @@ cachePolicy="memory-disk"
                     color: "#ffffff",
                   }}
                 >
-                  Directions
+                  Message
                 </Text>
               </TouchableOpacity>
               {business.website && (
@@ -951,30 +985,7 @@ cachePolicy="memory-disk"
                   </Text>
                 </TouchableOpacity>
               )}
-              <TouchableOpacity
-                onPress={() => router.push(`/pages/payments/c2b-payment?businessId=${business.id}`)}
-                style={{
-                  backgroundColor: "#ba9988",
-                  paddingHorizontal: 16,
-                  paddingVertical: 10,
-                  borderRadius: 12,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                <MaterialIcons name="payment" size={18} color="#ffffff" />
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                  }}
-                >
-                  Pay
-                </Text>
-              </TouchableOpacity>
-            </View>
+            </ScrollView>
           </View>
 
           {/* Tabs */}
@@ -991,6 +1002,7 @@ cachePolicy="memory-disk"
               ...(hasMenu ? [{ key: "menu", label: "Menu" }] : []),
               { key: "reviews", label: "Reviews" },
               { key: "photos", label: "Photos" },
+              { key: "videos", label: "Videos" },
             ].map((tab) => (
               <TouchableOpacity
                 key={tab.key}
@@ -1312,18 +1324,18 @@ cachePolicy="memory-disk"
                     onPress={() => setShowReviewForm(!showReviewForm)}
                     style={{
                       backgroundColor: "#ba9988",
-                      paddingHorizontal: 20,
-                      paddingVertical: 12,
+                      paddingHorizontal: 12,
+                      paddingVertical: 8,
                       borderRadius: 12,
                       flexDirection: "row",
                       alignItems: "center",
-                      gap: 8,
+                      gap: 6,
                     }}
                   >
-                    <MaterialIcons name="edit" size={18} color="#ffffff" />
+                    <MaterialIcons name="edit" size={16} color="#ffffff" />
                     <Text
                       style={{
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: "600",
                         color: "#ffffff",
                       }}
@@ -1561,6 +1573,88 @@ cachePolicy="memory-disk"
                     }}
                   >
                     Check back soon for photos from this business
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
+
+          {activeTab === "videos" && (
+            <View>
+              {business.videos && business.videos.length > 0 ? (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    gap: isMobile ? 8 : 12,
+                  }}
+                >
+                  {business.videos.map((videoUrl: string, index: number) => (
+                    <View
+                      key={index}
+                      style={{
+                        width: isMobile ? "100%" : "48%",
+                        aspectRatio: 16 / 9,
+                        borderRadius: 12,
+                        overflow: "hidden",
+                        backgroundColor: "#474747",
+                        borderWidth: 1,
+                        borderColor: "rgba(186, 153, 136, 0.2)",
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <MaterialIcons name="play-circle-filled" size={64} color="rgba(186, 153, 136, 0.8)" />
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: "rgba(255, 255, 255, 0.7)",
+                            marginTop: 8,
+                          }}
+                        >
+                          Video {index + 1}
+                        </Text>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <View
+                  style={{
+                    backgroundColor: "#474747",
+                    borderRadius: 16,
+                    padding: 40,
+                    alignItems: "center",
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                  }}
+                >
+                  <MaterialIcons name="video-library" size={48} color="rgba(186, 153, 136, 0.5)" />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: "rgba(255, 255, 255, 0.7)",
+                      textAlign: "center",
+                      marginTop: 16,
+                    }}
+                  >
+                    No videos available yet
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "rgba(255, 255, 255, 0.5)",
+                      textAlign: "center",
+                      marginTop: 8,
+                    }}
+                  >
+                    Check back soon for videos from this business
                   </Text>
                 </View>
               )}
