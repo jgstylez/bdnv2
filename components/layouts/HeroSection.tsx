@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useResponsive } from '../../hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '../../constants/theme';
@@ -36,7 +36,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         marginBottom: spacing.xl,
         borderRadius: borderRadius.lg,
         overflow: "hidden",
-        height: heroHeight,
+        // Use minHeight to allow content to expand naturally on native
+        // while maintaining consistent appearance on web
+        minHeight: heroHeight,
       }}
     >
       <LinearGradient
@@ -44,37 +46,49 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={{
-          flex: 1,
           justifyContent: "center",
           alignItems: "center",
           paddingHorizontal: spacing.xl,
           paddingVertical: spacing.lg,
+          minHeight: heroHeight,
+          // Ensure consistent padding on all platforms
+          ...(Platform.OS !== 'web' && {
+            paddingTop: spacing.lg,
+            paddingBottom: spacing.lg,
+          }),
         }}
       >
-        <Text
+        <View
           style={{
-            fontSize: isMobile ? typography.fontSize["2xl"] : typography.fontSize["3xl"],
-            fontWeight: typography.fontWeight.extrabold,
-            color: colors.text.primary,
-            textAlign: "center",
-            marginBottom: subtitle ? spacing.xs : 0,
+            alignItems: "center",
+            width: "100%",
           }}
         >
-          {title}
-        </Text>
-        {subtitle && (
           <Text
             style={{
-              fontSize: isMobile ? typography.fontSize.base : typography.fontSize.lg,
+              fontSize: isMobile ? typography.fontSize["2xl"] : typography.fontSize["3xl"],
+              fontWeight: typography.fontWeight.extrabold,
               color: colors.text.primary,
               textAlign: "center",
-              opacity: 0.9,
-              lineHeight: isMobile ? 20 : 24,
+              marginBottom: subtitle ? spacing.xs : 0,
             }}
           >
-            {subtitle}
+            {title}
           </Text>
-        )}
+          {subtitle && (
+            <Text
+              style={{
+                fontSize: isMobile ? typography.fontSize.base : typography.fontSize.lg,
+                color: colors.text.primary,
+                textAlign: "center",
+                opacity: 0.9,
+                lineHeight: isMobile ? 20 : 24,
+              }}
+            >
+              {subtitle}
+            </Text>
+          )}
+        </View>
       </LinearGradient>
     </View>
   );
