@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { MessageAttachment } from '@/types/messages';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 interface Message {
   id: string;
@@ -202,7 +203,8 @@ export default function Support() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -1216,7 +1218,7 @@ cachePolicy="memory-disk"
             </Modal>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

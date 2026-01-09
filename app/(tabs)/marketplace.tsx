@@ -24,6 +24,7 @@ import { ProductPlaceholder } from '@/components/ProductPlaceholder';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { getMerchantName } from '@/lib/merchant-lookup';
 import { mockProducts as centralizedMockProducts, getProductsByType, getFeaturedProducts, getTrendingProducts } from '@/data/mocks/products';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Use centralized mock products
 const mockProducts: Product[] = centralizedMockProducts;
@@ -430,11 +431,8 @@ export default function Marketplace() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        nestedScrollEnabled={Platform.OS === 'android'}
-        bounces={Platform.OS !== 'web'}
-        showsVerticalScrollIndicator={false}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
@@ -719,7 +717,7 @@ export default function Marketplace() {
             })}
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

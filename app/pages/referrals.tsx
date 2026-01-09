@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import QRCode from "react-native-qrcode-svg";
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock referral data
 const mockReferrals = [
@@ -34,7 +35,8 @@ export default function Referrals() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -472,7 +474,7 @@ export default function Referrals() {
             )}
           </View>
         </View>
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

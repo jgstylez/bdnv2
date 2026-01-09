@@ -7,6 +7,7 @@ import { Transaction, TransactionType, TransactionStatus } from '@/types/transac
 import { formatCurrency } from '@/lib/international';
 import { FilterDropdown } from '@/components/admin/FilterDropdown';
 import { HeroSection } from '@/components/layouts/HeroSection';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock transactions data
 const mockTransactions: Transaction[] = [
@@ -282,7 +283,8 @@ export default function TransactionHistory() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -556,7 +558,7 @@ export default function TransactionHistory() {
             </Text>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

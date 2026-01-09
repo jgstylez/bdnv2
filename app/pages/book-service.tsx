@@ -23,6 +23,7 @@ import { getMerchantName } from '@/lib/merchant-lookup';
 import { BackButton } from '@/components/navigation/BackButton';
 import { mockProducts as centralizedMockProducts, getMockProduct } from '@/data/mocks/products';
 import { mockWallets } from '@/data/mocks/wallets';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 type BookingStep = "details" | "date-time" | "review" | "processing" | "success";
 
@@ -736,7 +737,8 @@ export default function BookService() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
@@ -809,7 +811,7 @@ export default function BookService() {
             </TouchableOpacity>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

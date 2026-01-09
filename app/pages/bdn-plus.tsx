@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { SUBSCRIPTION_PLANS, SubscriptionPlan } from '@/types/subscription';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { useResponsive } from '@/hooks/useResponsive';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock current subscription
 const mockCurrentSubscription = {
@@ -36,7 +37,8 @@ export default function BDNPlus() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: paddingHorizontal,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -406,7 +408,7 @@ export default function BDNPlus() {
             ))}
           </View>
         </View>
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

@@ -26,6 +26,7 @@ import { Wallet, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
 import { getMerchantName } from '@/lib/merchant-lookup';
 import { BackButton } from '@/components/navigation/BackButton';
 import { mockProducts as centralizedMockProducts, getMockProduct } from '@/data/mocks/products';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Extended wallet type for mock data with additional properties
 type MockWallet = Wallet & {
@@ -392,11 +393,8 @@ export default function Checkout() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={Platform.OS === 'android'}
-        bounces={Platform.OS !== 'web'}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
@@ -1014,7 +1012,7 @@ export default function Checkout() {
             </View>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

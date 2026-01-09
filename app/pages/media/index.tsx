@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Carousel } from '@/components/layouts/Carousel';
 import { EnhancedBentoGrid } from '@/components/layouts/EnhancedBentoGrid';
 import { HeroSection } from '@/components/layouts/HeroSection';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 const mediaSections = [
   {
@@ -42,11 +43,8 @@ export default function Media() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        nestedScrollEnabled={Platform.OS === 'android'}
-        bounces={Platform.OS !== 'web'}
-        showsVerticalScrollIndicator={false}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -223,7 +221,7 @@ export default function Media() {
             </Carousel>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

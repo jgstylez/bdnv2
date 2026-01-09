@@ -8,6 +8,7 @@ import Constants from "expo-constants";
 import { userMenuItems } from "../../config/userMenu";
 import { UserBadge, BADGE_DEFINITIONS } from '@/types/badges';
 import { BadgeIcon } from '@/components/BadgeIcon';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock user data
 const mockUser = {
@@ -106,7 +107,8 @@ export default function Account() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: 20,
@@ -486,7 +488,7 @@ export default function Account() {
             </Text>
           </View>
         </View>
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

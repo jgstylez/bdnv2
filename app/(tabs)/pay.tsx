@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WalletCard } from '@/components/WalletCard';
 import { Carousel } from '@/components/layouts/Carousel';
 import { Wallet, Currency, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Extended wallet type for mock data with additional properties
 type MockWallet = Wallet & {
@@ -282,7 +283,8 @@ export default function Pay() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: 20,
@@ -565,7 +567,7 @@ export default function Pay() {
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
+      </OptimizedScrollView>
 
       {/* Add Payment Method Modal */}
       <Modal

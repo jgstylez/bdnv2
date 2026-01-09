@@ -3,6 +3,7 @@ import { View, ScrollView, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useResponsive } from '@/hooks/useResponsive';
 import { BackButton } from '@/components/navigation/BackButton';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 import {
   TokenBalanceCard,
   TokenTabs,
@@ -55,11 +56,8 @@ export default function Tokens() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={Platform.OS === 'android'}
-        bounces={Platform.OS !== 'web'}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: paddingHorizontal,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -132,7 +130,7 @@ export default function Tokens() {
             {/* Desktop Layout Here */}
           </>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
 
       <CertificateModal
         visible={showCertificateModal}

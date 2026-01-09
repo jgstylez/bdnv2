@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock user data
 const mockUser = {
@@ -156,7 +157,8 @@ export default function Profile() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -994,7 +996,7 @@ export default function Profile() {
             </View>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

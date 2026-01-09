@@ -11,6 +11,7 @@ import { HeroSection } from '@/components/layouts/HeroSection';
 import { useCart } from '@/contexts/CartContext';
 import { formatCurrency } from '@/lib/international';
 import { BackButton } from '@/components/navigation/BackButton';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 export default function Cart() {
   const router = useRouter();
@@ -70,11 +71,8 @@ export default function Cart() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={Platform.OS === 'android'}
-        bounces={Platform.OS !== 'web'}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
@@ -669,7 +667,7 @@ export default function Cart() {
             )}
           </>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

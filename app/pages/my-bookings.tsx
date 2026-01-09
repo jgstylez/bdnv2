@@ -16,6 +16,7 @@ import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { BackButton } from '@/components/navigation/BackButton';
 import { formatCurrency } from '@/lib/international';
 import { ProductPlaceholder } from '@/components/ProductPlaceholder';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 interface ServiceBooking {
   id: string;
@@ -164,7 +165,8 @@ export default function MyBookings() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: spacing.lg,
@@ -444,7 +446,7 @@ export default function MyBookings() {
             ))}
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

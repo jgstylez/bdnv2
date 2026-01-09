@@ -7,6 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Event, EventCategory } from '@/types/events';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { EventPlaceholder } from '@/components/EventPlaceholder';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 // Mock events data with real placeholder images
 const mockEvents: Event[] = [
@@ -492,11 +493,8 @@ export default function Events() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
-      <ScrollView
-        scrollEventThrottle={16}
-        nestedScrollEnabled={Platform.OS === 'android'}
-        bounces={Platform.OS !== 'web'}
-        showsVerticalScrollIndicator={false}
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
           paddingTop: Platform.OS === "web" ? 20 : 36,
@@ -731,7 +729,7 @@ export default function Events() {
             </Text>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }
