@@ -49,13 +49,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           justifyContent: "center",
           alignItems: "center",
           paddingHorizontal: spacing.xl,
-          paddingVertical: spacing.lg,
+          paddingTop: spacing.lg,
+          paddingBottom: spacing.lg,
           minHeight: heroHeight,
-          // Ensure consistent padding on all platforms
-          ...(Platform.OS !== 'web' && {
-            paddingTop: spacing.lg,
-            paddingBottom: spacing.lg,
-          }),
         }}
       >
         <View
