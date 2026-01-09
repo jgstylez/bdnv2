@@ -83,9 +83,9 @@ export default function ProductList() {
       case "trending":
         return "Trending Now";
       case "physical":
-        return "Physical Products";
+        return "Physical";
       case "digital":
-        return "Digital Products";
+        return "Digital";
       case "services":
         return "Services";
       default:

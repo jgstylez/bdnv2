@@ -392,8 +392,8 @@ export default function Marketplace() {
 
   const categories = [
     "All",
-    "Physical Products",
-    "Digital Products",
+    "Physical",
+    "Digital",
     "Services",
     "Food & Beverage",
     "Beauty & Personal Care",
@@ -407,9 +407,9 @@ export default function Marketplace() {
 
   const filteredProducts = selectedCategory
     ? mockProducts.filter((p) => {
-        if (selectedCategory === "Physical Products")
+        if (selectedCategory === "Physical")
           return p.productType === "physical";
-        if (selectedCategory === "Digital Products")
+        if (selectedCategory === "Digital")
           return p.productType === "digital";
         if (selectedCategory === "Services") return p.productType === "service";
         return p.category === selectedCategory;
@@ -515,13 +515,13 @@ export default function Marketplace() {
               section="trending"
             />
             <ProductCarousel
-              title="Physical Products"
+              title="Physical"
               products={physicalProducts}
               onProductPress={handleProductPress}
               section="physical"
             />
             <ProductCarousel
-              title="Digital Products"
+              title="Digital"
               products={digitalProducts}
               onProductPress={handleProductPress}
               section="digital"
