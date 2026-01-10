@@ -19,6 +19,8 @@ interface ShowToastOptions {
 
 /**
  * Show a toast notification
+ * Note: topOffset and bottomOffset are handled by the Toast component wrapper
+ * with safe area insets. Only pass them if you need custom positioning.
  */
 export function showToast(
   message: string,
@@ -31,8 +33,9 @@ export function showToast(
     position: options?.position || "top",
     visibilityTime: options?.visibilityTime || 3000,
     autoHide: options?.autoHide !== false,
-    topOffset: options?.topOffset || 60,
-    bottomOffset: options?.bottomOffset || 40,
+    // Only pass offsets if explicitly provided, otherwise use Toast component defaults (safe-area-aware)
+    ...(options?.topOffset !== undefined && { topOffset: options.topOffset }),
+    ...(options?.bottomOffset !== undefined && { bottomOffset: options.bottomOffset }),
     onPress: options?.onPress,
     onShow: options?.onShow,
     onHide: options?.onHide,
@@ -41,6 +44,8 @@ export function showToast(
 
 /**
  * Show a success toast
+ * Note: topOffset and bottomOffset are handled by the Toast component wrapper
+ * with safe area insets. Only pass them if you need custom positioning.
  */
 export function showSuccessToast(
   message: string,
@@ -54,8 +59,9 @@ export function showSuccessToast(
     position: options?.position || "top",
     visibilityTime: options?.visibilityTime || 3000,
     autoHide: options?.autoHide !== false,
-    topOffset: options?.topOffset || 60,
-    bottomOffset: options?.bottomOffset || 40,
+    // Only pass offsets if explicitly provided, otherwise use Toast component defaults (safe-area-aware)
+    ...(options?.topOffset !== undefined && { topOffset: options.topOffset }),
+    ...(options?.bottomOffset !== undefined && { bottomOffset: options.bottomOffset }),
     onPress: options?.onPress,
     onShow: options?.onShow,
     onHide: options?.onHide,
@@ -64,6 +70,8 @@ export function showSuccessToast(
 
 /**
  * Show an error toast
+ * Note: topOffset and bottomOffset are handled by the Toast component wrapper
+ * with safe area insets. Only pass them if you need custom positioning.
  */
 export function showErrorToast(
   message: string,
@@ -77,8 +85,9 @@ export function showErrorToast(
     position: options?.position || "top",
     visibilityTime: options?.visibilityTime || 4000,
     autoHide: options?.autoHide !== false,
-    topOffset: options?.topOffset || 60,
-    bottomOffset: options?.bottomOffset || 40,
+    // Only pass offsets if explicitly provided, otherwise use Toast component defaults (safe-area-aware)
+    ...(options?.topOffset !== undefined && { topOffset: options.topOffset }),
+    ...(options?.bottomOffset !== undefined && { bottomOffset: options.bottomOffset }),
     onPress: options?.onPress,
     onShow: options?.onShow,
     onHide: options?.onHide,
@@ -87,6 +96,8 @@ export function showErrorToast(
 
 /**
  * Show an info toast
+ * Note: topOffset and bottomOffset are handled by the Toast component wrapper
+ * with safe area insets. Only pass them if you need custom positioning.
  */
 export function showInfoToast(
   message: string,
@@ -100,8 +111,9 @@ export function showInfoToast(
     position: options?.position || "top",
     visibilityTime: options?.visibilityTime || 3000,
     autoHide: options?.autoHide !== false,
-    topOffset: options?.topOffset || 60,
-    bottomOffset: options?.bottomOffset || 40,
+    // Only pass offsets if explicitly provided, otherwise use Toast component defaults (safe-area-aware)
+    ...(options?.topOffset !== undefined && { topOffset: options.topOffset }),
+    ...(options?.bottomOffset !== undefined && { bottomOffset: options.bottomOffset }),
     onPress: options?.onPress,
     onShow: options?.onShow,
     onHide: options?.onHide,
@@ -110,6 +122,8 @@ export function showInfoToast(
 
 /**
  * Show a warning toast
+ * Note: topOffset and bottomOffset are handled by the Toast component wrapper
+ * with safe area insets. Only pass them if you need custom positioning.
  */
 export function showWarningToast(
   message: string,
@@ -123,8 +137,9 @@ export function showWarningToast(
     position: options?.position || "top",
     visibilityTime: options?.visibilityTime || 3500,
     autoHide: options?.autoHide !== false,
-    topOffset: options?.topOffset || 60,
-    bottomOffset: options?.bottomOffset || 40,
+    // Only pass offsets if explicitly provided, otherwise use Toast component defaults (safe-area-aware)
+    ...(options?.topOffset !== undefined && { topOffset: options.topOffset }),
+    ...(options?.bottomOffset !== undefined && { bottomOffset: options.bottomOffset }),
     onPress: options?.onPress,
     onShow: options?.onShow,
     onHide: options?.onHide,
