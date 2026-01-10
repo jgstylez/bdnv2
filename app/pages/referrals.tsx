@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Platform } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Platform, Share } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import QRCode from "react-native-qrcode-svg";
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { shareReferralLink } from '@/lib/share';
+import { copyToClipboard } from '@/lib/clipboard';
+import { showSuccessToast } from '@/lib/toast';
+import { WebShareModal } from '@/components/share/WebShareModal';
 
 // Mock referral data
 const mockReferrals = [
@@ -21,15 +25,48 @@ export default function Referrals() {
   const referralCode = "BDN-JOHN-2024";
   const referralLink = `https://bdn.app/invite/${referralCode}`;
   const totalEarned = mockReferrals.reduce((sum, ref) => sum + ref.points, 0);
+  const [showShareModal, setShowShareModal] = useState(false);
 
-  const handleShare = () => {
-    // TODO: Implement share functionality
-    alert(`Share your referral code: ${referralCode}`);
+  const shareMessage = `Join me on BDN! Use my referral code ${referralCode} to get started. Download the BDN App and start earning rewards!`;
+
+  const handleShare = async () => {
+    // Native mobile platforms - use native Share API
+    if (Platform.OS !== 'web') {
+      const success = await shareReferralLink(referralCode, referralLink);
+      if (success) {
+        showSuccessToast('Share dialog opened');
+      }
+      return;
+    }
+
+    // Web platform - try Web Share API first
+    if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Share BDN Referral Link',
+          text: shareMessage,
+          url: referralLink,
+        });
+        showSuccessToast('Shared successfully!');
+      } catch (error: any) {
+        // User cancelled or share failed - show custom modal
+        if (error.name !== 'AbortError') {
+          setShowShareModal(true);
+        }
+      }
+    } else {
+      // Web Share API not available - show custom modal
+      setShowShareModal(true);
+    }
   };
 
-  const handleCopy = () => {
-    // TODO: Implement copy to clipboard
-    alert("Referral code copied to clipboard!");
+  const handleCopy = async () => {
+    const success = await copyToClipboard(referralCode);
+    if (success) {
+      showSuccessToast('Referral code copied to clipboard!');
+    } else {
+      showSuccessToast('Failed to copy. Please try again.');
+    }
   };
 
   return (
@@ -475,6 +512,13 @@ export default function Referrals() {
           </View>
         </View>
       </OptimizedScrollView>
+      <WebShareModal
+        visible={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        message={shareMessage}
+        url={referralLink}
+        title="Share BDN Referral Link"
+      />
     </View>
   );
 }
