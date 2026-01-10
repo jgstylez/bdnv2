@@ -68,6 +68,7 @@ export default function CreateProduct() {
   const [productType, setProductType] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [merchantId, setMerchantId] = useState<string | null>(null);
+  const [nonprofitId, setNonprofitId] = useState<string | null>(null);
   const [submissionState, setSubmissionState] = useState<"idle" | "processing" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [createdProduct, setCreatedProduct] = useState<any>(null);
@@ -90,35 +91,57 @@ export default function CreateProduct() {
 
   const steps = ["Type", "Details", "Inventory", "Review"];
 
-  // Get merchant ID from storage as fallback
+  // Get entity ID (merchant or nonprofit) from storage
   useEffect(() => {
-    const loadMerchantId = async () => {
+    const loadEntityId = async () => {
       try {
-        // Try to get from storage
-        const selectedBusinessId = await getStorageItem("@bdn_selected_business_id");
-        if (selectedBusinessId) {
-          setMerchantId(selectedBusinessId);
-          console.log("Loaded merchantId from storage:", selectedBusinessId);
-        } else {
-          // Fallback: use a default or get from params
-          const merchantIdParam = params.merchantId as string | undefined;
-          if (merchantIdParam) {
-            setMerchantId(merchantIdParam);
-            console.log("Loaded merchantId from params:", merchantIdParam);
+        if (isNonprofit) {
+          // Load nonprofit ID
+          const selectedNonprofitId = await getStorageItem("@bdn_selected_nonprofit_id");
+          if (selectedNonprofitId) {
+            setNonprofitId(selectedNonprofitId);
+            console.log("Loaded nonprofitId from storage:", selectedNonprofitId);
           } else {
-            // Temporary fallback for development - in production this should be required
-            console.warn("No merchantId found, using fallback");
-            setMerchantId("1"); // Fallback for development
+            // Fallback: use a default or get from params
+            const nonprofitIdParam = params.nonprofitId as string | undefined;
+            if (nonprofitIdParam) {
+              setNonprofitId(nonprofitIdParam);
+              console.log("Loaded nonprofitId from params:", nonprofitIdParam);
+            } else {
+              console.warn("No nonprofitId found, using fallback");
+              setNonprofitId("org1"); // Fallback for development
+            }
+          }
+        } else {
+          // Load business/merchant ID
+          const selectedBusinessId = await getStorageItem("@bdn_selected_business_id");
+          if (selectedBusinessId) {
+            setMerchantId(selectedBusinessId);
+            console.log("Loaded merchantId from storage:", selectedBusinessId);
+          } else {
+            // Fallback: use a default or get from params
+            const merchantIdParam = params.merchantId as string | undefined;
+            if (merchantIdParam) {
+              setMerchantId(merchantIdParam);
+              console.log("Loaded merchantId from params:", merchantIdParam);
+            } else {
+              console.warn("No merchantId found, using fallback");
+              setMerchantId("1"); // Fallback for development
+            }
           }
         }
       } catch (error) {
-        logger.error("Error loading merchant ID", error);
+        logger.error(`Error loading ${isNonprofit ? "nonprofit" : "merchant"} ID`, error);
         // Fallback for development
-        setMerchantId("1");
+        if (isNonprofit) {
+          setNonprofitId("org1");
+        } else {
+          setMerchantId("1");
+        }
       }
     };
-    loadMerchantId();
-  }, [params.merchantId]);
+    loadEntityId();
+  }, [params.merchantId, params.nonprofitId, isNonprofit]);
 
   // Helper functions for dimensions
   const parseDimensions = (dimensions: string) => {
@@ -146,8 +169,7 @@ export default function CreateProduct() {
         }
       : undefined;
 
-    return {
-      merchantId: merchantId || "",
+    const baseData = {
       name: form.name.trim(),
       description: form.description.trim(),
       productType: productType as "physical" | "digital" | "service",
@@ -168,16 +190,32 @@ export default function CreateProduct() {
       }),
       createdAt: new Date().toISOString(),
     };
+
+    // Add entity-specific ID field
+    if (isNonprofit) {
+      return {
+        ...baseData,
+        nonprofitId: nonprofitId || "",
+      };
+    } else {
+      return {
+        ...baseData,
+        merchantId: merchantId || "",
+      };
+    }
   };
 
   const handleSubmit = async () => {
-    console.log("handleSubmit called", { merchantId, isSubmitting, submissionState });
+    const entityId = isNonprofit ? nonprofitId : merchantId;
+    console.log("handleSubmit called", { entityId, isNonprofit, isSubmitting, submissionState });
     
     // Final validation before submission
-    if (!merchantId) {
+    if (!entityId) {
       Alert.alert(
-        "Business Required",
-        "No business selected. Please select a business first to create products.",
+        isNonprofit ? "Nonprofit Required" : "Business Required",
+        isNonprofit 
+          ? "No nonprofit selected. Please select a nonprofit first to create items."
+          : "No business selected. Please select a business first to create products.",
         [{ text: "OK" }]
       );
       return;
@@ -208,12 +246,13 @@ export default function CreateProduct() {
       try {
         if (isEditing && productId) {
           // Update existing product
-          console.log("Updating product:", productId);
+          console.log(`Updating ${isNonprofit ? "nonprofit item" : "product"}:`, productId);
           response = await api.put(`/api/products/${productId}`, productData);
         } else {
-          // Create new product
-          console.log("Creating new product");
-          response = await api.post("/api/products", productData);
+          // Create new product/item
+          console.log(`Creating new ${isNonprofit ? "nonprofit item" : "product"}`);
+          const endpoint = isNonprofit ? "/api/nonprofits/products" : "/api/products";
+          response = await api.post(endpoint, productData);
         }
       } catch (apiError: any) {
         // If API fails and we're in development, use mock response
