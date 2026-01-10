@@ -60,3 +60,19 @@ export interface BlogArticle {
   isPublished: boolean;
 }
 
+
+export interface MediaContentItem {
+  id: string;
+  channelId: string;
+  title: string;
+  description: string;
+  thumbnailUrl?: string;
+  contentUrl?: string;
+  contentType: "video" | "audio" | "podcast" | "live";
+  duration?: string;
+  views: number;
+  likes: number;
+  publishedAt: string;
+  isPremium: boolean;
+  tags: string[];
+}

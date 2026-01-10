@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
+    width: '100%',
   },
   toast: {
     flexDirection: "row",
@@ -133,6 +134,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 12,
+    width: '100%',
   },
   successToast: {
     backgroundColor: colors.status.success, // Vibrant green background (#4bb858)

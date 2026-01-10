@@ -8,7 +8,7 @@ import QRCode from "react-native-qrcode-svg";
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 import { shareReferralLink } from '@/lib/share';
 import { copyToClipboard } from '@/lib/clipboard';
-import { showSuccessToast } from '@/lib/toast';
+import { showSuccessToast, showErrorToast } from '@/lib/toast';
 import { WebShareModal } from '@/components/share/WebShareModal';
 
 // Mock referral data
@@ -65,7 +65,7 @@ export default function Referrals() {
     if (success) {
       showSuccessToast('Referral code copied to clipboard!');
     } else {
-      showSuccessToast('Failed to copy. Please try again.');
+      showErrorToast('Failed to copy. Please try again.');
     }
   };
 

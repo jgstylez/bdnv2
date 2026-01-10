@@ -13,6 +13,7 @@ export default function MediaLayout() {
       <Stack.Screen name="bdn-tv" />
       <Stack.Screen name="blog" />
       <Stack.Screen name="channels" />
+      <Stack.Screen name="channels/[id]" />
     </Stack>
   );
 }
