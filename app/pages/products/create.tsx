@@ -245,9 +245,12 @@ export default function CreateProduct() {
 
       try {
         if (isEditing && productId) {
-          // Update existing product
+          // Update existing product/item
           console.log(`Updating ${isNonprofit ? "nonprofit item" : "product"}:`, productId);
-          response = await api.put(`/api/products/${productId}`, productData);
+          const updateEndpoint = isNonprofit 
+            ? `/api/nonprofits/products/${productId}` 
+            : `/api/products/${productId}`;
+          response = await api.put(updateEndpoint, productData);
         } else {
           // Create new product/item
           console.log(`Creating new ${isNonprofit ? "nonprofit item" : "product"}`);
