@@ -148,7 +148,6 @@ export default function PagesLayout() {
                   <Stack.Screen name="cart" />
                   <Stack.Screen name="invoices" />
                   <Stack.Screen name="account" />
-                  <Stack.Screen name="orders" />
               </Stack>
             </View>
             {!isDesktop && (

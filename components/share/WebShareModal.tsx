@@ -180,8 +180,8 @@ export const WebShareModal: React.FC<WebShareModalProps> = ({
       onPress: handleTelegram,
     },
   ].filter(option => {
-    // Only show LinkedIn, WhatsApp, Telegram if URL is available
-    if (['linkedin', 'whatsapp', 'telegram'].includes(option.id) && !url) {
+    // Only show Facebook, LinkedIn, WhatsApp, Telegram if URL is available
+    if (['facebook', 'linkedin', 'whatsapp', 'telegram'].includes(option.id) && !url) {
       return false;
     }
     return true;

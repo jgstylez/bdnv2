@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Alert, Platform, TextInput, Modal, Switch } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Alert, Platform, TextInput, Modal, Switch, KeyboardAvoidingView, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { FormInput } from '@/components/forms';
+import { showSuccessToast, showErrorToast } from '@/lib/toast';
 
 export default function ManageAccount() {
   const router = useRouter();
-  const { isMobile, paddingHorizontal } = useResponsive();
+  const { isMobile, paddingHorizontal, width } = useResponsive();
+  const insets = useSafeAreaInsets();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   
@@ -55,42 +58,77 @@ export default function ManageAccount() {
     ]);
   };
 
-  const handleChangePassword = () => {
+  // Email validation helper
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleChangePassword = async () => {
+    // Validation is already handled by disabled state, but double-check
     if (!currentPassword || !newPassword || !confirmPassword) {
-      Alert.alert("Error", "Please fill in all password fields");
+      showErrorToast("Missing fields", "Please fill in all password fields");
       return;
     }
     if (newPassword !== confirmPassword) {
-      Alert.alert("Error", "New passwords do not match");
+      showErrorToast("Passwords don't match", "New passwords must match");
       return;
     }
     if (newPassword.length < 8) {
-      Alert.alert("Error", "Password must be at least 8 characters long");
+      showErrorToast("Password too short", "Password must be at least 8 characters");
       return;
     }
-    // TODO: Implement password change
-    Alert.alert("Success", "Your password has been changed successfully");
-    setShowPasswordModal(false);
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+
+    try {
+      // TODO: Implement API call to change password
+      // await apiClient.post('/account/change-password', {
+      //   currentPassword,
+      //   newPassword,
+      // });
+
+      showSuccessToast("Password changed", "Your password has been updated successfully");
+      setShowPasswordModal(false);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error: any) {
+      showErrorToast(
+        "Failed to change password",
+        error?.message || "Please check your current password and try again"
+      );
+    }
   };
 
-  const handleChangeEmail = () => {
+  const handleChangeEmail = async () => {
     if (!newEmail || !emailPassword) {
-      Alert.alert("Error", "Please fill in email and password");
+      showErrorToast("Missing fields", "Please fill in email and password");
       return;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(newEmail)) {
-      Alert.alert("Error", "Please enter a valid email address");
+    if (!isValidEmail(newEmail)) {
+      showErrorToast("Invalid email", "Please enter a valid email address");
       return;
     }
-    // TODO: Implement email change
-    Alert.alert("Success", "A verification email has been sent to your new email address");
-    setShowEmailModal(false);
-    setNewEmail("");
-    setEmailPassword("");
+
+    try {
+      // TODO: Implement API call to change email
+      // await apiClient.post('/account/change-email', {
+      //   newEmail,
+      //   password: emailPassword,
+      // });
+
+      showSuccessToast(
+        "Verification email sent",
+        "Please check your new email address to verify the change"
+      );
+      setShowEmailModal(false);
+      setNewEmail("");
+      setEmailPassword("");
+    } catch (error: any) {
+      showErrorToast(
+        "Failed to change email",
+        error?.message || "Please check your password and try again"
+      );
+    }
   };
 
   const handleSavePreferences = () => {
@@ -750,116 +788,346 @@ export default function ManageAccount() {
             setNewPassword("");
             setConfirmPassword("");
           }}
+          statusBarTranslucent
         >
-          <View
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
             style={{
               flex: 1,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: spacing.xl,
             }}
           >
-            <View
+            <Pressable
               style={{
-                backgroundColor: colors.secondary.bg,
-                borderRadius: borderRadius.lg,
-                padding: spacing.xl,
-                width: "100%",
-                maxWidth: 500,
-                borderWidth: 1,
-                borderColor: colors.border.light,
+                flex: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.95)",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingHorizontal: spacing.md,
+                paddingTop: Math.max(insets.top, spacing.md),
+                paddingBottom: Math.max(insets.bottom, spacing.md),
+              }}
+              onPress={() => {
+                setShowPasswordModal(false);
+                setCurrentPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
               }}
             >
-              <Text
+              <Pressable
+                onPress={(e) => e.stopPropagation()}
                 style={{
-                  fontSize: typography.fontSize.xl,
-                  fontWeight: typography.fontWeight.bold,
-                  color: colors.text.primary,
-                  marginBottom: spacing.lg,
+                  width: "100%",
+                  maxWidth: isMobile ? width - 32 : 500,
+                  backgroundColor: "#474747",
+                  borderRadius: borderRadius.xl,
+                  borderWidth: 2,
+                  borderColor: "#5a5a68",
+                  maxHeight: isMobile ? "85%" : "90%",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 10 },
+                  shadowOpacity: 0.6,
+                  shadowRadius: 25,
+                  elevation: 25,
+                  paddingBottom: spacing.lg,
                 }}
               >
-                Change Password
-              </Text>
-
-              <View style={{ gap: spacing.md, marginBottom: spacing.xl }}>
-                <FormInput
-                  label="Current Password"
-                  value={currentPassword}
-                  onChangeText={setCurrentPassword}
-                  secureTextEntry
-                  placeholder="Enter current password"
-                  required
-                />
-                <FormInput
-                  label="New Password"
-                  value={newPassword}
-                  onChangeText={setNewPassword}
-                  secureTextEntry
-                  placeholder="Enter new password (min 8 characters)"
-                  required
-                />
-                <FormInput
-                  label="Confirm New Password"
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
-                  secureTextEntry
-                  placeholder="Confirm new password"
-                  required
-                />
-              </View>
-
-              <View style={{ flexDirection: "row", gap: spacing.md }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setShowPasswordModal(false);
-                    setCurrentPassword("");
-                    setNewPassword("");
-                    setConfirmPassword("");
-                  }}
+                {/* Header */}
+                <View
                   style={{
-                    flex: 1,
-                    paddingVertical: spacing.md,
-                    borderRadius: borderRadius.md,
-                    backgroundColor: colors.secondary.bg,
-                    borderWidth: 1,
-                    borderColor: colors.border.light,
-                    alignItems: "center",
+                    marginBottom: spacing.md,
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    paddingHorizontal: spacing.lg,
+                    paddingTop: spacing.lg,
                   }}
                 >
-                  <Text
+                  <View
                     style={{
-                      fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.primary,
+                      flex: 1,
+                      marginRight: spacing.xs,
                     }}
                   >
-                    Cancel
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleChangePassword}
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize["2xl"],
+                        fontWeight: typography.fontWeight.bold,
+                        color: colors.text.primary,
+                        marginBottom: spacing.xs,
+                      }}
+                      accessibilityRole="header"
+                    >
+                      Change Password
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.sm,
+                        color: colors.text.secondary,
+                        lineHeight: 18,
+                      }}
+                    >
+                      Update your account password to keep your account secure
+                    </Text>
+                  </View>
+                  <Pressable
+                    onPress={() => {
+                      setShowPasswordModal(false);
+                      setCurrentPassword("");
+                      setNewPassword("");
+                      setConfirmPassword("");
+                    }}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                      backgroundColor: "rgba(71, 71, 71, 0.6)",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    accessibilityLabel="Close modal"
+                    accessibilityRole="button"
+                  >
+                    <MaterialIcons name="close" size={24} color={colors.text.primary} />
+                  </Pressable>
+                </View>
+
+                {/* Content */}
+                <View
                   style={{
-                    flex: 1,
-                    paddingVertical: spacing.md,
-                    borderRadius: borderRadius.md,
-                    backgroundColor: colors.accent,
-                    alignItems: "center",
+                    paddingHorizontal: spacing.lg,
+                    paddingBottom: spacing.md,
                   }}
                 >
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.bold,
-                      color: colors.text.primary,
-                    }}
-                  >
-                    Change Password
-                  </Text>
-                </TouchableOpacity>
+                <View style={{ gap: spacing.md }}>
+                  <View>
+                    <FormInput
+                      label="Current Password"
+                      value={currentPassword}
+                      onChangeText={setCurrentPassword}
+                      secureTextEntry
+                      placeholder="Enter your current password"
+                      required
+                    />
+                  </View>
+                  
+                  <View>
+                    <FormInput
+                      label="New Password"
+                      value={newPassword}
+                      onChangeText={setNewPassword}
+                      secureTextEntry
+                      placeholder="Enter new password (min 8 characters)"
+                      required
+                    />
+                    {newPassword && newPassword.length > 0 && newPassword.length < 8 && (
+                      <View
+                        style={{
+                          backgroundColor: "rgba(255, 133, 33, 0.2)",
+                          borderRadius: borderRadius.md,
+                          padding: spacing.sm,
+                          paddingHorizontal: spacing.md,
+                          marginTop: spacing.xs,
+                          borderWidth: 1,
+                          borderColor: colors.status.warning,
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                        accessibilityRole="alert"
+                      >
+                        <MaterialIcons 
+                          name="warning" 
+                          size={16} 
+                          color={colors.status.warning} 
+                          style={{ marginRight: spacing.xs }}
+                        />
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.xs,
+                            fontWeight: "500",
+                            color: colors.status.warning,
+                            flex: 1,
+                            lineHeight: 16,
+                          }}
+                        >
+                          Must be at least 8 characters
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                  
+                  <View>
+                    <FormInput
+                      label="Confirm New Password"
+                      value={confirmPassword}
+                      onChangeText={setConfirmPassword}
+                      secureTextEntry
+                      placeholder="Re-enter your new password"
+                      required
+                    />
+                    {newPassword && confirmPassword && newPassword !== confirmPassword && (
+                      <View
+                        style={{
+                          backgroundColor: "rgba(231, 38, 38, 0.2)",
+                          borderRadius: borderRadius.md,
+                          padding: spacing.sm,
+                          paddingHorizontal: spacing.md,
+                          marginTop: spacing.xs,
+                          borderWidth: 1,
+                          borderColor: colors.status.error,
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                        accessibilityRole="alert"
+                      >
+                        <MaterialIcons 
+                          name="error-outline" 
+                          size={16} 
+                          color={colors.status.error} 
+                          style={{ marginRight: spacing.xs }}
+                        />
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.xs,
+                            fontWeight: "500",
+                            color: colors.status.error,
+                            flex: 1,
+                            lineHeight: 16,
+                          }}
+                        >
+                          Passwords do not match
+                        </Text>
+                      </View>
+                    )}
+                    {newPassword && confirmPassword && newPassword === confirmPassword && newPassword.length >= 8 && (
+                      <View
+                        style={{
+                          backgroundColor: "rgba(75, 184, 88, 0.2)",
+                          borderRadius: borderRadius.md,
+                          padding: spacing.sm,
+                          paddingHorizontal: spacing.md,
+                          marginTop: spacing.xs,
+                          borderWidth: 1,
+                          borderColor: colors.status.success,
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                        accessibilityRole="status"
+                      >
+                        <MaterialIcons 
+                          name="check-circle" 
+                          size={16} 
+                          color={colors.status.success} 
+                          style={{ marginRight: spacing.xs }}
+                        />
+                        <Text
+                          style={{
+                            fontSize: typography.fontSize.xs,
+                            fontWeight: "500",
+                            color: colors.status.success,
+                            flex: 1,
+                            lineHeight: 16,
+                          }}
+                        >
+                          Passwords match
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
+
+                {/* Footer */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    gap: spacing.md,
+                    paddingHorizontal: spacing.lg,
+                    paddingTop: spacing.md,
+                    paddingBottom: spacing.lg,
+                    borderTopWidth: 1,
+                    borderTopColor: "rgba(90, 90, 104, 0.5)",
+                  }}
+                >
+                  <Pressable
+                    onPress={() => {
+                      setShowPasswordModal(false);
+                      setCurrentPassword("");
+                      setNewPassword("");
+                      setConfirmPassword("");
+                    }}
+                    style={({ pressed }) => ({
+                      flex: 1,
+                      paddingHorizontal: spacing.md,
+                      paddingVertical: spacing.md,
+                      borderRadius: borderRadius.md,
+                      backgroundColor: "#232323",
+                      borderWidth: 1,
+                      borderColor: "#5a5a68",
+                      opacity: pressed ? 0.7 : 1,
+                      minHeight: 44,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    })}
+                    accessibilityLabel="Cancel password change"
+                    accessibilityRole="button"
+                  >
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.base,
+                        fontWeight: "600",
+                        color: colors.text.primary,
+                      }}
+                    >
+                      Cancel
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={handleChangePassword}
+                    disabled={!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8}
+                    style={({ pressed }) => ({
+                      flex: 1,
+                      paddingHorizontal: spacing.md,
+                      paddingVertical: spacing.md,
+                      borderRadius: borderRadius.md,
+                      backgroundColor: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
+                        ? "#3a3a3a"
+                        : colors.accent,
+                      opacity: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
+                        ? 0.5
+                        : pressed
+                        ? 0.9
+                        : 1,
+                      minHeight: 44,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderWidth: 1,
+                      borderColor: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
+                        ? "transparent"
+                        : colors.accent,
+                    })}
+                    accessibilityLabel="Change password"
+                    accessibilityRole="button"
+                    accessibilityState={{ disabled: !currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8 }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.base,
+                        fontWeight: "600",
+                        color: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
+                          ? colors.text.secondary
+                          : "#ffffff",
+                      }}
+                    >
+                      Change Password
+                    </Text>
+                  </Pressable>
+                </View>
+              </Pressable>
+            </Pressable>
+          </KeyboardAvoidingView>
         </Modal>
 
         {/* Change Email Modal */}
@@ -872,109 +1140,311 @@ export default function ManageAccount() {
             setNewEmail("");
             setEmailPassword("");
           }}
+          statusBarTranslucent
         >
-          <View
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
             style={{
               flex: 1,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: spacing.xl,
             }}
           >
-            <View
+            <Pressable
               style={{
-                backgroundColor: colors.secondary.bg,
-                borderRadius: borderRadius.lg,
-                padding: spacing.xl,
-                width: "100%",
-                maxWidth: 500,
-                borderWidth: 1,
-                borderColor: colors.border.light,
+                flex: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.95)",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingHorizontal: spacing.md,
+                paddingTop: Math.max(insets.top, spacing.md),
+                paddingBottom: Math.max(insets.bottom, spacing.md),
+              }}
+              onPress={() => {
+                setShowEmailModal(false);
+                setNewEmail("");
+                setEmailPassword("");
               }}
             >
-              <Text
+              <Pressable
+                onPress={(e) => e.stopPropagation()}
                 style={{
-                  fontSize: typography.fontSize.xl,
-                  fontWeight: typography.fontWeight.bold,
-                  color: colors.text.primary,
-                  marginBottom: spacing.lg,
+                  width: "100%",
+                  maxWidth: isMobile ? width - 32 : 500,
+                  backgroundColor: "#474747",
+                  borderRadius: borderRadius.xl,
+                  borderWidth: 2,
+                  borderColor: "#5a5a68",
+                  maxHeight: isMobile ? "85%" : "90%",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 10 },
+                  shadowOpacity: 0.6,
+                  shadowRadius: 25,
+                  elevation: 25,
+                  paddingBottom: spacing.lg,
                 }}
               >
-                Change Email Address
-              </Text>
-
-              <View style={{ gap: spacing.md, marginBottom: spacing.xl }}>
-                <FormInput
-                  label="New Email Address"
-                  value={newEmail}
-                  onChangeText={setNewEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  placeholder="Enter new email address"
-                  required
-                />
-                <FormInput
-                  label="Confirm Password"
-                  value={emailPassword}
-                  onChangeText={setEmailPassword}
-                  secureTextEntry
-                  placeholder="Enter your password to confirm"
-                  required
-                  helperText="You must enter your current password to change your email"
-                />
-              </View>
-
-              <View style={{ flexDirection: "row", gap: spacing.md }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setShowEmailModal(false);
-                    setNewEmail("");
-                    setEmailPassword("");
-                  }}
+                {/* Header */}
+                <View
                   style={{
-                    flex: 1,
-                    paddingVertical: spacing.md,
-                    borderRadius: borderRadius.md,
-                    backgroundColor: colors.secondary.bg,
-                    borderWidth: 1,
-                    borderColor: colors.border.light,
-                    alignItems: "center",
+                    marginBottom: spacing.md,
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    paddingHorizontal: spacing.lg,
+                    paddingTop: spacing.lg,
                   }}
                 >
-                  <Text
+                  <View
                     style={{
-                      fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.primary,
+                      flex: 1,
+                      marginRight: spacing.xs,
                     }}
                   >
-                    Cancel
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleChangeEmail}
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize["2xl"],
+                        fontWeight: typography.fontWeight.bold,
+                        color: colors.text.primary,
+                        marginBottom: spacing.xs,
+                      }}
+                      accessibilityRole="header"
+                    >
+                      Change Email Address
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.sm,
+                        color: colors.text.secondary,
+                        lineHeight: 18,
+                      }}
+                    >
+                      Update your email address to keep your account secure
+                    </Text>
+                  </View>
+                  <Pressable
+                    onPress={() => {
+                      setShowEmailModal(false);
+                      setNewEmail("");
+                      setEmailPassword("");
+                    }}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                      backgroundColor: "rgba(71, 71, 71, 0.6)",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    accessibilityLabel="Close modal"
+                    accessibilityRole="button"
+                  >
+                    <MaterialIcons name="close" size={24} color={colors.text.primary} />
+                  </Pressable>
+                </View>
+
+                {/* Content */}
+                <View
                   style={{
-                    flex: 1,
-                    paddingVertical: spacing.md,
-                    borderRadius: borderRadius.md,
-                    backgroundColor: colors.accent,
-                    alignItems: "center",
+                    paddingHorizontal: spacing.lg,
+                    paddingBottom: spacing.md,
                   }}
                 >
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.bold,
-                      color: colors.text.primary,
+                  <View style={{ gap: spacing.md }}>
+                    <View>
+                      <FormInput
+                        label="New Email Address"
+                        value={newEmail}
+                        onChangeText={setNewEmail}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        placeholder="Enter new email address"
+                        required
+                      />
+                      {newEmail && newEmail.length > 0 && !isValidEmail(newEmail) && (
+                        <View
+                          style={{
+                            backgroundColor: "rgba(231, 38, 38, 0.2)",
+                            borderRadius: borderRadius.md,
+                            padding: spacing.sm,
+                            paddingHorizontal: spacing.md,
+                            marginTop: spacing.xs,
+                            borderWidth: 1,
+                            borderColor: colors.status.error,
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                          accessibilityRole="alert"
+                        >
+                          <MaterialIcons 
+                            name="error-outline" 
+                            size={16} 
+                            color={colors.status.error} 
+                            style={{ marginRight: spacing.xs }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: typography.fontSize.xs,
+                              fontWeight: "500",
+                              color: colors.status.error,
+                              flex: 1,
+                              lineHeight: 16,
+                            }}
+                          >
+                            Please enter a valid email address
+                          </Text>
+                        </View>
+                      )}
+                      {newEmail && newEmail.length > 0 && isValidEmail(newEmail) && (
+                        <View
+                          style={{
+                            backgroundColor: "rgba(75, 184, 88, 0.2)",
+                            borderRadius: borderRadius.md,
+                            padding: spacing.sm,
+                            paddingHorizontal: spacing.md,
+                            marginTop: spacing.xs,
+                            borderWidth: 1,
+                            borderColor: colors.status.success,
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                          accessibilityRole="status"
+                        >
+                          <MaterialIcons 
+                            name="check-circle" 
+                            size={16} 
+                            color={colors.status.success} 
+                            style={{ marginRight: spacing.xs }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: typography.fontSize.xs,
+                              fontWeight: "500",
+                              color: colors.status.success,
+                              flex: 1,
+                              lineHeight: 16,
+                            }}
+                          >
+                            Valid email address
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                    
+                    <View>
+                      <FormInput
+                        label="Confirm Password"
+                        value={emailPassword}
+                        onChangeText={setEmailPassword}
+                        secureTextEntry
+                        placeholder="Enter your password to confirm"
+                        required
+                      />
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.xs,
+                          color: colors.text.secondary,
+                          marginTop: spacing.xs,
+                          paddingHorizontal: spacing.xs,
+                        }}
+                      >
+                        You must enter your current password to change your email
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Footer */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    gap: spacing.md,
+                    paddingHorizontal: spacing.lg,
+                    paddingTop: spacing.md,
+                    paddingBottom: spacing.lg,
+                    borderTopWidth: 1,
+                    borderTopColor: "rgba(90, 90, 104, 0.5)",
+                  }}
+                >
+                  <Pressable
+                    onPress={() => {
+                      setShowEmailModal(false);
+                      setNewEmail("");
+                      setEmailPassword("");
+                    }}
+                    style={({ pressed }) => ({
+                      flex: 1,
+                      paddingHorizontal: spacing.md,
+                      paddingVertical: spacing.md,
+                      borderRadius: borderRadius.md,
+                      backgroundColor: "#232323",
+                      borderWidth: 1,
+                      borderColor: "#5a5a68",
+                      opacity: pressed ? 0.7 : 1,
+                      minHeight: 44,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    })}
+                    accessibilityLabel="Cancel email change"
+                    accessibilityRole="button"
+                  >
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.base,
+                        fontWeight: "600",
+                        color: colors.text.primary,
+                      }}
+                    >
+                      Cancel
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={handleChangeEmail}
+                    disabled={!newEmail || !emailPassword || !isValidEmail(newEmail)}
+                    style={({ pressed }) => ({
+                      flex: 1,
+                      paddingHorizontal: spacing.md,
+                      paddingVertical: spacing.md,
+                      borderRadius: borderRadius.md,
+                      backgroundColor: (!newEmail || !emailPassword || !isValidEmail(newEmail))
+                        ? "#3a3a3a"
+                        : colors.accent,
+                      opacity: (!newEmail || !emailPassword || !isValidEmail(newEmail))
+                        ? 0.5
+                        : pressed
+                        ? 0.9
+                        : 1,
+                      minHeight: 44,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderWidth: 1,
+                      borderColor: (!newEmail || !emailPassword || !isValidEmail(newEmail))
+                        ? "transparent"
+                        : colors.accent,
+                    })}
+                    accessibilityLabel="Change email address"
+                    accessibilityRole="button"
+                    accessibilityState={{ 
+                      disabled: !newEmail || !emailPassword || !isValidEmail(newEmail)
                     }}
                   >
-                    Change Email
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.base,
+                        fontWeight: "600",
+                        color: (!newEmail || !emailPassword || !isValidEmail(newEmail))
+                          ? colors.text.secondary
+                          : "#ffffff",
+                      }}
+                    >
+                      Change Email
+                    </Text>
+                  </Pressable>
+                </View>
+              </Pressable>
+            </Pressable>
+          </KeyboardAvoidingView>
         </Modal>
       </ScrollView>
     </View>
