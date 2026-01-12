@@ -268,7 +268,7 @@ export default function MyEvents() {
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        onPress={() => alert("Edit event")}
+                        onPress={() => router.push(`/pages/events/manage/${event.id}`)}
                         style={{
                           flex: 1,
                           backgroundColor: "#ba9988",

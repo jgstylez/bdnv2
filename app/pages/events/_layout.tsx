@@ -15,6 +15,7 @@ export default function EventsLayout() {
       <Stack.Screen name="tickets" />
       <Stack.Screen name="create" />
       <Stack.Screen name="my-events" />
+      <Stack.Screen name="manage" />
     </Stack>
   );
 }
