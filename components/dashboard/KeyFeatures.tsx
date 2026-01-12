@@ -27,6 +27,13 @@ const features = [
     color: "#e91e63",
   },
   {
+    title: "Make Donations",
+    description: "Support causes & fundraisers",
+    icon: "favorite" as const,
+    onPress: (router: any) => router.push("/pages/fundraisers"),
+    color: "#e91e63",
+  },
+  {
     title: "BDN University",
     description: "Learn more about the platform & culture",
     icon: "school" as const,

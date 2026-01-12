@@ -73,13 +73,22 @@ export default function CampaignDetail() {
     ? Math.ceil((new Date(campaign.endDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
     : null;
 
-  // Render Campaign Content JSX
-  const renderCampaignContentJSX = () => (
-    <>
-      {/* ... Campaign Content ... */}
-    </>
-  );
+  // Filter donations for this specific campaign
+  const campaignDonations = mockDonors.filter((donor) => {
+    // In a real app, this would filter by campaignId
+    // For now, we'll use all mock donors as they're associated with campaign "1"
+    return true;
+  });
 
+  const totalDonations = campaignDonations.reduce((sum, d) => sum + d.amount, 0);
+  const totalContributors = campaign.contributors;
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  };
+
+  const progress = campaign.targetAmount ? Math.min((campaign.currentAmount / campaign.targetAmount) * 100, 100) : 0;
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background.primary }}>
@@ -91,7 +100,7 @@ export default function CampaignDetail() {
           paddingBottom: scrollViewBottomPadding,
         }}
       >
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.lg }}>
           <BackButton onPress={() => router.back()} />
           {isOwner && (
             <View style={{ flexDirection: 'row', gap: spacing.md }}>
@@ -105,10 +114,305 @@ export default function CampaignDetail() {
           )}
         </View>
 
-        {/* ... Rest of the component ... */}
+        {/* Campaign Image */}
+        {campaign.imageUrl && (
+          <View style={{ marginBottom: spacing.lg, borderRadius: borderRadius.lg, overflow: "hidden" }}>
+            <Image
+              source={{ uri: campaign.imageUrl }}
+              style={{ width: "100%", height: isMobile ? 200 : 300 }}
+              contentFit="cover"
+              cachePolicy="memory-disk"
+            />
+          </View>
+        )}
+
+        {/* Campaign Title */}
+        <Text
+          style={{
+            fontSize: isMobile ? typography.fontSize["2xl"] : typography.fontSize["3xl"],
+            fontWeight: typography.fontWeight.bold,
+            color: colors.text.primary,
+            marginBottom: spacing.sm,
+          }}
+        >
+          {campaign.title}
+        </Text>
+
+        {/* Campaign Type Badge */}
+        <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.md }}>
+          <View
+            style={{
+              backgroundColor: "rgba(186, 153, 136, 0.15)",
+              paddingHorizontal: spacing.md,
+              paddingVertical: spacing.xs,
+              borderRadius: borderRadius.md,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: typography.fontSize.xs,
+                color: colors.accent,
+                fontWeight: typography.fontWeight.semibold,
+                textTransform: "uppercase",
+              }}
+            >
+              {campaign.type}
+            </Text>
+          </View>
+          {daysRemaining !== null && daysRemaining > 0 && (
+            <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+              {daysRemaining} days remaining
+            </Text>
+          )}
+        </View>
+
+        {/* Campaign Description */}
+        <Text
+          style={{
+            fontSize: typography.fontSize.base,
+            color: colors.text.secondary,
+            lineHeight: typography.lineHeight.relaxed,
+            marginBottom: spacing.xl,
+          }}
+        >
+          {campaign.description}
+        </Text>
+
+        {/* Campaign Stats - Campaign-Specific */}
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            alignItems: "stretch",
+            gap: spacing.md,
+            marginBottom: spacing.xl,
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              flexShrink: 1,
+              flexGrow: 1,
+              minWidth: 0,
+              maxWidth: "50%",
+              backgroundColor: colors.secondary.bg,
+              borderRadius: borderRadius.lg,
+              padding: spacing.lg,
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: typography.fontSize.sm,
+                color: colors.text.secondary,
+                marginBottom: spacing.xs,
+              }}
+            >
+              Total Donations
+            </Text>
+            <Text
+              style={{
+                fontSize: typography.fontSize["2xl"],
+                fontWeight: typography.fontWeight.bold,
+                color: colors.status.success,
+              }}
+            >
+              {formatCurrency(campaign.currentAmount, campaign.currency)}
+            </Text>
+            {campaign.targetAmount && (
+              <Text
+                style={{
+                  fontSize: typography.fontSize.xs,
+                  color: colors.text.tertiary,
+                  marginTop: spacing.xs,
+                }}
+              >
+                of {formatCurrency(campaign.targetAmount, campaign.currency)} goal
+              </Text>
+            )}
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexShrink: 1,
+              flexGrow: 1,
+              minWidth: 0,
+              maxWidth: "50%",
+              backgroundColor: colors.secondary.bg,
+              borderRadius: borderRadius.lg,
+              padding: spacing.lg,
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: typography.fontSize.sm,
+                color: colors.text.secondary,
+                marginBottom: spacing.xs,
+              }}
+            >
+              Contributors
+            </Text>
+            <Text
+              style={{
+                fontSize: typography.fontSize["2xl"],
+                fontWeight: typography.fontWeight.bold,
+                color: colors.accent,
+              }}
+            >
+              {totalContributors}
+            </Text>
+          </View>
+        </View>
+
+        {/* Progress Bar */}
+        {campaign.targetAmount && (
+          <View style={{ marginBottom: spacing.xl }}>
+            <View
+              style={{
+                height: 12,
+                backgroundColor: colors.background.primary,
+                borderRadius: borderRadius.md,
+                overflow: "hidden",
+                marginBottom: spacing.xs,
+              }}
+            >
+              <View
+                style={{
+                  height: "100%",
+                  width: `${progress}%`,
+                  backgroundColor: colors.accent,
+                }}
+              />
+            </View>
+            <Text
+              style={{
+                fontSize: typography.fontSize.sm,
+                color: colors.text.secondary,
+                textAlign: "center",
+              }}
+            >
+              {Math.round(progress)}% funded
+            </Text>
+          </View>
+        )}
+
+        {/* Recent Donations - Campaign-Specific */}
+        <View style={{ marginBottom: spacing.xl }}>
+          <Text
+            style={{
+              fontSize: typography.fontSize.xl,
+              fontWeight: typography.fontWeight.bold,
+              color: colors.text.primary,
+              marginBottom: spacing.md,
+            }}
+          >
+            Recent Donations
+          </Text>
+          {campaignDonations.length > 0 ? (
+            <View style={{ gap: spacing.md }}>
+              {campaignDonations.slice(0, 5).map((donation, index) => (
+                <View
+                  key={index}
+                  style={{
+                    backgroundColor: colors.secondary.bg,
+                    borderRadius: borderRadius.md,
+                    padding: spacing.md,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View style={{ flex: 1 }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.xs }}>
+                      <MaterialIcons name="favorite" size={16} color={colors.accent} />
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.base,
+                          fontWeight: typography.fontWeight.semibold,
+                          color: colors.text.primary,
+                        }}
+                      >
+                        {donation.anonymous ? "Anonymous" : donation.name || "Anonymous"}
+                      </Text>
+                    </View>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.sm,
+                        color: colors.text.secondary,
+                        marginBottom: spacing.xs,
+                      }}
+                    >
+                      {campaign.title}
+                    </Text>
+                    {donation.name && !donation.anonymous && (
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.xs,
+                          color: colors.text.tertiary,
+                          fontStyle: "italic",
+                        }}
+                      >
+                        "{donation.name === "John Doe" ? "Happy to help!" : ""}"
+                      </Text>
+                    )}
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.xs,
+                        color: colors.text.tertiary,
+                        marginTop: spacing.xs,
+                      }}
+                    >
+                      {formatDate(donation.date)}
+                    </Text>
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.lg,
+                      fontWeight: typography.fontWeight.bold,
+                      color: colors.status.success,
+                    }}
+                  >
+                    +{formatCurrency(donation.amount, donation.currency as any)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View
+              style={{
+                backgroundColor: colors.secondary.bg,
+                borderRadius: borderRadius.md,
+                padding: spacing.xl,
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+              }}
+            >
+              <MaterialIcons name="favorite-border" size={48} color={colors.text.tertiary} />
+              <Text
+                style={{
+                  fontSize: typography.fontSize.base,
+                  color: colors.text.secondary,
+                  marginTop: spacing.md,
+                  textAlign: "center",
+                }}
+              >
+                No donations yet. Be the first to support this campaign!
+              </Text>
+            </View>
+          )}
+        </View>
+
+        {/* Donation Module */}
+        <DonationModule campaign={campaign} />
 
       </ScrollView>
-
     </View>
   );
 }

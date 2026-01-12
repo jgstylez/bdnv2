@@ -64,7 +64,7 @@ export default function NonprofitCampaigns() {
                 color: "#ffffff",
               }}
             >
-              New Campaign
+              Create New Campaign
             </Text>
           </TouchableOpacity>
         </View>

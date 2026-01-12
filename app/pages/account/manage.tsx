@@ -100,8 +100,8 @@ export default function ManageAccount() {
   };
 
   const handleChangeEmail = async () => {
-    if (!newEmail || !emailPassword) {
-      showErrorToast("Missing fields", "Please fill in email and password");
+    if (!newEmail) {
+      showErrorToast("Missing email", "Please enter a new email address");
       return;
     }
     if (!isValidEmail(newEmail)) {
@@ -113,7 +113,6 @@ export default function ManageAccount() {
       // TODO: Implement API call to change email
       // await apiClient.post('/account/change-email', {
       //   newEmail,
-      //   password: emailPassword,
       // });
 
       showSuccessToast(
@@ -126,7 +125,7 @@ export default function ManageAccount() {
     } catch (error: any) {
       showErrorToast(
         "Failed to change email",
-        error?.message || "Please check your password and try again"
+        error?.message || "Please try again"
       );
     }
   };
@@ -651,130 +650,224 @@ export default function ManageAccount() {
             setShowDeleteModal(false);
             setDeleteConfirmation("");
           }}
+          statusBarTranslucent
         >
-          <View
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
             style={{
               flex: 1,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: spacing.xl,
             }}
           >
-            <View
+            <Pressable
               style={{
-                backgroundColor: colors.secondary.bg,
-                borderRadius: borderRadius.lg,
-                padding: spacing.xl,
-                width: "100%",
-                maxWidth: 500,
-                borderWidth: 1,
-                borderColor: colors.border.light,
+                flex: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.95)",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingHorizontal: spacing.md,
+                paddingTop: Math.max(insets.top, spacing.md),
+                paddingBottom: Math.max(insets.bottom, spacing.md),
+              }}
+              onPress={() => {
+                setShowDeleteModal(false);
+                setDeleteConfirmation("");
               }}
             >
-              <Text
+              <Pressable
+                onPress={(e) => e.stopPropagation()}
                 style={{
-                  fontSize: typography.fontSize.xl,
-                  fontWeight: typography.fontWeight.bold,
-                  color: colors.text.primary,
-                  marginBottom: spacing.md,
+                  width: "100%",
+                  maxWidth: isMobile ? width - 32 : 500,
+                  backgroundColor: "#474747",
+                  borderRadius: borderRadius.xl,
+                  borderWidth: 2,
+                  borderColor: "#5a5a68",
+                  maxHeight: isMobile ? "85%" : "90%",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 10 },
+                  shadowOpacity: 0.6,
+                  shadowRadius: 25,
+                  elevation: 25,
+                  paddingBottom: spacing.lg,
                 }}
               >
-                Delete Account
-              </Text>
-
-              <View style={{ gap: spacing.md, marginBottom: spacing.xl }}>
-                <Text
+                {/* Header */}
+                <View
                   style={{
-                    fontSize: typography.fontSize.base,
-                    color: colors.text.primary,
-                    lineHeight: typography.lineHeight.relaxed,
+                    marginBottom: spacing.md,
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    paddingHorizontal: spacing.lg,
+                    paddingTop: spacing.lg,
                   }}
                 >
-                  Are you sure you want to delete your account? This action cannot be undone.
-                </Text>
-                <Text
-                  style={{
-                    fontSize: typography.fontSize.base,
-                    color: colors.text.secondary,
-                    marginTop: spacing.sm,
-                    lineHeight: typography.lineHeight.relaxed,
-                  }}
-                >
-                  To confirm, please type <Text style={{ fontWeight: typography.fontWeight.bold, color: colors.status.error }}>DELETE</Text> in the field below:
-                </Text>
-                <TextInput
-                  value={deleteConfirmation}
-                  onChangeText={setDeleteConfirmation}
-                  placeholder="Type DELETE here"
-                  placeholderTextColor={colors.text.placeholder}
-                  style={{
-                    backgroundColor: colors.background.input,
-                    borderRadius: borderRadius.md,
-                    padding: spacing.md,
-                    borderWidth: 1,
-                    borderColor: deleteConfirmation.toLowerCase() === "delete" ? colors.status.success : colors.border.light,
-                    fontSize: typography.fontSize.base,
-                    color: colors.text.primary,
-                    fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
-                    marginTop: spacing.sm,
-                  }}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
-              </View>
-
-              <View style={{ flexDirection: "row", gap: spacing.md }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setShowDeleteModal(false);
-                    setDeleteConfirmation("");
-                  }}
-                  style={{
-                    flex: 1,
-                    paddingVertical: spacing.md,
-                    borderRadius: borderRadius.md,
-                    backgroundColor: colors.secondary.bg,
-                    borderWidth: 1,
-                    borderColor: colors.border.light,
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
+                  <View
                     style={{
-                      fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.primary,
+                      flex: 1,
+                      marginRight: spacing.xs,
                     }}
                   >
-                    Cancel
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleDeleteAccount}
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize["2xl"],
+                        fontWeight: typography.fontWeight.bold,
+                        color: colors.text.primary,
+                        marginBottom: spacing.xs,
+                      }}
+                      accessibilityRole="header"
+                    >
+                      Delete Account
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.sm,
+                        color: colors.text.secondary,
+                        lineHeight: 18,
+                      }}
+                    >
+                      Are you sure you want to delete your account? This action cannot be undone.
+                    </Text>
+                  </View>
+                  <Pressable
+                    onPress={() => {
+                      setShowDeleteModal(false);
+                      setDeleteConfirmation("");
+                    }}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                      backgroundColor: "rgba(71, 71, 71, 0.6)",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    accessibilityLabel="Close modal"
+                    accessibilityRole="button"
+                  >
+                    <MaterialIcons name="close" size={24} color={colors.text.primary} />
+                  </Pressable>
+                </View>
+
+                {/* Content */}
+                <View
                   style={{
-                    flex: 1,
-                    paddingVertical: spacing.md,
-                    borderRadius: borderRadius.md,
-                    backgroundColor: colors.status.errorLight,
-                    borderWidth: 1,
-                    borderColor: colors.status.error,
-                    alignItems: "center",
+                    paddingHorizontal: spacing.lg,
+                    paddingBottom: spacing.sm,
                   }}
                 >
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.bold,
-                      color: colors.status.error,
+                  <View style={{ gap: spacing.lg }}>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.sm,
+                        color: colors.text.secondary,
+                        lineHeight: 18,
+                      }}
+                    >
+                      To confirm, please type <Text style={{ fontWeight: typography.fontWeight.bold, color: colors.status.error }}>DELETE</Text> in the field below:
+                    </Text>
+                    <FormInput
+                      value={deleteConfirmation}
+                      onChangeText={setDeleteConfirmation}
+                      placeholder="Type DELETE here"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      style={{
+                        fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+                        borderColor: deleteConfirmation.toLowerCase() === "delete" ? colors.status.success : undefined,
+                      }}
+                    />
+                  </View>
+                </View>
+
+                {/* Footer */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    gap: spacing.sm,
+                    paddingHorizontal: spacing.lg,
+                    paddingTop: spacing.md,
+                    paddingBottom: spacing.md,
+                    borderTopWidth: 1,
+                    borderTopColor: "rgba(90, 90, 104, 0.5)",
+                  }}
+                >
+                  <Pressable
+                    onPress={() => {
+                      setShowDeleteModal(false);
+                      setDeleteConfirmation("");
                     }}
+                    style={({ pressed }) => ({
+                      paddingHorizontal: spacing.lg,
+                      paddingVertical: spacing.sm,
+                      borderRadius: borderRadius.md,
+                      backgroundColor: "#232323",
+                      borderWidth: 1,
+                      borderColor: "#5a5a68",
+                      opacity: pressed ? 0.7 : 1,
+                      minHeight: 36,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    })}
+                    accessibilityLabel="Cancel account deletion"
+                    accessibilityRole="button"
                   >
-                    Delete Account
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.sm,
+                        fontWeight: "600",
+                        color: colors.text.primary,
+                      }}
+                    >
+                      Cancel
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={handleDeleteAccount}
+                    disabled={deleteConfirmation.toLowerCase() !== "delete"}
+                    style={({ pressed }) => ({
+                      paddingHorizontal: spacing.lg,
+                      paddingVertical: spacing.sm,
+                      borderRadius: borderRadius.md,
+                      backgroundColor: deleteConfirmation.toLowerCase() !== "delete"
+                        ? "#3a3a3a"
+                        : colors.status.error,
+                      opacity: deleteConfirmation.toLowerCase() !== "delete"
+                        ? 0.5
+                        : pressed
+                        ? 0.9
+                        : 1,
+                      minHeight: 36,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderWidth: 1,
+                      borderColor: deleteConfirmation.toLowerCase() !== "delete"
+                        ? "transparent"
+                        : colors.status.error,
+                    })}
+                    accessibilityLabel="Delete account"
+                    accessibilityRole="button"
+                    accessibilityState={{ disabled: deleteConfirmation.toLowerCase() !== "delete" }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.sm,
+                        fontWeight: "600",
+                        color: deleteConfirmation.toLowerCase() !== "delete"
+                          ? colors.text.secondary
+                          : "#ffffff",
+                      }}
+                    >
+                      Delete Account
+                    </Text>
+                  </Pressable>
+                </View>
+              </Pressable>
+            </Pressable>
+          </KeyboardAvoidingView>
         </Modal>
 
         {/* Change Password Modal */}
@@ -897,143 +990,19 @@ export default function ManageAccount() {
                 <View
                   style={{
                     paddingHorizontal: spacing.lg,
-                    paddingBottom: spacing.md,
+                    paddingBottom: spacing.sm,
                   }}
                 >
-                <View style={{ gap: spacing.md }}>
+                <View style={{ gap: spacing.lg }}>
                   <View>
                     <FormInput
-                      label="Current Password"
-                      value={currentPassword}
-                      onChangeText={setCurrentPassword}
-                      secureTextEntry
-                      placeholder="Enter your current password"
-                      required
-                    />
-                  </View>
-                  
-                  <View>
-                    <FormInput
-                      label="New Password"
-                      value={newPassword}
-                      onChangeText={setNewPassword}
-                      secureTextEntry
-                      placeholder="Enter new password (min 8 characters)"
-                      required
-                    />
-                    {newPassword && newPassword.length > 0 && newPassword.length < 8 && (
-                      <View
-                        style={{
-                          backgroundColor: "rgba(255, 133, 33, 0.2)",
-                          borderRadius: borderRadius.md,
-                          padding: spacing.sm,
-                          paddingHorizontal: spacing.md,
-                          marginTop: spacing.xs,
-                          borderWidth: 1,
-                          borderColor: colors.status.warning,
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                        accessibilityRole="alert"
-                      >
-                        <MaterialIcons 
-                          name="warning" 
-                          size={16} 
-                          color={colors.status.warning} 
-                          style={{ marginRight: spacing.xs }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: "500",
-                            color: colors.status.warning,
-                            flex: 1,
-                            lineHeight: 16,
-                          }}
-                        >
-                          Must be at least 8 characters
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                  
-                  <View>
-                    <FormInput
-                      label="Confirm New Password"
                       value={confirmPassword}
                       onChangeText={setConfirmPassword}
                       secureTextEntry
+                      showPasswordToggle
                       placeholder="Re-enter your new password"
                       required
                     />
-                    {newPassword && confirmPassword && newPassword !== confirmPassword && (
-                      <View
-                        style={{
-                          backgroundColor: "rgba(231, 38, 38, 0.2)",
-                          borderRadius: borderRadius.md,
-                          padding: spacing.sm,
-                          paddingHorizontal: spacing.md,
-                          marginTop: spacing.xs,
-                          borderWidth: 1,
-                          borderColor: colors.status.error,
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                        accessibilityRole="alert"
-                      >
-                        <MaterialIcons 
-                          name="error-outline" 
-                          size={16} 
-                          color={colors.status.error} 
-                          style={{ marginRight: spacing.xs }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: "500",
-                            color: colors.status.error,
-                            flex: 1,
-                            lineHeight: 16,
-                          }}
-                        >
-                          Passwords do not match
-                        </Text>
-                      </View>
-                    )}
-                    {newPassword && confirmPassword && newPassword === confirmPassword && newPassword.length >= 8 && (
-                      <View
-                        style={{
-                          backgroundColor: "rgba(75, 184, 88, 0.2)",
-                          borderRadius: borderRadius.md,
-                          padding: spacing.sm,
-                          paddingHorizontal: spacing.md,
-                          marginTop: spacing.xs,
-                          borderWidth: 1,
-                          borderColor: colors.status.success,
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                        accessibilityRole="status"
-                      >
-                        <MaterialIcons 
-                          name="check-circle" 
-                          size={16} 
-                          color={colors.status.success} 
-                          style={{ marginRight: spacing.xs }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: "500",
-                            color: colors.status.success,
-                            flex: 1,
-                            lineHeight: 16,
-                          }}
-                        >
-                          Passwords match
-                        </Text>
-                      </View>
-                    )}
                   </View>
                 </View>
               </View>
@@ -1043,10 +1012,10 @@ export default function ManageAccount() {
                   style={{
                     flexDirection: "row",
                     justifyContent: "flex-end",
-                    gap: spacing.md,
+                    gap: spacing.sm,
                     paddingHorizontal: spacing.lg,
                     paddingTop: spacing.md,
-                    paddingBottom: spacing.lg,
+                    paddingBottom: spacing.md,
                     borderTopWidth: 1,
                     borderTopColor: "rgba(90, 90, 104, 0.5)",
                   }}
@@ -1059,15 +1028,14 @@ export default function ManageAccount() {
                       setConfirmPassword("");
                     }}
                     style={({ pressed }) => ({
-                      flex: 1,
-                      paddingHorizontal: spacing.md,
-                      paddingVertical: spacing.md,
+                      paddingHorizontal: spacing.lg,
+                      paddingVertical: spacing.sm,
                       borderRadius: borderRadius.md,
                       backgroundColor: "#232323",
                       borderWidth: 1,
                       borderColor: "#5a5a68",
                       opacity: pressed ? 0.7 : 1,
-                      minHeight: 44,
+                      minHeight: 36,
                       alignItems: "center",
                       justifyContent: "center",
                     })}
@@ -1076,7 +1044,7 @@ export default function ManageAccount() {
                   >
                     <Text
                       style={{
-                        fontSize: typography.fontSize.base,
+                        fontSize: typography.fontSize.sm,
                         fontWeight: "600",
                         color: colors.text.primary,
                       }}
@@ -1088,9 +1056,8 @@ export default function ManageAccount() {
                     onPress={handleChangePassword}
                     disabled={!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8}
                     style={({ pressed }) => ({
-                      flex: 1,
-                      paddingHorizontal: spacing.md,
-                      paddingVertical: spacing.md,
+                      paddingHorizontal: spacing.lg,
+                      paddingVertical: spacing.sm,
                       borderRadius: borderRadius.md,
                       backgroundColor: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
                         ? "#3a3a3a"
@@ -1100,7 +1067,7 @@ export default function ManageAccount() {
                         : pressed
                         ? 0.9
                         : 1,
-                      minHeight: 44,
+                      minHeight: 36,
                       alignItems: "center",
                       justifyContent: "center",
                       borderWidth: 1,
@@ -1114,7 +1081,7 @@ export default function ManageAccount() {
                   >
                     <Text
                       style={{
-                        fontSize: typography.fontSize.base,
+                        fontSize: typography.fontSize.sm,
                         fontWeight: "600",
                         color: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
                           ? colors.text.secondary
@@ -1330,27 +1297,6 @@ export default function ManageAccount() {
                         </View>
                       )}
                     </View>
-                    
-                    <View>
-                      <FormInput
-                        label="Confirm Password"
-                        value={emailPassword}
-                        onChangeText={setEmailPassword}
-                        secureTextEntry
-                        placeholder="Enter your password to confirm"
-                        required
-                      />
-                      <Text
-                        style={{
-                          fontSize: typography.fontSize.xs,
-                          color: colors.text.secondary,
-                          marginTop: spacing.xs,
-                          paddingHorizontal: spacing.xs,
-                        }}
-                      >
-                        You must enter your current password to change your email
-                      </Text>
-                    </View>
                   </View>
                 </View>
 
@@ -1401,16 +1347,16 @@ export default function ManageAccount() {
                   </Pressable>
                   <Pressable
                     onPress={handleChangeEmail}
-                    disabled={!newEmail || !emailPassword || !isValidEmail(newEmail)}
+                    disabled={!newEmail || !isValidEmail(newEmail)}
                     style={({ pressed }) => ({
                       flex: 1,
                       paddingHorizontal: spacing.md,
                       paddingVertical: spacing.md,
                       borderRadius: borderRadius.md,
-                      backgroundColor: (!newEmail || !emailPassword || !isValidEmail(newEmail))
+                      backgroundColor: (!newEmail || !isValidEmail(newEmail))
                         ? "#3a3a3a"
                         : colors.accent,
-                      opacity: (!newEmail || !emailPassword || !isValidEmail(newEmail))
+                      opacity: (!newEmail || !isValidEmail(newEmail))
                         ? 0.5
                         : pressed
                         ? 0.9
@@ -1419,21 +1365,21 @@ export default function ManageAccount() {
                       alignItems: "center",
                       justifyContent: "center",
                       borderWidth: 1,
-                      borderColor: (!newEmail || !emailPassword || !isValidEmail(newEmail))
+                      borderColor: (!newEmail || !isValidEmail(newEmail))
                         ? "transparent"
                         : colors.accent,
                     })}
                     accessibilityLabel="Change email address"
                     accessibilityRole="button"
                     accessibilityState={{ 
-                      disabled: !newEmail || !emailPassword || !isValidEmail(newEmail)
+                      disabled: !newEmail || !isValidEmail(newEmail)
                     }}
                   >
                     <Text
                       style={{
                         fontSize: typography.fontSize.base,
                         fontWeight: "600",
-                        color: (!newEmail || !emailPassword || !isValidEmail(newEmail))
+                        color: (!newEmail || !isValidEmail(newEmail))
                           ? colors.text.secondary
                           : "#ffffff",
                       }}

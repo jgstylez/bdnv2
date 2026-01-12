@@ -160,11 +160,16 @@ export default function CreateProduct() {
 
   const transformFormDataToApiFormat = () => {
     const dims = parseDimensions(form.shipping.dimensions);
-    const dimensions = dims.length && dims.width && dims.height
+    const lengthNum = dims.length ? parseFloat(dims.length) : NaN;
+    const widthNum = dims.width ? parseFloat(dims.width) : NaN;
+    const heightNum = dims.height ? parseFloat(dims.height) : NaN;
+    
+    const dimensions = !isNaN(lengthNum) && !isNaN(widthNum) && !isNaN(heightNum) && 
+                       lengthNum > 0 && widthNum > 0 && heightNum > 0
       ? {
-          length: parseFloat(dims.length),
-          width: parseFloat(dims.width),
-          height: parseFloat(dims.height),
+          length: lengthNum,
+          width: widthNum,
+          height: heightNum,
           unit: "in" as const,
         }
       : undefined;

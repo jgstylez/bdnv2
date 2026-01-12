@@ -65,6 +65,30 @@ bdn2.0/
 7. **Mix NativeCN with custom components** as needed
 8. **Use `cn()` utility** for conditional class names
 
+## Responsive Design Guidelines
+
+### Mobile Definition
+When referring to "mobile" in this codebase, it encompasses **both**:
+1. **Mobile browser breakpoints** (responsive web design, typically < 768px width)
+2. **Native mobile display** (React Native/Expo apps running on iOS and Android devices)
+
+This means that any mobile-specific styling, layout, or behavior should work consistently across:
+- Mobile web browsers (responsive breakpoints)
+- Native iOS apps
+- Native Android apps
+
+### Implementation Notes
+- Use `isMobile` checks from `useResponsive()` hook or `useWindowDimensions()` for breakpoint detection
+- Mobile-first approach: design for mobile first, then enhance for larger screens
+- Ensure touch targets are appropriately sized for mobile (minimum 44x44px)
+- Test layouts on both mobile web and native mobile apps
+- When implementing mobile-specific features, ensure they work in both contexts
+
+### Breakpoints
+- **Mobile:** < 768px width
+- **Tablet:** 768px - 1024px width
+- **Desktop:** > 1024px width
+
 ## Animation Guidelines
 
 - Use React Native Reanimated for all animations

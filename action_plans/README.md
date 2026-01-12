@@ -93,6 +93,9 @@ These documents contain historical information and have been consolidated into *
 - Link to related documents when appropriate
 - Mark historical/archived documents clearly
 
+### Important: Mobile Definition
+When referring to "mobile" in this codebase, it encompasses **both** mobile browser breakpoints (responsive web design) and native mobile display (React Native/Expo apps). See **[architecture.md](./architecture.md)** for detailed responsive design guidelines.
+
 ## 🔍 Quick Reference
 
 ### For New Developers

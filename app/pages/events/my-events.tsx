@@ -102,7 +102,7 @@ export default function MyEvents() {
             }}
           >
             <MaterialIcons name="add-circle-outline" size={20} color="#ffffff" />
-            <Text style={{ color: "#ffffff", fontWeight: "600" }}>Create Event</Text>
+            <Text style={{ color: "#ffffff", fontWeight: "600" }}>Create New Event</Text>
           </TouchableOpacity>
         </View>
 
@@ -330,7 +330,7 @@ export default function MyEvents() {
               }}
             >
               <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>
-                Create Event
+                Create New Event
               </Text>
             </TouchableOpacity>
           </View>

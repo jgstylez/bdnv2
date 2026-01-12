@@ -203,14 +203,56 @@ class ApiClient {
       delete headers['Content-Type']; // Let browser set it with boundary
     }
 
-    const response = await fetch(this.buildURL(endpoint, options.params), {
-      method: 'POST',
-      headers: await this.getAuthHeaders().then(auth => ({ ...auth, ...headers })),
-      body: body instanceof FormData ? body : JSON.stringify(body),
-      signal: options.signal,
-    });
+    const url = this.buildURL(endpoint, options.params);
+    const controller = new AbortController();
+    const timeoutId = options.timeout
+      ? setTimeout(() => controller.abort(), options.timeout)
+      : setTimeout(() => controller.abort(), this.timeout);
 
-    return this.handleResponse<T>(response);
+    // Combine abort signals if both provided
+    const abortSignal = options.signal
+      ? (() => {
+          const combined = new AbortController();
+          options.signal!.addEventListener('abort', () => combined.abort());
+          controller.signal.addEventListener('abort', () => combined.abort());
+          return combined.signal;
+        })()
+      : controller.signal;
+
+    try {
+      const authHeaders = await this.getAuthHeaders();
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { ...authHeaders, ...headers },
+        body: body instanceof FormData ? body : JSON.stringify(body),
+        signal: abortSignal,
+      });
+
+      clearTimeout(timeoutId);
+      return await this.handleResponse<T>(response);
+    } catch (error: any) {
+      clearTimeout(timeoutId);
+
+      if (error.name === 'AbortError') {
+        throw {
+          message: 'Request timeout',
+          code: 'TIMEOUT',
+          statusCode: 408,
+        } as ApiError;
+      }
+
+      if (error.statusCode) {
+        // Already an ApiError
+        throw error;
+      }
+
+      // Network or other error
+      throw {
+        message: error.message || 'Network request failed',
+        code: 'NETWORK_ERROR',
+        statusCode: 0,
+      } as ApiError;
+    }
   }
 
   /**
@@ -227,14 +269,56 @@ class ApiClient {
       delete headers['Content-Type'];
     }
 
-    const response = await fetch(this.buildURL(endpoint, options.params), {
-      method: 'PUT',
-      headers: await this.getAuthHeaders().then(auth => ({ ...auth, ...headers })),
-      body: body instanceof FormData ? body : JSON.stringify(body),
-      signal: options.signal,
-    });
+    const url = this.buildURL(endpoint, options.params);
+    const controller = new AbortController();
+    const timeoutId = options.timeout
+      ? setTimeout(() => controller.abort(), options.timeout)
+      : setTimeout(() => controller.abort(), this.timeout);
 
-    return this.handleResponse<T>(response);
+    // Combine abort signals if both provided
+    const abortSignal = options.signal
+      ? (() => {
+          const combined = new AbortController();
+          options.signal!.addEventListener('abort', () => combined.abort());
+          controller.signal.addEventListener('abort', () => combined.abort());
+          return combined.signal;
+        })()
+      : controller.signal;
+
+    try {
+      const authHeaders = await this.getAuthHeaders();
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: { ...authHeaders, ...headers },
+        body: body instanceof FormData ? body : JSON.stringify(body),
+        signal: abortSignal,
+      });
+
+      clearTimeout(timeoutId);
+      return await this.handleResponse<T>(response);
+    } catch (error: any) {
+      clearTimeout(timeoutId);
+
+      if (error.name === 'AbortError') {
+        throw {
+          message: 'Request timeout',
+          code: 'TIMEOUT',
+          statusCode: 408,
+        } as ApiError;
+      }
+
+      if (error.statusCode) {
+        // Already an ApiError
+        throw error;
+      }
+
+      // Network or other error
+      throw {
+        message: error.message || 'Network request failed',
+        code: 'NETWORK_ERROR',
+        statusCode: 0,
+      } as ApiError;
+    }
   }
 
   /**

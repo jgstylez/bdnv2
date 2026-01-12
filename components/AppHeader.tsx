@@ -161,7 +161,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onMenuPress }) => {
 
     // Events routes
     if (pathname?.includes("/pages/events/tickets")) return "My Tickets";
-    if (pathname?.includes("/pages/events/create")) return "Create Event";
+    if (pathname?.includes("/pages/events/create")) return "Create New Event";
     if (pathname?.includes("/pages/events/my-events")) return "My Events";
     if (pathname?.includes("/pages/events")) return "Events";
 

@@ -482,7 +482,7 @@ export default function CreateEvent() {
             }}
           >
             <Text style={{ fontSize: 16, fontWeight: "700", color: "#ffffff" }}>
-              {step === 3 ? "Create Event" : "Next"}
+              {step === 3 ? "Create New Event" : "Next"}
             </Text>
           </TouchableOpacity>
         </View>

@@ -198,8 +198,8 @@ export const navigationMenu: NavGroup[] = [
     items: [
       { label: "Browse Events", href: "/pages/events", icon: "event" },
       { label: "My Tickets", href: "/pages/events/tickets", icon: "confirmation-number" },
-      { label: "Create Event", href: "/pages/events/create", icon: "add-circle" },
       { label: "My Events", href: "/pages/events/my-events", icon: "event-available" },
+      { label: "Create New Event", href: "/pages/events/create", icon: "add-circle" },
     ],
   },
   {
@@ -228,6 +228,7 @@ export const navigationMenu: NavGroup[] = [
         icon: "play-circle",
       },
       { label: "Help Center", href: "/pages/university/help", icon: "help" },
+      { label: "Support", href: "/pages/support", icon: "support-agent" },
     ],
   },
   {
