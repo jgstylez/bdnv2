@@ -94,6 +94,11 @@ export const navigationMenu: NavGroup[] = [
         icon: "event-note",
       },
       {
+        label: "Subscriptions",
+        href: "/pages/merchant/subscriptions",
+        icon: "subscriptions",
+      },
+      {
         label: "Menu",
         href: "/pages/merchant/menu",
         icon: "restaurant-menu",
