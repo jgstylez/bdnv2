@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { EventCategory } from '@/types/events';
+import { DateTimePickerComponent } from '@/components/forms/DateTimePicker';
 
 export default function CreateEvent() {
   const { width } = useWindowDimensions();
@@ -14,8 +15,8 @@ export default function CreateEvent() {
     title: "",
     description: "",
     category: "" as EventCategory | "",
-    startDate: "",
-    endDate: "",
+    startDate: null as Date | null,
+    endDate: null as Date | null,
     venueName: "",
     address: "",
     city: "",
@@ -143,44 +144,25 @@ export default function CreateEvent() {
       </Text>
 
       <View>
-        <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)", marginBottom: 8 }}>
-          Start Date & Time *
-        </Text>
-        <TextInput
+        <DateTimePickerComponent
+          label="Start Date & Time"
           value={formData.startDate}
-          onChangeText={(text) => updateFormData("startDate", text)}
-          placeholder="YYYY-MM-DD HH:MM"
-          placeholderTextColor="rgba(255, 255, 255, 0.4)"
-          style={{
-            backgroundColor: "#232323",
-            borderRadius: 12,
-            padding: 16,
-            fontSize: 16,
-            color: "#ffffff",
-            borderWidth: 1,
-            borderColor: "rgba(186, 153, 136, 0.2)",
-          }}
+          onChange={(date) => updateFormData("startDate", date)}
+          mode="datetime"
+          required
+          placeholder="Select start date and time"
         />
       </View>
 
       <View>
-        <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)", marginBottom: 8 }}>
-          End Date & Time *
-        </Text>
-        <TextInput
+        <DateTimePickerComponent
+          label="End Date & Time"
           value={formData.endDate}
-          onChangeText={(text) => updateFormData("endDate", text)}
-          placeholder="YYYY-MM-DD HH:MM"
-          placeholderTextColor="rgba(255, 255, 255, 0.4)"
-          style={{
-            backgroundColor: "#232323",
-            borderRadius: 12,
-            padding: 16,
-            fontSize: 16,
-            color: "#ffffff",
-            borderWidth: 1,
-            borderColor: "rgba(186, 153, 136, 0.2)",
-          }}
+          onChange={(date) => updateFormData("endDate", date)}
+          mode="datetime"
+          required
+          placeholder="Select end date and time"
+          minimumDate={formData.startDate || undefined}
         />
       </View>
 

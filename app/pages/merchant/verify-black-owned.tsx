@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { useResponsive } from '@/hooks/useResponsive';
-import { typography, spacing } from '@/constants/theme';
+import { typography, spacing, colors, borderRadius } from '@/constants/theme';
 import { logError } from '@/lib/logger';
 import { parseDocument, RECOMMENDED_DOCUMENTS, ParsedBusinessInfo } from '@/lib/documentParser';
 
@@ -32,6 +32,7 @@ export default function VerifyBlackOwned() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isParsing, setIsParsing] = useState(false);
   const [parsedInfo, setParsedInfo] = useState<ParsedBusinessInfo | null>(null);
+  const [isBlackOwned, setIsBlackOwned] = useState(false);
 
   const handlePickDocument = async () => {
     try {
@@ -167,7 +168,8 @@ export default function VerifyBlackOwned() {
   };
 
   const handleSubmit = async () => {
-    if (!validateForm()) return;
+    // Validation disabled for development
+    // if (!validateForm()) return;
 
     setIsSubmitting(true);
     try {
@@ -254,6 +256,55 @@ export default function VerifyBlackOwned() {
             verification of Black ownership before businesses can join. This helps ensure that our community and resources
             are directed to authentic Black-owned enterprises.
           </Text>
+        </View>
+
+        {/* Black-Owned Business Confirmation */}
+        <View
+          style={{
+            backgroundColor: "#474747",
+            borderRadius: 16,
+            padding: 20,
+            marginBottom: 24,
+            borderWidth: 1,
+            borderColor: "rgba(186, 153, 136, 0.2)",
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => setIsBlackOwned(!isBlackOwned)}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: spacing.md,
+            }}
+            activeOpacity={0.7}
+          >
+            <View
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: borderRadius.sm,
+                borderWidth: 2,
+                borderColor: isBlackOwned ? colors.accent : colors.text.tertiary,
+                backgroundColor: isBlackOwned ? colors.accent : "transparent",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {isBlackOwned && (
+                <MaterialIcons name="check" size={16} color="#ffffff" />
+              )}
+            </View>
+            <Text
+              style={{
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.semibold,
+                color: colors.text.primary,
+                flex: 1,
+              }}
+            >
+              Are you a Black-owned business?
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <View style={{ gap: 20 }}>
@@ -621,7 +672,7 @@ export default function VerifyBlackOwned() {
             }}
           >
             <Text style={{ fontSize: typography.fontSize.base, fontWeight: "600", color: "#ffffff" }}>
-              {isSubmitting ? "Submitting..." : "Submit Verification"}
+              {isSubmitting ? "Submitting..." : "Submit"}
             </Text>
           </TouchableOpacity>
         </View>

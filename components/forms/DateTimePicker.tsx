@@ -520,15 +520,16 @@ export const DateTimePickerComponent: React.FC<DateTimePickerProps> = ({
         onPress={handleOpenPicker}
         disabled={disabled}
         style={{
-          backgroundColor: disabled ? colors.secondary.bg : colors.background.input,
+          backgroundColor: disabled ? colors.secondary.bg : "#2a2a2a",
           borderRadius: borderRadius.md,
           padding: spacing.md,
-          borderWidth: 1,
-          borderColor: error ? colors.status.error : colors.border.light,
+          borderWidth: 1.5,
+          borderColor: error ? colors.status.error : "rgba(186, 153, 136, 0.3)",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
           opacity: disabled ? 0.5 : 1,
+          minHeight: 48,
         }}
       >
         <Text
