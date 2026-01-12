@@ -11,6 +11,7 @@ export default function PaymentsLayout() {
     >
       <Stack.Screen name="token-purchase" />
       <Stack.Screen name="c2b-payment" />
+      <Stack.Screen name="invoice" />
     </Stack>
   );
 }
