@@ -9,6 +9,7 @@ import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '@/lib/f
 import { formatCurrency } from '@/lib/international';
 import { Invoice } from '@/types/invoices';
 import { getAllMockBusinesses } from '@/data/mocks/businesses';
+import { useResponsive } from '@/hooks/useResponsive';
 
 // Extended wallet type for mock data with additional properties
 type MockWallet = WalletType & {
@@ -60,11 +61,12 @@ const mockWallets: MockWallet[] = [
 ];
 
 // Mock invoices - in production, fetch from API
+// These should match the invoices in app/pages/invoices/user.tsx and app/pages/invoices/[id].tsx
 const mockInvoices: Record<string, Invoice> = {
   "inv-1": {
     id: "inv-1",
     invoiceNumber: "INV-2024-001",
-    issuerId: "1",
+    issuerId: "1", // Matches business ID in mock businesses
     issuerType: "business",
     issuerName: "Soul Food Kitchen",
     recipientId: "user-1",
@@ -98,7 +100,7 @@ const mockInvoices: Record<string, Invoice> = {
   "inv-2": {
     id: "inv-2",
     invoiceNumber: "INV-2024-002",
-    issuerId: "2",
+    issuerId: "2", // Matches nonprofit ID if exists, or use business ID
     issuerType: "nonprofit",
     issuerName: "Community Foundation",
     recipientId: "user-1",
@@ -122,10 +124,50 @@ const mockInvoices: Record<string, Invoice> = {
         total: 50.00,
       },
     ],
+    recurringSettings: {
+      frequency: "monthly",
+      startDate: "2024-01-01T00:00:00Z",
+      nextBillingDate: "2024-03-01T00:00:00Z",
+      currentCycle: 2,
+    },
     issueDate: "2024-02-01T00:00:00Z",
     dueDate: "2024-02-15T00:00:00Z",
     createdAt: "2024-02-01T00:00:00Z",
     updatedAt: "2024-02-01T00:00:00Z",
+  },
+  "inv-3": {
+    id: "inv-3",
+    invoiceNumber: "INV-2024-003",
+    issuerId: "2", // Matches business ID in mock businesses
+    issuerType: "business",
+    issuerName: "Black Business Network Services",
+    recipientId: "user-1",
+    recipientName: "John Doe",
+    recipientEmail: "john@example.com",
+    billingType: "one-time",
+    status: "overdue",
+    currency: "USD",
+    subtotal: 75.00,
+    tax: 6.00,
+    discount: 0,
+    total: 81.00,
+    amountPaid: 0,
+    amountDue: 81.00,
+    lineItems: [
+      {
+        id: "1",
+        description: "Consultation Services",
+        quantity: 2,
+        unitPrice: 37.50,
+        tax: 6.00,
+        total: 81.00,
+      },
+    ],
+    issueDate: "2024-01-15T00:00:00Z",
+    dueDate: "2024-02-14T00:00:00Z",
+    paymentTerms: "Net 30",
+    createdAt: "2024-01-15T00:00:00Z",
+    updatedAt: "2024-01-15T00:00:00Z",
   },
 };
 
@@ -135,21 +177,23 @@ export default function InvoicePayment() {
   const { width } = useWindowDimensions();
   const router = useRouter();
   const params = useLocalSearchParams<{ invoiceId?: string }>();
-  const isMobile = width < 768;
+  const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const [step, setStep] = useState<PaymentStep>("payment-method");
   const [selectedWallet, setSelectedWallet] = useState<MockWallet | null>(null);
   const [useBLKD, setUseBLKD] = useState(false);
   const [transactionId, setTransactionId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Load invoice data
-  const invoice = params.invoiceId ? mockInvoices[params.invoiceId] : null;
+  // Load invoice data - handle both invoiceId from query params
+  // Note: useLocalSearchParams may return array for query params, so handle both cases
+  const invoiceId = Array.isArray(params.invoiceId) ? params.invoiceId[0] : params.invoiceId;
+  const invoice = invoiceId ? mockInvoices[invoiceId] : null;
   
   // Load business data from issuerId
   const allBusinesses = getAllMockBusinesses();
   const business = invoice ? allBusinesses.find(b => b.id === invoice.issuerId) : null;
 
-  // If invoice not found, show error
+  // If invoice not found, show error with helpful message
   if (!invoice) {
     return (
       <View style={{ flex: 1, backgroundColor: "#232323", justifyContent: "center", alignItems: "center", padding: 20 }}>
@@ -158,9 +202,14 @@ export default function InvoicePayment() {
         <Text style={{ fontSize: 20, fontWeight: "700", color: "#ffffff", marginTop: 24, marginBottom: 8 }}>
           Invoice Not Found
         </Text>
-        <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)", textAlign: "center", marginBottom: 24 }}>
+        <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)", textAlign: "center", marginBottom: 8 }}>
           The invoice you're trying to pay could not be found.
         </Text>
+        {invoiceId && (
+          <Text style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.5)", textAlign: "center", marginBottom: 24 }}>
+            Invoice ID: {invoiceId}
+          </Text>
+        )}
         <TouchableOpacity
           onPress={() => router.back()}
           style={{
@@ -954,9 +1003,9 @@ export default function InvoicePayment() {
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: isMobile ? 20 : 40,
+          paddingHorizontal,
           paddingTop: Platform.OS === "web" ? 20 : 36,
-          paddingBottom: 40,
+          paddingBottom: scrollViewBottomPadding,
         }}
       >
         {/* Progress Steps */}

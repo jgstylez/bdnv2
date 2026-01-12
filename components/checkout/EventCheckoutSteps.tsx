@@ -108,16 +108,22 @@ export function EventCheckoutReviewStep({
               borderRadius: borderRadius.md,
               overflow: "hidden",
               marginBottom: spacing.md,
-              backgroundColor: "#474747",
+              backgroundColor: colors.secondary.bg,
             }}
           >
-            <Image
-              source={{ uri: event.imageUrl || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop" }}
-              style={{ width: "100%", height: "100%" }}
-              contentFit="cover"
-              cachePolicy="memory-disk"
-              transition={200}
-            />
+            {event.imageUrl ? (
+              <Image
+                source={{ uri: event.imageUrl }}
+                style={{ width: "100%", height: "100%" }}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+                transition={200}
+              />
+            ) : (
+              <View style={{ width: "100%", height: "100%", backgroundColor: colors.secondary.bg, justifyContent: "center", alignItems: "center" }}>
+                <MaterialIcons name="event" size={48} color={colors.accent + "80"} />
+              </View>
+            )}
           </View>
 
           <Text

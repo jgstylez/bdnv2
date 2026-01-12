@@ -316,17 +316,20 @@ export default function NonprofitBookingsManagement() {
         {/* Nonprofit Switcher */}
         <NonprofitSwitcher />
 
-        {/* Stats Cards */}
+        {/* Stats Cards - 2x2 Grid */}
         <View
           style={{
-            flexDirection: isMobile ? "column" : "row",
+            flexDirection: "row",
+            flexWrap: "wrap",
             gap: spacing.md,
             marginBottom: spacing.lg,
           }}
         >
           <View
             style={{
-              flex: 1,
+              flex: 0,
+              flexBasis: "48%",
+              width: "48%",
               backgroundColor: colors.input,
               borderRadius: borderRadius.lg,
               padding: spacing.md,
@@ -355,7 +358,7 @@ export default function NonprofitBookingsManagement() {
           </View>
           <View
             style={{
-              flex: 1,
+              width: "48%",
               backgroundColor: colors.input,
               borderRadius: borderRadius.lg,
               padding: spacing.md,
@@ -384,7 +387,7 @@ export default function NonprofitBookingsManagement() {
           </View>
           <View
             style={{
-              flex: 1,
+              width: "48%",
               backgroundColor: colors.input,
               borderRadius: borderRadius.lg,
               padding: spacing.md,
@@ -413,7 +416,7 @@ export default function NonprofitBookingsManagement() {
           </View>
           <View
             style={{
-              flex: 1,
+              width: "48%",
               backgroundColor: colors.input,
               borderRadius: borderRadius.lg,
               padding: spacing.md,
