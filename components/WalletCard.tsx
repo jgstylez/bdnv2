@@ -97,12 +97,12 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
     return `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
-  const padding = compact ? (isMobile ? 12 : 14) : 14;
-  const iconSize = compact ? (isMobile ? 14 : 16) : 20;
-  const iconContainerSize = compact ? (isMobile ? 24 : 28) : 40;
-  const titleFontSize = compact ? (isMobile ? 12 : 13) : 14;
-  const subtitleFontSize = compact ? (isMobile ? 10 : 11) : 12;
-  const balanceFontSize = compact ? (isMobile ? 13 : 15) : (isMobile ? 16 : 18);
+  const padding = compact ? (isMobile ? 12 : 14) : (isMobile ? 16 : 14);
+  const iconSize = compact ? (isMobile ? 14 : 16) : (isMobile ? 22 : 20);
+  const iconContainerSize = compact ? (isMobile ? 24 : 28) : (isMobile ? 44 : 40);
+  const titleFontSize = compact ? (isMobile ? 12 : 13) : (isMobile ? 15 : 14);
+  const subtitleFontSize = compact ? (isMobile ? 10 : 11) : (isMobile ? 13 : 12);
+  const balanceFontSize = compact ? (isMobile ? 13 : 15) : (isMobile ? 18 : 18);
   const badgeFontSize = compact ? 8 : 9;
   const badgePadding = compact ? { paddingHorizontal: 4, paddingVertical: 1 } : { paddingHorizontal: 5, paddingVertical: 1 };
 
@@ -201,7 +201,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
                 fontSize: titleFontSize,
                 fontWeight: "700",
                 color: "#ffffff",
-                marginBottom: 4,
+                marginBottom: isMobile ? 6 : 4,
               }}
               numberOfLines={1}
             >
@@ -213,7 +213,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
                 fontSize: balanceFontSize,
                 fontWeight: "700",
                 color: iconColor,
-                marginBottom: 4,
+                marginBottom: isMobile ? 6 : 4,
               }}
               numberOfLines={1}
             >
@@ -240,7 +240,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
               backgroundColor: `${iconColor}25`,
               alignItems: "center",
               justifyContent: "center",
-              marginLeft: 8,
+              marginLeft: isMobile ? 12 : 8,
               flexShrink: 0,
             }}
           >
@@ -250,7 +250,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
       ) : (
         // Horizontal layout for full-size cards
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 12, flex: 1 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: isMobile ? 14 : 12, flex: 1 }}>
             <View
               style={{
                 width: iconContainerSize,
@@ -269,7 +269,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
                   fontSize: titleFontSize,
                   fontWeight: "700",
                   color: "#ffffff",
-                  marginBottom: 3,
+                  marginBottom: isMobile ? 5 : 3,
                 }}
                 numberOfLines={1}
               >
@@ -289,7 +289,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
           </View>
           {/* Show balance for all accounts */}
           {(
-            <View style={{ alignItems: "flex-end", marginLeft: 8, flexShrink: 0 }}>
+            <View style={{ alignItems: "flex-end", marginLeft: isMobile ? 12 : 8, flexShrink: 0 }}>
               <Text
                 style={{
                   fontSize: balanceFontSize,

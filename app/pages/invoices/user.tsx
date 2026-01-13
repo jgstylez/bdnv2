@@ -212,8 +212,8 @@ export default function UserInvoicesPage() {
         {/* Summary Cards */}
         <View
           style={{
-            flexDirection: "row",
-            gap: 24,
+            flexDirection: isMobile ? "column" : "row",
+            gap: isMobile ? 16 : 24,
             marginBottom: 24,
           }}
         >

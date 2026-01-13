@@ -65,6 +65,7 @@ export default function Donations() {
     : mockDonations.filter((donation) => donation.recipientType === selectedFilter);
 
   const totalDonations = mockDonations.reduce((sum, donation) => sum + donation.amount, 0);
+  const contributors = new Set(mockDonations.map(d => d.recipientId)).size;
 
   const getRecipientIcon = (type: string) => {
     switch (type) {
@@ -261,24 +262,53 @@ export default function Donations() {
             borderColor: "rgba(186, 153, 136, 0.2)",
           }}
         >
-          <Text
+          <View
             style={{
-              fontSize: 14,
-              color: "rgba(255, 255, 255, 0.7)",
-              marginBottom: 8,
+              flexDirection: "row",
+              gap: 24,
             }}
           >
-            Your Total Donations
-          </Text>
-          <Text
-            style={{
-              fontSize: 32,
-              fontWeight: "700",
-              color: "#ba9988",
-            }}
-          >
-            ${totalDonations.toFixed(2)}
-          </Text>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "rgba(255, 255, 255, 0.7)",
+                  marginBottom: 8,
+                }}
+              >
+                Total Donations
+              </Text>
+              <Text
+                style={{
+                  fontSize: 32,
+                  fontWeight: "700",
+                  color: "#ba9988",
+                }}
+              >
+                ${totalDonations.toFixed(2)}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "rgba(255, 255, 255, 0.7)",
+                  marginBottom: 8,
+                }}
+              >
+                Contributors
+              </Text>
+              <Text
+                style={{
+                  fontSize: 32,
+                  fontWeight: "700",
+                  color: "#ba9988",
+                }}
+              >
+                {contributors}
+              </Text>
+            </View>
+          </View>
         </View>
 
         {/* Filters */}

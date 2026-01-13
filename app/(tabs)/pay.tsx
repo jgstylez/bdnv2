@@ -400,7 +400,7 @@ export default function Pay() {
           </View>
 
           {nonDefaultWallets.length > 0 ? (
-            <Carousel itemsPerView={isMobile ? 1.8 : 4} showControls={!isMobile} showIndicators={true} gap={12}>
+            <Carousel itemsPerView={isMobile ? 1.2 : 4} showControls={!isMobile} showIndicators={true} gap={isMobile ? 16 : 12}>
               {nonDefaultWallets.map((wallet) => (
                 <WalletCard key={wallet.id} wallet={wallet} />
               ))}
