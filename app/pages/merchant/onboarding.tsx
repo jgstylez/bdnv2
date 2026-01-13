@@ -191,15 +191,16 @@ export default function MerchantOnboarding() {
                   value={formData.businessName}
                   onChangeText={(text) => setFormData({ ...formData, businessName: text })}
                   placeholder="Enter business name"
-                  placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                  placeholderTextColor="rgba(186, 153, 136, 0.5)"
                   style={{
-                    backgroundColor: "#474747",
+                    backgroundColor: "#2a2a2a",
                     borderRadius: 12,
                     padding: 16,
                     fontSize: 16,
                     color: "#ffffff",
-                    borderWidth: 1,
-                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    borderWidth: 1.5,
+                    borderColor: "rgba(186, 153, 136, 0.3)",
+                    minHeight: 48,
                   }}
                 />
               </View>
@@ -298,17 +299,17 @@ export default function MerchantOnboarding() {
                 value={formData.description}
                 onChangeText={(text) => setFormData({ ...formData, description: text })}
                 placeholder="Describe your business"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 multiline
                 numberOfLines={4}
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                   minHeight: 100,
                   textAlignVertical: "top",
                 }}
@@ -344,16 +345,17 @@ export default function MerchantOnboarding() {
                 value={formData.phone}
                 onChangeText={(text) => setFormData({ ...formData, phone: text })}
                 placeholder="(555) 123-4567"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 keyboardType="phone-pad"
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
+                  minHeight: 48,
                 }}
               />
             </View>
@@ -365,17 +367,18 @@ export default function MerchantOnboarding() {
                 value={formData.email}
                 onChangeText={(text) => setFormData({ ...formData, email: text })}
                 placeholder="business@example.com"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
+                  minHeight: 48,
                 }}
               />
             </View>
@@ -387,17 +390,18 @@ export default function MerchantOnboarding() {
                 value={formData.website}
                 onChangeText={(text) => setFormData({ ...formData, website: text })}
                 placeholder="www.example.com"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 keyboardType="url"
                 autoCapitalize="none"
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
+                  minHeight: 48,
                 }}
               />
             </View>
@@ -486,15 +490,16 @@ export default function MerchantOnboarding() {
                     value={formData.incorporationState}
                     onChangeText={(text) => setFormData({ ...formData, incorporationState: text })}
                     placeholder="e.g., Delaware, California"
-                    placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                    placeholderTextColor="rgba(186, 153, 136, 0.5)"
                     style={{
-                      backgroundColor: "#474747",
+                      backgroundColor: "#2a2a2a",
                       borderRadius: 12,
                       padding: 16,
                       fontSize: 16,
                       color: "#ffffff",
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderWidth: 1.5,
+                      borderColor: "rgba(186, 153, 136, 0.3)",
+                      minHeight: 48,
                     }}
                   />
                 </View>
@@ -506,15 +511,16 @@ export default function MerchantOnboarding() {
                     value={formData.incorporationDate}
                     onChangeText={(text) => setFormData({ ...formData, incorporationDate: text })}
                     placeholder="YYYY-MM-DD"
-                    placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                    placeholderTextColor="rgba(186, 153, 136, 0.5)"
                     style={{
-                      backgroundColor: "#474747",
+                      backgroundColor: "#2a2a2a",
                       borderRadius: 12,
                       padding: 16,
                       fontSize: 16,
                       color: "#ffffff",
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderWidth: 1.5,
+                      borderColor: "rgba(186, 153, 136, 0.3)",
+                      minHeight: 48,
                     }}
                   />
                 </View>
@@ -536,17 +542,17 @@ export default function MerchantOnboarding() {
                 value={formData.hours}
                 onChangeText={(text) => setFormData({ ...formData, hours: text })}
                 placeholder="Mon-Fri: 9am-5pm, Sat: 10am-3pm"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 multiline
                 numberOfLines={3}
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                   minHeight: 80,
                   textAlignVertical: "top",
                 }}

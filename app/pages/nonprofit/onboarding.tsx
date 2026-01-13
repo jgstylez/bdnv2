@@ -105,15 +105,16 @@ export default function NonprofitOnboarding() {
                 value={formData.organizationName}
                 onChangeText={(text) => setFormData({ ...formData, organizationName: text })}
                 placeholder="Enter organization name"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
+                  minHeight: 48,
                 }}
               />
             </View>
@@ -149,17 +150,17 @@ export default function NonprofitOnboarding() {
                 value={formData.description}
                 onChangeText={(text) => setFormData({ ...formData, description: text })}
                 placeholder="Brief description of your organization"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 multiline
                 numberOfLines={4}
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                   minHeight: 100,
                   textAlignVertical: "top",
                 }}
@@ -171,17 +172,17 @@ export default function NonprofitOnboarding() {
                 value={formData.mission}
                 onChangeText={(text) => setFormData({ ...formData, mission: text })}
                 placeholder="Your organization's mission statement"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 multiline
                 numberOfLines={5}
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                   minHeight: 120,
                   textAlignVertical: "top",
                 }}
@@ -212,16 +213,17 @@ export default function NonprofitOnboarding() {
                 value={formData.phone}
                 onChangeText={(text) => setFormData({ ...formData, phone: text })}
                 placeholder="Enter phone number"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 keyboardType="phone-pad"
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
+                  minHeight: 48,
                 }}
               />
             </View>
@@ -231,17 +233,18 @@ export default function NonprofitOnboarding() {
                 value={formData.email}
                 onChangeText={(text) => setFormData({ ...formData, email: text })}
                 placeholder="Enter email address"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
+                  minHeight: 48,
                 }}
               />
             </View>
@@ -251,17 +254,18 @@ export default function NonprofitOnboarding() {
                 value={formData.website}
                 onChangeText={(text) => setFormData({ ...formData, website: text })}
                 placeholder="Enter website URL"
-                placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                placeholderTextColor="rgba(186, 153, 136, 0.5)"
                 keyboardType="url"
                 autoCapitalize="none"
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "#2a2a2a",
                   borderRadius: 12,
                   padding: 16,
                   fontSize: 16,
                   color: "#ffffff",
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderWidth: 1.5,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
+                  minHeight: 48,
                 }}
               />
             </View>
