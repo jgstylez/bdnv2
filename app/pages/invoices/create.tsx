@@ -21,23 +21,37 @@ const mockUsers = [
 
 export default function CreateInvoice() {
   const router = useRouter();
-  const { type, templateId } = useLocalSearchParams<{ type: string; templateId?: string }>();
+  const { type, templateId, id } = useLocalSearchParams<{ type: string; templateId?: string; id?: string }>();
   const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const issuerType = type === "nonprofit" ? "nonprofit" : "business";
-  
-  // Load template if templateId is provided
-  // TODO: Fetch template from API when templateId is provided
-  const loadTemplate = (id: string) => {
-    // Mock template loading - in production, fetch from API
-    // For now, templates are loaded when the component mounts if templateId exists
+  const isEditing = !!id;
+
+  // Mock invoice data for editing
+  const mockInvoices: Record<string, any> = {
+    "inv-1": {
+      id: "inv-1",
+      invoiceNumber: "INV-2024-001",
+      recipientName: "John Doe",
+      recipientEmail: "john@example.com",
+      recipientId: "user-1",
+      billingType: "one-time",
+      issueDate: "2024-02-01",
+      dueDate: "2024-03-02",
+      paymentTerms: "Net 30",
+      notes: "Please include the invoice number on your check.",
+      terms: "Payment is due within 30 days.",
+      lineItems: [
+        {
+          id: "1",
+          description: "Catering Services for Corporate Event",
+          quantity: 1,
+          unitPrice: 150.00,
+          tax: 12.00,
+          total: 162.00,
+        },
+      ],
+    },
   };
-  
-  React.useEffect(() => {
-    if (templateId) {
-      loadTemplate(templateId);
-      // TODO: Populate form fields with template data
-    }
-  }, [templateId]);
 
   const [billingType, setBillingType] = useState<BillingType>("one-time");
   const [recipientEmail, setRecipientEmail] = useState("");
@@ -72,6 +86,43 @@ export default function CreateInvoice() {
       total: 0,
     },
   ]);
+
+  // Load existing invoice if editing
+  React.useEffect(() => {
+    if (isEditing && id && mockInvoices[id]) {
+      const invoice = mockInvoices[id];
+      setBillingType(invoice.billingType);
+      setRecipientEmail(invoice.recipientEmail);
+      setRecipientName(invoice.recipientName);
+      setRecipientUserId(invoice.recipientId);
+      setIssueDate(invoice.issueDate);
+      setDueDate(invoice.dueDate);
+      setPaymentTerms(invoice.paymentTerms);
+      setNotes(invoice.notes || "");
+      setTerms(invoice.terms || "");
+      setLineItems(invoice.lineItems);
+      
+      if (invoice.billingType === "recurring" && invoice.recurringSettings) {
+        setRecurringFrequency(invoice.recurringSettings.frequency);
+        setRecurringStartDate(invoice.recurringSettings.startDate.split("T")[0]);
+        if (invoice.recurringSettings.endDate) {
+          setRecurringEndDate(invoice.recurringSettings.endDate.split("T")[0]);
+        }
+      }
+    }
+  }, [id, isEditing]);
+  
+  // Load template if templateId is provided
+  // TODO: Fetch template from API when templateId is provided
+  const loadTemplate = (id: string) => {
+    // Mock template loading - in production, fetch from API
+  };
+  
+  React.useEffect(() => {
+    if (templateId) {
+      loadTemplate(templateId);
+    }
+  }, [templateId]);
 
   const updateLineItem = (id: string, field: keyof InvoiceLineItem, value: any) => {
     setLineItems((items) =>

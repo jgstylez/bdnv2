@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, TouchableOpacity, Linking, Platform } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Linking, Platform, Alert } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -123,14 +123,15 @@ const mockInvoices: Record<string, Invoice> = {
 
 export default function InvoiceDetail() {
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, view } = useLocalSearchParams<{ id: string; view?: string }>();
   const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
 
-  // This page is for recipients viewing invoices they've received
-  // Users cannot create/edit/delete invoices from this page
-  const isRecipient = true; 
+  // Determine if viewing as recipient (default) or issuer (business/nonprofit managing invoice)
+  // view=issuer means the business/nonprofit is viewing their own invoice
+  const isRecipient = view !== "issuer"; 
 
-  const invoice = mockInvoices[id || "inv-1"] || mockInvoices["inv-1"];
+  // Get invoice - use fallback if not found (shouldn't happen in production)
+  const invoice = id ? (mockInvoices[id] || mockInvoices["inv-1"]) : mockInvoices["inv-1"];
 
   const getStatusColor = (status: Invoice["status"]) => {
     switch (status) {
@@ -165,9 +166,44 @@ export default function InvoiceDetail() {
     alert("PDF download functionality coming soon!");
   };
 
+  const handleEditInvoice = () => {
+    if (!invoice) return;
+    const entityType = invoice.issuerType === "nonprofit" ? "nonprofit" : "business";
+    router.push(`/pages/invoices/create?id=${invoice.id}&type=${entityType}`);
+  };
+
+  const handleSendInvoice = () => {
+    // TODO: Send/resend invoice via API
+    Alert.alert("Success", "Invoice sent successfully!");
+  };
+
+  const handleDeleteInvoice = () => {
+    Alert.alert(
+      "Delete Invoice",
+      "Are you sure you want to delete this invoice? This action cannot be undone.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            // TODO: Delete invoice via API
+            Alert.alert("Success", "Invoice deleted successfully!");
+            router.back();
+          },
+        },
+      ]
+    );
+  };
+
   const statusColors = getStatusColor(invoice.status);
   const canPay = invoice.status === "sent" || invoice.status === "overdue";
   const isOverdue = invoice.status === "overdue";
+  const canEdit = invoice.status === "draft";
+  const canSend = invoice.status === "draft" || invoice.status === "sent";
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
@@ -209,7 +245,7 @@ export default function InvoiceDetail() {
                     marginLeft: spacing.sm,
                   }}
                 >
-                  Back to Invoices
+                  {isRecipient ? "Back to Invoices" : "Back to Invoice Management"}
                 </Text>
               )}
             </TouchableOpacity>
@@ -903,63 +939,194 @@ export default function InvoiceDetail() {
             gap: isMobile ? spacing.md : spacing.md, 
             marginTop: spacing.lg 
           }}>
-            {canPay && (
-              <TouchableOpacity
-                onPress={handlePayInvoice}
-                style={{
-                  flex: isMobile ? 0 : 1,
-                  backgroundColor: colors.accent,
-                  borderRadius: borderRadius.md,
-                  paddingVertical: spacing.md,
-                  minHeight: 48,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'row',
-                  gap: spacing.sm,
-                }}
-                activeOpacity={0.8}
-              >
-                <MaterialIcons name="payment" size={isMobile ? 18 : 20} color="#ffffff" />
-                <Text
+            {isRecipient ? (
+              <>
+                {/* Recipient Actions */}
+                {canPay && (
+                  <TouchableOpacity
+                    onPress={handlePayInvoice}
+                    style={{
+                      flex: isMobile ? 0 : 1,
+                      backgroundColor: colors.accent,
+                      borderRadius: borderRadius.md,
+                      paddingVertical: spacing.md,
+                      minHeight: 48,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      gap: spacing.sm,
+                    }}
+                    activeOpacity={0.8}
+                  >
+                    <MaterialIcons name="payment" size={isMobile ? 18 : 20} color="#ffffff" />
+                    <Text
+                      style={{
+                        fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
+                        fontWeight: typography.fontWeight.semibold,
+                        color: "#ffffff",
+                      }}
+                    >
+                      Pay Now
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                  onPress={handleDownloadPDF}
                   style={{
-                    fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: "#ffffff",
+                    flex: isMobile ? 0 : (canPay ? 0 : 1),
+                    backgroundColor: colors.secondary.bg,
+                    borderRadius: borderRadius.md,
+                    paddingVertical: spacing.md,
+                    paddingHorizontal: isMobile ? 0 : (canPay ? spacing.lg : 0),
+                    minHeight: 48,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    gap: spacing.sm,
+                    borderWidth: 1,
+                    borderColor: colors.border.light,
                   }}
+                  activeOpacity={0.8}
                 >
-                  Pay Now
-                </Text>
-              </TouchableOpacity>
+                  <MaterialIcons name="download" size={isMobile ? 18 : 20} color={colors.accent} />
+                  <Text
+                    style={{
+                      fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
+                      fontWeight: typography.fontWeight.semibold,
+                      color: colors.text.primary,
+                    }}
+                  >
+                    Download PDF
+                  </Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                {/* Issuer Actions */}
+                {canEdit && (
+                  <TouchableOpacity
+                    onPress={handleEditInvoice}
+                    style={{
+                      flex: isMobile ? 0 : 1,
+                      backgroundColor: colors.accent,
+                      borderRadius: borderRadius.md,
+                      paddingVertical: spacing.md,
+                      minHeight: 48,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      gap: spacing.sm,
+                    }}
+                    activeOpacity={0.8}
+                  >
+                    <MaterialIcons name="edit" size={isMobile ? 18 : 20} color={colors.text.primary} />
+                    <Text
+                      style={{
+                        fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
+                        fontWeight: typography.fontWeight.semibold,
+                        color: colors.text.primary,
+                      }}
+                    >
+                      Edit Invoice
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                {canSend && (
+                  <TouchableOpacity
+                    onPress={handleSendInvoice}
+                    style={{
+                      flex: isMobile ? 0 : 1,
+                      backgroundColor: invoice.status === "sent" ? colors.secondary.bg : colors.accent,
+                      borderRadius: borderRadius.md,
+                      paddingVertical: spacing.md,
+                      minHeight: 48,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      gap: spacing.sm,
+                      borderWidth: invoice.status === "sent" ? 1 : 0,
+                      borderColor: invoice.status === "sent" ? colors.border.light : undefined,
+                    }}
+                    activeOpacity={0.8}
+                  >
+                    <MaterialIcons 
+                      name="send" 
+                      size={isMobile ? 18 : 20} 
+                      color={invoice.status === "sent" ? colors.accent : colors.text.primary} 
+                    />
+                    <Text
+                      style={{
+                        fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
+                        fontWeight: typography.fontWeight.semibold,
+                        color: invoice.status === "sent" ? colors.accent : colors.text.primary,
+                      }}
+                    >
+                      {invoice.status === "sent" ? "Resend" : "Send Invoice"}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                  onPress={handleDownloadPDF}
+                  style={{
+                    flex: isMobile ? 0 : 0,
+                    backgroundColor: colors.secondary.bg,
+                    borderRadius: borderRadius.md,
+                    paddingVertical: spacing.md,
+                    paddingHorizontal: spacing.lg,
+                    minHeight: 48,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    gap: spacing.sm,
+                    borderWidth: 1,
+                    borderColor: colors.border.light,
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <MaterialIcons name="download" size={isMobile ? 18 : 20} color={colors.accent} />
+                  <Text
+                    style={{
+                      fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
+                      fontWeight: typography.fontWeight.semibold,
+                      color: colors.text.primary,
+                    }}
+                  >
+                    Download PDF
+                  </Text>
+                </TouchableOpacity>
+                {canEdit && (
+                  <TouchableOpacity
+                    onPress={handleDeleteInvoice}
+                    style={{
+                      flex: isMobile ? 0 : 0,
+                      backgroundColor: colors.secondary.bg,
+                      borderRadius: borderRadius.md,
+                      paddingVertical: spacing.md,
+                      paddingHorizontal: spacing.lg,
+                      minHeight: 48,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      gap: spacing.sm,
+                      borderWidth: 1,
+                      borderColor: colors.status.error,
+                    }}
+                    activeOpacity={0.8}
+                  >
+                    <MaterialIcons name="delete" size={isMobile ? 18 : 20} color={colors.status.error} />
+                    <Text
+                      style={{
+                        fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
+                        fontWeight: typography.fontWeight.semibold,
+                        color: colors.status.error,
+                      }}
+                    >
+                      Delete
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </>
             )}
-            <TouchableOpacity
-              onPress={handleDownloadPDF}
-              style={{
-                flex: isMobile ? 0 : (canPay ? 0 : 1),
-                backgroundColor: colors.secondary.bg,
-                borderRadius: borderRadius.md,
-                paddingVertical: spacing.md,
-                paddingHorizontal: isMobile ? 0 : (canPay ? spacing.lg : 0),
-                minHeight: 48,
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'row',
-                gap: spacing.sm,
-                borderWidth: 1,
-                borderColor: colors.border.light,
-              }}
-              activeOpacity={0.8}
-            >
-              <MaterialIcons name="download" size={isMobile ? 18 : 20} color={colors.accent} />
-              <Text
-                style={{
-                  fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
-                  fontWeight: typography.fontWeight.semibold,
-                  color: colors.text.primary,
-                }}
-              >
-                Download PDF
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
       </OptimizedScrollView>

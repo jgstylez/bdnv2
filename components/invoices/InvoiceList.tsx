@@ -217,10 +217,8 @@ export function InvoiceList({ entityType, invoices: externalInvoices, onInvoices
   }, [invoices, searchQuery, statusFilter, typeFilter]);
 
   const getRouteType = () => entityType === "business" ? "business" : "nonprofit";
-  const getTemplatesRoute = () => 
-    entityType === "business" 
-      ? "/pages/invoices/templates?entityType=business"
-      : "/pages/invoices/templates?entityType=nonprofit";
+  const getTemplatesRoute = () => `/pages/invoices/templates?entityType=${entityType}`;
+  const getBackRoute = () => `/pages/invoices?entityType=${entityType}`;
 
   return (
     <>
@@ -460,7 +458,7 @@ export function InvoiceList({ entityType, invoices: externalInvoices, onInvoices
                     label: "View",
                     icon: "visibility",
                     variant: "info",
-                    onPress: () => router.push(`/pages/invoices/${invoice.id}`),
+                    onPress: () => router.push(`/pages/invoices/${invoice.id}?view=issuer&entityType=${entityType}`),
                   },
                   {
                     label: "Edit",

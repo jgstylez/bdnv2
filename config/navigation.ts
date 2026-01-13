@@ -110,7 +110,7 @@ export const navigationMenu: NavGroup[] = [
       },
       {
         label: "Invoices",
-        href: "/pages/merchant/invoices",
+        href: "/pages/invoices?entityType=business",
         icon: "receipt",
       },
       { label: "QR Code", href: "/pages/merchant/qrcode", icon: "qr-code" },
@@ -172,7 +172,7 @@ export const navigationMenu: NavGroup[] = [
       },
       {
         label: "Invoices",
-        href: "/pages/nonprofit/invoices",
+        href: "/pages/invoices?entityType=nonprofit",
         icon: "receipt",
       },
       {
