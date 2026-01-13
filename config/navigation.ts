@@ -17,16 +17,16 @@ export const navigationMenu: NavGroup[] = [
     label: "Main",
     icon: "dashboard",
     items: [
-      { label: "Dashboard", href: "/(tabs)/dashboard", icon: "dashboard" },
-      {
-        label: "Marketplace",
-        href: "/(tabs)/marketplace",
-        icon: "shopping-bag",
-      },
+      { label: "Home", href: "/(tabs)/dashboard", icon: "dashboard" },
       {
         label: "Directory",
         href: "/pages/businesses/businesses",
         icon: "store",
+      },
+      {
+        label: "Marketplace",
+        href: "/(tabs)/marketplace",
+        icon: "shopping-bag",
       },
       { label: "Search", href: "/pages/search", icon: "search" },
     ],

@@ -40,6 +40,13 @@ const features = [
     onPress: (router: any) => router.push("/pages/university"),
     color: "#9c27b0",
   },
+  {
+    title: "Business Directory",
+    description: "Discover Black-owned businesses",
+    icon: "store" as const,
+    onPress: (router: any) => router.push("/pages/businesses/businesses"),
+    color: "#2196f3",
+  },
 ];
 
 interface KeyFeaturesProps {
