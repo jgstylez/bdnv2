@@ -186,7 +186,7 @@ export function TaxIdSelector({
 
   return (
     <View style={[{ gap: 16 }, style]}>
-      <View>
+      <View style={{ position: "relative" }}>
         <Text
           style={{
             fontSize: 14,
@@ -238,9 +238,15 @@ export function TaxIdSelector({
               backgroundColor: "#474747",
               borderRadius: 12,
               maxHeight: 300,
-              zIndex: 1000,
+              zIndex: 10000,
               borderWidth: 1,
               borderColor: "rgba(186, 153, 136, 0.2)",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 10,
+              overflow: "hidden",
             }}
           >
             <ScrollView style={{ maxHeight: 300 }}>
@@ -257,7 +263,7 @@ export function TaxIdSelector({
                       padding: 16,
                       borderBottomWidth: 1,
                       borderBottomColor: "rgba(186, 153, 136, 0.1)",
-                      backgroundColor: taxId.type === type ? "rgba(186, 153, 136, 0.1)" : "transparent",
+                      backgroundColor: taxId.type === type ? "rgba(186, 153, 136, 0.15)" : "#474747",
                     }}
                   >
                     <Text style={{ color: "#ffffff", fontSize: 14, fontWeight: "600" }}>
