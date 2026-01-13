@@ -145,8 +145,8 @@ export default function Donations() {
           </Text>
           <View
             style={{
-              flexDirection: isMobile ? "column" : "row",
-              gap: 12,
+              flexDirection: "row",
+              gap: 24,
               marginBottom: 20,
             }}
           >
@@ -315,6 +315,16 @@ export default function Donations() {
         </ScrollView>
 
         {/* Donations History */}
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "700",
+            color: "#ffffff",
+            marginBottom: 16,
+          }}
+        >
+          Your Donations
+        </Text>
         {filteredDonations.length > 0 ? (
           <View style={{ gap: 12 }}>
             {filteredDonations.map((donation) => (
