@@ -59,7 +59,7 @@ export const navigationMenu: NavGroup[] = [
       },
       {
         label: "BDN Tokens",
-        href: "/pages/tokens",
+        href: "/pages/tokens?tab=manage",
         icon: "account-balance-wallet",
       },
       {

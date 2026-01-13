@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, ScrollView, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useLocalSearchParams } from 'expo-router';
 import { useResponsive } from '@/hooks/useResponsive';
 import { BackButton } from '@/components/navigation/BackButton';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
@@ -21,6 +22,7 @@ import { TokenLedgerEntries } from '@/components/tokens/TokenLedgerEntries';
 
 export default function Tokens() {
   const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
+  const params = useLocalSearchParams<{ tab?: string }>();
   const {
     tokenAmount, setTokenAmount,
     purchaseType, setPurchaseType,
@@ -52,6 +54,13 @@ export default function Tokens() {
     handleConfirmOneTimePurchase,
     TOKEN_PRICE,
   } = useTokensPage();
+
+  // Set initial tab from URL parameter
+  useEffect(() => {
+    if (params.tab === 'manage' || params.tab === 'purchase') {
+      setActiveTab(params.tab);
+    }
+  }, [params.tab, setActiveTab]);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>

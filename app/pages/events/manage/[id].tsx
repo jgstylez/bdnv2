@@ -77,7 +77,9 @@ export default function ManageEvent() {
   };
 
   const handleEdit = () => {
-    router.push(`/pages/events/edit/${event.id}`);
+    // Navigate to create page with event ID for editing
+    // TODO: Update create page to support edit mode when eventId is provided
+    router.push(`/pages/events/create?eventId=${event.id}`);
   };
 
   const handleDuplicate = () => {
