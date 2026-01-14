@@ -12,7 +12,7 @@ export default function MyImpactLayout() {
       <Stack.Screen name="index" />
       <Stack.Screen name="points" />
       <Stack.Screen name="cashback" />
-      <Stack.Screen name="sponsorship" />
+      <Stack.Screen name="earnings" />
       <Stack.Screen name="donations" />
       <Stack.Screen name="leaderboard" />
       <Stack.Screen name="badges" />

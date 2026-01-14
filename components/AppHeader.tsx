@@ -142,7 +142,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onMenuPress }) => {
     if (pathname?.includes("/pages/myimpact/leaderboard")) return "Leaderboard";
     if (pathname?.includes("/pages/myimpact/points")) return "Impact Points";
     if (pathname?.includes("/pages/myimpact/cashback")) return "Cashback";
-    if (pathname?.includes("/pages/myimpact/sponsorship")) return "Sponsorship";
+    if (pathname?.includes("/pages/myimpact/earnings")) return "Earnings";
     if (pathname?.includes("/pages/myimpact/donations")) return "My Donations";
     if (pathname?.includes("/pages/myimpact/badges")) return "Badges";
     if (pathname?.includes("/pages/myimpact")) return "MyImpact";

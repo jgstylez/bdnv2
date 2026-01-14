@@ -26,7 +26,7 @@ const mockImpactSummary = {
   lifetimeCashback: 342.50,
   totalDonations: 1250.00,
   referralCount: 12,
-  sponsorshipEarnings: 89.25,
+  earnings: 89.25,
   currentLevel: "Bronze",
   pointsToNextLevel: 3750,
 };

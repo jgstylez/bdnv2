@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { SponsorshipReward } from '@/types/impact';
+import { EarningsReward } from '@/types/impact';
 
-// Mock sponsorship rewards
-const mockSponsorshipRewards: SponsorshipReward[] = [
+// Mock earnings rewards
+const mockEarningsRewards: EarningsReward[] = [
   {
     id: "1",
     sponsorId: "user1",
@@ -46,17 +46,17 @@ const mockSponsorshipRewards: SponsorshipReward[] = [
   },
 ];
 
-export default function Sponsorship() {
+export default function Earnings() {
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
-  const [selectedFilter, setSelectedFilter] = useState<"all" | SponsorshipReward["rewardType"]>("all");
+  const [selectedFilter, setSelectedFilter] = useState<"all" | EarningsReward["rewardType"]>("all");
 
   const filteredRewards = selectedFilter === "all"
-    ? mockSponsorshipRewards
-    : mockSponsorshipRewards.filter((reward) => reward.rewardType === selectedFilter);
+    ? mockEarningsRewards
+    : mockEarningsRewards.filter((reward) => reward.rewardType === selectedFilter);
 
-  const totalPoints = mockSponsorshipRewards.reduce((sum, reward) => sum + reward.points, 0);
-  const totalCashback = mockSponsorshipRewards.reduce((sum, reward) => sum + (reward.cashback || 0), 0);
+  const totalPoints = mockEarningsRewards.reduce((sum, reward) => sum + reward.points, 0);
+  const totalCashback = mockEarningsRewards.reduce((sum, reward) => sum + (reward.cashback || 0), 0);
 
   const getRewardIcon = (type: string) => {
     switch (type) {
@@ -98,7 +98,7 @@ export default function Sponsorship() {
     });
   };
 
-  const filters: { key: "all" | SponsorshipReward["rewardType"]; label: string }[] = [
+  const filters: { key: "all" | EarningsReward["rewardType"]; label: string }[] = [
     { key: "all", label: "All" },
     { key: "purchase", label: "Purchases" },
     { key: "signup", label: "Signups" },
@@ -319,7 +319,7 @@ export default function Sponsorship() {
                 marginTop: 16,
               }}
             >
-              No sponsorship rewards found for this filter
+              No earnings rewards found for this filter
             </Text>
           </View>
         )}
@@ -327,4 +327,3 @@ export default function Sponsorship() {
     </View>
   );
 }
-

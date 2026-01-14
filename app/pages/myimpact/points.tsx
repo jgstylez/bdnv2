@@ -68,7 +68,7 @@ export default function ImpactPoints() {
         return "rate-review";
       case "donation":
         return "favorite";
-      case "sponsorship":
+      case "earnings":
         return "trending-up";
       case "achievement":
         return "emoji-events";
@@ -87,7 +87,7 @@ export default function ImpactPoints() {
         return "#ffd700";
       case "donation":
         return "#ff4444";
-      case "sponsorship":
+      case "earnings":
         return "#9c27b0";
       case "achievement":
         return "#2196f3";
@@ -112,7 +112,7 @@ export default function ImpactPoints() {
     { key: "referral", label: "Referrals" },
     { key: "feedback", label: "Feedback" },
     { key: "donation", label: "Donations" },
-    { key: "sponsorship", label: "Sponsorship" },
+    { key: "earnings", label: "Earnings" },
     { key: "achievement", label: "Achievements" },
   ];
 

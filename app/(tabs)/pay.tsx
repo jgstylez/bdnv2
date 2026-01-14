@@ -313,7 +313,7 @@ export default function Pay() {
               marginBottom: 8,
             }}
           >
-            Total Balance ({selectedCurrency})
+            Total Balance
           </Text>
           <Text
             style={{

@@ -48,8 +48,8 @@ export const navigationMenu: NavGroup[] = [
         icon: "attach-money",
       },
       {
-        label: "Sponsorship",
-        href: "/pages/myimpact/sponsorship",
+        label: "Earnings",
+        href: "/pages/myimpact/earnings",
         icon: "people",
       },
       {

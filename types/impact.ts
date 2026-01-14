@@ -7,11 +7,11 @@ export interface ImpactPoint {
     | "referral"
     | "feedback"
     | "donation"
-    | "sponsorship"
+    | "earnings"
     | "achievement";
   description: string;
   relatedTransactionId?: string;
-  relatedUserId?: string; // For referrals/sponsorships
+  relatedUserId?: string; // For referrals/earnings
   createdAt: string;
 }
 
@@ -30,7 +30,7 @@ export interface Cashback {
   processedAt?: string;
 }
 
-export interface SponsorshipReward {
+export interface EarningsReward {
   id: string;
   sponsorId: string; // User who referred
   referredUserId: string;
@@ -92,7 +92,7 @@ export interface ImpactSummary {
   lifetimeCashback: number;
   totalDonations: number;
   referralCount: number;
-  sponsorshipEarnings: number;
+  earnings: number;
   currentLevel: string;
   pointsToNextLevel: number;
 }

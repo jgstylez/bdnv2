@@ -54,7 +54,7 @@ export interface FeatureFlags {
   // MyImpact Sub-features
   myImpactPoints: boolean;
   myImpactCashback: boolean;
-  myImpactSponsorship: boolean;
+  myImpactEarnings: boolean;
   myImpactDonations: boolean;
   myImpactLeaderboard: boolean;
   
@@ -117,7 +117,7 @@ export const defaultFeatureFlags: FeatureFlags = {
   // MyImpact Sub-features
   myImpactPoints: true,
   myImpactCashback: true,
-  myImpactSponsorship: true,
+  myImpactEarnings: true,
   myImpactDonations: true,
   myImpactLeaderboard: true,
   
@@ -377,9 +377,9 @@ export const featureFlagMetadata: FeatureFlagMetadata[] = [
     requires: ['myImpact'],
   },
   {
-    key: 'myImpactSponsorship',
-    label: 'MyImpact: Sponsorship',
-    description: 'Enable sponsorship rewards',
+    key: 'myImpactEarnings',
+    label: 'MyImpact: Earnings',
+    description: 'Enable earnings rewards',
     category: 'sub-features',
     impact: 'low',
     requires: ['myImpact'],

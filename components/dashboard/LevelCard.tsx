@@ -42,7 +42,7 @@ export function LevelCard({ isMobile }: LevelCardProps) {
     >
       <CardHeader>
         <View className="flex-row justify-between items-center mb-2">
-          <CardTitle mode="dark" className="text-lg font-bold">
+          <CardTitle mode="dark" className={cn("font-bold", isMobile ? "text-base" : "text-lg")}>
             {greeting}, {firstName}!
           </CardTitle>
           <TouchableOpacity

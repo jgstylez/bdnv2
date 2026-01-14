@@ -22,7 +22,7 @@ const navigationFeatureFlags: Record<string, keyof FeatureFlags> = {
   '/pages/myimpact/leaderboard': 'myImpactLeaderboard',
   '/pages/myimpact/points': 'myImpactPoints',
   '/pages/myimpact/cashback': 'myImpactCashback',
-  '/pages/myimpact/sponsorship': 'myImpactSponsorship',
+  '/pages/myimpact/earnings': 'myImpactEarnings',
   '/pages/myimpact/donations': 'myImpactDonations',
   '/pages/tokens': 'tokens',
   '/pages/myimpact/badges': 'badges',

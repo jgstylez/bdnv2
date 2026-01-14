@@ -90,7 +90,7 @@ A complete feature flag system has been implemented to allow admin operators to 
 ### Sub-features
 - `universityGuides`, `universityVideos`, `universityHelp`, `universityBlog`
 - `mediaBDNTV`, `mediaChannels`
-- `myImpactPoints`, `myImpactCashback`, `myImpactSponsorship`, `myImpactDonations`, `myImpactLeaderboard`
+- `myImpactPoints`, `myImpactCashback`, `myImpactEarnings`, `myImpactDonations`, `myImpactLeaderboard`
 - `eventCreation`, `eventTicketing`, `eventManagement`
 
 ---

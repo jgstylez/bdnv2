@@ -14,7 +14,7 @@ const mockImpactSummary: ImpactSummary = {
   lifetimeCashback: 342.50,
   totalDonations: 1250.00,
   referralCount: 12,
-  sponsorshipEarnings: 89.25,
+  earnings: 89.25,
   currentLevel: "Bronze",
   pointsToNextLevel: 3750,
 };
@@ -318,7 +318,7 @@ export default function MyImpact() {
                       flex: 1,
                     }}
                   >
-                    Sponsorship
+                    Earnings
                   </Text>
                 </View>
                 <Text
@@ -328,7 +328,7 @@ export default function MyImpact() {
                     color: "#ba9988",
                   }}
                 >
-                  ${mockImpactSummary.sponsorshipEarnings.toFixed(2)}
+                  ${mockImpactSummary.earnings.toFixed(2)}
                 </Text>
               </View>
             </View>
@@ -560,7 +560,7 @@ export default function MyImpact() {
                         flex: 1,
                       }}
                     >
-                      Sponsorship
+                      Earnings
                     </Text>
                   </View>
                   <Text
@@ -570,7 +570,7 @@ export default function MyImpact() {
                       color: "#ba9988",
                     }}
                   >
-                    ${mockImpactSummary.sponsorshipEarnings.toFixed(2)}
+                    ${mockImpactSummary.earnings.toFixed(2)}
                   </Text>
                 </View>
               </View>
@@ -697,7 +697,7 @@ export default function MyImpact() {
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => router.push("/pages/myimpact/sponsorship")}
+                  onPress={() => router.push("/pages/myimpact/earnings")}
                   style={{
                     flex: 1,
                     backgroundColor: "#474747",
@@ -716,7 +716,7 @@ export default function MyImpact() {
                       color: "#ffffff",
                     }}
                   >
-                    Sponsorship
+                    Earnings
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -822,7 +822,7 @@ export default function MyImpact() {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => router.push("/pages/myimpact/sponsorship")}
+                onPress={() => router.push("/pages/myimpact/earnings")}
                 style={{
                   flex: 1,
                   backgroundColor: "#474747",
@@ -841,7 +841,7 @@ export default function MyImpact() {
                     color: "#ffffff",
                   }}
                 >
-                  Sponsorship
+                  Earnings
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity

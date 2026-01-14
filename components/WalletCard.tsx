@@ -231,21 +231,23 @@ export const WalletCard: React.FC<WalletCardProps> = ({ wallet, onPress, compact
               {getAccountSubtitle()}
             </Text>
           </View>
-          {/* Icon on the right */}
-          <View
-            style={{
-              width: iconContainerSize,
-              height: iconContainerSize,
-              borderRadius: 6,
-              backgroundColor: `${iconColor}25`,
-              alignItems: "center",
-              justifyContent: "center",
-              marginLeft: isMobile ? 12 : 8,
-              flexShrink: 0,
-            }}
-          >
-            <MaterialIcons name={iconName} size={iconSize} color={iconColor} />
-          </View>
+          {/* Icon on the right - hidden on mobile */}
+          {!isMobile && (
+            <View
+              style={{
+                width: iconContainerSize,
+                height: iconContainerSize,
+                borderRadius: 6,
+                backgroundColor: `${iconColor}25`,
+                alignItems: "center",
+                justifyContent: "center",
+                marginLeft: 8,
+                flexShrink: 0,
+              }}
+            >
+              <MaterialIcons name={iconName} size={iconSize} color={iconColor} />
+            </View>
+          )}
         </View>
       ) : (
         // Horizontal layout for full-size cards
