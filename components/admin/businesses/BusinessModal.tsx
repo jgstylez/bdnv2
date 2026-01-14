@@ -6,18 +6,9 @@ import { InternationalAddressForm } from '../../forms/InternationalAddressForm';
 import { CurrencySelector } from '../../forms/CurrencySelector';
 import { TaxIdSelector } from '../../forms/TaxIdSelector';
 import { spacing } from '../../../constants/theme';
+import { BUSINESS_CATEGORIES } from '../../../constants/categories';
 
-const categories = [
-  "Restaurant",
-  "Retail",
-  "Services",
-  "Technology",
-  "Beauty & Wellness",
-  "Health & Fitness",
-  "Education",
-  "Entertainment",
-  "Other",
-];
+const categories = [...BUSINESS_CATEGORIES];
 
 const MERCHANT_TYPES: { value: MerchantType; label: string }[] = [
   { value: "local-shop", label: "Local Shop" },

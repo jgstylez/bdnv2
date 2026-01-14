@@ -25,6 +25,7 @@ import { HeroSection } from '@/components/layouts/HeroSection';
 import { getMerchantName } from '@/lib/merchant-lookup';
 import { mockProducts as centralizedMockProducts, getProductsByType, getFeaturedProducts, getTrendingProducts } from '@/data/mocks/products';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { MERCHANT_PRODUCT_CATEGORIES } from '@/constants/categories';
 
 // Use centralized mock products
 const mockProducts: Product[] = centralizedMockProducts;
@@ -396,14 +397,7 @@ export default function Marketplace() {
     "Physical",
     "Digital",
     "Services",
-    "Food & Beverage",
-    "Beauty & Personal Care",
-    "Accessories",
-    "Books & Media",
-    "Business Tools",
-    "Professional Services",
-    "Health & Fitness",
-    "Design Services",
+    ...MERCHANT_PRODUCT_CATEGORIES.slice(0, 20), // Show first 20 categories for filter
   ];
 
   const filteredProducts = selectedCategory

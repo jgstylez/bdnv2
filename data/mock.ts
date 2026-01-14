@@ -1,6 +1,24 @@
-import { Product } from '../types/merchant';
-import { Wallet as WalletType, Currency, BankAccountWallet, CreditCardWallet } from "../types/wallet";
+import { Product } from "../types/merchant";
+import {
+  Wallet as WalletType,
+  Currency,
+  BankAccountWallet,
+  CreditCardWallet,
+} from "../types/wallet";
 
+// Extended wallet type for mock data that allows additional properties
+type MockWallet = {
+  id: string;
+  userId: string;
+  currency: Currency;
+  balance: number;
+  provider: string;
+  type?: string;
+  name?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+  [key: string]: any;
+};
 
 // Mock user data - will be replaced with actual state management
 export const mockUser = {
@@ -34,7 +52,9 @@ export const mockNewProducts: Product[] = [
     inventory: 150,
     inventoryTracking: "manual",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=400&fit=crop&q=80"],
+    images: [
+      "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=400&fit=crop&q=80",
+    ],
     shippingRequired: true,
     shippingCost: 5.99,
     tags: ["coffee", "beverage"],
@@ -52,7 +72,9 @@ export const mockNewProducts: Product[] = [
     inventory: 999,
     inventoryTracking: "none",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&q=80"], // Digital marketing course with diverse team
+    images: [
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&q=80",
+    ], // Digital marketing course with diverse team
     shippingRequired: false,
     tags: ["education", "digital"],
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
@@ -63,13 +85,15 @@ export const mockNewProducts: Product[] = [
     name: "Hair Styling Service",
     description: "Professional hair styling and consultation",
     productType: "service",
-    price: 75.00,
+    price: 75.0,
     currency: "USD",
     category: "Beauty & Wellness",
     inventory: 10,
     inventoryTracking: "manual",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=400&h=400&fit=crop&q=80"], // Hair styling with African American woman
+    images: [
+      "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=400&h=400&fit=crop&q=80",
+    ], // Hair styling with African American woman
     shippingRequired: false,
     tags: ["beauty", "service"],
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
@@ -82,11 +106,13 @@ export const mockNewProducts: Product[] = [
     productType: "physical",
     price: 89.99,
     currency: "USD",
-    category: "Accessories",
+    category: "Clothing, Shoes & Accessories",
     inventory: 45,
     inventoryTracking: "manual",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop&q=80"],
+    images: [
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop&q=80",
+    ],
     shippingRequired: true,
     shippingCost: 0,
     tags: ["leather", "accessories"],
@@ -100,11 +126,13 @@ export const mockNewProducts: Product[] = [
     productType: "physical",
     price: 49.99,
     currency: "USD",
-    category: "Beauty & Personal Care",
+    category: "Beauty & Cosmetics",
     inventory: 200,
     inventoryTracking: "manual",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=400&fit=crop&q=80"],
+    images: [
+      "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=400&fit=crop&q=80",
+    ],
     shippingRequired: true,
     shippingCost: 6.99,
     tags: ["hair", "beauty"],
@@ -118,11 +146,13 @@ export const mockNewProducts: Product[] = [
     productType: "digital",
     price: 29.99,
     currency: "USD",
-    category: "Business Tools",
+    category: "Professional Services",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=400&fit=crop&q=80"],
+    images: [
+      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=400&fit=crop&q=80",
+    ],
     shippingRequired: false,
     tags: ["business", "template"],
     createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(), // 6 days ago
@@ -133,13 +163,15 @@ export const mockNewProducts: Product[] = [
     name: "Virtual Fitness Coaching",
     description: "One-on-one virtual fitness coaching sessions",
     productType: "service",
-    price: 60.00,
+    price: 60.0,
     currency: "USD",
-    category: "Health & Fitness",
+    category: "Exercise & Fitness",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&q=80"], // Fitness with African American person
+    images: [
+      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&q=80",
+    ], // Fitness with African American person
     shippingRequired: false,
     tags: ["fitness", "health"],
     createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
@@ -152,11 +184,13 @@ export const mockNewProducts: Product[] = [
     productType: "physical",
     price: 29.99,
     currency: "USD",
-    category: "Clothing & Apparel",
+    category: "Clothing, Shoes & Accessories",
     inventory: 100,
     inventoryTracking: "manual",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop&q=80"],
+    images: [
+      "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop&q=80",
+    ],
     shippingRequired: true,
     shippingCost: 5.99,
     tags: ["clothing", "apparel"],
@@ -170,11 +204,13 @@ export const mockNewProducts: Product[] = [
     productType: "service",
     price: 299.99,
     currency: "USD",
-    category: "Design Services",
+    category: "Professional Services",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=400&fit=crop&q=80"],
+    images: [
+      "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=400&fit=crop&q=80",
+    ],
     shippingRequired: false,
     tags: ["design", "logo"],
     createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(), // 9 days ago
@@ -187,11 +223,13 @@ export const mockNewProducts: Product[] = [
     productType: "digital",
     price: 19.99,
     currency: "USD",
-    category: "Books & Media",
+    category: "Music, Movies & Books",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
-    images: ["https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&h=400&fit=crop&q=80"],
+    images: [
+      "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&h=400&fit=crop&q=80",
+    ],
     shippingRequired: false,
     tags: ["ebook", "education"],
     createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days ago
@@ -200,36 +238,42 @@ export const mockNewProducts: Product[] = [
 
 // Mock carousel items - in production, these would come from admin CMS
 export const carouselItems = [
-    {
-      id: "1",
-      imageUrl: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=400&fit=crop",
-      title: "New Feature: Enhanced Business Discovery",
-      description: "Discover local Black-owned businesses with our improved search",
-      link: "/pages/search",
-      linkText: "Explore Now",
-    },
-    {
-      id: "2",
-      imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=400&fit=crop",
-      title: "Community Spotlight",
-      description: "Celebrating Black excellence in entrepreneurship",
-      link: "/pages/media",
-      linkText: "Watch Now",
-    },
-    {
-      id: "3",
-      imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=400&fit=crop",
-      title: "Learn & Grow with BDN University",
-      description: "Master the platform and unlock your potential",
-      link: "/pages/university",
-      linkText: "Start Learning",
-    },
-  ];
-
-  // Mock wallets
-export const mockWallets: WalletType[] = [
   {
     id: "1",
+    imageUrl:
+      "https://images.unsplash.com/photo-1573167101669-476636b96cea?w=800&h=400&fit=crop",
+    title: "New Feature: Enhanced Business Discovery",
+    description:
+      "Discover local Black-owned businesses with our improved search",
+    link: "/pages/search",
+    linkText: "Explore Now",
+  },
+  {
+    id: "2",
+    imageUrl:
+      "https://plus.unsplash.com/premium_photo-1723809616710-32afb9dcd0ef?w=800&h=400&fit=crop",
+    title: "Community Spotlight",
+    description: "Celebrating Black excellence in entrepreneurship",
+    link: "/pages/media",
+    linkText: "Watch Now",
+  },
+  {
+    id: "3",
+    imageUrl:
+      "https://images.unsplash.com/photo-1653566031535-bcf33e1c2893?w=800&h=400&fit=crop",
+    title: "Learn & Grow with BDN University",
+    description: "Master the platform and unlock your potential",
+    link: "/pages/university",
+    linkText: "Start Learning",
+  },
+];
+
+// Mock wallets
+export const mockWallets: MockWallet[] = [
+  {
+    id: "1",
+    userId: "user-1",
+    provider: "bdn",
     type: "primary",
     name: "Primary Wallet",
     currency: "USD",
@@ -239,6 +283,8 @@ export const mockWallets: WalletType[] = [
   },
   {
     id: "2",
+    userId: "user-1",
+    provider: "bdn",
     type: "myimpact",
     name: "MyImpact Rewards",
     currency: "BLKD",
@@ -247,10 +293,15 @@ export const mockWallets: WalletType[] = [
   },
   {
     id: "4",
-    type: "bankaccount",
-    name: "Chase Checking",
+    type: "bank",
+    userId: "user-1",
     currency: "USD",
     balance: 5432.18,
+    provider: "chase",
+    accountNumber: "****4321",
+    routingNumber: "021000021",
+    isDefault: false,
+    name: "Chase Checking",
     availableBalance: 5432.18,
     isActive: true,
     bankName: "Chase",
@@ -264,38 +315,44 @@ export const mockBusinesses: Record<string, any> = {
   "1": {
     id: "1",
     name: "Soul Food Kitchen",
-    category: "Restaurant",
-    imageUrl: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=600&fit=crop",
+    category: "Restaurants",
+    imageUrl:
+      "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=600&fit=crop",
   },
   "2": {
     id: "2",
     name: "Black Excellence Barbershop",
     category: "Services",
-    imageUrl: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&h=600&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&h=600&fit=crop",
   },
   "3": {
     id: "3",
     name: "African Heritage Books",
     category: "Retail",
-    imageUrl: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&h=600&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&h=600&fit=crop",
   },
   "4": {
     id: "4",
     name: "Black History E-Books",
-    category: "Digital",
-    imageUrl: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=800&h=600&fit=crop",
+    category: "Digital Products",
+    imageUrl:
+      "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=800&h=600&fit=crop",
   },
   "5": {
     id: "5",
     name: "Crown Beauty Salon",
     category: "Beauty & Wellness",
-    imageUrl: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=800&h=600&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?w=800&h=600&fit=crop",
   },
   "6": {
     id: "6",
     name: "Urban Tech Solutions",
     category: "Technology",
-    imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
   },
 };
 

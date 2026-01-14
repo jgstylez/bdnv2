@@ -10,6 +10,7 @@ import { CurrencySelector } from '@/components/forms/CurrencySelector';
 import { TaxIdSelector } from '@/components/forms/TaxIdSelector';
 import { TaxIdentification } from '@/types/international';
 import { requiresStateField } from '@/lib/international';
+import { BUSINESS_CATEGORIES } from '@/constants/categories';
 
 const MERCHANT_TYPES: { value: MerchantType; label: string; description: string }[] = [
   { value: "local-shop", label: "Local Shop", description: "Physical retail location" },
@@ -74,17 +75,7 @@ export default function MerchantOnboarding() {
     incorporationDate: "",
   });
 
-  const categories = [
-    "Restaurant",
-    "Retail",
-    "Services",
-    "Technology",
-    "Beauty & Wellness",
-    "Health & Fitness",
-    "Education",
-    "Entertainment",
-    "Other",
-  ];
+  const categories = [...BUSINESS_CATEGORIES];
 
   const handleNext = () => {
     if (validateStep()) {

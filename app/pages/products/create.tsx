@@ -14,27 +14,10 @@ import { logger } from "@/lib/logger";
 import { handleError } from "@/lib/error-handler";
 import { getStorageItem } from "@/lib/storage";
 import { ENV } from "@/lib/config";
+import { MERCHANT_PRODUCT_CATEGORIES, NONPROFIT_CATEGORIES } from "@/constants/categories";
 
-// Categories based on user type
-const MERCHANT_CATEGORIES = [
-  "Clothing & Apparel",
-  "Home & Living",
-  "Beauty & Personal Care",
-  "Food & Beverage",
-  "Art & Collectibles",
-  "Jewelry & Accessories",
-  "Electronics",
-  "Other"
-];
-
-const NONPROFIT_CATEGORIES = [
-  "Donation",
-  "Merchandise",
-  "Event Ticket",
-  "Fundraising Item",
-  "Digital Download",
-  "Other"
-];
+// Categories based on user type - use centralized categories
+const MERCHANT_CATEGORIES = [...MERCHANT_PRODUCT_CATEGORIES];
 
 const PRODUCT_TYPES = [
   {

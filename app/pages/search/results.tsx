@@ -14,6 +14,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { SearchResult, SearchFilters } from '@/types/search';
 import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
 import { ProductPlaceholder } from '@/components/ProductPlaceholder';
+import { BUSINESS_CATEGORIES } from '@/constants/categories';
 
 // Mock search results
 const mockResults: SearchResult[] = [
@@ -77,13 +78,7 @@ const mockResults: SearchResult[] = [
 
 const categories = [
   "All",
-  "Restaurants",
-  "Beauty & Wellness",
-  "Retail",
-  "Services",
-  "Technology",
-  "Education",
-  "Entertainment",
+  ...BUSINESS_CATEGORIES.slice(0, 30), // Show first 30 categories for filter
 ];
 
 export default function SearchResults() {

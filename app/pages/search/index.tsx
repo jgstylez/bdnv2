@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SearchResult, SearchFilters, RecentActivity } from '@/types/search';
 import { Carousel } from '@/components/layouts/Carousel';
+import { POPULAR_CATEGORIES } from '@/constants/categories';
 
 // Mock recent searches
 const mockRecentSearches: RecentActivity[] = [
@@ -404,14 +405,7 @@ export default function Search() {
             Popular Categories
           </Text>
           <Carousel itemsPerView={isMobile ? 2.2 : isTablet ? 3.2 : 4.2} showControls={!isMobile} showIndicators={false} gap={12}>
-            {[
-              { name: "Restaurants", icon: "restaurant", gradient: ["#ba9988", "#9d7f6f"] },
-              { name: "Beauty & Wellness", icon: "spa", gradient: ["#e91e63", "#c2185b"] },
-              { name: "Retail", icon: "store", gradient: ["#ffd700", "#ffb300"] },
-              { name: "Services", icon: "build", gradient: ["#2196f3", "#1976d2"] },
-              { name: "Technology", icon: "computer", gradient: ["#9c27b0", "#7b1fa2"] },
-              { name: "Education", icon: "school", gradient: ["#4caf50", "#388e3c"] },
-            ].map((category) => (
+            {POPULAR_CATEGORIES.map((category) => (
               <TouchableOpacity
                 key={category.name}
                 onPress={() => {
