@@ -104,10 +104,11 @@ export default function SearchResults() {
   });
 
   const filteredResults = mockResults.filter((result) => {
-    if (
-      selectedCategory !== "All" &&
-      result.metadata.category
-    ) {
+    if (selectedCategory !== "All") {
+      // If no category exists, filter it out when a category filter is active
+      if (!result.metadata.category) {
+        return false;
+      }
       // Normalize both product category and selected category for comparison
       const normalizedProductCategory = getStandardizedCategory(result.metadata.category);
       const normalizedSelectedCategory = getStandardizedCategory(selectedCategory);
