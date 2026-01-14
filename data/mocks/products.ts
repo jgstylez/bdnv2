@@ -257,7 +257,7 @@ export const mockProducts: Product[] = [
     inventoryTracking: "manual",
     isActive: true,
     images: [
-      "https://images.unsplash.com/photo-1609501676725-7186f70aab5e?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1700133501984-f057ecbcc960?w=800&h=800&fit=crop",
     ],
     shippingRequired: true,
     shippingCost: 6.99,

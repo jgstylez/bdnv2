@@ -11,6 +11,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { SearchResult, SearchFilters } from '@/types/search';
 import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
 import { ProductPlaceholder } from '@/components/ProductPlaceholder';
@@ -74,6 +75,20 @@ const mockResults: SearchResult[] = [
     },
     relevanceScore: 0.82,
   },
+  {
+    id: "4",
+    type: "product",
+    title: "Artisan Hot Sauce Collection",
+    description: "Handcrafted hot sauces with unique flavor profiles",
+    imageUrl: "https://images.unsplash.com/photo-1700133501984-f057ecbcc960",
+    metadata: {
+      category: "Food & Beverage",
+      price: 29.99,
+      currency: "USD",
+      rating: 4.7,
+    },
+    relevanceScore: 0.85,
+  },
 ];
 
 const categories = [
@@ -94,6 +109,7 @@ export default function SearchResults() {
     "relevance" | "distance" | "rating" | "price"
   >("relevance");
   const [showFilters, setShowFilters] = useState(false);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<SearchFilters>({
     category: selectedCategory !== "All" ? selectedCategory : undefined,
     location: {
@@ -105,16 +121,17 @@ export default function SearchResults() {
 
   const filteredResults = mockResults.filter((result) => {
     if (selectedCategory !== "All") {
-      // If no category exists, filter it out when a category filter is active
-      if (!result.metadata.category) {
-        return false;
+      // Only check category match if the result has a category
+      // Results without categories pass through (lenient behavior for uncategorized results)
+      if (result.metadata.category) {
+        // Normalize both product category and selected category for comparison
+        const normalizedProductCategory = getStandardizedCategory(result.metadata.category);
+        const normalizedSelectedCategory = getStandardizedCategory(selectedCategory);
+        if (normalizedProductCategory !== normalizedSelectedCategory) {
+          return false; // Filter out results with non-matching categories
+        }
       }
-      // Normalize both product category and selected category for comparison
-      const normalizedProductCategory = getStandardizedCategory(result.metadata.category);
-      const normalizedSelectedCategory = getStandardizedCategory(selectedCategory);
-      if (normalizedProductCategory !== normalizedSelectedCategory) {
-        return false;
-      }
+      // If no category exists, allow it through (don't filter it out)
     }
     if (
       searchQuery &&
@@ -385,8 +402,23 @@ export default function SearchResults() {
                   borderColor: "rgba(186, 153, 136, 0.2)",
                 }}
               >
-                {/* Image Placeholder */}
-                {result.type === "business" ? (
+                {/* Image */}
+                {result.imageUrl && 
+                 result.imageUrl.trim() !== "" && 
+                 !imageErrors.has(result.id) ? (
+                  <Image
+                    source={{ uri: result.imageUrl }}
+                    style={{ width: "100%", height: 150 }}
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                    {...(Platform.OS !== 'web' && {
+                      accessible: false,
+                    })}
+                    onError={() => {
+                      setImageErrors((prev) => new Set(prev).add(result.id));
+                    }}
+                  />
+                ) : result.type === "business" ? (
                   <BusinessPlaceholder
                     width="100%"
                     height={150}

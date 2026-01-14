@@ -394,16 +394,30 @@ export default function Search() {
 
         {/* Popular Categories - Bento Cards Carousel */}
         <View style={{ marginBottom: 32 }}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "700",
-              color: "#ffffff",
-              marginBottom: 16,
-            }}
-          >
-            Popular Categories
-          </Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "700",
+                color: "#ffffff",
+              }}
+            >
+              Popular Categories
+            </Text>
+            <TouchableOpacity
+              onPress={() => router.push("/pages/search/categories")}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ba9988",
+                }}
+              >
+                View All
+              </Text>
+            </TouchableOpacity>
+          </View>
           <Carousel itemsPerView={isMobile ? 2.2 : isTablet ? 3.2 : 4.2} showControls={!isMobile} showIndicators={false} gap={12}>
             {POPULAR_CATEGORIES.map((category) => (
               <TouchableOpacity
