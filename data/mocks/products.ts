@@ -1,4 +1,5 @@
 import { Product } from '../../types/merchant';
+import { getStandardizedCategory } from '../../constants/categories';
 
 /**
  * Centralized Mock Product Data
@@ -41,7 +42,7 @@ export const mockProducts: Product[] = [
     productType: "physical",
     price: 89.99,
     currency: "USD",
-    category: "Accessories",
+    category: "Clothing, Shoes & Accessories",
     inventory: 45,
     inventoryTracking: "manual",
     isActive: true,
@@ -63,7 +64,7 @@ export const mockProducts: Product[] = [
     productType: "physical",
     price: 49.99,
     currency: "USD",
-    category: "Beauty & Personal Care",
+    category: "Beauty & Cosmetics",
     inventory: 200,
     inventoryTracking: "manual",
     isActive: true,
@@ -85,7 +86,7 @@ export const mockProducts: Product[] = [
     productType: "physical",
     price: 29.99,
     currency: "USD",
-    category: "Clothing & Apparel",
+    category: "Clothing, Shoes & Accessories",
     inventory: 0, // Base inventory (variants handle actual inventory)
     inventoryTracking: "manual",
     lowStockThreshold: 10,
@@ -271,7 +272,7 @@ export const mockProducts: Product[] = [
     productType: "physical",
     price: 45.99,
     currency: "USD",
-    category: "Accessories",
+    category: "Clothing, Shoes & Accessories",
     inventory: 120,
     inventoryTracking: "manual",
     isActive: true,
@@ -291,7 +292,7 @@ export const mockProducts: Product[] = [
     productType: "physical",
     price: 28.99,
     currency: "USD",
-    category: "Beauty & Personal Care",
+    category: "Beauty & Cosmetics",
     inventory: 150,
     inventoryTracking: "manual",
     isActive: true,
@@ -331,7 +332,7 @@ export const mockProducts: Product[] = [
     productType: "physical",
     price: 65.99,
     currency: "USD",
-    category: "Home & Decor",
+    category: "Home Improvements & Decor",
     inventory: 40,
     inventoryTracking: "manual",
     isActive: true,
@@ -351,7 +352,7 @@ export const mockProducts: Product[] = [
     productType: "physical",
     price: 199.99,
     currency: "USD",
-    category: "Accessories",
+    category: "Clothing, Shoes & Accessories",
     inventory: 25,
     inventoryTracking: "manual",
     isActive: true,
@@ -392,7 +393,7 @@ export const mockProducts: Product[] = [
     productType: "digital",
     price: 19.99,
     currency: "USD",
-    category: "Books & Media",
+    category: "Music, Movies & Books",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
@@ -413,7 +414,7 @@ export const mockProducts: Product[] = [
     productType: "digital",
     price: 29.99,
     currency: "USD",
-    category: "Business Tools",
+    category: "Professional Services",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
@@ -455,7 +456,7 @@ export const mockProducts: Product[] = [
     productType: "digital",
     price: 24.99,
     currency: "USD",
-    category: "Business Tools",
+    category: "Professional Services",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
@@ -476,7 +477,7 @@ export const mockProducts: Product[] = [
     productType: "digital",
     price: 39.99,
     currency: "USD",
-    category: "Books & Media",
+    category: "Music, Movies & Books",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
@@ -497,7 +498,7 @@ export const mockProducts: Product[] = [
     productType: "digital",
     price: 49.99,
     currency: "USD",
-    category: "Business Tools",
+    category: "Professional Services",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
@@ -541,7 +542,7 @@ export const mockProducts: Product[] = [
     productType: "service",
     price: 60.0,
     currency: "USD",
-    category: "Health & Fitness",
+    category: "Exercise & Fitness",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
@@ -563,7 +564,7 @@ export const mockProducts: Product[] = [
     productType: "service",
     price: 299.99,
     currency: "USD",
-    category: "Design Services",
+    category: "Professional Services",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
@@ -607,7 +608,7 @@ export const mockProducts: Product[] = [
     productType: "service",
     price: 250.0,
     currency: "USD",
-    category: "Health & Fitness",
+    category: "Exercise & Fitness",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
@@ -629,7 +630,7 @@ export const mockProducts: Product[] = [
     productType: "service",
     price: 599.99,
     currency: "USD",
-    category: "Design Services",
+    category: "Professional Services",
     inventory: -1,
     inventoryTracking: "none",
     isActive: true,
@@ -727,9 +728,14 @@ export const getProductsByMerchant = (merchantId: string): Product[] => {
 
 /**
  * Get products by category
+ * Uses standardized category names for comparison
  */
 export const getProductsByCategory = (category: string): Product[] => {
-  return mockProducts.filter((p) => p.category === category);
+  const normalizedCategory = getStandardizedCategory(category);
+  return mockProducts.filter((p) => {
+    const normalizedProductCategory = getStandardizedCategory(p.category);
+    return normalizedProductCategory === normalizedCategory;
+  });
 };
 
 /**

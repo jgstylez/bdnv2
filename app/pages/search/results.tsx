@@ -14,7 +14,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { SearchResult, SearchFilters } from '@/types/search';
 import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
 import { ProductPlaceholder } from '@/components/ProductPlaceholder';
-import { BUSINESS_CATEGORIES } from '@/constants/categories';
+import { BUSINESS_CATEGORIES, getStandardizedCategory } from '@/constants/categories';
 
 // Mock search results
 const mockResults: SearchResult[] = [
@@ -106,9 +106,14 @@ export default function SearchResults() {
   const filteredResults = mockResults.filter((result) => {
     if (
       selectedCategory !== "All" &&
-      result.metadata.category !== selectedCategory
+      result.metadata.category
     ) {
-      return false;
+      // Normalize both product category and selected category for comparison
+      const normalizedProductCategory = getStandardizedCategory(result.metadata.category);
+      const normalizedSelectedCategory = getStandardizedCategory(selectedCategory);
+      if (normalizedProductCategory !== normalizedSelectedCategory) {
+        return false;
+      }
     }
     if (
       searchQuery &&

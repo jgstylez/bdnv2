@@ -25,7 +25,7 @@ import { HeroSection } from '@/components/layouts/HeroSection';
 import { getMerchantName } from '@/lib/merchant-lookup';
 import { mockProducts as centralizedMockProducts, getProductsByType, getFeaturedProducts, getTrendingProducts } from '@/data/mocks/products';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
-import { MERCHANT_PRODUCT_CATEGORIES } from '@/constants/categories';
+import { MERCHANT_PRODUCT_CATEGORIES, getStandardizedCategory } from '@/constants/categories';
 
 // Use centralized mock products
 const mockProducts: Product[] = centralizedMockProducts;
@@ -316,14 +316,30 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
                   <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
                     style={{
                       fontSize: 10,
                       color: "#9f9fb0",
                       fontWeight: typography.weights.semibold as any,
+                      marginBottom: 2,
                     }}
                   >
-                    {getMerchantName(product.merchantId)} • {product.category}
+                    {getMerchantName(product.merchantId)}
                   </Text>
+                  {product.category && (
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={{
+                        fontSize: typography.sizes.xs,
+                        color: colors.text.tertiary,
+                        fontWeight: typography.weights.normal as any,
+                      }}
+                    >
+                      {product.category}
+                    </Text>
+                  )}
                 </TouchableOpacity>
                 <View
                   style={{
@@ -407,7 +423,10 @@ export default function Marketplace() {
         if (selectedCategory === "Digital")
           return p.productType === "digital";
         if (selectedCategory === "Services") return p.productType === "service";
-        return p.category === selectedCategory;
+        // Normalize both product category and selected category for comparison
+        const normalizedProductCategory = getStandardizedCategory(p.category);
+        const normalizedSelectedCategory = getStandardizedCategory(selectedCategory);
+        return normalizedProductCategory === normalizedSelectedCategory;
       })
     : mockProducts;
 
@@ -656,15 +675,30 @@ export default function Marketplace() {
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     >
                       <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
                         style={{
                           fontSize: typography.sizes.xs,
                           color: colors.textColors.accent,
                           fontWeight: typography.weights.semibold as any,
+                          marginBottom: 2,
                         }}
                       >
-                        {getMerchantName(product.merchantId)} •{" "}
-                        {product.category}
+                        {getMerchantName(product.merchantId)}
                       </Text>
+                      {product.category && (
+                        <Text
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                          style={{
+                            fontSize: typography.sizes.xs,
+                            color: colors.text.tertiary,
+                            fontWeight: typography.weights.normal as any,
+                          }}
+                        >
+                          {product.category}
+                        </Text>
+                      )}
                     </TouchableOpacity>
                     <View
                       style={{
