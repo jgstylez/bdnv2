@@ -745,6 +745,54 @@ export default function Marketplace() {
             })}
           </View>
         )}
+
+        {/* Business Directory CTA */}
+        <TouchableOpacity
+          onPress={() => router.push("/pages/businesses/businesses")}
+          activeOpacity={0.8}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="View Business Directory"
+          accessibilityHint="Double tap to discover Black-owned businesses in your community"
+          style={{
+            marginTop: spacing.xl,
+            marginBottom: spacing["3xl"],
+            backgroundColor: colors.secondary,
+            borderRadius: borderRadius.lg,
+            borderWidth: 1,
+            borderColor: colors.border,
+            padding: spacing.lg,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={{ flex: 1, marginRight: spacing.md }}>
+            <Text
+              style={{
+                fontSize: typography.sizes.lg,
+                fontWeight: typography.weights.bold as any,
+                color: colors.text.primary,
+                marginBottom: spacing.xs,
+              }}
+            >
+              Discover More Businesses
+            </Text>
+            <Text
+              style={{
+                fontSize: typography.sizes.sm,
+                color: colors.text.secondary,
+              }}
+            >
+              Explore our directory of Black-owned businesses
+            </Text>
+          </View>
+          <MaterialIcons
+            name="arrow-forward"
+            size={24}
+            color={colors.accent}
+          />
+        </TouchableOpacity>
       </OptimizedScrollView>
     </View>
   );
