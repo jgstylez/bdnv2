@@ -131,6 +131,7 @@ export default function PagesLayout() {
                 }}
               >
                   <Stack.Screen name="referrals" />
+                  <Stack.Screen name="businesses" />
                   <Stack.Screen name="merchant" />
                   <Stack.Screen name="myimpact" />
                   <Stack.Screen name="university" />
