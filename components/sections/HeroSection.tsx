@@ -8,6 +8,7 @@ import {
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -44,11 +45,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   // Animation values
   const pulseAnim = useSharedValue(0);
-  const floatAnim = useSharedValue(0);
 
   React.useEffect(() => {
     pulseAnim.value = withRepeat(withTiming(1, { duration: 2000 }), -1, true);
-    floatAnim.value = withRepeat(withTiming(1, { duration: 3000 }), -1, true);
   }, []);
 
   const pulseStyle = useAnimatedStyle(() => ({
@@ -56,16 +55,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     transform: [{ scale: interpolate(pulseAnim.value, [0, 1], [1, 1.1]) }],
   }));
 
-  const floatStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: interpolate(floatAnim.value, [0, 1], [0, -10]) }],
-  }));
+  const handleForConsumers = () => {
+    router.push("/public_pages/for-consumers");
+  };
+
+  const handleForBusinesses = () => {
+    router.push("/public_pages/for-businesses");
+  };
 
   return (
     <Animated.View style={animatedStyle}>
-      <LinearGradient
-        colors={["#0a0a0a", "#1a1a1a", "#232323"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+      <View
         style={{
           width: "100%",
           paddingTop: isMobile ? 40 : 60,
@@ -74,9 +74,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           alignItems: "center",
           position: "relative",
           overflow: "hidden",
+          minHeight: isMobile ? 600 : 700,
         }}
       >
-        {/* Animated background elements */}
+        {/* Hero Background Image */}
         <View
           style={{
             position: "absolute",
@@ -84,308 +85,232 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             left: 0,
             right: 0,
             bottom: 0,
-            opacity: 0.3,
-            paddingHorizontal: isMobile ? 40 : 80,
-            paddingVertical: isMobile ? 40 : 80,
+            opacity: 0.4,
           }}
         >
-          <Svg
-            width={width}
-            height={600}
-            style={{ position: "absolute", top: -100 }}
-          >
-            <Defs>
-              <SvgLinearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <Stop offset="0%" stopColor="#ba9988" stopOpacity="0.1" />
-                <Stop offset="100%" stopColor="#ba9988" stopOpacity="0" />
-              </SvgLinearGradient>
-            </Defs>
-            <Circle cx={width * 0.2} cy={100} r={80} fill="url(#grad1)" />
-            <Circle cx={width * 0.8} cy={200} r={120} fill="url(#grad1)" />
-            <Circle cx={width * 0.5} cy={400} r={100} fill="url(#grad1)" />
-          </Svg>
-        </View>
-
-        {/* Fintech Badge */}
-        <Animated.View style={[{ marginBottom: 24 }, floatStyle]}>
-          <View
-            style={{
-              backgroundColor: "rgba(186, 153, 136, 0.1)",
-              paddingHorizontal: 16,
-              paddingVertical: 8,
-              borderRadius: 20,
-              borderWidth: 1,
-              borderColor: "rgba(186, 153, 136, 0.3)",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            <MaterialIcons
-              name="account-balance-wallet"
-              size={16}
-              color="#ba9988"
-            />
-            <Text
-              style={{
-                fontSize: isMobile ? 12 : 14,
-                color: "#ba9988",
-                fontWeight: "600",
-                letterSpacing: 0.5,
-              }}
-            >
-              FINANCIAL TECHNOLOGY PLATFORM
-            </Text>
-          </View>
-        </Animated.View>
-
-        {/* Main Heading */}
-        <Text
-          style={{
-            fontSize: isMobile ? 48 : 60,
-            fontWeight: "900",
-            color: "#ffffff",
-            textAlign: "center",
-            marginBottom: 32,
-            letterSpacing: -2,
-            lineHeight: isMobile ? 56 : 70,
-          }}
-        >
-          Empower Black Economic Growth
-        </Text>
-
-        {/* Video Placeholder */}
-        <TouchableOpacity
-          onPress={() => setVideoModalVisible(true)}
-          activeOpacity={0.9}
-          style={{
-            width: "100%",
-            maxWidth: isMobile ? width - 40 : 800,
-            aspectRatio: 16 / 9,
-            borderRadius: 20,
-            overflow: "hidden",
-            marginBottom: 32,
-            backgroundColor: "#1a1a1a",
-            borderWidth: 2,
-            borderColor: "rgba(186, 153, 136, 0.3)",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 8 },
-            shadowOpacity: 0.4,
-            shadowRadius: 16,
-            elevation: 8,
-          }}
-        >
-          {/* Video Thumbnail/Placeholder */}
-          <View
+          <Image
+            source={require("@/assets/images/public/hero-professional.png")}
             style={{
               width: "100%",
               height: "100%",
-              backgroundColor: "#232323",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
+            }}
+            contentFit="cover"
+            cachePolicy="memory-disk"
+          />
+          <LinearGradient
+            colors={["rgba(35, 35, 35, 0.85)", "rgba(35, 35, 35, 0.95)"]}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          />
+        </View>
+
+        {/* Content */}
+        <View style={{ position: "relative", zIndex: 1, width: "100%", alignItems: "center" }}>
+          {/* Main Heading */}
+          <Text
+            style={{
+              fontSize: isMobile ? 40 : 56,
+              fontWeight: "900",
+              color: "#ffffff",
+              textAlign: "center",
+              marginBottom: 24,
+              letterSpacing: -1.5,
+              lineHeight: isMobile ? 48 : 64,
             }}
           >
-            {/* Play Button Overlay */}
-            <View
-              style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              <View
-                style={{
-                  width: isMobile ? 64 : 80,
-                  height: isMobile ? 64 : 80,
-                  borderRadius: isMobile ? 32 : 40,
-                  backgroundColor: "rgba(186, 153, 136, 0.9)",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderWidth: 4,
-                  borderColor: "#ffffff",
-                }}
-              >
-                <MaterialIcons 
-                  name="play-arrow" 
-                  size={isMobile ? 32 : 40} 
-                  color="#ffffff"
-                  style={{ marginLeft: 4 }}
-                />
-              </View>
-            </View>
-            
-            {/* Video Label */}
-            <View
-              style={{
-                position: "absolute",
-                bottom: 16,
-                left: 16,
-                right: 16,
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              <MaterialIcons name="play-circle-filled" size={20} color="#ffffff" />
-              <Text
-                style={{
-                  fontSize: isMobile ? 14 : 16,
-                  fontWeight: "600",
-                  color: "#ffffff",
-                }}
-              >
-                {videoTitle}
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+            Building the future of{"\n"}
+            <Text style={{ color: "#ba9988" }}>Black economic empowerment</Text>
+          </Text>
 
-        {/* Value Proposition */}
-        <Text
-          style={{
-            fontSize: isMobile ? 16 : 20,
-            color: "rgba(255, 255, 255, 0.75)",
-            textAlign: "center",
-            maxWidth: 800,
-            lineHeight: isMobile ? 26 : 32,
-            marginBottom: 24,
-            fontWeight: "400",
-          }}
-        >
-          An all in one platform designed to circulate Black dollars and build
-          economic power in our communities. Get started in minutes—it's free.
-        </Text>
-
-        {/* Trust Indicators */}
-        <Text
-          style={{
-            fontSize: isMobile ? 14 : 16,
-            color: "rgba(255, 255, 255, 0.6)",
-            textAlign: "center",
-            marginBottom: 48,
-            fontWeight: "500",
-          }}
-        >
-          10K+ Members • 500+ Businesses • $2M+ Circulated
-        </Text>
-
-        {/* Dual CTA Buttons */}
-        <View
-          style={{
-            flexDirection: isMobile ? "column" : "row",
-            gap: 16,
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            maxWidth: isMobile ? "100%" : 600,
-          }}
-        >
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.push("/public_pages/for-consumers")}
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityLabel="I'm a Consumer"
-            accessibilityHint="Go to consumer landing page"
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          {/* Description */}
+          <Text
             style={{
-              backgroundColor: "#ba9988",
-              paddingHorizontal: isMobile ? 40 : 48,
-              paddingVertical: isMobile ? 16 : 18,
-              borderRadius: 14,
-              flex: isMobile ? 0 : 1,
-              minWidth: isMobile ? "100%" : 0,
-              alignItems: "center",
-              justifyContent: "center",
-              shadowColor: "#ba9988",
+              fontSize: isMobile ? 16 : 18,
+              color: "rgba(255, 255, 255, 0.85)",
+              textAlign: "center",
+              maxWidth: 800,
+              lineHeight: isMobile ? 24 : 28,
+              marginBottom: 32,
+            }}
+          >
+            We're entering a new chapter in our mission to educate, equip, and
+            empower our community. BDN 2.0 represents the evolution of group
+            economics and community-driven commerce.
+          </Text>
+
+          {/* Video Section */}
+          <TouchableOpacity
+            onPress={() => setVideoModalVisible(true)}
+            activeOpacity={0.9}
+            style={{
+              width: "100%",
+              maxWidth: isMobile ? width - 40 : 800,
+              aspectRatio: 16 / 9,
+              borderRadius: 20,
+              overflow: "hidden",
+              marginBottom: 32,
+              backgroundColor: "#1a1a1a",
+              borderWidth: 2,
+              borderColor: "rgba(186, 153, 136, 0.3)",
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 8 },
               shadowOpacity: 0.4,
               shadowRadius: 16,
               elevation: 8,
             }}
           >
-            <Text
+            <View
               style={{
-                fontSize: isMobile ? 16 : 18,
-                fontWeight: "700",
-                color: "#ffffff",
-                textAlign: "center",
-                letterSpacing: 0.5,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#232323",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "relative",
               }}
             >
-              I'm a Consumer
-            </Text>
+              <View
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "rgba(0, 0, 0, 0.3)",
+                }}
+              >
+                <View
+                  style={{
+                    width: isMobile ? 64 : 80,
+                    height: isMobile ? 64 : 80,
+                    borderRadius: isMobile ? 32 : 40,
+                    backgroundColor: "rgba(186, 153, 136, 0.9)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderWidth: 4,
+                    borderColor: "#ffffff",
+                  }}
+                >
+                  <MaterialIcons 
+                    name="play-arrow" 
+                    size={isMobile ? 32 : 40} 
+                    color="#ffffff"
+                    style={{ marginLeft: 4 }}
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: 16,
+                  left: 16,
+                  right: 16,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <MaterialIcons name="play-circle-filled" size={20} color="#ffffff" />
+                <Text
+                  style={{
+                    fontSize: isMobile ? 14 : 16,
+                    fontWeight: "600",
+                    color: "#ffffff",
+                  }}
+                >
+                  WHAT WE DO - WATCH VIDEO
+                </Text>
+              </View>
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.push("/public_pages/for-businesses")}
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityLabel="I'm a Business"
-            accessibilityHint="Go to business landing page"
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+
+          {/* CTA Buttons */}
+          <View
             style={{
-              backgroundColor: "rgba(186, 153, 136, 0.2)",
-              borderWidth: 2,
-              borderColor: "#ba9988",
-              paddingHorizontal: isMobile ? 40 : 48,
-              paddingVertical: isMobile ? 16 : 18,
-              borderRadius: 14,
-              flex: isMobile ? 0 : 1,
-              minWidth: isMobile ? "100%" : 0,
+              flexDirection: isMobile ? "column" : "row",
+              gap: 16,
               alignItems: "center",
               justifyContent: "center",
+              width: "100%",
+              maxWidth: isMobile ? "100%" : 600,
+              marginBottom: 32,
             }}
           >
-            <Text
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handleForConsumers}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="I'm a Consumer"
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               style={{
-                fontSize: isMobile ? 16 : 18,
-                fontWeight: "700",
-                color: "#ba9988",
-                textAlign: "center",
-                letterSpacing: 0.5,
+                backgroundColor: "#ba9988",
+                paddingHorizontal: isMobile ? 40 : 48,
+                paddingVertical: isMobile ? 16 : 18,
+                borderRadius: 14,
+                flex: isMobile ? 0 : 1,
+                minWidth: isMobile ? "100%" : 0,
+                alignItems: "center",
+                justifyContent: "center",
+                shadowColor: "#ba9988",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.4,
+                shadowRadius: 16,
+                elevation: 8,
               }}
             >
-              I'm a Business
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: isMobile ? 16 : 18,
+                  fontWeight: "700",
+                  color: "#ffffff",
+                  textAlign: "center",
+                  letterSpacing: 0.5,
+                }}
+              >
+                I'm a Consumer
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handleForBusinesses}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="I'm a Business"
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              style={{
+                backgroundColor: "rgba(186, 153, 136, 0.2)",
+                borderWidth: 2,
+                borderColor: "#ba9988",
+                paddingHorizontal: isMobile ? 40 : 48,
+                paddingVertical: isMobile ? 16 : 18,
+                borderRadius: 14,
+                flex: isMobile ? 0 : 1,
+                minWidth: isMobile ? "100%" : 0,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: isMobile ? 16 : 18,
+                  fontWeight: "700",
+                  color: "#ba9988",
+                  textAlign: "center",
+                  letterSpacing: 0.5,
+                }}
+              >
+                I'm a Business
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        {/* Trust Indicators */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 24,
-            marginTop: 48,
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <MaterialIcons name="verified" size={20} color="#ba9988" />
-            <Text style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.6)" }}>
-              Bank-Level Security
-            </Text>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <MaterialIcons name="lock" size={20} color="#ba9988" />
-            <Text style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.6)" }}>
-              Encrypted Payments
-            </Text>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <MaterialIcons name="check-circle" size={20} color="#ba9988" />
-            <Text style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.6)" }}>
-              FDIC Insured
-            </Text>
-          </View>
-        </View>
-      </LinearGradient>
+      </View>
 
       {/* Video Lightbox */}
       <VideoLightbox

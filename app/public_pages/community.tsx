@@ -6,8 +6,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
+import { DecorativePattern } from '@/components/placeholders/SVGPlaceholders';
 
 export default function Community() {
   const { width } = useWindowDimensions();
@@ -56,7 +57,7 @@ export default function Community() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="Join Our Community"
           subtitle="Together, we're building economic power and creating lasting change in Black communities."
         />
@@ -95,8 +96,21 @@ export default function Community() {
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
                       borderColor: "rgba(186, 153, 136, 0.2)",
+                      position: "relative",
+                      overflow: "hidden",
                     }}
                   >
+                    {/* Decorative Pattern */}
+                    <View
+                      style={{
+                        position: "absolute",
+                        top: -30,
+                        right: -30,
+                        opacity: 0.05,
+                      }}
+                    >
+                      <DecorativePattern size={120} opacity={0.05} />
+                    </View>
                     <View
                       style={{
                         width: 56,
@@ -106,6 +120,8 @@ export default function Community() {
                         alignItems: "center",
                         justifyContent: "center",
                         marginBottom: 20,
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
                       <MaterialIcons name={feature.icon as any} size={28} color="#ba9988" />
@@ -117,6 +133,8 @@ export default function Community() {
                         color: "#ffffff",
                         marginBottom: 12,
                         letterSpacing: -0.5,
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
                       {feature.title}
@@ -127,6 +145,8 @@ export default function Community() {
                         color: "rgba(255, 255, 255, 0.7)",
                         lineHeight: 24,
                         marginBottom: 24,
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
                       {feature.description}

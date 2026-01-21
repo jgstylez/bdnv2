@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 
 const updates = [
@@ -101,7 +101,7 @@ export default function Updates() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="Platform Updates"
           subtitle="Stay informed about the latest features, improvements, and changes to the BDN platform."
         />

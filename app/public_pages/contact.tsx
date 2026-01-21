@@ -5,8 +5,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
+import { DecorativePattern } from '@/components/placeholders/SVGPlaceholders';
 
 type UserType = "consumer" | "business" | "nonprofit" | "general";
 
@@ -69,7 +70,7 @@ export default function Contact() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="Get in Touch"
           subtitle="Have questions? We're here to help. Reach out and let's connect."
         />
@@ -199,8 +200,21 @@ export default function Contact() {
                       borderWidth: 1,
                       borderColor: "rgba(186, 153, 136, 0.2)",
                       alignItems: "center",
+                      position: "relative",
+                      overflow: "hidden",
                     }}
                   >
+                    {/* Decorative Pattern */}
+                    <View
+                      style={{
+                        position: "absolute",
+                        top: -20,
+                        right: -20,
+                        opacity: 0.05,
+                      }}
+                    >
+                      <DecorativePattern size={80} opacity={0.05} />
+                    </View>
                     <View
                       style={{
                         width: 56,
@@ -210,6 +224,8 @@ export default function Contact() {
                         alignItems: "center",
                         justifyContent: "center",
                         marginBottom: 16,
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
                       <MaterialIcons name={method.icon as any} size={28} color="#ba9988" />

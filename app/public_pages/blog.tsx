@@ -8,8 +8,9 @@ import { useRouter } from "expo-router";
 import { BlogPost } from '@/types/education';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
+import { ArticlePlaceholder } from '@/components/placeholders/SVGPlaceholders';
 
 // Mock blog posts - sourced from university/blog
 const mockBlogPosts: BlogPost[] = [
@@ -143,7 +144,7 @@ export default function Blog() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="BDN Blog"
           subtitle="Stay updated with the latest news, tips, and stories from our community."
         />
@@ -223,15 +224,17 @@ export default function Blog() {
                       }}
                     >
                       {/* Featured Image */}
-                      {post.featuredImage && (
-                        <View
-                          style={{
-                            width: isMobile ? "100%" : 320,
-                            height: isMobile ? 220 : "auto",
-                            backgroundColor: "#232323",
-                            overflow: "hidden",
-                          }}
-                        >
+                      <View
+                        style={{
+                          width: isMobile ? "100%" : 320,
+                          height: isMobile ? 220 : 320,
+                          backgroundColor: "rgba(186, 153, 136, 0.05)",
+                          overflow: "hidden",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {post.featuredImage ? (
                           <Image
                             source={{ uri: post.featuredImage }}
                             style={{
@@ -240,8 +243,10 @@ export default function Blog() {
                             }}
                             contentFit="cover"
                           />
-                        </View>
-                      )}
+                        ) : (
+                          <ArticlePlaceholder width={isMobile ? 300 : 280} height={isMobile ? 200 : 280} />
+                        )}
+                      </View>
                       
                       {/* Content */}
                       <View style={{ flex: 1, padding: isMobile ? 24 : 32 }}>

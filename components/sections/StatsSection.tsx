@@ -4,12 +4,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { ScrollAnimatedView } from "../ScrollAnimatedView";
 
 const STATS = [
-  { value: "10K+", label: "Active Members", icon: "people" },
-  { value: "500+", label: "Black-Owned Businesses", icon: "store" },
-  { value: "$2M+", label: "Circulated in Community", icon: "attach-money" },
-  { value: "50+", label: "Cities Nationwide", icon: "location-city" },
-  { value: "4.9/5", label: "Average Rating", icon: "star" },
-  { value: "24/7", label: "Support Available", icon: "support-agent" },
+  { value: "$1.8T", label: "Black Spending Power by 2026", icon: "attach-money" },
+  { value: "6 Hours", label: "Dollar Circulation in Community", icon: "schedule" },
+  { value: "2016", label: "Year Founded", icon: "calendar-today" },
 ];
 
 export const StatsSection: React.FC = () => {

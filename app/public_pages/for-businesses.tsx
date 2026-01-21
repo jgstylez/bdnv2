@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
@@ -27,7 +27,7 @@ export default function ForBusinesses() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="Grow Your Black-Owned Business with BDN"
           subtitle="Join 500+ businesses reaching engaged consumers and growing revenue"
           showVideo={true}

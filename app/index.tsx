@@ -13,16 +13,21 @@ import Animated, {
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/sections/HeroSection';
-import { StatsSection } from '@/components/sections/StatsSection';
+import { DevelopmentStatusSection } from '@/components/sections/DevelopmentStatusSection';
+import { InvestmentBreakdownSection } from '@/components/sections/InvestmentBreakdownSection';
+import { KeyInitiativesSection } from '@/components/sections/KeyInitiativesSection';
+import { BusinessCategoriesCarousel } from '@/components/sections/BusinessCategoriesCarousel';
+import { ImpactChainSection } from '@/components/sections/ImpactChainSection';
+import { BlackOWNDemandSection } from '@/components/sections/BlackOWNDemandSection';
+import { SocialMediaSection } from '@/components/sections/SocialMediaSection';
+import { TrademarkSection } from '@/components/sections/TrademarkSection';
 import { QuickValuePropsSection } from '@/components/sections/QuickValuePropsSection';
-import { ConsumerBusinessPreview } from '@/components/sections/ConsumerBusinessPreview';
 import { BentoGrid } from '@/components/sections/BentoGrid';
 import { FeatureHighlight } from '@/components/sections/FeatureHighlight';
 import { FeaturesSection } from '@/components/sections/FeaturesSection';
 import { FintechFeaturesSection } from '@/components/sections/FintechFeaturesSection';
 import { BusinessDirectoryPreview } from '@/components/sections/BusinessDirectoryPreview';
 import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
-import { CTASection } from '@/components/sections/CTASection';
 import { EmailCaptureSection } from '@/components/sections/EmailCaptureSection';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
@@ -142,10 +147,15 @@ export default function Home() {
         <HeroSection 
           animatedStyle={headerAnimatedStyle}
           videoUrl=""
-          videoTitle="See How BDN Works"
+          videoTitle="WHAT WE DO - WATCH VIDEO"
         />
-        <StatsSection />
-        <ConsumerBusinessPreview />
+        <DevelopmentStatusSection />
+        <InvestmentBreakdownSection />
+        <KeyInitiativesSection />
+        <BusinessCategoriesCarousel />
+        <ImpactChainSection />
+        <BlackOWNDemandSection />
+        <SocialMediaSection />
         <QuickValuePropsSection />
         <FintechFeaturesSection />
         <BusinessDirectoryPreview />
@@ -153,7 +163,7 @@ export default function Home() {
         <FeatureHighlight />
         <FeaturesSection />
         <TestimonialsSection />
-        <CTASection onPress={() => {}} />
+        <TrademarkSection />
         <EmailCaptureSection />
         <Footer />
       </AnimatedScrollView>

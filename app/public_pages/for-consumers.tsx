@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { FintechFeaturesSection } from '@/components/sections/FintechFeaturesSection';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
@@ -28,7 +28,7 @@ export default function ForConsumers() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="Support Black Businesses, Earn Rewards, Build Economic Power"
           subtitle="Join 10K+ members circulating Black dollars and unlocking exclusive benefits"
           showVideo={true}

@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
@@ -27,7 +27,7 @@ export default function CommunityImpact() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="Community Impact"
           subtitle="Real-world examples of how supporting Black businesses creates lasting economic impact"
         />

@@ -6,10 +6,11 @@ import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { FintechFeaturesSection } from '@/components/sections/FintechFeaturesSection';
 import { FeaturesSection } from '@/components/sections/FeaturesSection';
+import { DecorativePattern, DiamondPattern } from '@/components/placeholders/SVGPlaceholders';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 export default function Features() {
@@ -30,7 +31,7 @@ export default function Features() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="Platform Features"
           subtitle="Everything you need to support Black businesses and build economic power in one powerful platform."
         />
@@ -127,8 +128,31 @@ export default function Features() {
                 borderWidth: 1,
                 borderColor: "rgba(186, 153, 136, 0.2)",
                 alignItems: "center",
+                position: "relative",
+                overflow: "hidden",
               }}
             >
+              {/* Decorative Patterns */}
+              <View
+                style={{
+                  position: "absolute",
+                  top: -50,
+                  right: -50,
+                  opacity: 0.1,
+                }}
+              >
+                <DecorativePattern size={200} opacity={0.1} />
+              </View>
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: -30,
+                  left: -30,
+                  opacity: 0.08,
+                }}
+              >
+                <DiamondPattern size={150} opacity={0.08} />
+              </View>
               <Text
                 style={{
                   fontSize: isMobile ? 28 : 36,

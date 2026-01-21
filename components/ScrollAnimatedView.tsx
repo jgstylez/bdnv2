@@ -3,7 +3,6 @@ import { View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 
@@ -23,8 +22,8 @@ export const ScrollAnimatedView: React.FC<ScrollAnimatedViewProps> = ({
   React.useEffect(() => {
     const timer = setTimeout(() => {
       opacity.value = withTiming(1, { duration: 800 });
-      translateY.value = withSpring(0, { damping: 20 });
-      scale.value = withSpring(1, { damping: 20 });
+      translateY.value = withTiming(0, { duration: 600 });
+      scale.value = withTiming(1, { duration: 600 });
     }, delay);
 
     return () => clearTimeout(timer);

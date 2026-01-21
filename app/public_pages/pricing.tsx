@@ -7,7 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { SUBSCRIPTION_PLANS, SubscriptionPlan } from '@/types/subscription';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { useResponsive } from '@/hooks/useResponsive';
 
@@ -35,7 +35,7 @@ export default function Pricing() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="BDN+ Premium"
           subtitle="Unlock enhanced features and exclusive benefits. Choose the plan that's right for you."
         />

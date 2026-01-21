@@ -4,11 +4,14 @@ import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/layouts/HeroSection';
+import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { MissionPlaceholder, DecorativePattern } from '@/components/placeholders/SVGPlaceholders';
 
 export default function About() {
   const { width } = useWindowDimensions();
@@ -52,7 +55,7 @@ export default function About() {
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
-        <HeroSection
+        <PublicHeroSection
           title="About Black Dollar Network"
           subtitle="Building economic power through innovation, collaboration, and community."
         />
@@ -61,18 +64,53 @@ export default function About() {
         <ScrollAnimatedView delay={200}>
           <View
             style={{
-              paddingHorizontal: isMobile ? 20 : 40,
-              paddingVertical: isMobile ? 60 : 80,
+              position: "relative",
+              minHeight: isMobile ? 600 : 700,
               backgroundColor: "#232323",
             }}
           >
+            {/* Background Image/Placeholder */}
             <View
               style={{
-                maxWidth: 1000,
-                alignSelf: "center",
-                width: "100%",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                opacity: 0.3,
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
+              <MissionPlaceholder width={400} height={300} />
+              <LinearGradient
+                colors={["rgba(35, 35, 35, 0.85)", "rgba(35, 35, 35, 0.95)"]}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+              />
+            </View>
+
+            {/* Content */}
+            <View
+              style={{
+                paddingHorizontal: isMobile ? 20 : 40,
+                paddingVertical: isMobile ? 60 : 80,
+                position: "relative",
+                zIndex: 1,
+              }}
+            >
+              <View
+                style={{
+                  maxWidth: 1000,
+                  alignSelf: "center",
+                  width: "100%",
+                }}
+              >
               <Text
                 style={{
                   fontSize: isMobile ? 32 : 44,
@@ -115,8 +153,21 @@ export default function About() {
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
                       borderColor: "rgba(186, 153, 136, 0.2)",
+                      position: "relative",
+                      overflow: "hidden",
                     }}
                   >
+                    {/* Decorative Pattern */}
+                    <View
+                      style={{
+                        position: "absolute",
+                        top: -30,
+                        right: -30,
+                        opacity: 0.05,
+                      }}
+                    >
+                      <DecorativePattern size={120} opacity={0.05} />
+                    </View>
                     <View
                       style={{
                         width: 56,
@@ -126,6 +177,8 @@ export default function About() {
                         alignItems: "center",
                         justifyContent: "center",
                         marginBottom: 20,
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
                       <MaterialIcons name={value.icon as any} size={28} color="#ba9988" />
@@ -137,6 +190,8 @@ export default function About() {
                         color: "#ffffff",
                         marginBottom: 12,
                         letterSpacing: -0.5,
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
                       {value.title}
@@ -146,6 +201,8 @@ export default function About() {
                         fontSize: 15,
                         color: "rgba(255, 255, 255, 0.7)",
                         lineHeight: 24,
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
                       {value.description}
@@ -189,6 +246,7 @@ export default function About() {
                   </View>
                 ))}
               </View>
+            </View>
             </View>
           </View>
         </ScrollAnimatedView>
