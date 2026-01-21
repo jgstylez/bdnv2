@@ -14,6 +14,8 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { StatsSection } from '@/components/sections/StatsSection';
+import { QuickValuePropsSection } from '@/components/sections/QuickValuePropsSection';
+import { ConsumerBusinessPreview } from '@/components/sections/ConsumerBusinessPreview';
 import { BentoGrid } from '@/components/sections/BentoGrid';
 import { FeatureHighlight } from '@/components/sections/FeatureHighlight';
 import { FeaturesSection } from '@/components/sections/FeaturesSection';
@@ -137,8 +139,14 @@ export default function Home() {
           paddingBottom: 0,
         }}
       >
-        <HeroSection animatedStyle={headerAnimatedStyle} />
+        <HeroSection 
+          animatedStyle={headerAnimatedStyle}
+          videoUrl=""
+          videoTitle="See How BDN Works"
+        />
         <StatsSection />
+        <ConsumerBusinessPreview />
+        <QuickValuePropsSection />
         <FintechFeaturesSection />
         <BusinessDirectoryPreview />
         <BentoGrid />

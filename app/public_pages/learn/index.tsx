@@ -2,66 +2,96 @@ import React from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
-export default function Community() {
+const EDUCATIONAL_TOPICS = [
+  {
+    title: "Black Spending Power",
+    icon: "trending-up",
+    description: "Understand the $1.6+ trillion in annual Black spending power and how your spending decisions create impact.",
+    href: "/public_pages/learn/black-spending-power",
+    color: "#ba9988",
+  },
+  {
+    title: "Group Economics",
+    icon: "diamond",
+    description: "Learn about group economics, the multiplier effect, and how circulating Black dollars strengthens communities.",
+    href: "/public_pages/learn/group-economics",
+    color: "#ba9988",
+  },
+  {
+    title: "Community Impact",
+    icon: "public",
+    description: "See real-world examples of how supporting Black businesses creates lasting economic impact in communities.",
+    href: "/public_pages/learn/community-impact",
+    color: "#ba9988",
+  },
+  {
+    title: "Financial Literacy",
+    icon: "account-balance-wallet",
+    description: "Build your financial knowledge with guides on budgeting, investing, and building wealth.",
+    href: "/pages/university",
+    color: "#ba9988",
+  },
+  {
+    title: "Business Growth",
+    icon: "store",
+    description: "Resources for Black business owners: marketing, operations, scaling, and success strategies.",
+    href: "/pages/university",
+    color: "#ba9988",
+  },
+];
+
+const FEATURED_RESOURCES = [
+  {
+    title: "The Power of $1.6 Trillion",
+    type: "Article",
+    description: "Deep dive into Black spending power and its potential impact.",
+    href: "/public_pages/blog",
+  },
+  {
+    title: "Group Economics 101",
+    type: "Guide",
+    description: "A comprehensive guide to understanding and practicing group economics.",
+    href: "/public_pages/learn/group-economics",
+  },
+  {
+    title: "BDN Impact Report 2024",
+    type: "Report",
+    description: "See how BDN has facilitated economic impact in Black communities.",
+    href: "/public_pages/learn/community-impact",
+  },
+];
+
+export default function LearnIndex() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const isMobile = width < 768;
 
-  const communityFeatures = [
-    {
-      icon: "groups",
-      title: "Join the Movement",
-      description: "Connect with thousands of members dedicated to supporting Black businesses and building economic power.",
-      action: "Sign Up",
-      href: "/(auth)/signup",
-    },
-    {
-      icon: "store",
-      title: "Support Businesses",
-      description: "Discover and support Black-owned businesses in your area. Every purchase strengthens our community.",
-      action: "Browse Directory",
-      href: "/pages/businesses/businesses",
-    },
-    {
-      icon: "trending-up",
-      title: "Track Impact",
-      description: "See how your spending circulates in the community. Track your economic impact in real-time.",
-      action: "View Impact",
-      href: "/pages/myimpact",
-    },
-    {
-      icon: "event",
-      title: "Attend Events",
-      description: "Join community events, workshops, and networking opportunities designed to empower and connect.",
-      action: "View Events",
-      href: "/pages/events",
-    },
-  ];
-
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <Navigation />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
         <HeroSection
-          title="Join Our Community"
-          subtitle="Together, we're building economic power and creating lasting change in Black communities."
+          title="Educational Resources"
+          subtitle="Learn about Black spending power, group economics, and how to build economic impact in our communities"
         />
 
-        {/* Community Features */}
+        {/* Topics Grid */}
         <ScrollAnimatedView delay={200}>
           <View
             style={{
@@ -77,6 +107,18 @@ export default function Community() {
                 width: "100%",
               }}
             >
+              <Text
+                style={{
+                  fontSize: isMobile ? 32 : 44,
+                  fontWeight: "700",
+                  color: "#ffffff",
+                  marginBottom: 48,
+                  textAlign: "center",
+                  letterSpacing: -0.5,
+                }}
+              >
+                Explore Topics
+              </Text>
               <View
                 style={{
                   flexDirection: isMobile ? "column" : "row",
@@ -84,14 +126,15 @@ export default function Community() {
                   gap: 24,
                 }}
               >
-                {communityFeatures.map((feature, index) => (
-                  <View
+                {EDUCATIONAL_TOPICS.map((topic, index) => (
+                  <TouchableOpacity
                     key={index}
+                    onPress={() => router.push(topic.href as any)}
                     style={{
                       flex: 1,
-                      minWidth: isMobile ? "100%" : "45%",
+                      minWidth: isMobile ? "100%" : "30%",
                       backgroundColor: "#474747",
-                      borderRadius: 20,
+                      borderRadius: 24,
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
                       borderColor: "rgba(186, 153, 136, 0.2)",
@@ -99,16 +142,16 @@ export default function Community() {
                   >
                     <View
                       style={{
-                        width: 56,
-                        height: 56,
+                        width: 64,
+                        height: 64,
                         borderRadius: 16,
                         backgroundColor: "rgba(186, 153, 136, 0.15)",
                         alignItems: "center",
                         justifyContent: "center",
-                        marginBottom: 20,
+                        marginBottom: 24,
                       }}
                     >
-                      <MaterialIcons name={feature.icon as any} size={28} color="#ba9988" />
+                      <MaterialIcons name={topic.icon as any} size={32} color={topic.color} />
                     </View>
                     <Text
                       style={{
@@ -119,46 +162,38 @@ export default function Community() {
                         letterSpacing: -0.5,
                       }}
                     >
-                      {feature.title}
+                      {topic.title}
                     </Text>
                     <Text
                       style={{
                         fontSize: 15,
                         color: "rgba(255, 255, 255, 0.7)",
                         lineHeight: 24,
-                        marginBottom: 24,
+                        marginBottom: 20,
                       }}
                     >
-                      {feature.description}
+                      {topic.description}
                     </Text>
-                    <TouchableOpacity
-                      onPress={() => router.push(feature.href as any)}
-                      style={{
-                        backgroundColor: "#ba9988",
-                        paddingVertical: 12,
-                        paddingHorizontal: 24,
-                        borderRadius: 10,
-                        alignSelf: "flex-start",
-                      }}
-                    >
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                       <Text
                         style={{
                           fontSize: 14,
                           fontWeight: "600",
-                          color: "#ffffff",
+                          color: "#ba9988",
                         }}
                       >
-                        {feature.action} →
+                        Learn More
                       </Text>
-                    </TouchableOpacity>
-                  </View>
+                      <MaterialIcons name="arrow-forward" size={18} color="#ba9988" />
+                    </View>
+                  </TouchableOpacity>
                 ))}
               </View>
             </View>
           </View>
         </ScrollAnimatedView>
 
-        {/* Community Stats */}
+        {/* Featured Resources */}
         <ScrollAnimatedView delay={400}>
           <View
             style={{
@@ -184,63 +219,88 @@ export default function Community() {
                   letterSpacing: -0.5,
                 }}
               >
-                Community Impact
+                Featured Resources
               </Text>
               <View
                 style={{
                   flexDirection: isMobile ? "column" : "row",
-                  flexWrap: "wrap",
-                  justifyContent: "space-around",
-                  gap: isMobile ? 40 : 60,
+                  gap: 24,
                 }}
               >
-                {[
-                  { value: "10K+", label: "Active Members", icon: "people" },
-                  { value: "500+", label: "Black-Owned Businesses", icon: "store" },
-                  { value: "$2M+", label: "Dollars Circulated", icon: "attach-money" },
-                  { value: "50+", label: "Cities Nationwide", icon: "location-city" },
-                ].map((stat, index) => (
-                  <View key={index} style={{ alignItems: "center", flex: isMobile ? 1 : 0 }}>
+                {FEATURED_RESOURCES.map((resource, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => router.push(resource.href as any)}
+                    style={{
+                      flex: 1,
+                      backgroundColor: "#474747",
+                      borderRadius: 20,
+                      padding: isMobile ? 24 : 32,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.2)",
+                    }}
+                  >
                     <View
                       style={{
-                        width: 64,
-                        height: 64,
-                        borderRadius: 16,
                         backgroundColor: "rgba(186, 153, 136, 0.15)",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        paddingHorizontal: 12,
+                        paddingVertical: 6,
+                        borderRadius: 8,
+                        alignSelf: "flex-start",
                         marginBottom: 16,
                       }}
                     >
-                      <MaterialIcons name={stat.icon as any} size={32} color="#ba9988" />
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontWeight: "600",
+                          color: "#ba9988",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {resource.type}
+                      </Text>
                     </View>
                     <Text
                       style={{
-                        fontSize: isMobile ? 40 : 52,
-                        fontWeight: "800",
-                        color: "#ba9988",
-                        marginBottom: 8,
+                        fontSize: isMobile ? 20 : 24,
+                        fontWeight: "700",
+                        color: "#ffffff",
+                        marginBottom: 12,
                       }}
                     >
-                      {stat.value}
+                      {resource.title}
                     </Text>
                     <Text
                       style={{
-                        fontSize: 16,
+                        fontSize: 15,
                         color: "rgba(255, 255, 255, 0.7)",
-                        textAlign: "center",
+                        lineHeight: 24,
+                        marginBottom: 20,
                       }}
                     >
-                      {stat.label}
+                      {resource.description}
                     </Text>
-                  </View>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: "600",
+                          color: "#ba9988",
+                        }}
+                      >
+                        Read More
+                      </Text>
+                      <MaterialIcons name="arrow-forward" size={18} color="#ba9988" />
+                    </View>
+                  </TouchableOpacity>
                 ))}
               </View>
             </View>
           </View>
         </ScrollAnimatedView>
 
-        {/* Get Involved CTA */}
+        {/* Newsletter Signup */}
         <ScrollAnimatedView delay={600}>
           <View
             style={{
@@ -251,7 +311,7 @@ export default function Community() {
           >
             <View
               style={{
-                maxWidth: 1000,
+                maxWidth: 800,
                 alignSelf: "center",
                 width: "100%",
                 backgroundColor: "#474747",
@@ -262,6 +322,7 @@ export default function Community() {
                 alignItems: "center",
               }}
             >
+              <MaterialIcons name="email" size={48} color="#ba9988" style={{ marginBottom: 24 }} />
               <Text
                 style={{
                   fontSize: isMobile ? 28 : 36,
@@ -271,27 +332,26 @@ export default function Community() {
                   textAlign: "center",
                 }}
               >
-                Get Involved Today
+                Stay Updated
               </Text>
               <Text
                 style={{
-                  fontSize: isMobile ? 16 : 18,
+                  fontSize: 16,
                   color: "rgba(255, 255, 255, 0.7)",
                   textAlign: "center",
                   marginBottom: 32,
                   maxWidth: 600,
                 }}
               >
-                Join thousands of members building economic power and creating lasting change.
+                Get the latest educational content, resources, and insights delivered to your inbox.
               </Text>
               <TouchableOpacity
-                onPress={() => router.push("/(auth)/signup")}
+                onPress={() => router.push("/public_pages/contact")}
                 style={{
                   backgroundColor: "#ba9988",
-                  paddingHorizontal: 48,
-                  paddingVertical: 16,
+                  paddingVertical: 14,
+                  paddingHorizontal: 32,
                   borderRadius: 12,
-                  minWidth: 200,
                   alignItems: "center",
                 }}
               >
@@ -302,7 +362,7 @@ export default function Community() {
                     color: "#ffffff",
                   }}
                 >
-                  Join the Community
+                  Subscribe to Newsletter
                 </Text>
               </TouchableOpacity>
             </View>
@@ -310,8 +370,7 @@ export default function Community() {
         </ScrollAnimatedView>
 
         <Footer />
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }
-

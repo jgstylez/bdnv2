@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -22,17 +22,25 @@ import Svg, {
   LinearGradient as SvgLinearGradient,
   Stop,
 } from "react-native-svg";
+import { VideoLightbox } from "../modals/VideoLightbox";
 
 interface HeroSectionProps {
   animatedStyle: any;
+  videoUrl?: string;
+  videoTitle?: string;
 }
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({ 
+  animatedStyle, 
+  videoUrl,
+  videoTitle = "Watch Our Story",
+}) => {
   const { width } = useWindowDimensions();
   const router = useRouter();
   const isMobile = width < 768;
+  const [videoModalVisible, setVideoModalVisible] = useState(false);
 
   // Animation values
   const pulseAnim = useSharedValue(0);
@@ -60,7 +68,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
         end={{ x: 1, y: 1 }}
         style={{
           width: "100%",
-          paddingTop: isMobile ? 80 : 120,
+          paddingTop: isMobile ? 40 : 60,
           paddingBottom: isMobile ? 80 : 100,
           paddingHorizontal: isMobile ? 20 : 40,
           alignItems: "center",
@@ -143,8 +151,98 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
             lineHeight: isMobile ? 56 : 70,
           }}
         >
-          The #1 Black Business Marketplace
+          Empower Black Economic Growth
         </Text>
+
+        {/* Video Placeholder */}
+        <TouchableOpacity
+          onPress={() => setVideoModalVisible(true)}
+          activeOpacity={0.9}
+          style={{
+            width: "100%",
+            maxWidth: isMobile ? width - 40 : 800,
+            aspectRatio: 16 / 9,
+            borderRadius: 20,
+            overflow: "hidden",
+            marginBottom: 32,
+            backgroundColor: "#1a1a1a",
+            borderWidth: 2,
+            borderColor: "rgba(186, 153, 136, 0.3)",
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.4,
+            shadowRadius: 16,
+            elevation: 8,
+          }}
+        >
+          {/* Video Thumbnail/Placeholder */}
+          <View
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#232323",
+              justifyContent: "center",
+              alignItems: "center",
+              position: "relative",
+            }}
+          >
+            {/* Play Button Overlay */}
+            <View
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <View
+                style={{
+                  width: isMobile ? 64 : 80,
+                  height: isMobile ? 64 : 80,
+                  borderRadius: isMobile ? 32 : 40,
+                  backgroundColor: "rgba(186, 153, 136, 0.9)",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderWidth: 4,
+                  borderColor: "#ffffff",
+                }}
+              >
+                <MaterialIcons 
+                  name="play-arrow" 
+                  size={isMobile ? 32 : 40} 
+                  color="#ffffff"
+                  style={{ marginLeft: 4 }}
+                />
+              </View>
+            </View>
+            
+            {/* Video Label */}
+            <View
+              style={{
+                position: "absolute",
+                bottom: 16,
+                left: 16,
+                right: 16,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <MaterialIcons name="play-circle-filled" size={20} color="#ffffff" />
+              <Text
+                style={{
+                  fontSize: isMobile ? 14 : 16,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                }}
+              >
+                {videoTitle}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
 
         {/* Value Proposition */}
         <Text
@@ -154,7 +252,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
             textAlign: "center",
             maxWidth: 800,
             lineHeight: isMobile ? 26 : 32,
-            marginBottom: 48,
+            marginBottom: 24,
             fontWeight: "400",
           }}
         >
@@ -162,7 +260,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
           economic power in our communities. Get started in minutes—it's free.
         </Text>
 
-        {/* CTA Buttons */}
+        {/* Trust Indicators */}
+        <Text
+          style={{
+            fontSize: isMobile ? 14 : 16,
+            color: "rgba(255, 255, 255, 0.6)",
+            textAlign: "center",
+            marginBottom: 48,
+            fontWeight: "500",
+          }}
+        >
+          10K+ Members • 500+ Businesses • $2M+ Circulated
+        </Text>
+
+        {/* Dual CTA Buttons */}
         <View
           style={{
             flexDirection: isMobile ? "column" : "row",
@@ -175,18 +286,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
         >
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => router.push("/(auth)/signup")}
+            onPress={() => router.push("/public_pages/for-consumers")}
             accessible={true}
             accessibilityRole="button"
-            accessibilityLabel="Get Started Free"
-            accessibilityHint="Sign up for a free account"
+            accessibilityLabel="I'm a Consumer"
+            accessibilityHint="Go to consumer landing page"
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
               backgroundColor: "#ba9988",
               paddingHorizontal: isMobile ? 40 : 48,
               paddingVertical: isMobile ? 16 : 18,
               borderRadius: 14,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 0 : 1,
+              minWidth: isMobile ? "100%" : 0,
               alignItems: "center",
               justifyContent: "center",
               shadowColor: "#ba9988",
@@ -205,38 +317,40 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
                 letterSpacing: 0.5,
               }}
             >
-              Get Started Free
+              I'm a Consumer
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => router.push("/(auth)/login")}
+            onPress={() => router.push("/public_pages/for-businesses")}
             accessible={true}
             accessibilityRole="button"
-            accessibilityLabel="Sign In"
-            accessibilityHint="Sign in to your existing account"
+            accessibilityLabel="I'm a Business"
+            accessibilityHint="Go to business landing page"
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             style={{
+              backgroundColor: "rgba(186, 153, 136, 0.2)",
+              borderWidth: 2,
+              borderColor: "#ba9988",
               paddingHorizontal: isMobile ? 40 : 48,
               paddingVertical: isMobile ? 16 : 18,
-              borderWidth: 2,
-              borderColor: "#474747",
               borderRadius: 14,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 0 : 1,
+              minWidth: isMobile ? "100%" : 0,
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "rgba(71, 71, 71, 0.3)",
             }}
           >
             <Text
               style={{
                 fontSize: isMobile ? 16 : 18,
-                fontWeight: "600",
-                color: "#ffffff",
+                fontWeight: "700",
+                color: "#ba9988",
                 textAlign: "center",
+                letterSpacing: 0.5,
               }}
             >
-              Sign In
+              I'm a Business
             </Text>
           </TouchableOpacity>
         </View>
@@ -272,6 +386,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ animatedStyle }) => {
           </View>
         </View>
       </LinearGradient>
+
+      {/* Video Lightbox */}
+      <VideoLightbox
+        visible={videoModalVisible}
+        onClose={() => setVideoModalVisible(false)}
+        videoUrl={videoUrl}
+        title={videoTitle}
+      />
     </Animated.View>
   );
 };

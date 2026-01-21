@@ -18,8 +18,9 @@ export const Navigation: React.FC<NavigationProps> = ({ includeSafeAreaPadding =
 
   const navItems = [
     { label: "Home", href: "/" },
-    { label: "About", href: "/public_pages/about" },
+    { label: "Learn", href: "/public_pages/learn" },
     { label: "Features", href: "/public_pages/features" },
+    { label: "About", href: "/public_pages/about" },
     { label: "Community", href: "/public_pages/community" },
     { label: "Contact", href: "/public_pages/contact" },
   ];
@@ -85,29 +86,27 @@ export const Navigation: React.FC<NavigationProps> = ({ includeSafeAreaPadding =
               BDN
             </Text>
             </View>
-            {!isMobile && (
-              <View
+            <View
+              style={{
+                backgroundColor: "rgba(186, 153, 136, 0.15)",
+                paddingHorizontal: 12,
+                paddingVertical: 6,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+              }}
+            >
+              <Text
                 style={{
-                  backgroundColor: "rgba(186, 153, 136, 0.15)",
-                  paddingHorizontal: 12,
-                  paddingVertical: 6,
-                  borderRadius: 12,
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  fontSize: 11,
+                  color: "#ba9988",
+                  fontWeight: "600",
+                  letterSpacing: 0.5,
                 }}
               >
-                <Text
-                  style={{
-                    fontSize: 11,
-                    color: "#ba9988",
-                    fontWeight: "600",
-                    letterSpacing: 0.5,
-                  }}
-                >
-                  EDUCATE • EQUIP • EMPOWER
-                </Text>
-              </View>
-            )}
+                EDUCATE • EQUIP • EMPOWER®
+              </Text>
+            </View>
           </View>
         </TouchableOpacity>
 
@@ -120,7 +119,7 @@ export const Navigation: React.FC<NavigationProps> = ({ includeSafeAreaPadding =
               alignItems: "center",
             }}
           >
-            {navItems.map((item) => (
+            {navItems.filter((item) => item.label !== "Home").map((item) => (
               <TouchableOpacity
                 key={item.label}
                 onPress={() => router.push(item.href as any)}

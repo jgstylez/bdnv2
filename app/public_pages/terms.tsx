@@ -99,7 +99,7 @@ export default function Terms() {
         showBackToTop={true}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: isMobile ? insets.bottom + 40 : 40,
+          paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
         <HeroSection

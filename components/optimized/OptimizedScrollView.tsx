@@ -131,8 +131,6 @@ export const OptimizedScrollView: React.FC<OptimizedScrollViewProps> = ({
         onMomentumScrollEnd={handleMomentumScrollEnd}
         contentContainerStyle={[
           {
-            paddingHorizontal: paddingHorizontal,
-            paddingTop: Platform.OS === 'web' ? 20 : 36,
             paddingBottom: scrollViewBottomPadding + extraBottomPadding,
           },
           contentContainerStyle,

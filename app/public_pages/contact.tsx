@@ -8,10 +8,13 @@ import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 
+type UserType = "consumer" | "business" | "nonprofit" | "general";
+
 export default function Contact() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const isMobile = width < 768;
+  const [userType, setUserType] = useState<UserType>("general");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -63,13 +66,104 @@ export default function Contact() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: isMobile ? insets.bottom + 40 : 40,
+          paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
         <HeroSection
           title="Get in Touch"
           subtitle="Have questions? We're here to help. Reach out and let's connect."
         />
+
+        {/* User Type Selector */}
+        <ScrollAnimatedView delay={100}>
+          <View
+            style={{
+              paddingHorizontal: isMobile ? 20 : 40,
+              paddingVertical: isMobile ? 40 : 60,
+              backgroundColor: "#232323",
+            }}
+          >
+            <View
+              style={{
+                maxWidth: 1000,
+                alignSelf: "center",
+                width: "100%",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: isMobile ? 16 : 18,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 16,
+                  textAlign: "center",
+                }}
+              >
+                I'm contacting as:
+              </Text>
+              <View
+                style={{
+                  flexDirection: isMobile ? "column" : "row",
+                  gap: 12,
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                {[
+                  { key: "consumer", label: "Consumer" },
+                  { key: "business", label: "Business" },
+                  { key: "nonprofit", label: "Nonprofit" },
+                  { key: "general", label: "General Inquiry" },
+                ].map((type) => (
+                  <TouchableOpacity
+                    key={type.key}
+                    onPress={() => setUserType(type.key as UserType)}
+                    style={{
+                      backgroundColor: userType === type.key ? "#ba9988" : "#474747",
+                      paddingHorizontal: 24,
+                      paddingVertical: 12,
+                      borderRadius: 12,
+                      borderWidth: userType === type.key ? 0 : 1,
+                      borderColor: "rgba(186, 153, 136, 0.2)",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: "600",
+                        color: userType === type.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                    >
+                      {type.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              {userType === "business" && (
+                <TouchableOpacity
+                  onPress={() => {}}
+                  style={{
+                    backgroundColor: "#ba9988",
+                    paddingVertical: 12,
+                    borderRadius: 12,
+                    alignItems: "center",
+                    marginTop: 20,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                    }}
+                  >
+                    Schedule a Demo →
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </ScrollAnimatedView>
 
         {/* Contact Methods */}
         <ScrollAnimatedView delay={200}>

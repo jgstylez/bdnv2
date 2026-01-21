@@ -9,8 +9,18 @@ export const Footer: React.FC = () => {
   const router = useRouter();
   const isMobile = width < 768;
   const isTablet = width >= 768 && width < 1024;
+  const isDesktop = width >= 1024;
 
   const footerSections = [
+    {
+      title: "Learn",
+      links: [
+        { label: "Educational Hub", href: "/public_pages/learn" },
+        { label: "Black Spending Power", href: "/public_pages/learn/black-spending-power" },
+        { label: "Group Economics", href: "/public_pages/learn/group-economics" },
+        { label: "Community Impact", href: "/public_pages/learn/community-impact" },
+      ],
+    },
     {
       title: "Product",
       links: [
@@ -25,6 +35,7 @@ export const Footer: React.FC = () => {
         { label: "About", href: "/public_pages/about" },
         { label: "Blog", href: "/public_pages/blog" },
         { label: "Careers", href: "/public_pages/careers" },
+        { label: "Contact", href: "/public_pages/contact" },
       ],
     },
     {
@@ -33,14 +44,6 @@ export const Footer: React.FC = () => {
         { label: "Documentation", href: "/public_pages/docs" },
         { label: "Support", href: "/pages/support" },
         { label: "Community", href: "/public_pages/community" },
-      ],
-    },
-    {
-      title: "Legal",
-      links: [
-        { label: "Privacy", href: "/public_pages/privacy" },
-        { label: "Terms", href: "/public_pages/terms" },
-        { label: "Security", href: "/public_pages/security" },
       ],
     },
   ];
@@ -73,19 +76,106 @@ export const Footer: React.FC = () => {
           width: "100%",
         }}
       >
+        {/* CTA Section */}
+        <View
+          style={{
+            backgroundColor: "#474747",
+            borderRadius: 24,
+            padding: isMobile ? 32 : 48,
+            marginBottom: isMobile ? 40 : 60,
+            borderWidth: 1,
+            borderColor: "rgba(186, 153, 136, 0.2)",
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: isMobile ? 28 : 36,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
+              textAlign: "center",
+            }}
+          >
+            Ready to Build Economic Power?
+          </Text>
+          <Text
+            style={{
+              fontSize: isMobile ? 15 : 16,
+              color: "rgba(255, 255, 255, 0.7)",
+              textAlign: "center",
+              marginBottom: 32,
+              maxWidth: 600,
+            }}
+          >
+            Join thousands of members and businesses circulating Black dollars and creating lasting impact.
+          </Text>
+          <View
+            style={{
+              flexDirection: isMobile ? "column" : "row",
+              gap: 16,
+              width: "100%",
+              maxWidth: 500,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => router.push("/(auth)/signup")}
+              style={{
+                flex: 1,
+                backgroundColor: "#ba9988",
+                paddingVertical: 14,
+                borderRadius: 12,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                }}
+              >
+                Get Started Free
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push("/pages/merchant/onboarding")}
+              style={{
+                flex: 1,
+                borderWidth: 2,
+                borderColor: "#ba9988",
+                paddingVertical: 14,
+                borderRadius: 12,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: "600",
+                  color: "#ba9988",
+                }}
+              >
+                List Your Business
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* Main Footer Content */}
         <View
           style={{
             flexDirection: isMobile ? "column" : "row",
             justifyContent: "space-between",
             marginBottom: isMobile ? 40 : 48,
-            gap: isMobile ? 40 : 60,
+            gap: isMobile ? 40 : isTablet ? 40 : 32,
           }}
         >
           {/* Brand Section */}
           <View 
             style={{ 
-              width: isMobile ? "100%" : isTablet ? "35%" : "40%",
+              width: isMobile ? "100%" : isTablet ? "35%" : isDesktop ? "35%" : "35%",
+              maxWidth: isDesktop ? 380 : undefined,
             }}
           >
             <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 16 }}>
@@ -169,11 +259,12 @@ export const Footer: React.FC = () => {
               style={{
                 flex: 1,
                 flexDirection: "row",
+                flexWrap: "wrap",
                 gap: 24,
               }}
             >
-              {/* Column 1: Product & Company */}
-              <View style={{ flex: 1 }}>
+              {/* Column 1: Learn & Product */}
+              <View style={{ flex: 1, minWidth: "45%" }}>
                 {footerSections.slice(0, 2).map((section) => (
                   <View key={section.title} style={{ marginBottom: 32 }}>
                     <Text
@@ -214,9 +305,9 @@ export const Footer: React.FC = () => {
                 ))}
               </View>
 
-              {/* Column 2: Resources & Legal */}
-              <View style={{ flex: 1 }}>
-                {footerSections.slice(2, 4).map((section) => (
+              {/* Column 2: Company & Resources */}
+              <View style={{ flex: 1, minWidth: "45%" }}>
+                {footerSections.slice(2).map((section) => (
                   <View key={section.title} style={{ marginBottom: 32 }}>
                     <Text
                       style={{
@@ -255,22 +346,28 @@ export const Footer: React.FC = () => {
                   </View>
                 ))}
               </View>
+
             </View>
           ) : (
             <View
               style={{
                 flex: 1,
                 flexDirection: "row",
-                justifyContent: "space-between",
-                gap: 40,
+                justifyContent: isTablet ? "space-between" : "flex-start",
+                gap: isTablet ? 24 : isDesktop ? 20 : 24,
+                flexWrap: isTablet ? "wrap" : "nowrap",
               }}
             >
+              {/* Empty spacer column on desktop for spacing */}
+              {isDesktop && <View style={{ width: 40 }} />}
               {footerSections.map((section) => (
                 <View 
                   key={section.title} 
                   style={{ 
-                    flex: 1,
-                    minWidth: 120,
+                    flex: isTablet ? 0 : isDesktop ? 1 : 0,
+                    width: isTablet ? "48%" : undefined,
+                    minWidth: isDesktop ? 100 : isTablet ? 120 : 100,
+                    maxWidth: isDesktop ? 140 : undefined,
                   }}
                 >
                   <Text

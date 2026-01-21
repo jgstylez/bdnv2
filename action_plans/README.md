@@ -9,6 +9,20 @@ This folder contains all project documentation, planning documents, and architec
 - **[project-overview.md](./project-overview.md)** - Project overview and getting started guide
 - **[architecture.md](./architecture.md)** - Architecture and design system documentation
 
+### Comprehensive Technical Plans
+These plans cover the complete technical architecture and implementation strategy for BDN 2.0:
+
+- **[bdn-2.0-comprehensive-technical-plan.md](./bdn-2.0-comprehensive-technical-plan.md)** - **MASTER PLAN** - Complete technical architecture, payment system, inventory management, content gating, admin panel, AI features, and implementation phases
+- **[security-compliance-strategy.md](./security-compliance-strategy.md)** - Database security, PCI DSS compliance (USD transactions via processors), GDPR/CCPA, financial regulations
+- **[unit-testing-strategy.md](./unit-testing-strategy.md)** - Unit testing strategy with tests written alongside features
+- **[testing-strategy-expansion.md](./testing-strategy-expansion.md)** - Integration, E2E, and performance testing strategies
+- **[infrastructure-deployment-strategy.md](./infrastructure-deployment-strategy.md)** - Docker, Cloud Run, CI/CD pipelines, environment management
+- **[monitoring-observability-strategy.md](./monitoring-observability-strategy.md)** - Logging, alerting, metrics, performance monitoring, cost tracking
+- **[disaster-recovery-business-continuity.md](./disaster-recovery-business-continuity.md)** - Backup procedures, failover strategies, recovery procedures, RTO/RPO targets
+- **[documentation-strategy.md](./documentation-strategy.md)** - API docs (OpenAPI/Swagger), runbooks, ADRs, developer guides
+- **[charting-blnkfinance-integration.md](./charting-blnkfinance-integration.md)** - Charting library migration (Victory) and BlnkFinance Core ledger integration
+- **[firebase-sandbox-production-ci-cd.md](./firebase-sandbox-production-ci-cd.md)** - Firebase sandbox/production split and CI/CD setup (for legacy systems)
+
 ### Feature Documentation
 - **[feature-flags-implementation.md](./feature-flags-implementation.md)** - Feature flags system documentation
 - **[developer-quick-reference.md](./developer-quick-reference.md)** - Developer dashboard quick reference
@@ -69,6 +83,12 @@ This folder contains all project documentation, planning documents, and architec
 ### Troubleshooting
 - **[troubleshooting.md](./troubleshooting.md)** - Troubleshooting guide
 - **[TROUBLESHOOTING copy.md](./TROUBLESHOOTING%20copy.md)** - Troubleshooting copy (duplicate, can be removed)
+
+### Specialized Plans & Reviews
+- **[seo-enhancement-plan.md](./seo-enhancement-plan.md)** - SEO enhancement for landing pages (structured data, Open Graph, meta tags)
+- **[legacy-300-landing-page.md](./legacy-300-landing-page.md)** - Legacy 300 landing page implementation plan
+- **[error-fixes-mock-data-walkthrough.md](./error-fixes-mock-data-walkthrough.md)** - Error fixes and mock data for app walkthrough
+- **[organization-program-management-review.md](./organization-program-management-review.md)** - Organization signup, program setup, and participant invitation flows review
 
 ### Historical Reviews (Archived)
 These documents contain historical information and have been consolidated into **[CODEBASE-REVIEW-2025.md](./CODEBASE-REVIEW-2025.md)**:

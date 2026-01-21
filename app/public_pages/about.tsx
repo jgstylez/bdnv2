@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, ScrollView, useWindowDimensions, Platform } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, Platform, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -12,6 +13,7 @@ import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView'
 export default function About() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const isMobile = width < 768;
 
   const values = [
@@ -47,7 +49,7 @@ export default function About() {
         showBackToTop={true}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: isMobile ? insets.bottom + 40 : 40,
+          paddingBottom: isMobile ? insets.bottom : 0,
         }}
       >
         <HeroSection
@@ -247,6 +249,104 @@ export default function About() {
                 >
                   Our platform combines cutting-edge financial technology with a deep commitment to community values. Every feature we build, every business we support, and every transaction we facilitate moves us closer to our goal: a stronger, more self-sufficient Black economy.
                 </Text>
+              </View>
+            </View>
+          </View>
+        </ScrollAnimatedView>
+
+        {/* Join the Movement CTA */}
+        <ScrollAnimatedView delay={600}>
+          <View
+            style={{
+              paddingHorizontal: isMobile ? 20 : 40,
+              paddingVertical: isMobile ? 60 : 80,
+              backgroundColor: "#232323",
+            }}
+          >
+            <View
+              style={{
+                maxWidth: 1000,
+                alignSelf: "center",
+                width: "100%",
+                backgroundColor: "#474747",
+                borderRadius: 24,
+                padding: isMobile ? 32 : 48,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: isMobile ? 28 : 36,
+                  fontWeight: "700",
+                  color: "#ffffff",
+                  marginBottom: 16,
+                  textAlign: "center",
+                }}
+              >
+                Join the Movement
+              </Text>
+              <Text
+                style={{
+                  fontSize: isMobile ? 16 : 18,
+                  color: "rgba(255, 255, 255, 0.7)",
+                  textAlign: "center",
+                  marginBottom: 32,
+                  maxWidth: 600,
+                }}
+              >
+                Be part of building economic power and creating lasting change in Black communities.
+              </Text>
+              <View
+                style={{
+                  flexDirection: isMobile ? "column" : "row",
+                  gap: 16,
+                  width: "100%",
+                  maxWidth: 600,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => router.push("/public_pages/for-consumers")}
+                  style={{
+                    flex: 1,
+                    backgroundColor: "#ba9988",
+                    paddingVertical: 14,
+                    borderRadius: 12,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                    }}
+                  >
+                    I'm a Consumer
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => router.push("/public_pages/for-businesses")}
+                  style={{
+                    flex: 1,
+                    borderWidth: 2,
+                    borderColor: "#ba9988",
+                    paddingVertical: 14,
+                    borderRadius: 12,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: "600",
+                      color: "#ba9988",
+                    }}
+                  >
+                    I'm a Business
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

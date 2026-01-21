@@ -3,15 +3,13 @@ import { View, Platform, useWindowDimensions } from "react-native";
 import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function PublicPagesLayout() {
+export default function LearnLayout() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const isDesktop = width >= 1024 && Platform.OS === "web";
   const isMobile = width < 768;
   
-  // Add padding for status bar on mobile
   const paddingTop = isDesktop ? 0 : insets.top;
-  // Add padding for bottom safe area on mobile
   const paddingBottom = isMobile ? insets.bottom : 0;
 
   return (
@@ -28,23 +26,11 @@ export default function PublicPagesLayout() {
           },
         }}
       >
-        <Stack.Screen name="about" />
-        <Stack.Screen name="features" />
-        <Stack.Screen name="community" />
-        <Stack.Screen name="contact" />
-        <Stack.Screen name="blog" />
-        <Stack.Screen name="updates" />
-        <Stack.Screen name="careers" />
-        <Stack.Screen name="docs" />
-        <Stack.Screen name="privacy" />
-        <Stack.Screen name="terms" />
-        <Stack.Screen name="security" />
-        <Stack.Screen name="pricing" />
-        <Stack.Screen name="for-consumers" />
-        <Stack.Screen name="for-businesses" />
-        <Stack.Screen name="learn" />
+        <Stack.Screen name="index" />
+        <Stack.Screen name="black-spending-power" />
+        <Stack.Screen name="group-economics" />
+        <Stack.Screen name="community-impact" />
       </Stack>
     </View>
   );
 }
-
