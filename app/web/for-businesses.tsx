@@ -33,17 +33,8 @@ export default function ForBusinesses() {
           showVideo={true}
           videoUrl=""
           videoTitle="See How BDN Works for Businesses"
-        />
-
-        {/* CTA Section */}
-        <ScrollAnimatedView delay={100}>
-          <View
-            style={{
-              paddingHorizontal: isMobile ? 20 : 40,
-              paddingVertical: isMobile ? 40 : 60,
-              backgroundColor: "#232323",
-            }}
-          >
+        >
+          <ScrollAnimatedView delay={100}>
             <View
               style={{
                 maxWidth: 1000,
@@ -112,8 +103,8 @@ export default function ForBusinesses() {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
-        </ScrollAnimatedView>
+          </ScrollAnimatedView>
+        </PublicHeroSection>
 
         {/* Black Consumer Market Opportunity */}
         <ScrollAnimatedView delay={200}>

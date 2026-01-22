@@ -16,6 +16,7 @@ interface PublicHeroSectionProps {
   backgroundImage?: ImageSourcePropType;
   overlayColor?: string;
   overlayOpacity?: number;
+  children?: React.ReactNode;
 }
 
 /**
@@ -43,6 +44,7 @@ export const PublicHeroSection: React.FC<PublicHeroSectionProps> = ({
   backgroundImage,
   overlayColor = "#1a1a1a",
   overlayOpacity = 0.65,
+  children,
 }) => {
   const { isMobile, width } = useResponsive();
   const [videoModalVisible, setVideoModalVisible] = useState(false);
@@ -164,6 +166,7 @@ export const PublicHeroSection: React.FC<PublicHeroSectionProps> = ({
                 shadowOpacity: 0.4,
                 shadowRadius: 16,
                 elevation: 8,
+                alignSelf: "center",
               }}
             >
               <View
@@ -198,15 +201,15 @@ export const PublicHeroSection: React.FC<PublicHeroSectionProps> = ({
                       borderColor: "#ffffff",
                     }}
                   >
-                    <MaterialIcons 
-                      name="play-arrow" 
-                      size={isMobile ? 32 : 40} 
+                    <MaterialIcons
+                      name="play-arrow"
+                      size={isMobile ? 32 : 40}
                       color="#ffffff"
                       style={{ marginLeft: 4 }}
                     />
                   </View>
                 </View>
-                
+
                 <View
                   style={{
                     position: "absolute",
@@ -236,7 +239,7 @@ export const PublicHeroSection: React.FC<PublicHeroSectionProps> = ({
           <Text
             style={{
               fontSize: isMobile ? 40 : 56,
-              fontWeight: typography.fontWeight.extrabold,
+              fontWeight: "800",
               color: colors.accent,
               textAlign: "center",
               marginBottom: subtitle ? spacing.md : 0,
@@ -259,6 +262,12 @@ export const PublicHeroSection: React.FC<PublicHeroSectionProps> = ({
             >
               {subtitle}
             </Text>
+          )}
+
+          {children && (
+            <View style={{ marginTop: spacing.xl }}>
+              {children}
+            </View>
           )}
         </View>
       </View>
