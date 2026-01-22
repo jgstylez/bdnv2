@@ -119,7 +119,7 @@ export const BentoGrid: React.FC = () => {
           <View
             style={{
               flexDirection: isMobile ? "column" : "row",
-              flexWrap: "nowrap",
+              flexWrap: isMobile ? "wrap" : "nowrap",
               gap: 20,
             }}
           >
@@ -129,9 +129,9 @@ export const BentoGrid: React.FC = () => {
                   key={feature.title}
                   activeOpacity={0.9}
                   style={{
-                    flex: isMobile ? undefined : 1,
+                    flex: isMobile ? 0 : 1,
                     width: isMobile ? "100%" : undefined,
-                    minWidth: isMobile ? undefined : 0,
+                    minWidth: isMobile ? "100%" : 0,
                     height: isMobile ? 280 : 320,
                   }}
                 >
