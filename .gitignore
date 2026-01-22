@@ -31,6 +31,9 @@ dist/
 *.keystore
 secrets.js
 secrets.json
+DEPLOYMENT_SECRETS.md
+*.secrets.md
+*.credentials.md
 
 # IDE files
 .idea/

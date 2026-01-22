@@ -152,7 +152,7 @@ export const BusinessCategoriesCarousel: React.FC = () => {
                 lineHeight: isMobile ? 26 : 30,
               }}
             >
-              BDN 2.0 will serve Black-owned businesses across many verticals.
+              BDN 2.0 will serve Black-owned businesses across many verticals. We've found many individuals aren't aware of the expansive Black-owned businesses that currently exist across many industries.{"\n\n"}Here are just a few examples below:
             </Text>
           </View>
 

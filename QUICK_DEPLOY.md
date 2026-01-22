@@ -3,7 +3,7 @@
 ## Current Status ✅
 - ✅ Logged into EAS as `bdnetwork`
 - ✅ EAS CLI installed
-- ✅ Keystore file ready: `./key.jks`
+- ✅ Keystore file ready (see `DEPLOYMENT_SECRETS.md`)
 - ✅ Project configured: `@bdnetwork/bdn`
 
 ## Next Steps (Run These Commands)
@@ -13,9 +13,11 @@
 eas credentials
 ```
 **Select:** Android → production → Upload own keystore
-**Path:** `/Users/jgstylez/dev/bdnv2/key.jks`
-**Password:** `p22VJEEepnDePtDW`
-**Alias:** `key`
+**Path:** See `DEPLOYMENT_SECRETS.md` (stored securely)
+**Password:** See `DEPLOYMENT_SECRETS.md` (stored securely)
+**Alias:** See `DEPLOYMENT_SECRETS.md` (stored securely)
+
+**⚠️ IMPORTANT:** Never commit `DEPLOYMENT_SECRETS.md` to version control.
 
 ### 2️⃣ Set Up iOS Credentials
 ```bash
@@ -46,12 +48,14 @@ Then select option 4 for "Build and submit (all-in-one)"
 ---
 
 ## Keystore Info
-- **File:** `./key.jks`
-- **Password:** `p22VJEEepnDePtDW`
-- **Alias:** `key`
-- **Key Password:** `p22VJEEepnDePtDW`
+- **File:** See `DEPLOYMENT_SECRETS.md` (stored securely)
+- **Password:** See `DEPLOYMENT_SECRETS.md` (stored securely)
+- **Alias:** See `DEPLOYMENT_SECRETS.md` (stored securely)
+- **Key Password:** See `DEPLOYMENT_SECRETS.md` (stored securely)
+
+**⚠️ IMPORTANT:** All sensitive credentials are stored in `DEPLOYMENT_SECRETS.md` which is gitignored.
 
 ## App Info
 - **Bundle ID:** `com.blackdollarnetwork.mobile`
 - **Version:** `3.19.0` (Build 223)
-- **Project ID:** `5dec71d3-e780-438e-97a4-b749b0c72c0e`
+- **Project ID:** See `app.json` (public identifier)

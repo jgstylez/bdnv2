@@ -467,7 +467,7 @@ export const Footer: React.FC = () => {
               lineHeight: 20,
             }}
           >
-            © 2016 - {new Date().getFullYear()} Black Dollar Network, LLC. All rights reserved.
+            © 2016 - {new Date().getFullYear()} Black Dollar Network, LLC. Black Dollar Network® is a registered trademark. All rights reserved.
           </Text>
           <View
             style={{

@@ -89,7 +89,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           }}
         >
           <Image
-            source={require("@/assets/images/public/hero-professional.png")}
+            source={require("@/assets/images/public/AdobeStock_1076676359.jpeg")}
             style={{
               width: "100%",
               height: "100%",
@@ -124,8 +124,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               lineHeight: isMobile ? 48 : 64,
             }}
           >
-            Building the future of{"\n"}
-            <Text style={{ color: "#ba9988" }}>Black economic empowerment</Text>
+            Creating Real{"\n"}
+            <Text style={{ color: "#ba9988" }}>Community-Driven Commerce</Text>
           </Text>
 
           {/* Description */}
@@ -140,8 +140,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             }}
           >
             We're entering a new chapter in our mission to educate, equip, and
-            empower our community. BDN 2.0 represents the evolution of group
-            economics and community-driven commerce.
+            empower our community.
           </Text>
 
           {/* Video Section */}

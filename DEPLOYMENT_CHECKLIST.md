@@ -21,10 +21,12 @@ When prompted:
 1. Select **Android**
 2. Select **production**
 3. Choose **"I want to upload my own keystore"**
-4. Provide the path to your keystore: `[PATH_TO_FLUTTER_PROJECT]/android/key.jks`
-5. Enter the keystore password: `p22VJEEepnDePtDW`
-6. Enter the key alias: `key`
-7. Enter the key password: `p22VJEEepnDePtDW`
+4. Provide the path to your keystore: See `DEPLOYMENT_SECRETS.md` (stored securely)
+5. Enter the keystore password: See `DEPLOYMENT_SECRETS.md` (stored securely)
+6. Enter the key alias: See `DEPLOYMENT_SECRETS.md` (stored securely)
+7. Enter the key password: See `DEPLOYMENT_SECRETS.md` (stored securely)
+
+**⚠️ IMPORTANT:** Never commit `DEPLOYMENT_SECRETS.md` to version control. Store credentials securely.
 
 ### 2. Set Up iOS Credentials
 Run this command again:
@@ -98,7 +100,7 @@ Once the app is approved and live, you can:
 
 ## ⚠️ Important Notes
 
-1. **Keystore Security**: The keystore passwords are sensitive. Store them securely and never commit them to git.
+1. **Keystore Security**: The keystore passwords are sensitive. Store them securely in `DEPLOYMENT_SECRETS.md` (which is gitignored) or a password manager. Never commit them to git.
 
 2. **Version Numbers**: Current version is `3.19.0` with build `223`. If you prefer a major version bump to `4.0.0`, update `app.json` before building.
 

@@ -9,9 +9,9 @@
 - Expo Updates: Configured for OTA updates
 
 ✅ **Keystore:**
-- Location: `./key.jks`
-- Alias: `key`
-- Password: `p22VJEEepnDePtDW`
+- Location: `./key.jks` (or see `DEPLOYMENT_SECRETS.md` for actual path)
+- Alias: See `DEPLOYMENT_SECRETS.md`
+- Password: **Stored securely** (see `DEPLOYMENT_SECRETS.md`)
 
 ## 📋 Pre-Deployment Checklist
 
@@ -39,10 +39,12 @@ eas credentials
 1. Select **Android**
 2. Select **production**
 3. Choose **"I want to upload my own keystore"**
-4. Provide the path: `./key.jks` (or full path: `/Users/jgstylez/dev/bdnv2/key.jks`)
-5. Enter keystore password: `p22VJEEepnDePtDW`
-6. Enter key alias: `key`
-7. Enter key password: `p22VJEEepnDePtDW`
+4. Provide the path: See `DEPLOYMENT_SECRETS.md` for keystore location
+5. Enter keystore password: See `DEPLOYMENT_SECRETS.md` (stored securely)
+6. Enter key alias: See `DEPLOYMENT_SECRETS.md`
+7. Enter key password: See `DEPLOYMENT_SECRETS.md` (stored securely)
+
+**⚠️ IMPORTANT:** Never commit `DEPLOYMENT_SECRETS.md` to version control. Store credentials in a password manager or secure environment variables.
 
 **Expected output:**
 ```
@@ -210,12 +212,12 @@ eas project:info
 ### Build Fails
 
 **Error:** "Keystore not found"
-- Verify `key.jks` exists in project root
-- Use full path: `/Users/jgstylez/dev/bdnv2/key.jks`
+- Verify `key.jks` exists (check `DEPLOYMENT_SECRETS.md` for location)
+- Use the correct path from your secure credentials file
 
 **Error:** "Invalid keystore password"
-- Double-check password: `p22VJEEepnDePtDW`
-- Verify alias: `key`
+- Verify password from `DEPLOYMENT_SECRETS.md` or your secure credential storage
+- Verify alias from `DEPLOYMENT_SECRETS.md`
 
 **Error:** "Dependencies missing"
 ```bash
