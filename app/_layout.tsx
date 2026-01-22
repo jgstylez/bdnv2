@@ -14,6 +14,7 @@ import { FeatureFlagsProvider } from '@/contexts/FeatureFlagsContext';
 import { toastConfig } from '@/components/ToastConfig';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { useDarkModeSetup } from '../nativewind-setup';
+import { SEOHead } from '@/components/SEOHead';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete
 SplashScreen.preventAutoHideAsync();
@@ -59,6 +60,7 @@ export default function RootLayout() {
           <AuthProvider> 
             <FeatureFlagsProvider>
               <CartProvider>
+                <SEOHead />
                 <StatusBar style="light" />
                 <Stack
                   screenOptions={{

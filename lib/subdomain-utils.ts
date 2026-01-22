@@ -90,3 +90,40 @@ export function getSubdomain(searchParams?: { subdomain?: string }): string | nu
 export function isAppSubdomain(searchParams?: { subdomain?: string }): boolean {
   return getSubdomain(searchParams) === 'app';
 }
+
+/**
+ * Checks if the current hostname is a sandbox domain
+ * @returns true if on sandbox.blackdollarnetwork.com or any sandbox subdomain, false otherwise
+ */
+export function isSandboxDomain(): boolean {
+  if (typeof window === 'undefined' || !window.location) {
+    return false;
+  }
+
+  const hostname = window.location.hostname;
+  
+  // Check if hostname contains 'sandbox'
+  return hostname.includes('sandbox');
+}
+
+/**
+ * Checks if the current hostname is a production domain that should be indexed
+ * Only these exact domains should be indexed by search engines:
+ * - blackdollarnetwork.com
+ * - www.blackdollarnetwork.com
+ * 
+ * All other subdomains (app, operator, developer, sandbox, etc.) should NOT be indexed
+ * @returns true if on blackdollarnetwork.com or www.blackdollarnetwork.com, false otherwise
+ */
+export function isProductionDomain(): boolean {
+  if (typeof window === 'undefined' || !window.location) {
+    return false;
+  }
+
+  const hostname = window.location.hostname.toLowerCase();
+  
+  // Exact match for production domains that should be indexed
+  // Allow: blackdollarnetwork.com, www.blackdollarnetwork.com
+  // Disallow: app.blackdollarnetwork.com, sandbox.blackdollarnetwork.com, operator.*, developer.*, etc.
+  return hostname === 'blackdollarnetwork.com' || hostname === 'www.blackdollarnetwork.com';
+}
