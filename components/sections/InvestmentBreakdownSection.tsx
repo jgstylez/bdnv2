@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity, useWindowDimensions, Linking, Image } from "react-native";
+import { View, Text, TouchableOpacity, useWindowDimensions, Linking } from "react-native";
+import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ScrollAnimatedView } from "../ScrollAnimatedView";
 import { LinearGradient } from "expo-linear-gradient";
@@ -114,11 +115,11 @@ export const InvestmentBreakdownSection: React.FC = () => {
                 style={{
                   flex: isMobile ? 1 : 1,
                   minWidth: isMobile ? "100%" : 0,
-                  backgroundColor: "#474747",
+                  backgroundColor: "rgba(35, 35, 35, 0.4)",
                   borderRadius: 20,
                   padding: isMobile ? 24 : 28,
                   borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                 }}
               >
                 {/* Percentage */}

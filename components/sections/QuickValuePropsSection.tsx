@@ -89,11 +89,11 @@ export const QuickValuePropsSection: React.FC = () => {
                 key={prop.title}
                 style={{
                   flex: 1,
-                  backgroundColor: "#474747",
+                  backgroundColor: "rgba(35, 35, 35, 0.4)",
                   borderRadius: 24,
                   padding: isMobile ? 24 : 32,
                   borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                   shadowColor: "#000",
                   shadowOffset: { width: 0, height: 4 },
                   shadowOpacity: 0.2,

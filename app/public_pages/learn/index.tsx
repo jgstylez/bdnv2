@@ -221,11 +221,11 @@ export default function LearnIndex() {
                     style={{
                       flex: 1,
                       minWidth: isMobile ? "100%" : "30%",
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.6)",
                       borderRadius: 24,
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                     }}
                   >
                     {/* Decorative Background Pattern */}
@@ -343,11 +343,11 @@ export default function LearnIndex() {
                     onPress={() => router.push(resource.href as any)}
                     style={{
                       flex: 1,
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.6)",
                       borderRadius: 20,
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                     }}
                   >
                     {/* Image Placeholder */}
@@ -439,11 +439,11 @@ export default function LearnIndex() {
                 maxWidth: 800,
                 alignSelf: "center",
                 width: "100%",
-                backgroundColor: "#474747",
+                backgroundColor: "rgba(35, 35, 35, 0.6)",
                 borderRadius: 24,
                 padding: isMobile ? 32 : 48,
                 borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
+                borderColor: "rgba(186, 153, 136, 0.3)",
                 alignItems: "center",
                 position: "relative",
                 overflow: "hidden",

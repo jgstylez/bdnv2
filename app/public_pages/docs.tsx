@@ -106,11 +106,11 @@ export default function Docs() {
                     key={index}
                     style={{
                       flex: 1,
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       borderRadius: 12,
                       padding: 20,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                       flexDirection: "row",
                       alignItems: "center",
                       gap: 12,
@@ -177,10 +177,10 @@ export default function Docs() {
                   <View
                     key={categoryIndex}
                     style={{
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       borderRadius: 16,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                       overflow: "hidden",
                     }}
                   >

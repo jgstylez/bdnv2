@@ -215,11 +215,11 @@ export default function Blog() {
                       onPress={() => router.push(`/pages/university/blog/${post.id}`)}
                       activeOpacity={0.9}
                       style={{
-                        backgroundColor: "#474747",
+                        backgroundColor: "rgba(35, 35, 35, 0.4)",
                         borderRadius: 20,
                         overflow: "hidden",
                         borderWidth: 1,
-                        borderColor: "rgba(186, 153, 136, 0.2)",
+                        borderColor: "rgba(186, 153, 136, 0.3)",
                         flexDirection: isMobile ? "column" : "row",
                       }}
                     >
@@ -353,12 +353,12 @@ export default function Blog() {
               ) : (
                 <View
                   style={{
-                    backgroundColor: "#474747",
+                    backgroundColor: "rgba(35, 35, 35, 0.4)",
                     borderRadius: 16,
                     padding: 40,
                     alignItems: "center",
                     borderWidth: 1,
-                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    borderColor: "rgba(186, 153, 136, 0.3)",
                   }}
                 >
                   <MaterialIcons name="article" size={48} color="rgba(186, 153, 136, 0.5)" />

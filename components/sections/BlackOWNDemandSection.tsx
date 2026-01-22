@@ -30,11 +30,11 @@ export const BlackOWNDemandSection: React.FC = () => {
         >
           <View
             style={{
-              backgroundColor: "#474747",
+              backgroundColor: "rgba(35, 35, 35, 0.4)",
               borderRadius: 24,
               overflow: "hidden",
               borderWidth: 1,
-              borderColor: "rgba(186, 153, 136, 0.2)",
+              borderColor: "rgba(186, 153, 136, 0.3)",
               flexDirection: isMobile ? "column" : "row",
             }}
           >

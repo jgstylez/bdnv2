@@ -95,11 +95,11 @@ export const FeaturesSection: React.FC = () => {
                 style={{
                   width: isMobile ? "100%" : "31%",
                   minWidth: isMobile ? "100%" : 280,
-                  backgroundColor: "#474747",
+                  backgroundColor: "rgba(35, 35, 35, 0.4)",
                   borderRadius: 20,
                   padding: isMobile ? 24 : 28,
                   borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.1)",
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                   shadowColor: "#000",
                   shadowOffset: { width: 0, height: 4 },
                   shadowOpacity: 0.2,

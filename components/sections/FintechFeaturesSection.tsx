@@ -228,11 +228,11 @@ export const FintechFeaturesSection: React.FC = () => {
                   key={feature.title}
                   style={{
                     width: cardWidth,
-                    backgroundColor: "#474747",
+                    backgroundColor: "rgba(35, 35, 35, 0.4)",
                     borderRadius: 24,
                     overflow: "hidden",
                     borderWidth: 1,
-                    borderColor: "rgba(186, 153, 136, 0.1)",
+                    borderColor: "rgba(186, 153, 136, 0.3)",
                     shadowColor: "#000",
                     shadowOffset: { width: 0, height: 8 },
                     shadowOpacity: 0.3,

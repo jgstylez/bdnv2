@@ -78,11 +78,11 @@ export const ActionStepsSection: React.FC = () => {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "#474747",
+                backgroundColor: "rgba(35, 35, 35, 0.4)",
                 borderRadius: 20,
                 padding: isMobile ? 24 : 32,
                 borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
+                borderColor: "rgba(186, 153, 136, 0.3)",
               }}
             >
               <View
@@ -178,11 +178,11 @@ export const ActionStepsSection: React.FC = () => {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "#474747",
+                backgroundColor: "rgba(35, 35, 35, 0.4)",
                 borderRadius: 20,
                 padding: isMobile ? 24 : 32,
                 borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
+                borderColor: "rgba(186, 153, 136, 0.3)",
               }}
             >
               <View

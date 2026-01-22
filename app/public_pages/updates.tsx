@@ -176,11 +176,11 @@ export default function Updates() {
                     <View
                       key={index}
                       style={{
-                        backgroundColor: "#474747",
+                        backgroundColor: "rgba(35, 35, 35, 0.4)",
                         borderRadius: 20,
                         padding: isMobile ? 24 : 32,
                         borderWidth: 1,
-                        borderColor: "rgba(186, 153, 136, 0.2)",
+                        borderColor: "rgba(186, 153, 136, 0.3)",
                       }}
                     >
                       {/* Header */}
@@ -293,12 +293,12 @@ export default function Updates() {
               ) : (
                 <View
                   style={{
-                    backgroundColor: "#474747",
+                    backgroundColor: "rgba(35, 35, 35, 0.4)",
                     borderRadius: 16,
                     padding: 40,
                     alignItems: "center",
                     borderWidth: 1,
-                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    borderColor: "rgba(186, 153, 136, 0.3)",
                   }}
                 >
                   <MaterialIcons name="update" size={48} color="rgba(186, 153, 136, 0.5)" />

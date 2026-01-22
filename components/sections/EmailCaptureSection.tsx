@@ -54,12 +54,12 @@ export const EmailCaptureSection: React.FC = () => {
         >
           <View
             style={{
-              backgroundColor: "#474747",
+              backgroundColor: "rgba(35, 35, 35, 0.4)",
               borderRadius: 24,
               padding: isMobile ? 32 : 48,
               overflow: "hidden",
               borderWidth: 1,
-              borderColor: "rgba(186, 153, 136, 0.2)",
+              borderColor: "rgba(186, 153, 136, 0.3)",
               position: "relative",
             }}
           >

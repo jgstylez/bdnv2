@@ -159,11 +159,11 @@ export default function GroupEconomics() {
                         style={{
                           flexDirection: "row",
                           gap: 16,
-                          backgroundColor: "#474747",
+                          backgroundColor: "rgba(35, 35, 35, 0.4)",
                           borderRadius: 16,
                           padding: 20,
                           borderWidth: 1,
-                          borderColor: "rgba(186, 153, 136, 0.2)",
+                          borderColor: "rgba(186, 153, 136, 0.3)",
                         }}
                       >
                         <View
@@ -286,11 +286,11 @@ export default function GroupEconomics() {
                     <View
                       style={{
                         flex: 1,
-                        backgroundColor: "#474747",
+                        backgroundColor: "rgba(35, 35, 35, 0.4)",
                         borderRadius: 16,
                         padding: 24,
                         borderWidth: 1,
-                        borderColor: "rgba(186, 153, 136, 0.2)",
+                        borderColor: "rgba(186, 153, 136, 0.3)",
                       }}
                     >
                       <MaterialIcons name="work" size={32} color="#ba9988" style={{ marginBottom: 12 }} />
@@ -316,11 +316,11 @@ export default function GroupEconomics() {
                     <View
                       style={{
                         flex: 1,
-                        backgroundColor: "#474747",
+                        backgroundColor: "rgba(35, 35, 35, 0.4)",
                         borderRadius: 16,
                         padding: 24,
                         borderWidth: 1,
-                        borderColor: "rgba(186, 153, 136, 0.2)",
+                        borderColor: "rgba(186, 153, 136, 0.3)",
                       }}
                     >
                       <MaterialIcons name="trending-up" size={32} color="#ba9988" style={{ marginBottom: 12 }} />
@@ -346,11 +346,11 @@ export default function GroupEconomics() {
                     <View
                       style={{
                         flex: 1,
-                        backgroundColor: "#474747",
+                        backgroundColor: "rgba(35, 35, 35, 0.4)",
                         borderRadius: 16,
                         padding: 24,
                         borderWidth: 1,
-                        borderColor: "rgba(186, 153, 136, 0.2)",
+                        borderColor: "rgba(186, 153, 136, 0.3)",
                       }}
                     >
                       <MaterialIcons name="home" size={32} color="#ba9988" style={{ marginBottom: 12 }} />

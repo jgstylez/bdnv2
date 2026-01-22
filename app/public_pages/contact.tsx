@@ -194,11 +194,11 @@ export default function Contact() {
                     key={index}
                     style={{
                       flex: 1,
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       borderRadius: 16,
                       padding: 24,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                       alignItems: "center",
                       position: "relative",
                       overflow: "hidden",

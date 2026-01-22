@@ -27,7 +27,7 @@ export const ScrollAnimatedView: React.FC<ScrollAnimatedViewProps> = ({
     }, delay);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [delay]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,

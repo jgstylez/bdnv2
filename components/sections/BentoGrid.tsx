@@ -114,7 +114,7 @@ export const BentoGrid: React.FC = () => {
                       flex: 1,
                       borderRadius: 24,
                       overflow: "hidden",
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       shadowColor: "#000",
                       shadowOffset: { width: 0, height: 8 },
                       shadowOpacity: 0.3,

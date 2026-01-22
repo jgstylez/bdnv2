@@ -136,7 +136,7 @@ export const BusinessDirectoryPreview: React.FC = () => {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                backgroundColor: "#474747",
+                backgroundColor: "rgba(35, 35, 35, 0.4)",
                 borderRadius: 16,
                 padding: 20,
                 borderWidth: 2,
@@ -181,11 +181,11 @@ export const BusinessDirectoryPreview: React.FC = () => {
                 onPress={handleBusinessPress}
                 style={{
                   width: isMobile ? width - 80 : 320,
-                  backgroundColor: "#474747",
+                  backgroundColor: "rgba(35, 35, 35, 0.4)",
                   borderRadius: 20,
                   overflow: "hidden",
                   borderWidth: 1,
-                  borderColor: hoveredIndex === index ? "rgba(186, 153, 136, 0.5)" : "rgba(186, 153, 136, 0.1)",
+                  borderColor: hoveredIndex === index ? "rgba(186, 153, 136, 0.5)" : "rgba(186, 153, 136, 0.3)",
                   shadowColor: "#000",
                   shadowOffset: { width: 0, height: 4 },
                   shadowOpacity: 0.3,

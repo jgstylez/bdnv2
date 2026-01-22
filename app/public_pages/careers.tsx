@@ -149,11 +149,11 @@ export default function Careers() {
                     style={{
                       flex: 1,
                       minWidth: isMobile ? "100%" : "30%",
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       borderRadius: 16,
                       padding: 24,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                     }}
                   >
                     <View
@@ -239,11 +239,11 @@ export default function Careers() {
                   <View
                     key={position.id}
                     style={{
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       borderRadius: 16,
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                     }}
                   >
                     <View
@@ -352,12 +352,12 @@ export default function Careers() {
               <View
                 style={{
                   marginTop: 48,
-                  backgroundColor: "#474747",
+                  backgroundColor: "rgba(35, 35, 35, 0.4)",
                   borderRadius: 16,
                   padding: 32,
                   alignItems: "center",
                   borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                 }}
               >
                 <MaterialIcons name="email" size={48} color="rgba(186, 153, 136, 0.5)" />

@@ -125,11 +125,11 @@ export default function Security() {
                     style={{
                       flex: 1,
                       minWidth: isMobile ? "100%" : "30%",
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       borderRadius: 16,
                       padding: 24,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                     }}
                   >
                     <View
@@ -212,11 +212,11 @@ export default function Security() {
 
               <View
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "rgba(35, 35, 35, 0.4)",
                   borderRadius: 16,
                   padding: 32,
                   borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                 }}
               >
                 <View style={{ gap: 16 }}>
@@ -266,11 +266,11 @@ export default function Security() {
             >
               <View
                 style={{
-                  backgroundColor: "#474747",
+                  backgroundColor: "rgba(35, 35, 35, 0.4)",
                   borderRadius: 16,
                   padding: 32,
                   borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderColor: "rgba(186, 153, 136, 0.3)",
                   alignItems: "center",
                 }}
               >

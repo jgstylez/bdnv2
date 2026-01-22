@@ -79,11 +79,11 @@ export default function CommunityImpact() {
                     style={{
                       flex: 1,
                       minWidth: isMobile ? "100%" : "45%",
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       borderRadius: 20,
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                       alignItems: "center",
                     }}
                   >
@@ -175,11 +175,11 @@ export default function CommunityImpact() {
                   <View
                     key={index}
                     style={{
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       borderRadius: 24,
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                     }}
                   >
                     <View
@@ -308,11 +308,11 @@ export default function CommunityImpact() {
                     style={{
                       flexDirection: "row",
                       gap: 16,
-                      backgroundColor: "#474747",
+                      backgroundColor: "rgba(35, 35, 35, 0.4)",
                       borderRadius: 16,
                       padding: 20,
                       borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      borderColor: "rgba(186, 153, 136, 0.3)",
                     }}
                   >
                     <View
@@ -369,7 +369,13 @@ export default function CommunityImpact() {
                 maxWidth: 800,
                 alignSelf: "center",
                 width: "100%",
+                backgroundColor: "rgba(35, 35, 35, 0.4)",
+                borderRadius: 24,
+                padding: isMobile ? 32 : 48,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.3)",
                 alignItems: "center",
+                marginBottom: 40,
               }}
             >
               <Text
