@@ -1,0 +1,20 @@
+# robots.txt for Black Dollar Network
+# Production environment - allow crawling
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://blackdollarnetwork.com/sitemap.xml
+Sitemap: https://www.blackdollarnetwork.com/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /developer/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /.expo/
+
+# Allow business and nonprofit pages (even if gated, they have public previews)
+Allow: /pages/businesses/
+Allow: /pages/nonprofit/

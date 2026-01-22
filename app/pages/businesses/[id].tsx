@@ -12,6 +12,7 @@ import { BusinessReview, ReviewReason } from '@/types/review';
 import { Menu, isFoodBusiness } from '@/types/menu';
 import { BackButton } from '@/components/navigation/BackButton';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { BusinessSEO } from '@/components/seo/BusinessSEO';
 
 // Mock business data - in production, this would come from an API
 const mockBusinessData: Record<string, any> = {
@@ -768,8 +769,37 @@ export default function BusinessDetail() {
     return `${business.location.address}, ${business.location.city}, ${business.location.state} ${business.location.zipCode}`;
   };
 
+  // Convert mock business data to Merchant format for SEO
+  const businessForSEO = {
+    id: business.id,
+    userId: business.userId || 'unknown',
+    name: business.name,
+    type: (business.type || 'local-shop') as 'local-shop' | 'local-service' | 'national-service' | 'online-shopping' | 'restaurant',
+    level: 'basic' as const,
+    description: business.description || '',
+    address: business.location ? {
+      streetAddress: business.location.address,
+      city: business.location.city,
+      state: business.location.state,
+      postalCode: business.location.zipCode,
+      countryCode: 'US' as const,
+    } : undefined,
+    phone: business.phone,
+    email: business.email,
+    website: business.website,
+    category: business.category || '',
+    isVerified: true,
+    isActive: true,
+    blackOwnedVerificationStatus: 'verified' as const,
+    createdAt: business.createdAt || new Date().toISOString(),
+    rating: business.rating,
+    reviewCount: business.reviewCount,
+    imageUrl: business.imageUrl,
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
+      <BusinessSEO business={businessForSEO} />
       <StatusBar style="light" />
       <OptimizedScrollView
         showBackToTop={true}

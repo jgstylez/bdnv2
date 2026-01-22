@@ -1,6 +1,7 @@
 /**
  * Sitemap Generator Utility
  * Generates XML sitemap for public pages that should be indexed
+ * Includes support for dynamic business and nonprofit listings
  */
 
 export interface SitemapPage {
@@ -8,6 +9,18 @@ export interface SitemapPage {
   priority: string;
   changefreq: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
   lastmod?: string;
+}
+
+export interface BusinessSitemapEntry {
+  id: string;
+  name: string;
+  updatedAt?: string;
+}
+
+export interface NonprofitSitemapEntry {
+  id: string;
+  name: string;
+  updatedAt?: string;
 }
 
 /**
@@ -44,16 +57,20 @@ export const PUBLIC_PAGES: SitemapPage[] = [
  * Generates the sitemap XML for public pages
  * @param baseUrl - The base URL for the sitemap (default: https://blackdollarnetwork.com)
  * @param pages - Optional custom list of pages (default: PUBLIC_PAGES)
+ * @param businesses - Optional list of businesses to include
+ * @param nonprofits - Optional list of nonprofits to include
  * @returns XML sitemap string
  */
 export function generateSitemap(
   baseUrl: string = 'https://blackdollarnetwork.com',
-  pages: SitemapPage[] = PUBLIC_PAGES
+  pages: SitemapPage[] = PUBLIC_PAGES,
+  businesses?: BusinessSitemapEntry[],
+  nonprofits?: NonprofitSitemapEntry[]
 ): string {
   const currentDate = new Date().toISOString().split('T')[0];
   
-  // Generate XML sitemap
-  const urls = pages.map(page => {
+  // Generate XML sitemap for static pages
+  const staticUrls = pages.map(page => {
     const url = page.path === '' ? baseUrl : `${baseUrl}${page.path}`;
     const lastmod = page.lastmod || currentDate;
     return `  <url>
@@ -62,11 +79,41 @@ export function generateSitemap(
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>`;
-  }).join('\n');
+  });
+
+  // Generate XML sitemap for businesses
+  const businessUrls = businesses?.map(business => {
+    const url = `${baseUrl}/pages/businesses/${business.id}`;
+    const lastmod = business.updatedAt 
+      ? new Date(business.updatedAt).toISOString().split('T')[0]
+      : currentDate;
+    return `  <url>
+    <loc>${escapeXml(url)}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+  }) || [];
+
+  // Generate XML sitemap for nonprofits
+  const nonprofitUrls = nonprofits?.map(nonprofit => {
+    const url = `${baseUrl}/pages/nonprofit/${nonprofit.id}`;
+    const lastmod = nonprofit.updatedAt 
+      ? new Date(nonprofit.updatedAt).toISOString().split('T')[0]
+      : currentDate;
+    return `  <url>
+    <loc>${escapeXml(url)}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+  }) || [];
+
+  const allUrls = [...staticUrls, ...businessUrls, ...nonprofitUrls].join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls}
+${allUrls}
 </urlset>`;
 }
 

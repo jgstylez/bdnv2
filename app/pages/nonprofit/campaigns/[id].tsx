@@ -14,6 +14,7 @@ import { getMockCampaign, mockDonors } from '@/data/mocks/campaigns';
 import { getMockOrganization } from '@/data/mocks/organizations';
 import { DonationModule } from '@/components/campaigns/DonationModule';
 import { logger } from '@/lib/logger';
+import { CampaignSEO } from '@/components/seo/CampaignSEO';
 
 export default function CampaignDetail() {
   const router = useRouter();
@@ -90,8 +91,12 @@ export default function CampaignDetail() {
 
   const progress = campaign.targetAmount ? Math.min((campaign.currentAmount / campaign.targetAmount) * 100, 100) : 0;
 
+  // Get organization data for SEO
+  const organization = getMockOrganization(campaign.organizationId || '1');
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.background.primary }}>
+      <CampaignSEO campaign={campaign} organization={organization} />
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{

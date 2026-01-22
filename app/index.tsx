@@ -28,6 +28,7 @@ import { FeaturesSection } from '@/components/sections/FeaturesSection';
 import { BusinessDirectoryPreview } from '@/components/sections/BusinessDirectoryPreview';
 import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
 import { EmailCaptureSection } from '@/components/sections/EmailCaptureSection';
+import { PageSEO } from '@/components/seo/PageSEO';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
@@ -134,6 +135,23 @@ export default function Home() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
+      <PageSEO
+        title="Black Dollar Network | Educate. Equip. Empower. | Connect Black Dollars with Black Businesses"
+        description="The backbone of group economics and the cornerstone of community empowerment. Discover Black-owned businesses, support nonprofits, and strengthen the Black economy worldwide. Join Black Dollar Network today."
+        keywords={[
+          'Black Dollar Network',
+          'Black-owned businesses',
+          'group economics',
+          'Black economic empowerment',
+          'support Black businesses',
+          'Black spending power',
+          'community empowerment',
+          'Black businesses directory',
+          'Black entrepreneurs',
+          'economic justice',
+        ]}
+        enableBDNStructuredData={true}
+      />
       <StatusBar style="light" />
       <Navigation includeSafeAreaPadding={true} />
       <AnimatedScrollView
