@@ -35,6 +35,7 @@ export default function PublicPagesLayout() {
         <Stack.Screen name="blog" />
         <Stack.Screen name="updates" />
         <Stack.Screen name="careers" />
+        <Stack.Screen name="partnerships" />
         <Stack.Screen name="docs" />
         <Stack.Screen name="knowledge-base" />
         <Stack.Screen name="privacy" />

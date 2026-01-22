@@ -25,6 +25,7 @@ export const Footer: React.FC = () => {
       title: "Company",
       links: [
         { label: "About", href: "/public_pages/about" },
+        { label: "Partnerships", href: "/public_pages/partnerships" },
         { label: "Careers", href: "/public_pages/careers" },
         { label: "Contact", href: "/public_pages/contact" },
       ],
@@ -237,7 +238,7 @@ export const Footer: React.FC = () => {
             >
               {/* Column 1: Learn & Product */}
               <View style={{ flex: 1, minWidth: "45%" }}>
-                {footerSections.slice(0, 2).map((section) => (
+                {[footerSections[2], footerSections[0]].map((section) => (
                   <View key={section.title} style={{ marginBottom: 32 }}>
                     <Text
                       style={{
@@ -279,7 +280,7 @@ export const Footer: React.FC = () => {
 
               {/* Column 2: Company & Resources */}
               <View style={{ flex: 1, minWidth: "45%" }}>
-                {footerSections.slice(2).map((section) => (
+                {[footerSections[1], footerSections[3]].map((section) => (
                   <View key={section.title} style={{ marginBottom: 32 }}>
                     <Text
                       style={{
