@@ -25,7 +25,6 @@ export const Footer: React.FC = () => {
       title: "Company",
       links: [
         { label: "About", href: "/public_pages/about" },
-        { label: "Blog", href: "/public_pages/blog" },
         { label: "Careers", href: "/public_pages/careers" },
         { label: "Contact", href: "/public_pages/contact" },
       ],
@@ -43,7 +42,8 @@ export const Footer: React.FC = () => {
       title: "Resources",
       links: [
         { label: "Documentation", href: "/public_pages/docs" },
-        { label: "Support", href: "/pages/support" },
+        { label: "Knowledge Base", href: "/public_pages/knowledge-base" },
+        { label: "Blog", href: "/public_pages/blog" },
         { label: "Community", href: "/public_pages/community" },
       ],
     },

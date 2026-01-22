@@ -456,7 +456,7 @@ export default function Roadmap() {
                         }}
                       >
                         <MaterialIcons
-                          name={feature.userVoted ? "keyboard-arrow-up" : "keyboard-arrow-up"}
+                          name={feature.userVoted ? "keyboard-arrow-up" : "keyboard-arrow-down"}
                           size={32}
                           color={feature.userVoted ? "#ba9988" : "rgba(255, 255, 255, 0.5)"}
                         />

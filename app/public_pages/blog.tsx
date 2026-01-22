@@ -11,6 +11,7 @@ import { Footer } from '@/components/Footer';
 import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { ArticlePlaceholder } from '@/components/placeholders/SVGPlaceholders';
+import { useAuth } from '@/hooks/useAuth';
 
 // Mock blog posts - sourced from university/blog
 const mockBlogPosts: BlogPost[] = [
@@ -119,12 +120,17 @@ export default function Blog() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const { isAuthenticated } = useAuth();
   const isMobile = width < 768;
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const filteredPosts = selectedCategory === "all"
     ? mockBlogPosts
     : mockBlogPosts.filter((post) => post.category === selectedCategory);
+
+  // Define which posts are free to read (first 2)
+  const FREE_POSTS_COUNT = 2;
+  const isPostFree = (index: number) => index < FREE_POSTS_COUNT;
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -146,7 +152,7 @@ export default function Blog() {
       >
         <PublicHeroSection
           title="BDN Blog"
-          subtitle="Stay updated with the latest news, tips, and stories from our community."
+          subtitle="Stay updated with the latest news, tips, and stories from our community. Read our featured articles free, or sign up to unlock all content."
         />
 
         {/* Category Filters */}
@@ -158,36 +164,47 @@ export default function Blog() {
               backgroundColor: "#232323",
             }}
           >
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: 12 }}
+            <View
+              style={{
+                maxWidth: 1200,
+                alignSelf: "center",
+                width: "100%",
+              }}
             >
-              {categories.map((category) => (
-                <TouchableOpacity
-                  key={category.key}
-                  onPress={() => setSelectedCategory(category.key)}
-                  style={{
-                    backgroundColor: selectedCategory === category.key ? "#ba9988" : "#474747",
-                    paddingHorizontal: 20,
-                    paddingVertical: 10,
-                    borderRadius: 12,
-                    borderWidth: 1,
-                    borderColor: selectedCategory === category.key ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                  }}
-                >
-                  <Text
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ 
+                  gap: 12,
+                  justifyContent: isMobile ? "flex-start" : "center",
+                }}
+              >
+                {categories.map((category) => (
+                  <TouchableOpacity
+                    key={category.key}
+                    onPress={() => setSelectedCategory(category.key)}
                     style={{
-                      fontSize: 14,
-                      fontWeight: "600",
-                      color: selectedCategory === category.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                      backgroundColor: selectedCategory === category.key ? "#ba9988" : "#474747",
+                      paddingHorizontal: 20,
+                      paddingVertical: 10,
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      borderColor: selectedCategory === category.key ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
                     }}
                   >
-                    {category.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: "600",
+                        color: selectedCategory === category.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                    >
+                      {category.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
           </View>
         </ScrollAnimatedView>
 
@@ -208,12 +225,14 @@ export default function Blog() {
               }}
             >
               {filteredPosts.length > 0 ? (
-                <View style={{ gap: 32 }}>
-                  {filteredPosts.map((post) => (
-                    <TouchableOpacity
+                <View style={{ gap: isMobile ? 24 : 32 }}>
+                  {filteredPosts.map((post, index) => {
+                    const isFree = isPostFree(index);
+                    const isGated = !isFree && !isAuthenticated;
+                    
+                    return (
+                    <View
                       key={post.id}
-                      onPress={() => router.push(`/pages/university/blog/${post.id}`)}
-                      activeOpacity={0.9}
                       style={{
                         backgroundColor: "rgba(71, 71, 71, 0.4)",
                         borderRadius: 20,
@@ -221,18 +240,97 @@ export default function Blog() {
                         borderWidth: 1,
                         borderColor: "rgba(186, 153, 136, 0.3)",
                         flexDirection: "row",
+                        position: "relative",
+                        alignItems: "stretch",
                       }}
                     >
+                      {isGated && (
+                        <View
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: "rgba(35, 35, 35, 0.95)",
+                            zIndex: 10,
+                            borderRadius: 20,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: 24,
+                            gap: 16,
+                          }}
+                        >
+                          <MaterialIcons name="lock" size={48} color="#ba9988" />
+                          <Text
+                            style={{
+                              fontSize: isMobile ? 20 : 24,
+                              fontWeight: "700",
+                              color: "#ffffff",
+                              textAlign: "center",
+                            }}
+                          >
+                            Sign up to read this article
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: "rgba(255, 255, 255, 0.7)",
+                              textAlign: "center",
+                              maxWidth: 400,
+                            }}
+                          >
+                            Join BDN to access exclusive content and unlock all articles.
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => router.push("/(auth)/signup")}
+                            style={{
+                              backgroundColor: "#ba9988",
+                              paddingHorizontal: 32,
+                              paddingVertical: 14,
+                              borderRadius: 12,
+                              marginTop: 8,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: 15,
+                                fontWeight: "600",
+                                color: "#ffffff",
+                              }}
+                            >
+                              Sign Up Free
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (isGated) {
+                            router.push("/(auth)/signup");
+                          } else {
+                            router.push(`/pages/university/blog/${post.id}`);
+                          }
+                        }}
+                        activeOpacity={0.9}
+                        style={{
+                          flexDirection: isMobile ? "column" : "row",
+                          flex: 1,
+                          alignItems: "stretch",
+                        }}
+                      >
                       {/* Featured Image */}
                       <View
                         style={{
-                          width: 120,
-                          height: 180,
+                          width: isMobile ? "100%" : 300,
+                          height: isMobile ? 200 : undefined,
+                          minHeight: isMobile ? 200 : "100%",
                           backgroundColor: "rgba(186, 153, 136, 0.05)",
                           overflow: "hidden",
                           alignItems: "center",
                           justifyContent: "center",
                           flexShrink: 0,
+                          alignSelf: "stretch",
                         }}
                       >
                         {post.featuredImage ? (
@@ -241,29 +339,30 @@ export default function Blog() {
                             style={{
                               width: "100%",
                               height: "100%",
+                              minHeight: "100%",
                             }}
                             contentFit="cover"
                           />
                         ) : (
-                          <ArticlePlaceholder width={120} height={180} />
+                          <ArticlePlaceholder width={isMobile ? "100%" : 300} height={isMobile ? 200 : 300} />
                         )}
                       </View>
                       
                       {/* Content */}
-                      <View style={{ flex: 1, padding: isMobile ? 24 : 32 }}>
+                      <View style={{ flex: 1, padding: isMobile ? 20 : 32, alignSelf: "stretch" }}>
                         {/* Category and Date */}
-                        <View style={{ flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                        <View style={{ flexDirection: "row", alignItems: "center", gap: isMobile ? 8 : 12, marginBottom: isMobile ? 10 : 12, flexWrap: "wrap" }}>
                           <View
                             style={{
                               backgroundColor: "rgba(186, 153, 136, 0.15)",
-                              paddingHorizontal: 10,
-                              paddingVertical: 4,
+                              paddingHorizontal: isMobile ? 8 : 10,
+                              paddingVertical: isMobile ? 3 : 4,
                               borderRadius: 6,
                             }}
                           >
                             <Text
                               style={{
-                                fontSize: 11,
+                                fontSize: isMobile ? 10 : 11,
                                 fontWeight: "600",
                                 color: "#ba9988",
                                 textTransform: "capitalize",
@@ -272,9 +371,57 @@ export default function Blog() {
                               {post.category}
                             </Text>
                           </View>
+                          {isFree && (
+                            <View
+                              style={{
+                                backgroundColor: "rgba(76, 175, 80, 0.2)",
+                                paddingHorizontal: isMobile ? 6 : 8,
+                                paddingVertical: isMobile ? 3 : 4,
+                                borderRadius: 6,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 4,
+                              }}
+                            >
+                              <MaterialIcons name="check-circle" size={isMobile ? 11 : 12} color="#4caf50" />
+                              <Text
+                                style={{
+                                  fontSize: isMobile ? 9 : 10,
+                                  fontWeight: "600",
+                                  color: "#4caf50",
+                                }}
+                              >
+                                Free
+                              </Text>
+                            </View>
+                          )}
+                          {isGated && (
+                            <View
+                              style={{
+                                backgroundColor: "rgba(186, 153, 136, 0.2)",
+                                paddingHorizontal: isMobile ? 6 : 8,
+                                paddingVertical: isMobile ? 3 : 4,
+                                borderRadius: 6,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 4,
+                              }}
+                            >
+                              <MaterialIcons name="lock" size={isMobile ? 11 : 12} color="#ba9988" />
+                              <Text
+                                style={{
+                                  fontSize: isMobile ? 9 : 10,
+                                  fontWeight: "600",
+                                  color: "#ba9988",
+                                }}
+                              >
+                                Members Only
+                              </Text>
+                            </View>
+                          )}
                           <Text
                             style={{
-                              fontSize: 12,
+                              fontSize: isMobile ? 11 : 12,
                               color: "rgba(255, 255, 255, 0.5)",
                             }}
                           >
@@ -285,11 +432,11 @@ export default function Blog() {
                         {/* Title */}
                         <Text
                           style={{
-                            fontSize: isMobile ? 22 : 26,
+                            fontSize: isMobile ? 20 : 26,
                             fontWeight: "700",
                             color: "#ffffff",
-                            marginBottom: 12,
-                            lineHeight: isMobile ? 30 : 34,
+                            marginBottom: isMobile ? 10 : 12,
+                            lineHeight: isMobile ? 28 : 34,
                           }}
                         >
                           {post.title}
@@ -298,24 +445,36 @@ export default function Blog() {
                         {/* Excerpt */}
                         <Text
                           style={{
-                            fontSize: 15,
+                            fontSize: isMobile ? 14 : 15,
                             color: "rgba(255, 255, 255, 0.7)",
-                            marginBottom: 20,
-                            lineHeight: 24,
+                            marginBottom: isMobile ? 16 : 20,
+                            lineHeight: isMobile ? 22 : 24,
                           }}
-                          numberOfLines={3}
+                          numberOfLines={isMobile ? 2 : 3}
                         >
                           {post.excerpt}
                         </Text>
 
                         {/* Footer */}
-                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: "auto" }}>
-                          <View style={{ flexDirection: "row", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+                        <View style={{ 
+                          flexDirection: isMobile ? "column" : "row", 
+                          alignItems: isMobile ? "flex-start" : "center", 
+                          justifyContent: "space-between", 
+                          marginTop: isMobile ? 16 : "auto",
+                          gap: isMobile ? 12 : 0,
+                        }}>
+                          <View style={{ 
+                            flexDirection: "row", 
+                            alignItems: "center", 
+                            gap: isMobile ? 12 : 16, 
+                            flexWrap: "wrap",
+                            flex: 1,
+                          }}>
                             <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                              <MaterialIcons name="person" size={16} color="rgba(255, 255, 255, 0.5)" />
+                              <MaterialIcons name="person" size={isMobile ? 14 : 16} color="rgba(255, 255, 255, 0.5)" />
                               <Text
                                 style={{
-                                  fontSize: 13,
+                                  fontSize: isMobile ? 12 : 13,
                                   color: "rgba(255, 255, 255, 0.6)",
                                 }}
                               >
@@ -323,33 +482,37 @@ export default function Blog() {
                               </Text>
                             </View>
                             <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                              <MaterialIcons name="schedule" size={16} color="rgba(255, 255, 255, 0.5)" />
+                              <MaterialIcons name="schedule" size={isMobile ? 14 : 16} color="rgba(255, 255, 255, 0.5)" />
                               <Text
                                 style={{
-                                  fontSize: 13,
+                                  fontSize: isMobile ? 12 : 13,
                                   color: "rgba(255, 255, 255, 0.6)",
                                 }}
                               >
                                 {post.readTime} min read
                               </Text>
                             </View>
-                            <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                              <MaterialIcons name="visibility" size={16} color="rgba(255, 255, 255, 0.5)" />
-                              <Text
-                                style={{
-                                  fontSize: 13,
-                                  color: "rgba(255, 255, 255, 0.6)",
-                                }}
-                              >
-                                {post.views} views
-                              </Text>
-                            </View>
+                            {!isMobile && (
+                              <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+                                <MaterialIcons name="visibility" size={16} color="rgba(255, 255, 255, 0.5)" />
+                                <Text
+                                  style={{
+                                    fontSize: 13,
+                                    color: "rgba(255, 255, 255, 0.6)",
+                                  }}
+                                >
+                                  {post.views} views
+                                </Text>
+                              </View>
+                            )}
                           </View>
-                          <MaterialIcons name="arrow-forward" size={20} color="#ba9988" />
+                          <MaterialIcons name="arrow-forward" size={isMobile ? 18 : 20} color="#ba9988" />
                         </View>
                       </View>
                     </TouchableOpacity>
-                  ))}
+                    </View>
+                  );
+                  })}
                 </View>
               ) : (
                 <View

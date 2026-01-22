@@ -7,6 +7,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
 const docCategories = [
   {
