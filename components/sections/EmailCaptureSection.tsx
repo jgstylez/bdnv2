@@ -100,7 +100,7 @@ export const EmailCaptureSection: React.FC = () => {
                   color: "rgba(255, 255, 255, 0.8)",
                   textAlign: "center",
                   lineHeight: isMobile ? 22 : 26,
-                  maxWidth: 600,
+                  maxWidth: isMobile ? "100%" : 900,
                   marginBottom: 32,
                 }}
               >

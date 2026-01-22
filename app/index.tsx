@@ -14,7 +14,7 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { DevelopmentStatusSection } from '@/components/sections/DevelopmentStatusSection';
-import { InvestmentBreakdownSection } from '@/components/sections/InvestmentBreakdownSection';
+import { InvestmentBreakdownSection, ProjectUnityCTASection } from '@/components/sections/InvestmentBreakdownSection';
 import { KeyInitiativesSection } from '@/components/sections/KeyInitiativesSection';
 import { BusinessCategoriesCarousel } from '@/components/sections/BusinessCategoriesCarousel';
 import { ImpactChainSection } from '@/components/sections/ImpactChainSection';
@@ -25,7 +25,6 @@ import { QuickValuePropsSection } from '@/components/sections/QuickValuePropsSec
 import { BentoGrid } from '@/components/sections/BentoGrid';
 import { FeatureHighlight } from '@/components/sections/FeatureHighlight';
 import { FeaturesSection } from '@/components/sections/FeaturesSection';
-import { FintechFeaturesSection } from '@/components/sections/FintechFeaturesSection';
 import { BusinessDirectoryPreview } from '@/components/sections/BusinessDirectoryPreview';
 import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
 import { EmailCaptureSection } from '@/components/sections/EmailCaptureSection';
@@ -151,19 +150,19 @@ export default function Home() {
         />
         <DevelopmentStatusSection />
         <BusinessDirectoryPreview />
-        <InvestmentBreakdownSection />
-        <KeyInitiativesSection />
-        <BusinessCategoriesCarousel />
+        <FeaturesSection />
         <ImpactChainSection />
+        <QuickValuePropsSection />
+        <BusinessCategoriesCarousel />
+        <KeyInitiativesSection />
         <BlackOWNDemandSection />
         <SocialMediaSection />
-        <QuickValuePropsSection />
-        <FintechFeaturesSection />
-        <BentoGrid />
-        <FeatureHighlight />
-        <FeaturesSection />
         <TestimonialsSection />
         <TrademarkSection />
+        <BentoGrid />
+        <FeatureHighlight />
+        <InvestmentBreakdownSection />
+        <ProjectUnityCTASection />
         <EmailCaptureSection />
         <Footer />
       </AnimatedScrollView>

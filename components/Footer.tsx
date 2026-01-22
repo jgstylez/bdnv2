@@ -105,7 +105,7 @@ export const Footer: React.FC = () => {
               color: "rgba(255, 255, 255, 0.7)",
               textAlign: "center",
               marginBottom: 32,
-              maxWidth: 600,
+              maxWidth: isMobile ? "100%" : 900,
             }}
           >
             Join thousands of members and businesses circulating Black dollars and creating lasting impact.

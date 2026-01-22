@@ -53,6 +53,29 @@ export const QuickValuePropsSection: React.FC = () => {
           }}
         >
           <View style={{ alignItems: "center", marginBottom: isMobile ? 48 : 64 }}>
+            {/* Badge */}
+            <View
+              style={{
+                backgroundColor: "rgba(186, 153, 136, 0.15)",
+                paddingVertical: 6,
+                paddingHorizontal: 12,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "600",
+                  color: "#ba9988",
+                  letterSpacing: 1,
+                }}
+              >
+                COMMUNITY
+              </Text>
+            </View>
             <Text
               style={{
                 fontSize: isMobile ? 32 : 44,

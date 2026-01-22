@@ -86,39 +86,13 @@ export const TestimonialsSection: React.FC = () => {
               color: "rgba(255, 255, 255, 0.7)",
               textAlign: "center",
               marginBottom: isMobile ? 40 : 60,
-              maxWidth: 600,
+              maxWidth: isMobile ? 600 : 900,
+              alignSelf: "center",
+              width: "100%",
             }}
           >
-            Join thousands of members who are transforming their futures with BDN. Rated 4.9/5 by our community.
+            Join thousands of members who are transforming their futures with BDN.
           </Text>
-
-          {/* Trust Stats */}
-          <View
-            style={{
-              flexDirection: isMobile ? "column" : "row",
-              justifyContent: "center",
-              gap: isMobile ? 20 : 40,
-              marginBottom: 48,
-              flexWrap: "wrap",
-            }}
-          >
-            <View style={{ alignItems: "center" }}>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 4, marginBottom: 8 }}>
-                {[...Array(5)].map((_, i) => (
-                  <MaterialIcons key={i} name="star" size={24} color="#ba9988" />
-                ))}
-              </View>
-              <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>4.9/5 Average Rating</Text>
-            </View>
-            <View style={{ alignItems: "center" }}>
-              <Text style={{ fontSize: 32, fontWeight: "700", color: "#ba9988", marginBottom: 4 }}>10K+</Text>
-              <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Verified Reviews</Text>
-            </View>
-            <View style={{ alignItems: "center" }}>
-              <Text style={{ fontSize: 32, fontWeight: "700", color: "#ba9988", marginBottom: 4 }}>98%</Text>
-              <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Would Recommend</Text>
-            </View>
-          </View>
 
           {/* Testimonials Grid */}
           <ScrollView
@@ -146,29 +120,6 @@ export const TestimonialsSection: React.FC = () => {
                   elevation: 4,
                 }}
               >
-                {/* Rating Stars */}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 4,
-                    marginBottom: 16,
-                  }}
-                >
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <MaterialIcons key={i} name="star" size={18} color="#ba9988" />
-                  ))}
-                </View>
-
-                <Text
-                  style={{
-                    fontSize: 20,
-                    marginBottom: 16,
-                    color: "#ba9988",
-                  }}
-                >
-                  "
-                </Text>
                 <Text
                   style={{
                     fontSize: isMobile ? 15 : 16,

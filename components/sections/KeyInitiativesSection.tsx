@@ -1,7 +1,9 @@
 import React from "react";
 import { View, Text, useWindowDimensions } from "react-native";
+import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ScrollAnimatedView } from "../ScrollAnimatedView";
+import { LinearGradient } from "expo-linear-gradient";
 
 const INITIATIVES = [
   {
@@ -32,16 +34,54 @@ export const KeyInitiativesSection: React.FC = () => {
     <ScrollAnimatedView delay={300}>
       <View
         style={{
+          position: "relative",
           paddingHorizontal: isMobile ? 20 : 40,
           paddingVertical: isMobile ? 60 : 80,
           backgroundColor: "#1a1a1a",
+          overflow: "hidden",
         }}
       >
+        {/* Background Image */}
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            opacity: 0.3,
+            zIndex: 0,
+          }}
+        >
+          <Image
+            source={require("@/assets/images/public/cta-community-family.png")}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+            contentFit="cover"
+            cachePolicy="memory-disk"
+          />
+          <LinearGradient
+            colors={["rgba(35, 35, 35, 0.75)", "rgba(35, 35, 35, 0.8)", "rgba(35, 35, 35, 1)"]}
+            locations={[0, 0.5, 1]}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          />
+        </View>
+
         <View
           style={{
             maxWidth: 1200,
             alignSelf: "center",
             width: "100%",
+            position: "relative",
+            zIndex: 1,
           }}
         >
           {/* Section Header */}
@@ -51,6 +91,29 @@ export const KeyInitiativesSection: React.FC = () => {
               alignItems: "center",
             }}
           >
+            {/* Badge */}
+            <View
+              style={{
+                backgroundColor: "rgba(186, 153, 136, 0.15)",
+                paddingVertical: 6,
+                paddingHorizontal: 12,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "600",
+                  color: "#ba9988",
+                  letterSpacing: 1,
+                }}
+              >
+                MISSION
+              </Text>
+            </View>
             <Text
               style={{
                 fontSize: isMobile ? 32 : 44,

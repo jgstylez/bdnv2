@@ -9,7 +9,7 @@ const CHAIN_STEPS = [
   {
     step: 1,
     icon: "business",
-    description: "Stronger businesses lead to more jobs",
+    description: "Stronger businesses lead to more jobs in the community",
   },
   {
     step: 2,
@@ -43,31 +43,33 @@ export const ImpactChainSection: React.FC = () => {
         style={{
           position: "relative",
           minHeight: isMobile ? 600 : 700,
-          backgroundColor: "#1a1a1a",
+          backgroundColor: "#232323",
         }}
       >
         {/* Background Image */}
         <View
           style={{
             position: "absolute",
-            top: 0,
+            top: isMobile ? 0 : -100,
             left: 0,
             right: 0,
-            bottom: 0,
-            opacity: 0.3,
+            bottom: isMobile ? 0 : -100,
+            opacity: 0.2,
           }}
         >
           <Image
-            source={require("@/assets/images/public/impact-business-owner.png")}
+            source={require("@/assets/images/public/cta-community-family.png")}
             style={{
               width: "100%",
               height: "100%",
             }}
             contentFit="cover"
+            contentPosition={isMobile ? "center" : "center top"}
             cachePolicy="memory-disk"
           />
           <LinearGradient
-            colors={["rgba(35, 35, 35, 0.8)", "rgba(35, 35, 35, 0.95)"]}
+            colors={["rgba(35, 35, 35, 1)", "rgba(35, 35, 35, 0.96)", "rgba(35, 35, 35, 0.8)", "rgba(35, 35, 35, 0.5)", "rgba(35, 35, 35, 0.5)", "rgba(35, 35, 35, 0.8)", "rgba(35, 35, 35, 0.96)", "rgba(35, 35, 35, 1)"]}
+            locations={[0, 0.1, 0.2, 0.35, 0.65, 0.8, 0.9, 1]}
             style={{
               position: "absolute",
               top: 0,
@@ -82,7 +84,8 @@ export const ImpactChainSection: React.FC = () => {
         <View
           style={{
             paddingHorizontal: isMobile ? 20 : 40,
-            paddingVertical: isMobile ? 60 : 80,
+            paddingTop: isMobile ? 60 : 180,
+            paddingBottom: isMobile ? 60 : 80,
             position: "relative",
             zIndex: 1,
           }}
@@ -101,6 +104,29 @@ export const ImpactChainSection: React.FC = () => {
                 alignItems: "center",
               }}
             >
+              {/* Badge */}
+              <View
+                style={{
+                  backgroundColor: "rgba(186, 153, 136, 0.15)",
+                  paddingVertical: 6,
+                  paddingHorizontal: 12,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  marginBottom: 16,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: "600",
+                    color: "#ba9988",
+                    letterSpacing: 1,
+                  }}
+                >
+                  CORRECTIVE ECONOMICS
+                </Text>
+              </View>
               <Text
                 style={{
                   fontSize: isMobile ? 32 : 44,
@@ -173,6 +199,19 @@ export const ImpactChainSection: React.FC = () => {
                       </Text>
                     </View>
 
+                    {/* Description */}
+                    <Text
+                      style={{
+                        fontSize: isMobile ? 14 : 15,
+                        color: "rgba(255, 255, 255, 0.9)",
+                        textAlign: "center",
+                        lineHeight: 22,
+                        fontWeight: "500",
+                      }}
+                    >
+                      {item.description}
+                    </Text>
+
                     {/* Icon */}
                     <View
                       style={{
@@ -190,19 +229,6 @@ export const ImpactChainSection: React.FC = () => {
                         color="#ba9988"
                       />
                     </View>
-
-                    {/* Description */}
-                    <Text
-                      style={{
-                        fontSize: isMobile ? 14 : 15,
-                        color: "rgba(255, 255, 255, 0.9)",
-                        textAlign: "center",
-                        lineHeight: 22,
-                        fontWeight: "500",
-                      }}
-                    >
-                      {item.description}
-                    </Text>
                   </View>
 
                   {/* Arrow Connector */}

@@ -75,6 +75,29 @@ export const InvestmentBreakdownSection: React.FC = () => {
               alignItems: "center",
             }}
           >
+            {/* Badge */}
+            <View
+              style={{
+                backgroundColor: "rgba(186, 153, 136, 0.15)",
+                paddingVertical: 6,
+                paddingHorizontal: 12,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "600",
+                  color: "#ba9988",
+                  letterSpacing: 1,
+                }}
+              >
+                PROJECT UNITY
+              </Text>
+            </View>
             <Text
               style={{
                 fontSize: isMobile ? 32 : 44,
@@ -184,149 +207,174 @@ export const InvestmentBreakdownSection: React.FC = () => {
             ))}
           </View>
         </View>
+      </View>
+    </ScrollAnimatedView>
+  );
+};
 
-        {/* CTA Section - Full Width */}
+// Separate CTA Section Component - Full Width Bleed
+export const ProjectUnityCTASection: React.FC = () => {
+  const { width } = useWindowDimensions();
+  const isMobile = width < 768;
+
+  return (
+    <ScrollAnimatedView delay={400}>
+      <View
+        style={{
+          position: "relative",
+          minHeight: isMobile ? 400 : 500,
+          backgroundColor: "#1a1a1a",
+          overflow: "hidden",
+          width: "100%",
+        }}
+      >
+        {/* Background Image */}
         <View
           style={{
-            position: "relative",
-            minHeight: isMobile ? 400 : 500,
-            backgroundColor: "#1a1a1a",
-            borderRadius: 0,
-            overflow: "hidden",
-            marginTop: isMobile ? 60 : 80,
-            width: "100%",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            opacity: 0.3,
+            zIndex: 0,
           }}
         >
-          {/* Background Image */}
-          <View
+          <Image
+            source={require("@/assets/images/public/impact-business-owner.png")}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+            contentFit="cover"
+            cachePolicy="memory-disk"
+          />
+          <LinearGradient
+            colors={["rgba(35, 35, 35, 0.8)", "rgba(35, 35, 35, 0.95)"]}
             style={{
               position: "absolute",
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              opacity: 0.3,
             }}
-          >
-            <Image
-              source={require("@/assets/images/public/cta-community-family.png")}
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-              contentFit="cover"
-              cachePolicy="memory-disk"
-            />
-            <LinearGradient
-              colors={["rgba(35, 35, 35, 0.8)", "rgba(35, 35, 35, 0.95)"]}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-              }}
-            />
-          </View>
+          />
+        </View>
 
-          {/* Content */}
-          <View
-            style={{
-              paddingHorizontal: isMobile ? 20 : 40,
-              paddingTop: isMobile ? 60 : 80,
-              paddingBottom: isMobile ? 40 : 50,
-              position: "relative",
-              zIndex: 1,
-              maxWidth: 1200,
-              alignSelf: "center",
-              width: "100%",
-            }}
-          >
-            <View style={{ alignItems: "center" }}>
-              {/* Heading */}
-              <Text
-                style={{
-                  fontSize: isMobile ? 28 : 40,
-                  fontWeight: "700",
-                  color: "#ffffff",
-                  marginBottom: 16,
-                  textAlign: "center",
-                  letterSpacing: -0.5,
-                }}
-              >
-                Your contribution is not just a donation—{"\n"}
-                it's sowing a seed into our collective future!
-              </Text>
+        {/* Top Gradient Overlay - Blends with section above */}
+        <LinearGradient
+          colors={["#232323", "rgba(35, 35, 35, 0.8)", "transparent"]}
+          locations={[0, 0.3, 1]}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: isMobile ? 120 : 150,
+            zIndex: 1,
+          }}
+        />
 
-              {/* Description */}
+        {/* Content */}
+        <View
+          style={{
+            paddingHorizontal: isMobile ? 20 : 40,
+            paddingTop: isMobile ? 60 : 80,
+            paddingBottom: isMobile ? 40 : 50,
+            position: "relative",
+            zIndex: 2,
+            maxWidth: 1200,
+            alignSelf: "center",
+            width: "100%",
+          }}
+        >
+          <View style={{ alignItems: "center" }}>
+            {/* Heading */}
+            <Text
+              style={{
+                fontSize: isMobile ? 28 : 40,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginBottom: 16,
+                textAlign: "center",
+                letterSpacing: -0.5,
+              }}
+            >
+              Your contribution is not just a donation—{"\n"}
+              it's sowing a seed into our collective future!
+            </Text>
+
+            {/* Description */}
+            <Text
+              style={{
+                fontSize: isMobile ? 16 : 18,
+                color: "rgba(255, 255, 255, 0.8)",
+                textAlign: "center",
+                lineHeight: isMobile ? 24 : 28,
+                maxWidth: isMobile ? "100%" : 900,
+                marginBottom: 32,
+              }}
+            >
+              Join us in making a difference. Your donation will help create the
+              change you wish to see.
+            </Text>
+
+            {/* CTA Button */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => Linking.openURL("https://www.zeffy.com/en-US/peer-to-peer/donate-to-project-unity")}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="Support Project Unity"
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              style={{
+                backgroundColor: "#ba9988",
+                paddingHorizontal: isMobile ? 40 : 48,
+                paddingVertical: isMobile ? 16 : 18,
+                borderRadius: 14,
+                minWidth: isMobile ? "100%" : 280,
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                gap: 8,
+                shadowColor: "#ba9988",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.4,
+                shadowRadius: 16,
+                elevation: 8,
+                marginBottom: 24,
+              }}
+            >
               <Text
                 style={{
                   fontSize: isMobile ? 16 : 18,
-                  color: "rgba(255, 255, 255, 0.8)",
-                  textAlign: "center",
-                  lineHeight: isMobile ? 24 : 28,
-                  maxWidth: 700,
-                  marginBottom: 32,
+                  fontWeight: "700",
+                  color: "#ffffff",
+                  letterSpacing: 0.5,
                 }}
               >
-                Join us in making a difference. Your donation will help create the
-                change you wish to see.
+                Support Project Unity
               </Text>
+              <MaterialIcons name="arrow-forward" size={20} color="#ffffff" />
+            </TouchableOpacity>
 
-              {/* CTA Button */}
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => Linking.openURL("https://www.zeffy.com/en-US/peer-to-peer/donate-to-project-unity")}
-                accessible={true}
-                accessibilityRole="button"
-                accessibilityLabel="Support Project Unity"
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                style={{
-                  backgroundColor: "#ba9988",
-                  paddingHorizontal: isMobile ? 40 : 48,
-                  paddingVertical: isMobile ? 16 : 18,
-                  borderRadius: 14,
-                  minWidth: isMobile ? "100%" : 280,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                  gap: 8,
-                  shadowColor: "#ba9988",
-                  shadowOffset: { width: 0, height: 8 },
-                  shadowOpacity: 0.4,
-                  shadowRadius: 16,
-                  elevation: 8,
-                  marginBottom: 24,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: isMobile ? 16 : 18,
-                    fontWeight: "700",
-                    color: "#ffffff",
-                    letterSpacing: 0.5,
-                  }}
-                >
-                  Support Project Unity
-                </Text>
-                <MaterialIcons name="arrow-forward" size={20} color="#ffffff" />
-              </TouchableOpacity>
-
-              {/* Tax Deductible Note */}
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: "rgba(255, 255, 255, 0.6)",
-                  textAlign: "center",
-                  maxWidth: 600,
-                  lineHeight: 20,
-                }}
-              >
-                All donations are made to Black Dollar Movement, Inc., a registered
-                501(c)(3) nonprofit organization. Your donation is fully
-                tax-deductible.
-              </Text>
-            </View>
+            {/* Tax Deductible Note */}
+            <Text
+              style={{
+                fontSize: 12,
+                color: "rgba(255, 255, 255, 0.6)",
+                textAlign: "center",
+                maxWidth: 600,
+                lineHeight: 20,
+              }}
+            >
+              All donations are made to Black Dollar Movement, Inc., a registered
+              501(c)(3) nonprofit organization.
+              
+              {"\n"}
+              Your donation is fully
+              tax-deductible.
+            </Text>
           </View>
         </View>
       </View>

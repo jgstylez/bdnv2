@@ -69,7 +69,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         style={{
           width: "100%",
           paddingTop: isMobile ? 40 : 60,
-          paddingBottom: isMobile ? 80 : 100,
+          paddingBottom: isMobile ? 40 : 50,
           paddingHorizontal: isMobile ? 20 : 40,
           alignItems: "center",
           position: "relative",
@@ -98,7 +98,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             cachePolicy="memory-disk"
           />
           <LinearGradient
-            colors={["rgba(35, 35, 35, 0.85)", "rgba(35, 35, 35, 0.95)"]}
+            colors={["rgba(35, 35, 35, 0.75)", "rgba(35, 35, 35, 0.8)", "rgba(35, 35, 35, 1)"]}
+            locations={[0, 0.5, 1]}
             style={{
               position: "absolute",
               top: 0,

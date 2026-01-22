@@ -7,7 +7,7 @@ import { ScrollAnimatedView } from "../ScrollAnimatedView";
 const FEATURES = [
   {
     title: "Connect",
-    description: "Bridge the gap between Black consumers and Black business owners. Find and support Black-owned businesses in your community.",
+    description: "Bridge the gap between consumers and Black businesses. Find Black-owned businesses near you.",
     icon: "handshake",
     gradient: ["#d4a574", "#c8965a"],
     iconColor: "#d4a574",
@@ -67,6 +67,29 @@ export const BentoGrid: React.FC = () => {
               alignItems: "center",
             }}
           >
+            {/* Badge */}
+            <View
+              style={{
+                backgroundColor: "rgba(186, 153, 136, 0.15)",
+                paddingVertical: 6,
+                paddingHorizontal: 12,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "600",
+                  color: "#ba9988",
+                  letterSpacing: 1,
+                }}
+              >
+                SELF-SUFFICIENCY
+              </Text>
+            </View>
             <Text
               style={{
                 fontSize: isMobile ? 32 : 48,
@@ -77,7 +100,7 @@ export const BentoGrid: React.FC = () => {
                 letterSpacing: -0.5,
               }}
             >
-              Explore Features
+              Group Economics
             </Text>
             <Text
               style={{
@@ -96,19 +119,19 @@ export const BentoGrid: React.FC = () => {
           <View
             style={{
               flexDirection: isMobile ? "column" : "row",
-              flexWrap: "wrap",
+              flexWrap: isMobile ? "wrap" : "nowrap",
               gap: 20,
             }}
           >
             {FEATURES.map((feature, index) => {
-              const cardWidth = isMobile ? "100%" : "48%";
-
               return (
                 <TouchableOpacity
                   key={feature.title}
                   activeOpacity={0.9}
                   style={{
-                    width: cardWidth,
+                    flex: isMobile ? 1 : 1,
+                    width: isMobile ? "100%" : undefined,
+                    minWidth: isMobile ? "100%" : 0,
                     height: isMobile ? 280 : 320,
                   }}
                 >
@@ -126,7 +149,7 @@ export const BentoGrid: React.FC = () => {
                     }}
                   >
                     <LinearGradient
-                      colors={feature.gradient}
+                      colors={feature.gradient as [string, string]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
                       style={{

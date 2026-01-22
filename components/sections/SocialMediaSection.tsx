@@ -128,6 +128,29 @@ export const SocialMediaSection: React.FC = () => {
               alignItems: "center",
             }}
           >
+            {/* Badge */}
+            <View
+              style={{
+                backgroundColor: "rgba(186, 153, 136, 0.15)",
+                paddingVertical: 6,
+                paddingHorizontal: 12,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "600",
+                  color: "#ba9988",
+                  letterSpacing: 1,
+                }}
+              >
+                NOTABLE FOLLOWERS
+              </Text>
+            </View>
             <Text
               style={{
                 fontSize: isMobile ? 32 : 44,
@@ -140,80 +163,141 @@ export const SocialMediaSection: React.FC = () => {
             >
               SOCIAL MEDIA
             </Text>
-            <Text
-              style={{
-                fontSize: isMobile ? 24 : 32,
-                fontWeight: "700",
-                color: "#ba9988",
-                textAlign: "center",
-                letterSpacing: 2,
-              }}
-            >
-              NOTABLE FOLLOWERS
-            </Text>
           </View>
 
           {/* Content Layout */}
           <View
             style={{
               flexDirection: isMobile ? "column" : "row",
-              gap: isMobile ? 40 : 60,
-              alignItems: isMobile ? "center" : "flex-start",
+              gap: isMobile ? 40 : 0,
+              alignItems: isMobile ? "center" : "stretch",
             }}
           >
-            {/* Left Sidebar - Social Media Icons */}
-            <View
-              style={{
-                width: isMobile ? "100%" : 200,
-                alignItems: isMobile ? "center" : "flex-start",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: isMobile ? 16 : 18,
-                  fontWeight: "700",
-                  color: "#ffffff",
-                  marginBottom: 24,
-                  textAlign: isMobile ? "center" : "left",
-                  letterSpacing: 0.5,
-                }}
-              >
-                NEARLY 400K SUBSCRIBERS
-              </Text>
+            {/* Left Sidebar - Social Media Icons + Rotated Text */}
+            {!isMobile && (
               <View
                 style={{
-                  flexDirection: isMobile ? "row" : "column",
-                  gap: 16,
-                  alignItems: isMobile ? "center" : "flex-start",
-                  justifyContent: isMobile ? "center" : "flex-start",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 8,
+                  marginRight: 40,
                 }}
               >
-                {SOCIAL_LINKS.slice(0, 5).map((social, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => handleSocialLink(social.url)}
-                    activeOpacity={0.7}
+                {/* Social Icons */}
+                <View
+                  style={{
+                    flexDirection: "column",
+                    gap: 16,
+                    alignItems: "flex-start",
+                  }}
+                >
+                  {SOCIAL_LINKS.slice(0, 5).map((social, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => handleSocialLink(social.url)}
+                      activeOpacity={0.7}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 8,
+                        backgroundColor: "transparent",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <View style={{ opacity: 0.9 }}>
+                        {React.cloneElement(social.icon as React.ReactElement, {
+                          fill: "#ba9988",
+                        })}
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+
+                {/* Rotated Subscriber Text */}
+                <View
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 30,
+                    height: 280,
+                  }}
+                >
+                  <Text
                     style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 8,
-                      backgroundColor: "transparent",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      fontSize: 14,
+                      fontWeight: "700",
+                      color: "#ffffff",
+                      letterSpacing: 2,
+                      transform: [{ rotate: "90deg" }],
+                      width: 280,
+                      textAlign: "center",
                     }}
                   >
-                    <View style={{ opacity: 0.9 }}>
-                      {React.cloneElement(social.icon as React.ReactElement, {
-                        fill: "#ba9988",
-                      })}
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                    NEARLY 400K SUBSCRIBERS
+                  </Text>
+                </View>
               </View>
-            </View>
+            )}
+
+            {/* Mobile: Social Icons */}
+            {isMobile && (
+              <View
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    gap: 16,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {SOCIAL_LINKS.slice(0, 5).map((social, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => handleSocialLink(social.url)}
+                      activeOpacity={0.7}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 8,
+                        backgroundColor: "transparent",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <View style={{ opacity: 0.9 }}>
+                        {React.cloneElement(social.icon as React.ReactElement, {
+                          fill: "#ba9988",
+                        })}
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            )}
 
             {/* Right: Notable Followers Grid */}
             <View style={{ flex: 1, width: "100%" }}>
+              {/* Mobile: Subscriber Text */}
+              {isMobile && (
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "700",
+                    color: "#ffffff",
+                    marginBottom: 24,
+                    textAlign: "center",
+                    letterSpacing: 0.5,
+                  }}
+                >
+                  NEARLY 400K SUBSCRIBERS
+                </Text>
+              )}
               <View
                 style={{
                   flexDirection: isMobile ? "column" : "row",
