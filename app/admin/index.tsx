@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -160,8 +160,10 @@ function AdminDashboardContent() {
         <View style={{ marginBottom: 32 }}>
           <Text
             style={{
-              fontSize: 16,
+              fontSize: 14,
               color: "rgba(255, 255, 255, 0.7)",
+              textTransform: "uppercase",
+              letterSpacing: 0.5,
             }}
           >
             Platform Management & Control
@@ -171,16 +173,17 @@ function AdminDashboardContent() {
         {/* Quick Stats */}
         <View
           style={{
-            flexDirection: isMobile ? "column" : "row",
-            flexWrap: "wrap",
+            flexDirection: "row",
+            flexWrap: isMobile ? "wrap" : "nowrap",
             gap: 12,
             marginBottom: 32,
           }}
         >
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: "#474747",
               borderRadius: 16,
               padding: 20,
@@ -209,8 +212,9 @@ function AdminDashboardContent() {
           </View>
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: "#474747",
               borderRadius: 16,
               padding: 20,
@@ -239,8 +243,9 @@ function AdminDashboardContent() {
           </View>
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: "#474747",
               borderRadius: 16,
               padding: 20,
@@ -269,8 +274,9 @@ function AdminDashboardContent() {
           </View>
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: "#474747",
               borderRadius: 16,
               padding: 20,
@@ -313,7 +319,7 @@ function AdminDashboardContent() {
           </Text>
           <View
             style={{
-              flexDirection: isMobile ? "column" : "row",
+              flexDirection: "row",
               flexWrap: "wrap",
               gap: 16,
             }}
@@ -323,7 +329,10 @@ function AdminDashboardContent() {
                 key={section.id}
                 onPress={() => router.push(section.route as any)}
                 style={{
-                  width: isMobile ? "100%" : "48%",
+                  width: Platform.OS === "web" ? "calc(50% - 8px)" : "48%",
+                  flexBasis: Platform.OS === "web" ? undefined : "48%",
+                  flexGrow: 0,
+                  flexShrink: 0,
                   backgroundColor: "#474747",
                   borderRadius: 16,
                   padding: 20,

@@ -173,51 +173,95 @@ export default function TokenHoldersManagement() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
         }}
       >
-        <AdminPageHeader
-          title="Token Holders Management"
-          description="Manage token holders, balances, and account status"
-          actionButton={{
-            label: "Export Data",
-            icon: "download",
-            onPress: () => alert("Export functionality coming soon"),
-          }}
-        />
+        {/* Header */}
+        <View style={{ marginBottom: 32 }}>
+          <Text
+            style={{
+              fontSize: isMobile ? 28 : 36,
+              fontWeight: "800",
+              color: "#ffffff",
+              marginBottom: 8,
+            }}
+          >
+            Token Holders Management
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              color: "rgba(255, 255, 255, 0.7)",
+              lineHeight: 24,
+            }}
+          >
+            Manage token holders, balances, and account status
+          </Text>
+        </View>
+
+        {/* Quick Actions */}
+        <View style={{ marginBottom: 32, flexDirection: "row", gap: 12, flexWrap: "wrap" }}>
+          <TouchableOpacity
+            onPress={() => alert("Export functionality coming soon")}
+            style={{
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12,
+              flex: isMobile ? 1 : 0,
+              minWidth: isMobile ? "100%" : 200,
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+            }}
+          >
+            <MaterialIcons name="download" size={24} color="#ba9988" />
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "700",
+                color: "#ffffff",
+              }}
+            >
+              Export Data
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         {/* Search and Filters */}
-        <View style={{ marginBottom: spacing["2xl"], gap: spacing.md }}>
+        <View style={{ marginBottom: 32, gap: 16 }}>
           {/* Search Bar */}
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.md,
-              paddingHorizontal: spacing.lg,
+              backgroundColor: "#474747",
+              borderRadius: 12,
+              paddingHorizontal: 16,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
-            <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
+            <MaterialIcons name="search" size={20} color="rgba(255, 255, 255, 0.5)" />
             <TextInput
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholder="Search by wallet address, name, or email..."
-              placeholderTextColor={colors.text.placeholder}
+              placeholderTextColor="rgba(255, 255, 255, 0.4)"
               style={{
                 flex: 1,
-                paddingVertical: spacing.md - 2,
-                paddingHorizontal: spacing.md,
-                fontSize: typography.fontSize.base,
-                color: colors.text.primary,
+                paddingVertical: 12,
+                paddingHorizontal: 12,
+                fontSize: 16,
+                color: "#ffffff",
               }}
             />
           </View>
@@ -226,7 +270,7 @@ export default function TokenHoldersManagement() {
           <View
             style={{
               flexDirection: isMobile ? "column" : "row",
-              gap: spacing.md,
+              gap: 16,
             }}
           >
             <FilterDropdown
@@ -257,35 +301,38 @@ export default function TokenHoldersManagement() {
         {/* Stats Summary */}
         <View
           style={{
-            flexDirection: isMobile ? "column" : "row",
-            gap: spacing.md,
-            marginBottom: spacing.lg,
+            flexDirection: "row",
+            flexWrap: isMobile ? "wrap" : "nowrap",
+            gap: 12,
+            marginBottom: 32,
           }}
         >
           <View
             style={{
-              flex: 1,
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.md,
-              padding: spacing.lg,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.secondary,
-                marginBottom: spacing.xs,
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
               }}
             >
               Total Holders
             </Text>
             <Text
               style={{
-                fontSize: typography.fontSize["2xl"],
-                fontWeight: typography.fontWeight.bold,
-                color: colors.accent,
+                fontSize: 28,
+                fontWeight: "700",
+                color: "#ba9988",
               }}
             >
               {tokenHolders.length.toLocaleString()}
@@ -293,28 +340,30 @@ export default function TokenHoldersManagement() {
           </View>
           <View
             style={{
-              flex: 1,
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.md,
-              padding: spacing.lg,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.secondary,
-                marginBottom: spacing.xs,
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
               }}
             >
               Total Balance
             </Text>
             <Text
               style={{
-                fontSize: typography.fontSize["2xl"],
-                fontWeight: typography.fontWeight.bold,
-                color: colors.accent,
+                fontSize: 28,
+                fontWeight: "700",
+                color: "#ba9988",
               }}
             >
               {tokenHolders.reduce((sum, h) => sum + h.balance, 0).toLocaleString(undefined, {
@@ -325,27 +374,29 @@ export default function TokenHoldersManagement() {
           </View>
           <View
             style={{
-              flex: 1,
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.md,
-              padding: spacing.lg,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.secondary,
-                marginBottom: spacing.xs,
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
               }}
             >
               Active Holders
             </Text>
             <Text
               style={{
-                fontSize: typography.fontSize["2xl"],
-                fontWeight: typography.fontWeight.bold,
+                fontSize: 28,
+                fontWeight: "700",
                 color: "#4caf50",
               }}
             >
@@ -355,24 +406,25 @@ export default function TokenHoldersManagement() {
         </View>
 
         {/* Token Holders List */}
-        <View style={{ gap: spacing.md }}>
+        <View style={{ gap: 16 }}>
           {paginatedHolders.length === 0 ? (
             <View
               style={{
-                backgroundColor: colors.secondary.bg,
-                borderRadius: borderRadius.md,
-                padding: spacing["2xl"],
+                backgroundColor: "#474747",
+                borderRadius: 16,
+                padding: 40,
                 alignItems: "center",
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: "rgba(186, 153, 136, 0.2)",
               }}
             >
-              <MaterialIcons name="account-balance-wallet" size={48} color={colors.text.tertiary} />
+              <MaterialIcons name="account-balance-wallet" size={48} color="rgba(186, 153, 136, 0.5)" />
               <Text
                 style={{
-                  fontSize: typography.fontSize.base,
-                  color: colors.text.secondary,
-                  marginTop: spacing.md,
+                  fontSize: 16,
+                  color: "rgba(255, 255, 255, 0.6)",
+                  marginTop: 16,
+                  textAlign: "center",
                 }}
               >
                 No token holders found

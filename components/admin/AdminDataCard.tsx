@@ -43,23 +43,23 @@ const AdminDataCardComponent: React.FC<AdminDataCardProps> = ({
     switch (variant) {
       case "danger":
         return {
-          backgroundColor: colors.status.errorLight,
-          borderColor: colors.status.error,
+          backgroundColor: "rgba(255, 68, 68, 0.1)",
+          borderColor: "#ff4444",
         };
       case "info":
         return {
-          backgroundColor: colors.accentLight,
-          borderColor: colors.accent,
+          backgroundColor: "rgba(186, 153, 136, 0.1)",
+          borderColor: "#ba9988",
         };
       case "primary":
         return {
-          backgroundColor: colors.accent,
-          borderColor: colors.accent,
+          backgroundColor: "#ba9988",
+          borderColor: "#ba9988",
         };
       default:
         return {
-          backgroundColor: colors.primary.bg,
-          borderColor: colors.border.light,
+          backgroundColor: "#232323",
+          borderColor: "rgba(186, 153, 136, 0.2)",
         };
     }
   };
@@ -67,35 +67,35 @@ const AdminDataCardComponent: React.FC<AdminDataCardProps> = ({
   const getActionTextColor = (variant: "primary" | "secondary" | "danger" | "info" = "secondary") => {
     switch (variant) {
       case "danger":
-        return colors.status.error;
+        return "#ff4444";
       case "info":
-        return colors.accent;
+        return "#ba9988";
       case "primary":
-        return colors.text.primary;
+        return "#ffffff";
       default:
-        return colors.accent;
+        return "#ba9988";
     }
   };
 
   return (
     <View
       style={{
-        backgroundColor: colors.secondary.bg,
-        borderRadius: borderRadius.lg,
-        padding: spacing.lg,
+        backgroundColor: "#474747",
+        borderRadius: 16,
+        padding: 24,
         borderWidth: 1,
-        borderColor: colors.border.light,
-        gap: spacing.md,
+        borderColor: "rgba(186, 153, 136, 0.2)",
+        gap: 16,
       }}
     >
       {/* Header */}
       <View>
         <Text
           style={{
-            fontSize: typography.fontSize.xl,
-            fontWeight: typography.fontWeight.bold,
-            color: colors.text.primary,
-            marginBottom: spacing.xs,
+            fontSize: 20,
+            fontWeight: "700",
+            color: "#ffffff",
+            marginBottom: 4,
           }}
         >
           {title}
@@ -103,8 +103,8 @@ const AdminDataCardComponent: React.FC<AdminDataCardProps> = ({
         {subtitle && (
           <Text
             style={{
-              fontSize: typography.fontSize.base,
-              color: colors.text.secondary,
+              fontSize: 16,
+              color: "rgba(255, 255, 255, 0.7)",
             }}
           >
             {subtitle}
@@ -114,21 +114,21 @@ const AdminDataCardComponent: React.FC<AdminDataCardProps> = ({
 
       {/* Badges */}
       {badges.length > 0 && (
-        <View style={{ flexDirection: "row", gap: spacing.sm, flexWrap: "wrap" }}>
+        <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
           {badges.map((badge, index) => (
             <View
               key={index}
               style={{
                 backgroundColor: badge.backgroundColor,
-                paddingHorizontal: spacing.md - 2,
-                paddingVertical: spacing.xs,
-                borderRadius: borderRadius.sm,
+                paddingHorizontal: 12,
+                paddingVertical: 6,
+                borderRadius: 8,
               }}
             >
               <Text
                 style={{
-                  fontSize: typography.fontSize.xs + 1,
-                  fontWeight: typography.fontWeight.semibold,
+                  fontSize: 13,
+                  fontWeight: "600",
                   color: badge.color,
                   textTransform: "capitalize",
                 }}
@@ -145,7 +145,7 @@ const AdminDataCardComponent: React.FC<AdminDataCardProps> = ({
 
       {/* Actions */}
       {actions.length > 0 && (
-        <View style={{ flexDirection: "row", gap: spacing.sm, marginTop: spacing.md, flexWrap: "wrap" }}>
+        <View style={{ flexDirection: "row", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
           {actions.map((action, index) => (
             <TouchableOpacity
               key={index}
@@ -153,22 +153,22 @@ const AdminDataCardComponent: React.FC<AdminDataCardProps> = ({
               style={{
                 flex: isMobile ? 1 : undefined,
                 minWidth: isMobile ? undefined : 100,
-                paddingVertical: spacing.sm + 2,
-                paddingHorizontal: spacing.md,
-                borderRadius: borderRadius.sm,
+                paddingVertical: 10,
+                paddingHorizontal: 16,
+                borderRadius: 8,
                 borderWidth: 1,
                 alignItems: "center",
                 flexDirection: "row",
                 justifyContent: "center",
-                gap: spacing.xs,
+                gap: 6,
                 ...getActionStyle(action.variant),
               }}
             >
-              <MaterialIcons name={action.icon} size={16} color={getActionTextColor(action.variant)} />
+              <MaterialIcons name={action.icon} size={18} color={getActionTextColor(action.variant)} />
               <Text
                 style={{
-                  fontSize: typography.fontSize.sm,
-                  fontWeight: typography.fontWeight.semibold,
+                  fontSize: 14,
+                  fontWeight: "600",
                   color: getActionTextColor(action.variant),
                 }}
               >

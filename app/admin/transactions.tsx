@@ -243,77 +243,163 @@ export default function TransactionManagement() {
             />
           </View>
 
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-            {[
-              { key: "all", label: "All Status" },
-              { key: "completed", label: "Completed" },
-              { key: "pending", label: "Pending" },
-              { key: "failed", label: "Failed" },
-              { key: "refunded", label: "Refunded" },
-            ].map((status) => (
-              <TouchableOpacity
-                key={status.key}
-                onPress={() => setSelectedStatus(status.key)}
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  borderRadius: 20,
-                  backgroundColor: selectedStatus === status.key ? "#ba9988" : "#474747",
-                  borderWidth: 1,
-                  borderColor:
-                    selectedStatus === status.key
-                      ? "#ba9988"
-                      : "rgba(186, 153, 136, 0.2)",
-                }}
+          {isMobile ? (
+            <>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: 8, paddingRight: 20 }}
               >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: selectedStatus === status.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                  }}
-                >
-                  {status.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+                {[
+                  { key: "all", label: "All Status" },
+                  { key: "completed", label: "Completed" },
+                  { key: "pending", label: "Pending" },
+                  { key: "failed", label: "Failed" },
+                  { key: "refunded", label: "Refunded" },
+                ].map((status) => (
+                  <TouchableOpacity
+                    key={status.key}
+                    onPress={() => setSelectedStatus(status.key)}
+                    style={{
+                      paddingHorizontal: 14,
+                      paddingVertical: 8,
+                      borderRadius: 20,
+                      backgroundColor: selectedStatus === status.key ? "#ba9988" : "#474747",
+                      borderWidth: 1,
+                      borderColor:
+                        selectedStatus === status.key
+                          ? "#ba9988"
+                          : "rgba(186, 153, 136, 0.2)",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontWeight: "600",
+                        color: selectedStatus === status.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                    >
+                      {status.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
 
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-            {[
-              { key: "all", label: "All Types" },
-              { key: "payment", label: "Payments" },
-              { key: "token-purchase", label: "Token Purchases" },
-              { key: "donation", label: "Donations" },
-              { key: "event-ticket", label: "Event Tickets" },
-            ].map((type) => (
-              <TouchableOpacity
-                key={type.key}
-                onPress={() => setSelectedType(type.key)}
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  borderRadius: 20,
-                  backgroundColor: selectedType === type.key ? "#ba9988" : "#474747",
-                  borderWidth: 1,
-                  borderColor:
-                    selectedType === type.key
-                      ? "#ba9988"
-                      : "rgba(186, 153, 136, 0.2)",
-                }}
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: 8, paddingRight: 20 }}
               >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: selectedType === type.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                  }}
-                >
-                  {type.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+                {[
+                  { key: "all", label: "All Types" },
+                  { key: "payment", label: "Payments" },
+                  { key: "token-purchase", label: "Token Purchases" },
+                  { key: "donation", label: "Donations" },
+                  { key: "event-ticket", label: "Event Tickets" },
+                ].map((type) => (
+                  <TouchableOpacity
+                    key={type.key}
+                    onPress={() => setSelectedType(type.key)}
+                    style={{
+                      paddingHorizontal: 14,
+                      paddingVertical: 8,
+                      borderRadius: 20,
+                      backgroundColor: selectedType === type.key ? "#ba9988" : "#474747",
+                      borderWidth: 1,
+                      borderColor:
+                        selectedType === type.key
+                          ? "#ba9988"
+                          : "rgba(186, 153, 136, 0.2)",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontWeight: "600",
+                        color: selectedType === type.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                    >
+                      {type.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </>
+          ) : (
+            <>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+                {[
+                  { key: "all", label: "All Status" },
+                  { key: "completed", label: "Completed" },
+                  { key: "pending", label: "Pending" },
+                  { key: "failed", label: "Failed" },
+                  { key: "refunded", label: "Refunded" },
+                ].map((status) => (
+                  <TouchableOpacity
+                    key={status.key}
+                    onPress={() => setSelectedStatus(status.key)}
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 8,
+                      borderRadius: 20,
+                      backgroundColor: selectedStatus === status.key ? "#ba9988" : "#474747",
+                      borderWidth: 1,
+                      borderColor:
+                        selectedStatus === status.key
+                          ? "#ba9988"
+                          : "rgba(186, 153, 136, 0.2)",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: "600",
+                        color: selectedStatus === status.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                    >
+                      {status.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+                {[
+                  { key: "all", label: "All Types" },
+                  { key: "payment", label: "Payments" },
+                  { key: "token-purchase", label: "Token Purchases" },
+                  { key: "donation", label: "Donations" },
+                  { key: "event-ticket", label: "Event Tickets" },
+                ].map((type) => (
+                  <TouchableOpacity
+                    key={type.key}
+                    onPress={() => setSelectedType(type.key)}
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 8,
+                      borderRadius: 20,
+                      backgroundColor: selectedType === type.key ? "#ba9988" : "#474747",
+                      borderWidth: 1,
+                      borderColor:
+                        selectedType === type.key
+                          ? "#ba9988"
+                          : "rgba(186, 153, 136, 0.2)",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: "600",
+                        color: selectedType === type.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                    >
+                      {type.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </>
+          )}
         </View>
 
         {/* Transactions List */}

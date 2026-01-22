@@ -281,52 +281,93 @@ export default function BusinessManagement() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal,
-          paddingTop: Platform.OS === "web" ? spacing["2xl"] : spacing["2xl"] + 16,
-          paddingBottom: spacing["4xl"],
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
         }}
       >
         {/* Header */}
-        <AdminPageHeader
-          title="Business Management"
-          description="Approve and manage merchant accounts. Edit business information and handle applications."
-          actionButton={{
-            label: "Create Business",
-            icon: "add",
-            onPress: () => setShowCreateModal(true),
-          }}
-        />
+        <View style={{ marginBottom: 32 }}>
+          <Text
+            style={{
+              fontSize: isMobile ? 28 : 36,
+              fontWeight: "800",
+              color: "#ffffff",
+              marginBottom: 8,
+            }}
+          >
+            Business Management
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              color: "rgba(255, 255, 255, 0.7)",
+              lineHeight: 24,
+            }}
+          >
+            Approve and manage merchant accounts. Edit business information and handle applications.
+          </Text>
+        </View>
+
+        {/* Quick Actions */}
+        <View style={{ marginBottom: 32, flexDirection: "row", gap: 12, flexWrap: "wrap" }}>
+          <TouchableOpacity
+            onPress={() => setShowCreateModal(true)}
+            style={{
+              backgroundColor: "#ba9988",
+              borderRadius: 16,
+              padding: 20,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12,
+              flex: isMobile ? 1 : 0,
+              minWidth: isMobile ? "100%" : 200,
+            }}
+          >
+            <MaterialIcons name="add" size={24} color="#ffffff" />
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "700",
+                color: "#ffffff",
+              }}
+            >
+              Create Business
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         {/* Search and Filters */}
-        <View style={{ marginBottom: spacing["2xl"], gap: spacing.md }}>
+        <View style={{ marginBottom: 32, gap: 16 }}>
           {/* Search Bar */}
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: colors.input,
-              borderRadius: borderRadius.md,
-              paddingHorizontal: spacing.lg,
+              backgroundColor: "#474747",
+              borderRadius: 12,
+              paddingHorizontal: 16,
               borderWidth: 1,
-              borderColor: colors.border,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
-            <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
+            <MaterialIcons name="search" size={20} color="rgba(255, 255, 255, 0.5)" />
             <TextInput
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholder="Search businesses..."
-              placeholderTextColor={colors.text.placeholder}
+              placeholderTextColor="rgba(255, 255, 255, 0.4)"
               style={{
                 flex: 1,
-                paddingVertical: spacing.md - 2,
-                paddingHorizontal: spacing.md,
-                fontSize: typography.fontSize.base,
-                color: colors.text.primary,
+                paddingVertical: 12,
+                paddingHorizontal: 12,
+                fontSize: 16,
+                color: "#ffffff",
               }}
             />
           </View>
@@ -335,7 +376,9 @@ export default function BusinessManagement() {
           <View
             style={{
               flexDirection: isMobile ? "column" : "row",
-              gap: spacing.md,
+              gap: 16,
+            }}
+          >,
             }}
           >
             <FilterDropdown
@@ -370,21 +413,21 @@ export default function BusinessManagement() {
         ) : (
           <View
             style={{
-              backgroundColor: colors.input,
-              borderRadius: borderRadius.lg,
-              padding: spacing["4xl"],
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 40,
               alignItems: "center",
               borderWidth: 1,
-              borderColor: colors.border,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
-            <MaterialIcons name="store" size={48} color={colors.accent} />
+            <MaterialIcons name="store" size={48} color="rgba(186, 153, 136, 0.5)" />
             <Text
               style={{
-                fontSize: typography.fontSize.lg,
-                color: colors.text.tertiary,
+                fontSize: 16,
+                color: "rgba(255, 255, 255, 0.6)",
                 textAlign: "center",
-                marginTop: spacing.lg,
+                marginTop: 16,
               }}
             >
               No businesses found

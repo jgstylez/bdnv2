@@ -736,16 +736,17 @@ export default function SubscriptionBoxesManagement() {
         {/* Statistics */}
         <View
           style={{
-            flexDirection: isMobile ? "column" : "row",
-            flexWrap: "wrap",
+            flexDirection: "row",
+            flexWrap: isMobile ? "wrap" : "nowrap",
             gap: 12,
             marginBottom: 32,
           }}
         >
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: "#474747",
               borderRadius: 16,
               padding: 20,
@@ -762,8 +763,9 @@ export default function SubscriptionBoxesManagement() {
           </View>
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: "#474747",
               borderRadius: 16,
               padding: 20,
@@ -780,8 +782,9 @@ export default function SubscriptionBoxesManagement() {
           </View>
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: "#474747",
               borderRadius: 16,
               padding: 20,
@@ -798,8 +801,9 @@ export default function SubscriptionBoxesManagement() {
           </View>
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: "#474747",
               borderRadius: 16,
               padding: 20,

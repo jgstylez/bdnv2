@@ -43,7 +43,7 @@ export function BusinessList({
   getStatusColor,
 }: BusinessListProps) {
   return (
-    <View style={{ gap: spacing.md }}>
+    <View style={{ gap: 16 }}>
       {businesses.map((business) => {
         const statusColor = getStatusColor(business.status);
         const actions: Array<{

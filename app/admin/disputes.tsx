@@ -183,31 +183,52 @@ export default function DisputeManagement() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
         }}
       >
-        <AdminPageHeader
-          title="Dispute & Support Management"
-          description="Manage user disputes, support tickets, and resolve issues"
-        />
+        {/* Header */}
+        <View style={{ marginBottom: 32 }}>
+          <Text
+            style={{
+              fontSize: isMobile ? 28 : 36,
+              fontWeight: "800",
+              color: "#ffffff",
+              marginBottom: 8,
+            }}
+          >
+            Dispute Management
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              color: "rgba(255, 255, 255, 0.7)",
+              lineHeight: 24,
+            }}
+          >
+            Review and resolve disputes. Manage dispute status, assign resolutions, and communicate with users.
+          </Text>
+        </View>
 
         {/* Stats Summary */}
         <View
           style={{
-            flexDirection: isMobile ? "column" : "row",
+            flexDirection: "row",
+            flexWrap: isMobile ? "wrap" : "nowrap",
             gap: spacing.md,
             marginBottom: spacing["2xl"],
           }}
         >
           <View
             style={{
-              flex: 1,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               padding: spacing.lg,
@@ -236,7 +257,9 @@ export default function DisputeManagement() {
         </View>
           <View
             style={{
-              flex: 1,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               padding: spacing.lg,
@@ -265,7 +288,9 @@ export default function DisputeManagement() {
           </View>
           <View
                 style={{
-              flex: 1,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               padding: spacing.lg,
@@ -294,7 +319,9 @@ export default function DisputeManagement() {
           </View>
           <View
                 style={{
-              flex: 1,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
               backgroundColor: colors.input,
               borderRadius: borderRadius.md,
               padding: spacing.lg,
@@ -324,31 +351,31 @@ export default function DisputeManagement() {
         </View>
 
         {/* Search and Filters */}
-        <View style={{ marginBottom: spacing["2xl"], gap: spacing.md }}>
+        <View style={{ marginBottom: 32, gap: 16 }}>
           {/* Search Bar */}
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: colors.input,
-              borderRadius: borderRadius.md,
-              paddingHorizontal: spacing.lg,
+              backgroundColor: "#474747",
+              borderRadius: 12,
+              paddingHorizontal: 16,
               borderWidth: 1,
-              borderColor: colors.border,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
-            <MaterialIcons name="search" size={20} color={colors.text.tertiary} />
+            <MaterialIcons name="search" size={20} color="rgba(255, 255, 255, 0.5)" />
             <TextInput
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholder="Search by ID, subject, user name, or email..."
-              placeholderTextColor={colors.text.placeholder}
+              placeholderTextColor="rgba(255, 255, 255, 0.4)"
               style={{
                 flex: 1,
-                paddingVertical: spacing.md - 2,
-                paddingHorizontal: spacing.md,
-                fontSize: typography.fontSize.base,
-                color: colors.text.primary,
+                paddingVertical: 12,
+                paddingHorizontal: 12,
+                fontSize: 16,
+                color: "#ffffff",
               }}
             />
           </View>
@@ -357,7 +384,7 @@ export default function DisputeManagement() {
           <View
             style={{
               flexDirection: isMobile ? "column" : "row",
-              gap: spacing.md,
+              gap: 16,
             }}
           >
             <FilterDropdown
@@ -405,20 +432,21 @@ export default function DisputeManagement() {
           {paginatedDisputes.length === 0 ? (
             <View
               style={{
-                backgroundColor: colors.input,
-                borderRadius: borderRadius.md,
-                padding: spacing["2xl"],
+                backgroundColor: "#474747",
+                borderRadius: 16,
+                padding: 40,
                 alignItems: "center",
                 borderWidth: 1,
-                borderColor: colors.border,
+                borderColor: "rgba(186, 153, 136, 0.2)",
               }}
             >
-              <MaterialIcons name="inbox" size={48} color={colors.text.tertiary} />
-                    <Text
-                      style={{
-                  fontSize: typography.fontSize.base,
-                  color: colors.text.secondary,
-                  marginTop: spacing.md,
+              <MaterialIcons name="inbox" size={48} color="rgba(186, 153, 136, 0.5)" />
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "rgba(255, 255, 255, 0.6)",
+                  marginTop: 16,
+                  textAlign: "center",
                 }}
               >
                 No disputes found matching your filters
