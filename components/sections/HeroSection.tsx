@@ -89,7 +89,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           }}
         >
           <Image
-            source={require("@/assets/images/public/AdobeStock_1076676359.jpeg")}
+            source={require("@/assets/images/public/asdfabdn_hero_bg.jpg")}
             style={{
               width: "100%",
               height: "100%",
