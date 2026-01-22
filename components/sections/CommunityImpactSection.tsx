@@ -85,7 +85,7 @@ export const CommunityImpactSection: React.FC = () => {
                 style={{
                   flex: 1,
                   minWidth: isMobile ? "100%" : "45%",
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 20,
                   padding: isMobile ? 24 : 32,
                   borderWidth: 1,
@@ -131,7 +131,7 @@ export const CommunityImpactSection: React.FC = () => {
 
           <View
             style={{
-              backgroundColor: "rgba(35, 35, 35, 0.4)",
+              backgroundColor: "rgba(71, 71, 71, 0.4)",
               borderRadius: 24,
               padding: isMobile ? 24 : 32,
               borderWidth: 1,

@@ -125,7 +125,7 @@ export default function Security() {
                     style={{
                       flex: 1,
                       minWidth: isMobile ? "100%" : "30%",
-                      backgroundColor: "rgba(35, 35, 35, 0.4)",
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
                       borderRadius: 16,
                       padding: 24,
                       borderWidth: 1,
@@ -212,7 +212,7 @@ export default function Security() {
 
               <View
                 style={{
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 16,
                   padding: 32,
                   borderWidth: 1,
@@ -266,7 +266,7 @@ export default function Security() {
             >
               <View
                 style={{
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 16,
                   padding: 32,
                   borderWidth: 1,

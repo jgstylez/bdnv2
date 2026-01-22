@@ -115,7 +115,7 @@ export const InvestmentBreakdownSection: React.FC = () => {
                 style={{
                   flex: isMobile ? 1 : 1,
                   minWidth: isMobile ? "100%" : 0,
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 20,
                   padding: isMobile ? 24 : 28,
                   borderWidth: 1,

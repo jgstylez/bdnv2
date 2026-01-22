@@ -9,25 +9,33 @@ const FEATURES = [
     title: "Connect",
     description: "Bridge the gap between Black consumers and Black business owners. Find and support Black-owned businesses in your community.",
     icon: "handshake",
-    gradient: ["#ba9988", "#9d7f6f"],
+    gradient: ["#d4a574", "#c8965a"],
+    iconColor: "#d4a574",
+    iconBg: "rgba(212, 165, 116, 0.15)",
   },
   {
     title: "Circulate",
     description: "Keep Black dollars circulating within our community. Every transaction strengthens our collective economic power.",
     icon: "attach-money",
-    gradient: ["#6b8e9f", "#5a7a8a"],
+    gradient: ["#5ba3c7", "#4a8fb3"],
+    iconColor: "#5ba3c7",
+    iconBg: "rgba(91, 163, 199, 0.15)",
   },
   {
     title: "Empower",
     description: "Access resources, education, and tools designed to build stronger, self-sufficient communities.",
     icon: "trending-up",
-    gradient: ["#8b6f9d", "#745a83"],
+    gradient: ["#a67bc9", "#8f66b3"],
+    iconColor: "#a67bc9",
+    iconBg: "rgba(166, 123, 201, 0.15)",
   },
   {
     title: "Grow",
     description: "Level up through our tiered system. From Basic to Black Diamond, unlock benefits as you support the community.",
     icon: "show-chart",
-    gradient: ["#9d8b6f", "#837a5a"],
+    gradient: ["#7fb87f", "#6aa36a"],
+    iconColor: "#7fb87f",
+    iconBg: "rgba(127, 184, 127, 0.15)",
   },
 ];
 
@@ -93,12 +101,7 @@ export const BentoGrid: React.FC = () => {
             }}
           >
             {FEATURES.map((feature, index) => {
-              const isLarge = index === 1; // Make "Grow" card larger
-              const cardWidth = isMobile
-                ? "100%"
-                : isLarge
-                ? "48%"
-                : "48%";
+              const cardWidth = isMobile ? "100%" : "48%";
 
               return (
                 <TouchableOpacity
@@ -106,7 +109,7 @@ export const BentoGrid: React.FC = () => {
                   activeOpacity={0.9}
                   style={{
                     width: cardWidth,
-                    minHeight: isMobile ? 200 : isLarge ? 280 : 240,
+                    height: isMobile ? 280 : 320,
                   }}
                 >
                   <View
@@ -114,7 +117,7 @@ export const BentoGrid: React.FC = () => {
                       flex: 1,
                       borderRadius: 24,
                       overflow: "hidden",
-                      backgroundColor: "rgba(35, 35, 35, 0.4)",
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
                       shadowColor: "#000",
                       shadowOffset: { width: 0, height: 8 },
                       shadowOpacity: 0.3,
@@ -132,46 +135,65 @@ export const BentoGrid: React.FC = () => {
                         left: 0,
                         right: 0,
                         height: "40%",
-                        opacity: 0.15,
+                        opacity: 0.25,
                       }}
                     />
+                    {/* Colored Header Section with Icon and Title */}
                     <View
                       style={{
-                        padding: isMobile ? 24 : 32,
+                        paddingHorizontal: isMobile ? 24 : 32,
+                        paddingTop: isMobile ? 24 : 32,
+                        paddingBottom: isMobile ? 20 : 24,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 16,
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: 56,
+                          height: 56,
+                          borderRadius: 16,
+                          backgroundColor: feature.iconBg,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <MaterialIcons name={feature.icon as any} size={28} color={feature.iconColor} />
+                      </View>
+                      <Text
+                        style={{
+                          flex: 1,
+                          fontSize: isMobile ? 24 : 28,
+                          fontWeight: "700",
+                          color: "#ffffff",
+                          letterSpacing: -0.5,
+                        }}
+                      >
+                        {feature.title}
+                      </Text>
+                    </View>
+                    {/* Content Section */}
+                    <View
+                      style={{
+                        paddingHorizontal: isMobile ? 24 : 32,
+                        paddingTop: isMobile ? 32 : 40,
+                        paddingBottom: isMobile ? 24 : 32,
                         flex: 1,
                         justifyContent: "space-between",
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
                       <View>
-                        <View
-                          style={{
-                            width: 56,
-                            height: 56,
-                            borderRadius: 16,
-                            backgroundColor: "rgba(186, 153, 136, 0.1)",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            marginBottom: 20,
-                          }}
-                        >
-                          <MaterialIcons name={feature.icon as any} size={28} color="#ba9988" />
-                        </View>
-                        <Text
-                          style={{
-                            fontSize: isMobile ? 24 : 28,
-                            fontWeight: "700",
-                            color: "#ffffff",
-                            marginBottom: 12,
-                            letterSpacing: -0.5,
-                          }}
-                        >
-                          {feature.title}
-                        </Text>
                         <Text
                           style={{
                             fontSize: isMobile ? 15 : 16,
                             color: "rgba(255, 255, 255, 0.8)",
                             lineHeight: 24,
+                            marginBottom: 12,
                           }}
                         >
                           {feature.description}
@@ -179,7 +201,6 @@ export const BentoGrid: React.FC = () => {
                       </View>
                       <TouchableOpacity
                         style={{
-                          marginTop: 20,
                           alignSelf: "flex-start",
                         }}
                       >
@@ -187,7 +208,7 @@ export const BentoGrid: React.FC = () => {
                           style={{
                             fontSize: 14,
                             fontWeight: "600",
-                            color: "#ba9988",
+                            color: feature.iconColor,
                           }}
                         >
                           Learn more →

@@ -215,7 +215,7 @@ export default function Blog() {
                       onPress={() => router.push(`/pages/university/blog/${post.id}`)}
                       activeOpacity={0.9}
                       style={{
-                        backgroundColor: "rgba(35, 35, 35, 0.4)",
+                        backgroundColor: "rgba(71, 71, 71, 0.4)",
                         borderRadius: 20,
                         overflow: "hidden",
                         borderWidth: 1,
@@ -353,7 +353,7 @@ export default function Blog() {
               ) : (
                 <View
                   style={{
-                    backgroundColor: "rgba(35, 35, 35, 0.4)",
+                    backgroundColor: "rgba(71, 71, 71, 0.4)",
                     borderRadius: 16,
                     padding: 40,
                     alignItems: "center",

@@ -149,7 +149,7 @@ export default function Pricing() {
                 key={plan.id}
                 style={{
                   flex: 1,
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 20,
                   padding: 24,
                   borderWidth: 2,
@@ -297,7 +297,7 @@ export default function Pricing() {
             >
               <View
                 style={{
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 16,
                   padding: 24,
                   borderWidth: 1,
@@ -447,7 +447,7 @@ export default function Pricing() {
                   <View
                     key={index}
                     style={{
-                      backgroundColor: "rgba(35, 35, 35, 0.4)",
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
                       borderRadius: 16,
                       padding: 24,
                       borderWidth: 1,
@@ -538,7 +538,7 @@ export default function Pricing() {
                     key={index}
                     style={{
                       flex: 1,
-                      backgroundColor: "rgba(35, 35, 35, 0.4)",
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
                       borderRadius: 20,
                       padding: 24,
                       borderWidth: 1,

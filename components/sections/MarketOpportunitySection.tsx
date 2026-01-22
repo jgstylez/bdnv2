@@ -74,7 +74,7 @@ export const MarketOpportunitySection: React.FC = () => {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "rgba(35, 35, 35, 0.4)",
+                backgroundColor: "rgba(71, 71, 71, 0.4)",
                 borderRadius: 20,
                 padding: isMobile ? 24 : 32,
                 borderWidth: 1,
@@ -113,7 +113,7 @@ export const MarketOpportunitySection: React.FC = () => {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "rgba(35, 35, 35, 0.4)",
+                backgroundColor: "rgba(71, 71, 71, 0.4)",
                 borderRadius: 20,
                 padding: isMobile ? 24 : 32,
                 borderWidth: 1,

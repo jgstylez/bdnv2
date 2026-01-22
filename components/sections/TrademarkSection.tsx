@@ -102,7 +102,7 @@ export const TrademarkSection: React.FC = () => {
                     maxWidth: isMobile ? "100%" : 200,
                     borderRadius: 12,
                     overflow: "hidden",
-                    backgroundColor: "rgba(35, 35, 35, 0.4)",
+                    backgroundColor: "rgba(71, 71, 71, 0.4)",
                     borderWidth: 1,
                     borderColor: "rgba(186, 153, 136, 0.3)",
                     position: "relative",

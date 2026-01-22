@@ -54,7 +54,7 @@ export const EmailCaptureSection: React.FC = () => {
         >
           <View
             style={{
-              backgroundColor: "rgba(35, 35, 35, 0.4)",
+              backgroundColor: "rgba(71, 71, 71, 0.4)",
               borderRadius: 24,
               padding: isMobile ? 32 : 48,
               overflow: "hidden",

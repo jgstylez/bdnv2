@@ -134,7 +134,7 @@ export const TestimonialsSection: React.FC = () => {
                 key={index}
                 style={{
                   width: isMobile ? width - 80 : 380,
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 20,
                   padding: isMobile ? 24 : 32,
                   borderWidth: 1,

@@ -159,7 +159,7 @@ export default function GroupEconomics() {
                         style={{
                           flexDirection: "row",
                           gap: 16,
-                          backgroundColor: "rgba(35, 35, 35, 0.4)",
+                          backgroundColor: "rgba(71, 71, 71, 0.4)",
                           borderRadius: 16,
                           padding: 20,
                           borderWidth: 1,
@@ -286,7 +286,7 @@ export default function GroupEconomics() {
                     <View
                       style={{
                         flex: 1,
-                        backgroundColor: "rgba(35, 35, 35, 0.4)",
+                        backgroundColor: "rgba(71, 71, 71, 0.4)",
                         borderRadius: 16,
                         padding: 24,
                         borderWidth: 1,
@@ -316,7 +316,7 @@ export default function GroupEconomics() {
                     <View
                       style={{
                         flex: 1,
-                        backgroundColor: "rgba(35, 35, 35, 0.4)",
+                        backgroundColor: "rgba(71, 71, 71, 0.4)",
                         borderRadius: 16,
                         padding: 24,
                         borderWidth: 1,
@@ -346,7 +346,7 @@ export default function GroupEconomics() {
                     <View
                       style={{
                         flex: 1,
-                        backgroundColor: "rgba(35, 35, 35, 0.4)",
+                        backgroundColor: "rgba(71, 71, 71, 0.4)",
                         borderRadius: 16,
                         padding: 24,
                         borderWidth: 1,

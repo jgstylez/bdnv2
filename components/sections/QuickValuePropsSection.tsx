@@ -89,7 +89,7 @@ export const QuickValuePropsSection: React.FC = () => {
                 key={prop.title}
                 style={{
                   flex: 1,
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 24,
                   padding: isMobile ? 24 : 32,
                   borderWidth: 1,

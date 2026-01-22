@@ -169,7 +169,7 @@ export default function Terms() {
                 style={{
                   marginTop: 48,
                   padding: 24,
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 16,
                   borderWidth: 1,
                   borderColor: "rgba(186, 153, 136, 0.3)",

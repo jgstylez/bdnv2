@@ -47,7 +47,7 @@ export const FeatureHighlight: React.FC = () => {
         >
           <View
             style={{
-              backgroundColor: "rgba(35, 35, 35, 0.4)",
+              backgroundColor: "rgba(71, 71, 71, 0.4)",
               borderRadius: 32,
               padding: isMobile ? 32 : 56,
               overflow: "hidden",

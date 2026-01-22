@@ -149,7 +149,7 @@ export default function Careers() {
                     style={{
                       flex: 1,
                       minWidth: isMobile ? "100%" : "30%",
-                      backgroundColor: "rgba(35, 35, 35, 0.4)",
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
                       borderRadius: 16,
                       padding: 24,
                       borderWidth: 1,
@@ -239,7 +239,7 @@ export default function Careers() {
                   <View
                     key={position.id}
                     style={{
-                      backgroundColor: "rgba(35, 35, 35, 0.4)",
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
                       borderRadius: 16,
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
@@ -352,7 +352,7 @@ export default function Careers() {
               <View
                 style={{
                   marginTop: 48,
-                  backgroundColor: "rgba(35, 35, 35, 0.4)",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 16,
                   padding: 32,
                   alignItems: "center",

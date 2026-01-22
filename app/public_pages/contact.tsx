@@ -194,7 +194,7 @@ export default function Contact() {
                     key={index}
                     style={{
                       flex: 1,
-                      backgroundColor: "rgba(35, 35, 35, 0.4)",
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
                       borderRadius: 16,
                       padding: 24,
                       borderWidth: 1,
