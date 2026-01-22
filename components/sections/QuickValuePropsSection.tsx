@@ -11,7 +11,7 @@ const VALUE_PROPS = [
     description: "Support Black businesses, earn rewards, and track your economic impact. Level up through tiers and unlock exclusive benefits.",
     benefits: ["Earn points & cashback", "Track spending impact", "Access exclusive events", "Level up rewards"],
     cta: "Get Started Free",
-    href: "/public_pages/for-consumers",
+    href: "/web/for-consumers",
   },
   {
     title: "Businesses",
@@ -19,7 +19,7 @@ const VALUE_PROPS = [
     description: "Reach engaged Black consumers, grow revenue, and access powerful business tools. Join 500+ businesses on the platform.",
     benefits: ["Reach engaged consumers", "Payment processing", "Marketing tools", "Analytics dashboard"],
     cta: "List Your Business",
-    href: "/public_pages/for-businesses",
+    href: "/web/for-businesses",
   },
   {
     title: "Nonprofits",
@@ -27,7 +27,7 @@ const VALUE_PROPS = [
     description: "Connect with supporters, raise funds, and amplify your impact. Tools designed for community organizations.",
     benefits: ["Fundraising campaigns", "Community engagement", "Impact tracking", "Donor management"],
     cta: "Learn More",
-    href: "/public_pages/community",
+    href: "/web/community",
   },
 ];
 

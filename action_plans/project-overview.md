@@ -68,7 +68,7 @@ bdnv2/
 │   │   └── ...            # Other feature pages
 │   ├── admin/             # Admin dashboard (30 files)
 │   ├── developer/         # Developer dashboard (8 files)
-│   └── public_pages/      # Public marketing pages (13 files)
+│   └── web/      # Public marketing pages (13 files)
 ├── components/            # Reusable components (154 files)
 │   ├── admin/            # Admin-specific components
 │   ├── forms/            # Form components (11 files)

@@ -110,16 +110,26 @@ export default function Updates() {
         <ScrollAnimatedView delay={200}>
           <View
             style={{
-              paddingHorizontal: isMobile ? 20 : 40,
               paddingVertical: 20,
+              paddingHorizontal: isMobile ? 20 : 40,
               backgroundColor: "#232323",
             }}
           >
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: 12 }}
+            <View
+              style={{
+                maxWidth: 1000,
+                alignSelf: "center",
+                width: "100%",
+              }}
             >
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ 
+                  gap: 12, 
+                  paddingRight: 20,
+                }}
+              >
               {[
                 { key: "all", label: "All Updates" },
                 { key: "major", label: "Major" },
@@ -158,7 +168,8 @@ export default function Updates() {
                   </Text>
                 </TouchableOpacity>
               ))}
-            </ScrollView>
+              </ScrollView>
+            </View>
           </View>
         </ScrollAnimatedView>
 
@@ -192,50 +203,45 @@ export default function Updates() {
                       }}
                     >
                       {/* Header */}
-                      <View style={{ flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: isMobile ? "flex-start" : "center", marginBottom: 20, gap: 12 }}>
-                        <View style={{ flex: 1 }}>
-                          <View style={{ flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 8 }}>
-                            <View
-                              style={{
-                                backgroundColor: `${getTypeColor(update.type)}26`,
-                                paddingHorizontal: 12,
-                                paddingVertical: 6,
-                                borderRadius: 8,
-                                borderWidth: 1,
-                                borderColor: `${getTypeColor(update.type)}40`,
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  fontWeight: "700",
-                                  color: getTypeColor(update.type),
-                                  textTransform: "uppercase",
-                                }}
-                              >
-                                {getTypeLabel(update.type)}
-                              </Text>
-                            </View>
+                      <View style={{ marginBottom: 20 }}>
+                        <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+                          <View
+                            style={{
+                              backgroundColor: `${getTypeColor(update.type)}26`,
+                              paddingHorizontal: 10,
+                              paddingVertical: 4,
+                              borderRadius: 6,
+                              borderWidth: 1,
+                              borderColor: `${getTypeColor(update.type)}40`,
+                            }}
+                          >
                             <Text
                               style={{
-                                fontSize: 14,
-                                fontWeight: "600",
-                                color: "#ba9988",
+                                fontSize: 11,
+                                fontWeight: "700",
+                                color: getTypeColor(update.type),
+                                textTransform: "uppercase",
                               }}
                             >
-                              v{update.version}
+                              {getTypeLabel(update.type)}
                             </Text>
                           </View>
                           <Text
                             style={{
-                              fontSize: isMobile ? 24 : 28,
-                              fontWeight: "700",
-                              color: "#ffffff",
-                              marginBottom: 8,
-                              letterSpacing: -0.5,
+                              fontSize: 13,
+                              fontWeight: "600",
+                              color: "#ba9988",
                             }}
                           >
-                            {update.title}
+                            v{update.version}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: "rgba(255, 255, 255, 0.4)",
+                            }}
+                          >
+                            •
                           </Text>
                           <Text
                             style={{
@@ -246,6 +252,16 @@ export default function Updates() {
                             {formatDate(update.date)}
                           </Text>
                         </View>
+                        <Text
+                          style={{
+                            fontSize: isMobile ? 20 : 26,
+                            fontWeight: "700",
+                            color: "#ffffff",
+                            letterSpacing: -0.5,
+                          }}
+                        >
+                          {update.title}
+                        </Text>
                       </View>
 
                       {/* Description */}
@@ -261,39 +277,47 @@ export default function Updates() {
                       </Text>
 
                       {/* Features */}
-                      <View style={{ gap: 12 }}>
+                      <View style={{ gap: isMobile ? 8 : 10 }}>
                         <Text
                           style={{
-                            fontSize: 14,
+                            fontSize: 13,
                             fontWeight: "600",
-                            color: "#ffffff",
-                            marginBottom: 8,
+                            color: "rgba(255, 255, 255, 0.6)",
+                            marginBottom: 4,
+                            textTransform: "uppercase",
+                            letterSpacing: 0.5,
                           }}
                         >
-                          What's New:
+                          What's New
                         </Text>
-                        {update.features.map((feature, idx) => (
-                          <View
-                            key={idx}
-                            style={{
-                              flexDirection: "row",
-                              alignItems: "flex-start",
-                              gap: 12,
-                            }}
-                          >
-                            <MaterialIcons name="check-circle" size={20} color="#4caf50" />
-                            <Text
+                        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+                          {update.features.map((feature, idx) => (
+                            <View
+                              key={idx}
                               style={{
-                                fontSize: 14,
-                                color: "rgba(255, 255, 255, 0.8)",
-                                lineHeight: 22,
-                                flex: 1,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 6,
+                                backgroundColor: "rgba(76, 175, 80, 0.1)",
+                                paddingHorizontal: 10,
+                                paddingVertical: 6,
+                                borderRadius: 8,
+                                borderWidth: 1,
+                                borderColor: "rgba(76, 175, 80, 0.2)",
                               }}
                             >
-                              {feature}
-                            </Text>
-                          </View>
-                        ))}
+                              <MaterialIcons name="check" size={14} color="#4caf50" />
+                              <Text
+                                style={{
+                                  fontSize: 13,
+                                  color: "rgba(255, 255, 255, 0.8)",
+                                }}
+                              >
+                                {feature}
+                              </Text>
+                            </View>
+                          ))}
+                        </View>
                       </View>
                     </View>
                   ))}

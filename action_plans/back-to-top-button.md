@@ -96,10 +96,10 @@ const handleScrollEndDrag = useCallback((event) => {
 Currently implemented on the following pages (14 total):
 
 ### Public Pages
-- `app/public_pages/about.tsx`
-- `app/public_pages/docs.tsx`
-- `app/public_pages/privacy.tsx`
-- `app/public_pages/terms.tsx`
+- `app/web/about.tsx`
+- `app/web/docs.tsx`
+- `app/web/privacy.tsx`
+- `app/web/terms.tsx`
 
 ### Main App Pages
 - `app/(tabs)/dashboard.tsx`
@@ -160,11 +160,11 @@ Add `showBackToTop={true}` to pages that:
 The following pages use regular `ScrollView` and have long content that could benefit from the back-to-top button:
 
 ### Public Pages
-- `app/public_pages/features.tsx` - Long features list
-- `app/public_pages/blog.tsx` - Blog post listings
-- `app/public_pages/security.tsx` - Security information page
-- `app/public_pages/careers.tsx` - Job listings (if long)
-- `app/public_pages/updates.tsx` - Update listings (if long)
+- `app/web/features.tsx` - Long features list
+- `app/web/blog.tsx` - Blog post listings
+- `app/web/security.tsx` - Security information page
+- `app/web/careers.tsx` - Job listings (if long)
+- `app/web/updates.tsx` - Update listings (if long)
 
 ### To Add Back-to-Top Button
 

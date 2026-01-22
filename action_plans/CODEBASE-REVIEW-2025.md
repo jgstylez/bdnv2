@@ -45,7 +45,7 @@ bdnv2/
 │   ├── pages/             # All other pages (businesses, products, events, etc.)
 │   ├── admin/             # Admin dashboard
 │   ├── developer/         # Developer dashboard
-│   └── public_pages/      # Public marketing pages
+│   └── web/      # Public marketing pages
 ├── components/            # Reusable components (154 files)
 ├── contexts/              # React Context providers (5 files)
 ├── hooks/                 # Custom React hooks (9 files)
@@ -227,7 +227,7 @@ bdnv2/
 - **Pages:** `app/pages/` - All other pages (businesses, products, events, etc.)
 - **Admin:** `app/admin/` - Admin dashboard and management
 - **Developer:** `app/developer/` - Developer dashboard and API docs
-- **Public:** `app/public_pages/` - Marketing/public pages
+- **Public:** `app/web/` - Marketing/public pages
 - **Auth:** `app/(auth)/` - Login, signup, PIN setup
 
 ### Navigation Features

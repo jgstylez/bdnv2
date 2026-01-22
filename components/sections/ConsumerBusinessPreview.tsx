@@ -96,7 +96,7 @@ export const ConsumerBusinessPreview: React.FC = () => {
                 ))}
               </View>
               <TouchableOpacity
-                onPress={() => router.push("/public_pages/for-consumers")}
+                onPress={() => router.push("/web/for-consumers")}
                 style={{
                   backgroundColor: "#ba9988",
                   paddingVertical: 14,
@@ -182,7 +182,7 @@ export const ConsumerBusinessPreview: React.FC = () => {
                 ))}
               </View>
               <TouchableOpacity
-                onPress={() => router.push("/public_pages/for-businesses")}
+                onPress={() => router.push("/web/for-businesses")}
                 style={{
                   borderWidth: 2,
                   borderColor: "#ba9988",

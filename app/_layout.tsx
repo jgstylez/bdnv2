@@ -48,7 +48,7 @@ export default function RootLayout() {
                   <Stack.Screen name="(auth)" options={{ headerShown: false }} />
                   <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                   <Stack.Screen name="pages" options={{ headerShown: false }} />
-                  <Stack.Screen name="public_pages" options={{ headerShown: false }} />
+                  <Stack.Screen name="web" options={{ headerShown: false }} />
                   <Stack.Screen name="admin" options={{ headerShown: false }} />
                 </Stack>
                 <ToastWrapper />

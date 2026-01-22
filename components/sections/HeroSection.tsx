@@ -56,11 +56,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   }));
 
   const handleForConsumers = () => {
-    router.push("/public_pages/for-consumers");
+    router.push("/web/for-consumers");
   };
 
   const handleForBusinesses = () => {
-    router.push("/public_pages/for-businesses");
+    router.push("/web/for-businesses");
   };
 
   return (

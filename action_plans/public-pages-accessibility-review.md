@@ -1,7 +1,7 @@
 # Public Pages Mobile Responsiveness & Accessibility Review
 
 **Date:** January 2025  
-**Scope:** `app/public_pages/` directory (18 files, 140+ interactive elements)
+**Scope:** `app/web/` directory (18 files, 140+ interactive elements)
 
 ## Executive Summary
 
@@ -34,13 +34,13 @@ This review identifies critical mobile responsiveness and accessibility issues a
 **Examples Found:**
 ```typescript
 // ❌ Current (No accessibility)
-<TouchableOpacity onPress={() => router.push("/public_pages/for-consumers")}>
+<TouchableOpacity onPress={() => router.push("/web/for-consumers")}>
   <Text>I'm a Consumer</Text>
 </TouchableOpacity>
 
 // ✅ Should be
 <TouchableOpacity
-  onPress={() => router.push("/public_pages/for-consumers")}
+  onPress={() => router.push("/web/for-consumers")}
   accessible={true}
   accessibilityRole="button"
   accessibilityLabel="Navigate to For Consumers page"
@@ -52,7 +52,7 @@ This review identifies critical mobile responsiveness and accessibility issues a
 ```
 
 **Affected Files:**
-- All 18 files in `app/public_pages/`
+- All 18 files in `app/web/`
 - Estimated 140+ TouchableOpacity elements
 - All TextInput elements
 - All Image components

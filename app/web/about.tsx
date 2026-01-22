@@ -387,7 +387,7 @@ export default function About() {
                 }}
               >
                 <TouchableOpacity
-                  onPress={() => router.push("/public_pages/for-consumers")}
+                  onPress={() => router.push("/web/for-consumers")}
                   accessible={true}
                   accessibilityRole="button"
                   accessibilityLabel="Navigate to For Consumers page"
@@ -413,7 +413,7 @@ export default function About() {
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => router.push("/public_pages/for-businesses")}
+                  onPress={() => router.push("/web/for-businesses")}
                   accessible={true}
                   accessibilityRole="button"
                   accessibilityLabel="Navigate to For Businesses page"

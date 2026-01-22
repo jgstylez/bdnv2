@@ -9,21 +9,21 @@ const RESOURCES = [
     title: "Black Spending Power Guide",
     type: "Guide",
     description: "Comprehensive guide to understanding and maximizing Black spending power.",
-    href: "/public_pages/learn/black-spending-power",
+    href: "/web/learn/black-spending-power",
     icon: "trending-up",
   },
   {
     title: "Group Economics 101",
     type: "Article",
     description: "Learn the fundamentals of group economics and how to practice it.",
-    href: "/public_pages/learn/group-economics",
+    href: "/web/learn/group-economics",
     icon: "diamond",
   },
   {
     title: "Community Impact Stories",
     type: "Case Study",
     description: "Real-world examples of economic impact in Black communities.",
-    href: "/public_pages/learn/community-impact",
+    href: "/web/learn/community-impact",
     icon: "public",
   },
   {
@@ -181,7 +181,7 @@ export const EducationalResourcesSection: React.FC = () => {
           </View>
 
           <TouchableOpacity
-            onPress={() => router.push("/public_pages/learn")}
+            onPress={() => router.push("/web/learn")}
             style={{
               backgroundColor: "#ba9988",
               paddingVertical: 16,

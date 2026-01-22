@@ -1,6 +1,6 @@
 # Public Website Images
 
-This directory contains images used for the public-facing website pages (located in `app/public_pages/`).
+This directory contains images used for the public-facing website pages (located in `app/web/`).
 
 ## Image Files
 

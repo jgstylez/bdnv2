@@ -136,7 +136,7 @@ export const SpendingPowerSection: React.FC = () => {
           </View>
 
           <TouchableOpacity
-            onPress={() => router.push("/public_pages/learn/black-spending-power")}
+            onPress={() => router.push("/web/learn/black-spending-power")}
             style={{
               backgroundColor: "#ba9988",
               paddingVertical: 16,

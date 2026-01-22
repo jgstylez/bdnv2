@@ -19,7 +19,7 @@ This plan outlines the complete technical architecture for BDN 2.0, including th
 │              Frontend (Expo/React Native)                    │
 │  ┌──────────────────────┐  ┌──────────────────────────┐   │
 │  │ Public Pages         │  │ Authenticated Pages       │   │
-│  │ (@public_pages)      │  │ (@(tabs), @pages)        │   │
+│  │ (@web)      │  │ (@(tabs), @pages)        │   │
 │  │ - Businesses (preview)│  │ - Full content access    │   │
 │  │ - Events (preview)   │  │ - Transactions           │   │
 │  │ - Blog (excerpts)    │  │ - User features          │   │
@@ -533,7 +533,7 @@ Business Receives:
 
 **Production Domains:**
 
-- `blackdollarnetwork.com` - Public-facing marketing website (`@public_pages`)
+- `blackdollarnetwork.com` - Public-facing marketing website (`@web`)
 - `app.blackdollarnetwork.com` - User application (dashboard if logged in, login if not) (`@(tabs)`, `@pages`)
 - `operator.blackdollarnetwork.com` - Admin/Operator dashboard (if logged in as admin) (`@admin`)
 - `developer.blackdollarnetwork.com` - Developer dashboard (if logged in as developer) (`@developer`)
@@ -601,7 +601,7 @@ export default function RootLayout() {
     <Stack>
       {/* Public pages - only on public subdomain */}
       {subdomain === Subdomain.PUBLIC && (
-        <Stack.Screen name="public_pages" />
+        <Stack.Screen name="web" />
       )}
       
       {/* App routes - on app subdomain or mobile */}
@@ -1125,7 +1125,7 @@ export async function retryWithBackoff<T>(
 
 ### Overview
 
-BDN 2.0 implements a content gating strategy where public pages (`@public_pages`) display limited content to drive user signups. Users can browse businesses, events, and blog posts without authentication, but full access requires signup/login. This creates an inbound marketing funnel while maintaining SEO-friendly public content.
+BDN 2.0 implements a content gating strategy where public pages (`@web`) display limited content to drive user signups. Users can browse businesses, events, and blog posts without authentication, but full access requires signup/login. This creates an inbound marketing funnel while maintaining SEO-friendly public content.
 
 ### Content Access Levels
 
@@ -1192,21 +1192,21 @@ export function ContentGate(props: ContentGateProps) {
 
 ### Public Content Pages
 
-**Business Directory** (`app/public_pages/businesses.tsx`):
+**Business Directory** (`app/web/businesses.tsx`):
 
 - List of businesses with basic info
 - Search and filter functionality
 - Clicking business shows preview + signup prompt
 - SEO-optimized URLs: `/businesses/[slug]`
 
-**Events Directory** (`app/public_pages/events.tsx`):
+**Events Directory** (`app/web/events.tsx`):
 
 - List of upcoming events
 - Category filters
 - Event preview with signup prompt for details
 - SEO-optimized URLs: `/events/[slug]`
 
-**Blog/Updates** (`app/public_pages/blog.tsx`):
+**Blog/Updates** (`app/web/blog.tsx`):
 
 - Blog post listings with excerpts
 - Category and tag filters
@@ -1396,10 +1396,10 @@ model SignupConversion {
 
 - `components/ContentGate.tsx` - Content gating component
 - `components/SignupPrompt.tsx` - Signup prompt component
-- `app/public_pages/businesses.tsx` - Public business directory
-- `app/public_pages/businesses/[slug].tsx` - Public business detail
-- `app/public_pages/events.tsx` - Public events directory
-- `app/public_pages/events/[slug].tsx` - Public event detail
+- `app/web/businesses.tsx` - Public business directory
+- `app/web/businesses/[slug].tsx` - Public business detail
+- `app/web/events.tsx` - Public events directory
+- `app/web/events/[slug].tsx` - Public event detail
 - `server/src/api/public/businesses.ts` - Public business API
 - `server/src/api/public/events.ts` - Public events API
 - `server/src/api/public/blog.ts` - Public blog API
@@ -1409,8 +1409,8 @@ model SignupConversion {
 
 **Modified Files:**
 
-- `app/public_pages/blog.tsx` - Add content gating
-- `app/public_pages/_layout.tsx` - Add new routes
+- `app/web/blog.tsx` - Add content gating
+- `app/web/_layout.tsx` - Add new routes
 - `server/prisma/schema.prisma` - Add content gating models
 - `lib/api-client.ts` - Add public API endpoints
 - `hooks/useAuth.ts` - Add return URL handling
@@ -3104,10 +3104,10 @@ enum JobStatus {
 
 - `components/ContentGate.tsx` - Content gating component
 - `components/SignupPrompt.tsx` - Signup prompt component
-- `app/public_pages/businesses.tsx` - Public business directory
-- `app/public_pages/businesses/[slug].tsx` - Public business detail
-- `app/public_pages/events.tsx` - Public events directory
-- `app/public_pages/events/[slug].tsx` - Public event detail
+- `app/web/businesses.tsx` - Public business directory
+- `app/web/businesses/[slug].tsx` - Public business detail
+- `app/web/events.tsx` - Public events directory
+- `app/web/events/[slug].tsx` - Public event detail
 - `server/src/api/public/businesses.ts` - Public business API
 - `server/src/api/public/events.ts` - Public events API
 - `server/src/api/public/blog.ts` - Public blog API

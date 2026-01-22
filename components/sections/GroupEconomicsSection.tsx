@@ -121,7 +121,7 @@ export const GroupEconomicsSection: React.FC = () => {
           </View>
 
           <TouchableOpacity
-            onPress={() => router.push("/public_pages/learn/group-economics")}
+            onPress={() => router.push("/web/learn/group-economics")}
             style={{
               backgroundColor: "#ba9988",
               paddingVertical: 16,

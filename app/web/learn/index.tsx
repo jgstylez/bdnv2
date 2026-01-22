@@ -16,21 +16,21 @@ const EDUCATIONAL_TOPICS = [
     title: "Black Spending Power",
     icon: "trending-up",
     description: "Understand the $1.6+ trillion in annual Black spending power and how your spending decisions create impact.",
-    href: "/public_pages/learn/black-spending-power",
+    href: "/web/learn/black-spending-power",
     color: "#ba9988",
   },
   {
     title: "Group Economics",
     icon: "diamond",
     description: "Learn about group economics, the multiplier effect, and how circulating Black dollars strengthens communities.",
-    href: "/public_pages/learn/group-economics",
+    href: "/web/learn/group-economics",
     color: "#ba9988",
   },
   {
     title: "Community Impact",
     icon: "public",
     description: "See real-world examples of how supporting Black businesses creates lasting economic impact in communities.",
-    href: "/public_pages/learn/community-impact",
+    href: "/web/learn/community-impact",
     color: "#ba9988",
   },
   {
@@ -54,21 +54,21 @@ const FEATURED_RESOURCES = [
     title: "The Power of $1.6 Trillion",
     type: "Article",
     description: "Deep dive into Black spending power and its potential impact.",
-    href: "/public_pages/blog",
+    href: "/web/blog",
     imageType: "article",
   },
   {
     title: "Group Economics 101",
     type: "Guide",
     description: "A comprehensive guide to understanding and practicing group economics.",
-    href: "/public_pages/learn/group-economics",
+    href: "/web/learn/group-economics",
     imageType: "guide",
   },
   {
     title: "BDN Impact Report 2024",
     type: "Report",
     description: "See how BDN has facilitated economic impact in Black communities.",
-    href: "/public_pages/learn/community-impact",
+    href: "/web/learn/community-impact",
     imageType: "report",
   },
 ];
@@ -537,7 +537,7 @@ export default function LearnIndex() {
                 Get the latest educational content, resources, and insights delivered to your inbox.
               </Text>
               <TouchableOpacity
-                onPress={() => router.push("/public_pages/contact")}
+                onPress={() => router.push("/web/contact")}
                 accessible={true}
                 accessibilityRole="button"
                 accessibilityLabel="Subscribe to newsletter"

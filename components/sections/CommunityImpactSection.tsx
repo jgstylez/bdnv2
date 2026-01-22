@@ -170,7 +170,7 @@ export const CommunityImpactSection: React.FC = () => {
             }}
           >
             <TouchableOpacity
-              onPress={() => router.push("/public_pages/learn/community-impact")}
+              onPress={() => router.push("/web/learn/community-impact")}
               style={{
                 backgroundColor: "#ba9988",
                 paddingVertical: 14,

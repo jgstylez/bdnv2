@@ -15,37 +15,37 @@ export const Footer: React.FC = () => {
     {
       title: "Product",
       links: [
-        { label: "Features", href: "/public_pages/features" },
-        { label: "BDN+", href: "/public_pages/pricing" },
-        { label: "Updates", href: "/public_pages/updates" },
-        { label: "Roadmap", href: "/public_pages/roadmap" },
+        { label: "Features", href: "/web/features" },
+        { label: "BDN+", href: "/web/pricing" },
+        { label: "Updates", href: "/web/updates" },
+        { label: "Roadmap", href: "/web/roadmap" },
       ],
     },
     {
       title: "Company",
       links: [
-        { label: "About", href: "/public_pages/about" },
-        { label: "Partnerships", href: "/public_pages/partnerships" },
-        { label: "Careers", href: "/public_pages/careers" },
-        { label: "Contact", href: "/public_pages/contact" },
+        { label: "About", href: "/web/about" },
+        { label: "Partnerships", href: "/web/partnerships" },
+        { label: "Careers", href: "/web/careers" },
+        { label: "Contact", href: "/web/contact" },
       ],
     },
     {
       title: "Learn",
       links: [
-        { label: "Educational Hub", href: "/public_pages/learn" },
-        { label: "Spending Power", href: "/public_pages/learn/black-spending-power" },
-        { label: "Group Economics", href: "/public_pages/learn/group-economics" },
-        { label: "Community Impact", href: "/public_pages/learn/community-impact" },
+        { label: "Educational Hub", href: "/web/learn" },
+        { label: "Spending Power", href: "/web/learn/black-spending-power" },
+        { label: "Group Economics", href: "/web/learn/group-economics" },
+        { label: "Community Impact", href: "/web/learn/community-impact" },
       ],
     },
     {
       title: "Resources",
       links: [
-        { label: "Documentation", href: "/public_pages/docs" },
-        { label: "Knowledge Base", href: "/public_pages/knowledge-base" },
-        { label: "Blog", href: "/public_pages/blog" },
-        { label: "Community", href: "/public_pages/community" },
+        { label: "Documentation", href: "/web/docs" },
+        { label: "Knowledge Base", href: "/web/knowledge-base" },
+        { label: "Blog", href: "/web/blog" },
+        { label: "Community", href: "/web/community" },
       ],
     },
   ];
@@ -478,7 +478,7 @@ export const Footer: React.FC = () => {
           >
             <TouchableOpacity 
               activeOpacity={0.7}
-              onPress={() => router.push("/public_pages/privacy")}
+              onPress={() => router.push("/web/privacy")}
             >
               <Text
                 style={{
@@ -491,7 +491,7 @@ export const Footer: React.FC = () => {
             </TouchableOpacity>
             <TouchableOpacity 
               activeOpacity={0.7}
-              onPress={() => router.push("/public_pages/terms")}
+              onPress={() => router.push("/web/terms")}
             >
               <Text
                 style={{
@@ -504,7 +504,7 @@ export const Footer: React.FC = () => {
             </TouchableOpacity>
             <TouchableOpacity 
               activeOpacity={0.7}
-              onPress={() => router.push("/public_pages/cookie-policy")}
+              onPress={() => router.push("/web/cookie-policy")}
             >
               <Text
                 style={{

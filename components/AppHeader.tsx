@@ -100,7 +100,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onMenuPress }) => {
     if (pathname?.includes("/pages/checkout")) return "Checkout";
     if (pathname?.includes("/pages/transactions")) return "Transactions";
     if (pathname?.includes("/pages/bdn-plus")) return "BDN+";
-    if (pathname?.includes("/public_pages/pricing")) return "Pricing";
+    if (pathname?.includes("/web/pricing")) return "Pricing";
     if (pathname?.includes("/pages/support")) return "Support";
     if (pathname?.includes("/pages/profile")) return "Profile";
 

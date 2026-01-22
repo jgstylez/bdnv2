@@ -330,11 +330,12 @@ export default function Roadmap() {
                   >
                     Filter by Category
                   </Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      flexWrap: "wrap",
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
                       gap: 8,
+                      paddingRight: isMobile ? 20 : 0,
                     }}
                   >
                     {[
@@ -375,7 +376,7 @@ export default function Roadmap() {
                         </Text>
                       </TouchableOpacity>
                     ))}
-                  </View>
+                  </ScrollView>
                 </View>
 
                 {/* Sort */}
@@ -478,35 +479,30 @@ export default function Roadmap() {
                         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         style={{
                           alignItems: "center",
-                          justifyContent: "flex-start",
-                          paddingTop: 4,
-                          minWidth: 60,
-                          minHeight: 44,
+                          justifyContent: "center",
+                          padding: 12,
+                          minWidth: 70,
+                          minHeight: 70,
+                          backgroundColor: feature.userVoted ? "rgba(186, 153, 136, 0.2)" : "rgba(71, 71, 71, 0.6)",
+                          borderRadius: 12,
+                          borderWidth: 1,
+                          borderColor: feature.userVoted ? "#ba9988" : "rgba(255, 255, 255, 0.1)",
                         }}
                       >
                         <MaterialIcons
-                          name={feature.userVoted ? "keyboard-arrow-up" : "keyboard-arrow-down"}
-                          size={32}
+                          name="thumb-up"
+                          size={24}
                           color={feature.userVoted ? "#ba9988" : "rgba(255, 255, 255, 0.5)"}
                         />
                         <Text
                           style={{
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: "700",
                             color: feature.userVoted ? "#ba9988" : "rgba(255, 255, 255, 0.7)",
                             marginTop: 4,
                           }}
                         >
                           {feature.upvotes}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 11,
-                            color: "rgba(255, 255, 255, 0.5)",
-                            marginTop: 2,
-                          }}
-                        >
-                          {feature.upvotes === 1 ? "vote" : "votes"}
                         </Text>
                       </TouchableOpacity>
 
