@@ -5,40 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Event, EventStatus } from '@/types/events';
-
-// Mock events data
-const mockEvents: Event[] = [
-  {
-    id: "1",
-    organizerId: "org1",
-    organizerName: "Soul Food Kitchen",
-    organizerType: "business",
-    title: "Jazz & Soul Food Night",
-    description: "An evening of live jazz music paired with authentic soul food cuisine",
-    category: "music",
-    imageUrl: "",
-    venue: {
-      name: "Soul Food Kitchen",
-      address: "123 Main St",
-      city: "Atlanta",
-      state: "GA",
-      zipCode: "30303",
-      country: "USA",
-    },
-    startDate: "2024-03-15T19:00:00Z",
-    endDate: "2024-03-15T23:00:00Z",
-    timezone: "America/New_York",
-    status: "published",
-    isPublic: true,
-    maxAttendees: 150,
-    currentAttendees: 87,
-    ticketTypes: [],
-    tags: [],
-    createdAt: "2024-02-01T00:00:00Z",
-    updatedAt: "2024-02-01T00:00:00Z",
-    publishedAt: "2024-02-01T00:00:00Z",
-  },
-];
+import { mockEvents } from '@/data/mocks/events';
 
 export default function MyEvents() {
   const { width } = useWindowDimensions();
@@ -46,7 +13,7 @@ export default function MyEvents() {
   const isMobile = width < 768;
   const [filter, setFilter] = useState<EventStatus | "all">("all");
 
-  const filteredEvents = mockEvents.filter((event) => {
+  const filteredEvents = Object.values(mockEvents).filter((event) => {
     if (filter === "all") return true;
     return event.status === filter;
   });
@@ -163,7 +130,7 @@ export default function MyEvents() {
                       overflow: "hidden",
                     }}
                   >
-                    {event.imageUrl ? (
+                    {event.imageUrl && event.imageUrl.trim() !== "" ? (
                       <Image
                         source={{ uri: event.imageUrl }}
                         style={{ width: "100%", height: "100%" }}
@@ -171,7 +138,7 @@ export default function MyEvents() {
                         cachePolicy="memory-disk"
                       />
                     ) : (
-                      <View style={{ width: "100%", height: "100%", backgroundColor: "#474747", justifyContent: "center", alignItems: "center" }}>
+                      <View style={{ width: "100%", height: isMobile ? 200 : 200, backgroundColor: "#474747", justifyContent: "center", alignItems: "center" }}>
                         <MaterialIcons name="event" size={48} color="rgba(186, 153, 136, 0.5)" />
                       </View>
                     )}

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
+import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
 import { Ticket, TicketStatus } from '@/types/events';
+import { mockEvents } from '@/data/mocks/events';
+import { EventPlaceholder } from '@/components/EventPlaceholder';
 
 // Mock tickets data
 const mockTickets: Ticket[] = [
@@ -47,6 +50,7 @@ export default function MyTickets() {
   const router = useRouter();
   const isMobile = width < 768;
   const [selectedTicket, setSelectedTicket] = useState<string | null>(null);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -102,20 +106,51 @@ export default function MyTickets() {
         {/* Tickets List */}
         {mockTickets.length > 0 ? (
           <View style={{ gap: 16 }}>
-            {mockTickets.map((ticket) => (
-              <View
-                key={ticket.id}
-                style={{
-                  backgroundColor: "#474747",
-                  borderRadius: 16,
-                  padding: 20,
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
-                }}
-              >
-                <View style={{ flexDirection: isMobile ? "column" : "row", gap: 20 }}>
-                  {/* Ticket Info */}
-                  <View style={{ flex: 1 }}>
+            {mockTickets.map((ticket) => {
+              const event = mockEvents[ticket.eventId];
+              return (
+                <View
+                  key={ticket.id}
+                  style={{
+                    backgroundColor: "#474747",
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                  }}
+                >
+                  {/* Event Image */}
+                  {event && (
+                    <View style={{ width: "100%", height: 200, overflow: "hidden", backgroundColor: "#232323" }}>
+                      {event.imageUrl && event.imageUrl.trim() !== "" ? (
+                        imageErrors.has(ticket.eventId) ? (
+                          <EventPlaceholder width="100%" height={200} />
+                        ) : (
+                          <Image
+                            source={{ uri: event.imageUrl }}
+                            style={{ width: "100%", height: "100%" }}
+                            contentFit="cover"
+                            cachePolicy="memory-disk"
+                            transition={200}
+                            priority="high"
+                            {...(Platform.OS !== 'web' && {
+                              accessible: false,
+                            })}
+                            onError={() => {
+                              setImageErrors((prev) => new Set(prev).add(ticket.eventId));
+                            }}
+                          />
+                        )
+                      ) : (
+                        <EventPlaceholder width="100%" height={200} />
+                      )}
+                    </View>
+                  )}
+                  
+                  <View style={{ padding: 20 }}>
+                    <View style={{ flexDirection: isMobile ? "column" : "row", gap: 20 }}>
+                      {/* Ticket Info */}
+                      <View style={{ flex: 1 }}>
                     <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 }}>
                       <View
                         style={{
@@ -226,9 +261,11 @@ export default function MyTickets() {
                       Scan at event
                     </Text>
                   </View>
+                    </View>
+                  </View>
                 </View>
-              </View>
-            ))}
+              );
+            })}
           </View>
         ) : (
           <View
