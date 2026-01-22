@@ -3,6 +3,7 @@ import { View, Text, Modal, TouchableOpacity, Platform, useWindowDimensions } fr
 import { Image } from "expo-image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ImagePlaceholder } from "@/components/placeholders/SVGPlaceholders";
 
 interface ImageLightboxProps {
   visible: boolean;
@@ -105,7 +106,7 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
               alignItems: "center",
             }}
           >
-            {imageSource && (
+            {imageSource ? (
               <Image
                 source={imageSource}
                 style={{
@@ -116,6 +117,20 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
                 cachePolicy="memory-disk"
                 transition={200}
               />
+            ) : (
+              <View style={{ justifyContent: "center", alignItems: "center", padding: 40 }}>
+                <ImagePlaceholder width={300} height={200} />
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: "rgba(255, 255, 255, 0.5)",
+                    marginTop: 16,
+                    textAlign: "center",
+                  }}
+                >
+                  No image available
+                </Text>
+              </View>
             )}
           </View>
         </View>

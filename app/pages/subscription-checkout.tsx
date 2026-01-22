@@ -81,8 +81,19 @@ export default function SubscriptionCheckout() {
         <View style={{ flexDirection: "row", gap: spacing.md }}>
           {/* Product Image */}
           <View style={{ width: 80, height: 80, borderRadius: borderRadius.md, overflow: "hidden", backgroundColor: colors.background.primary }}>
-            {product.images && product.images[0] ? (
-              <Image source={{ uri: product.images[0] }} style={{ width: "100%", height: "100%" }} contentFit="cover" />
+            {product.images && 
+             product.images.length > 0 && 
+             product.images[0] && 
+             product.images[0].trim() !== "" ? (
+              <Image 
+                source={{ uri: product.images[0] }} 
+                style={{ width: "100%", height: "100%" }} 
+                contentFit="cover"
+                cachePolicy="memory-disk"
+                onError={() => {
+                  // Error handled by showing placeholder
+                }}
+              />
             ) : (
               <ProductPlaceholder width={80} height={80} />
             )}

@@ -266,7 +266,10 @@ export default function CreateSubscription() {
                       backgroundColor: colors.input,
                     }}
                   >
-                    {product.images && product.images[0] ? (
+                    {product.images && 
+                     product.images.length > 0 && 
+                     product.images[0] && 
+                     product.images[0].trim() !== "" ? (
                       <Image
                         source={{ uri: product.images[0] }}
                         style={{ width: "100%", height: "100%" }}

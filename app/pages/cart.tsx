@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
@@ -16,6 +16,7 @@ import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView'
 export default function Cart() {
   const router = useRouter();
   const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
   const { 
     items: cartItems, 
     savedItems,
@@ -214,13 +215,19 @@ export default function Cart() {
                       borderColor: colors.border.light,
                     }}
                   >
-                    {item.images && item.images.length > 0 && item.images[0] ? (
+                    {item.images && 
+                     item.images.length > 0 && 
+                     item.images[0] && 
+                     item.images[0].trim() !== "" &&
+                     !imageErrors.has(item.id) ? (
                       <Image
                         source={{ uri: item.images[0] }}
                         style={{ width: "100%", height: "100%" }}
                         contentFit="cover"
                         cachePolicy="memory-disk"
-                        onError={() => {}}
+                        onError={() => {
+                          setImageErrors((prev) => new Set(prev).add(item.id));
+                        }}
                       />
                     ) : (
                       <ProductPlaceholder width="100%" height={isMobile ? 100 : 120} aspectRatio={1} />
@@ -562,12 +569,19 @@ export default function Cart() {
                           borderColor: colors.border.light,
                         }}
                       >
-                        {item.images && item.images.length > 0 && item.images[0] ? (
+                        {item.images && 
+                         item.images.length > 0 && 
+                         item.images[0] && 
+                         item.images[0].trim() !== "" &&
+                         !imageErrors.has(item.id) ? (
                           <Image
                             source={{ uri: item.images[0] }}
                             style={{ width: "100%", height: "100%" }}
                             contentFit="cover"
                             cachePolicy="memory-disk"
+                            onError={() => {
+                              setImageErrors((prev) => new Set(prev).add(item.id));
+                            }}
                           />
                         ) : (
                           <ProductPlaceholder width="100%" height={isMobile ? 80 : 100} aspectRatio={1} />

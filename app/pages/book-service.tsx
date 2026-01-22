@@ -179,11 +179,15 @@ export default function BookService() {
         }}
       >
         <View style={{ flexDirection: "row", gap: spacing.md, marginBottom: spacing.md }}>
-          {product.images && product.images.length > 0 ? (
+          {product.images && 
+           product.images.length > 0 && 
+           product.images[0] && 
+           product.images[0].trim() !== "" ? (
             <Image
               source={{ uri: product.images[0] }}
               style={{ width: 80, height: 80, borderRadius: borderRadius.md }}
               contentFit="cover"
+              cachePolicy="memory-disk"
             />
           ) : (
             <ProductPlaceholder width={80} height={80} aspectRatio={1} />

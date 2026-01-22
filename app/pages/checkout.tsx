@@ -58,6 +58,7 @@ export default function Checkout() {
   const [transactionId, setTransactionId] = useState<string | null>(null);
   const [useBLKD, setUseBLKD] = useState(true); // Preselected as true
   const [wallets, setWallets] = useState<MockWallet[]>([]);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   // Mock wallets - in production, fetch from API/context
   useEffect(() => {
@@ -455,13 +456,19 @@ export default function Checkout() {
                         borderColor: colors.border,
                       }}
                     >
-                      {item.images && item.images.length > 0 && item.images[0] ? (
+                      {item.images && 
+                       item.images.length > 0 && 
+                       item.images[0] && 
+                       item.images[0].trim() !== "" &&
+                       !imageErrors.has(item.id) ? (
                         <Image
                           source={{ uri: item.images[0] }}
                           style={{ width: "100%", height: "100%" }}
                           contentFit="cover"
                           cachePolicy="memory-disk"
-                          onError={() => { }}
+                          onError={() => {
+                            setImageErrors((prev) => new Set(prev).add(item.id));
+                          }}
                         />
                       ) : (
                         <ProductPlaceholder width="100%" height={80} aspectRatio={1} />

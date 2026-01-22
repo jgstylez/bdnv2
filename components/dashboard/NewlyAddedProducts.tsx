@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
@@ -14,6 +14,7 @@ interface NewlyAddedProductsProps {
 export function NewlyAddedProducts({ isMobile }: NewlyAddedProductsProps) {
   const router = useRouter();
   const { width } = useWindowDimensions();
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
   
   // Calculate card width to show exactly 2.5 cards on mobile
   const getCardWidth = () => {
@@ -66,7 +67,11 @@ export function NewlyAddedProducts({ isMobile }: NewlyAddedProductsProps) {
             }}
           >
             <View className="w-full aspect-square relative bg-dark-background overflow-hidden">
-              {product.images && product.images.length > 0 && product.images[0] ? (
+              {product.images && 
+               product.images.length > 0 && 
+               product.images[0] && 
+               product.images[0].trim() !== "" &&
+               !imageErrors.has(product.id) ? (
                 <Image
                   source={{ uri: product.images[0] }}
                   style={{ width: '100%', height: '100%' }}
@@ -75,7 +80,7 @@ export function NewlyAddedProducts({ isMobile }: NewlyAddedProductsProps) {
                   transition={200}
                   placeholderContentFit="cover"
                   onError={() => {
-                    // Image load error - silently fail, placeholder will show
+                    setImageErrors((prev) => new Set(prev).add(product.id));
                   }}
                 />
               ) : (

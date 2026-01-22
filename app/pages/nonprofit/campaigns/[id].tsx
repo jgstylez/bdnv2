@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform, Alert } from "react-native";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
@@ -15,6 +15,7 @@ import { getMockOrganization } from '@/data/mocks/organizations';
 import { DonationModule } from '@/components/campaigns/DonationModule';
 import { logger } from '@/lib/logger';
 import { CampaignSEO } from '@/components/seo/CampaignSEO';
+import { ImagePlaceholder } from '@/components/placeholders/SVGPlaceholders';
 
 export default function CampaignDetail() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function CampaignDetail() {
   const { width } = useWindowDimensions();
   const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const { selectedNonprofit } = useNonprofit();
+  const [imageError, setImageError] = useState(false);
   
   const campaign = getMockCampaign(params.id || "1");
   const isOwner = true; // Mock ownership
@@ -120,16 +122,21 @@ export default function CampaignDetail() {
         </View>
 
         {/* Campaign Image */}
-        {campaign.imageUrl && (
-          <View style={{ marginBottom: spacing.lg, borderRadius: borderRadius.lg, overflow: "hidden" }}>
+        <View style={{ marginBottom: spacing.lg, borderRadius: borderRadius.lg, overflow: "hidden" }}>
+          {campaign.imageUrl && campaign.imageUrl.trim() !== "" && !imageError ? (
             <Image
               source={{ uri: campaign.imageUrl }}
               style={{ width: "100%", height: isMobile ? 200 : 300 }}
               contentFit="cover"
               cachePolicy="memory-disk"
+              onError={() => setImageError(true)}
             />
-          </View>
-        )}
+          ) : (
+            <View style={{ width: "100%", height: isMobile ? 200 : 300, justifyContent: "center", alignItems: "center", backgroundColor: colors.secondary.bg }}>
+              <ImagePlaceholder width={isMobile ? width - 80 : 600} height={isMobile ? 200 : 300} />
+            </View>
+          )}
+        </View>
 
         {/* Campaign Title */}
         <Text

@@ -211,6 +211,7 @@ export function ProductList({ entityType, products: externalProducts, onProducts
   const [filterType, setFilterType] = useState<ProductType | "all">("all");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   // Update products if external products change
   React.useEffect(() => {
@@ -432,13 +433,19 @@ export function ProductList({ entityType, products: externalProducts, onProducts
               }}
             >
               {/* Product Image */}
-              {product.images && product.images.length > 0 && product.images[0] ? (
+              {product.images && 
+               product.images.length > 0 && 
+               product.images[0] && 
+               product.images[0].trim() !== "" &&
+               !imageErrors.has(product.id) ? (
                 <Image
                   source={{ uri: product.images[0] }}
                   style={{ width: "100%", height: isMobile ? 200 : 200 }}
                   contentFit="cover"
                   cachePolicy="memory-disk"
-                  onError={() => { }}
+                  onError={() => {
+                    setImageErrors((prev) => new Set(prev).add(product.id));
+                  }}
                 />
               ) : (
                 <ProductPlaceholder width="100%" height={isMobile ? 200 : 200} aspectRatio={16 / 9} />

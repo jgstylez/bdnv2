@@ -12,6 +12,7 @@ import {
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
+import { ImagePlaceholder } from "@/components/placeholders/SVGPlaceholders";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -54,6 +55,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   const [showSwipeIndicator, setShowSwipeIndicator] = useState(true);
   const [containerWidth, setContainerWidth] = useState(screenWidth);
   const [containerHeight, setContainerHeight] = useState(height);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
   const isMobile = screenWidth < 768;
   const isTablet = screenWidth >= 768 && screenWidth < 1024;
   const gradientHeight = isMobile ? 140 : 180; // Gradient height for desktop/tablet
@@ -177,23 +179,33 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
                 overflow: "hidden",
               }}
             >
-              <Image
-                source={{ uri: item.imageUrl }}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
-                resizeMode="cover"
-                {...(Platform.OS !== 'web' && {
-                  accessible: true,
-                  accessibilityRole: "image" as const,
-                  accessibilityLabel:
-                    item.title 
-                      ? `Carousel image: ${item.title}${item.description ? `. ${item.description}` : ""}`
-                      : `Carousel image ${index + 1} of ${items.length}`,
-                  accessibilityHint: item.link ? "Double tap to open link" : undefined,
-                })}
-              />
+              {item.imageUrl && item.imageUrl.trim() !== "" && !imageErrors.has(item.id) ? (
+                <Image
+                  source={{ uri: item.imageUrl }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                  resizeMode="cover"
+                  cachePolicy="memory-disk"
+                  {...(Platform.OS !== 'web' && {
+                    accessible: true,
+                    accessibilityRole: "image" as const,
+                    accessibilityLabel:
+                      item.title 
+                        ? `Carousel image: ${item.title}${item.description ? `. ${item.description}` : ""}`
+                        : `Carousel image ${index + 1} of ${items.length}`,
+                    accessibilityHint: item.link ? "Double tap to open link" : undefined,
+                  })}
+                  onError={() => {
+                    setImageErrors((prev) => new Set(prev).add(item.id));
+                  }}
+                />
+              ) : (
+                <View style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                  <ImagePlaceholder width={width} height={actualHeight} />
+                </View>
+              )}
               {/* Solid Black Overlay - Half Container */}
               {(item.title || item.description || item.link) && (
                 <View
