@@ -93,7 +93,7 @@ export const QuickValuePropsSection: React.FC = () => {
                 fontSize: isMobile ? 16 : 18,
                 color: "rgba(255, 255, 255, 0.7)",
                 textAlign: "center",
-                maxWidth: 700,
+                maxWidth: isMobile ? 700 : 900,
                 lineHeight: 26,
               }}
             >

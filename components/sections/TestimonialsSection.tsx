@@ -68,18 +68,43 @@ export const TestimonialsSection: React.FC = () => {
             width: "100%",
           }}
         >
-          <Text
-            style={{
-              fontSize: isMobile ? 32 : 44,
-              fontWeight: "700",
-              color: "#ffffff",
-              marginBottom: 16,
-              textAlign: "center",
-              letterSpacing: -0.5,
-            }}
-          >
-            What Our Community Says
-          </Text>
+          <View style={{ alignItems: "center", marginBottom: 16 }}>
+            {/* Badge */}
+            <View
+              style={{
+                backgroundColor: "rgba(186, 153, 136, 0.15)",
+                paddingVertical: 6,
+                paddingHorizontal: 12,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: "rgba(186, 153, 136, 0.2)",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "600",
+                  color: "#ba9988",
+                  letterSpacing: 1,
+                }}
+              >
+                WORD OF MOUTH
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontSize: isMobile ? 32 : 44,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginBottom: 16,
+                textAlign: "center",
+                letterSpacing: -0.5,
+              }}
+            >
+              What Our Community Says
+            </Text>
+          </View>
           <Text
             style={{
               fontSize: isMobile ? 16 : 18,
