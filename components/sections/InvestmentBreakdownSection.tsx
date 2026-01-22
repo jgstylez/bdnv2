@@ -124,88 +124,396 @@ export const InvestmentBreakdownSection: React.FC = () => {
             </Text>
           </View>
 
-          {/* Investment Grid */}
-          <View
-            style={{
-              flexDirection: isMobile ? "column" : "row",
-              flexWrap: isMobile ? "wrap" : "nowrap",
-              gap: 20,
-            }}
-          >
-            {INVESTMENTS.map((investment, index) => (
-              <View
-                key={index}
-                style={{
-                  flex: isMobile ? 1 : 1,
-                  minWidth: isMobile ? "100%" : 0,
-                  backgroundColor: "rgba(71, 71, 71, 0.4)",
-                  borderRadius: 20,
-                  padding: isMobile ? 24 : 28,
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.3)",
-                }}
-              >
-                {/* Percentage */}
-                <Text
+          {/* Investment Grid - Percentage-based layout */}
+          {isMobile ? (
+            // Mobile: Stack vertically
+            <View style={{ gap: 20 }}>
+              {INVESTMENTS.map((investment, index) => (
+                <View
+                  key={index}
                   style={{
-                    fontSize: isMobile ? 48 : 64,
-                    fontWeight: "800",
-                    color: "#ba9988",
-                    marginBottom: 12,
+                    backgroundColor: "rgba(71, 71, 71, 0.4)",
+                    borderRadius: 20,
+                    padding: 24,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.3)",
                   }}
                 >
-                  {investment.percentage}
-                </Text>
+                  {/* Percentage */}
+                  <Text
+                    style={{
+                      fontSize: 48,
+                      fontWeight: "800",
+                      color: "#ba9988",
+                      marginBottom: 12,
+                    }}
+                  >
+                    {investment.percentage}
+                  </Text>
 
-                {/* Title */}
-                <Text
-                  style={{
-                    fontSize: isMobile ? 22 : 26,
-                    fontWeight: "700",
-                    color: "#ffffff",
-                    marginBottom: 20,
-                    letterSpacing: -0.5,
-                  }}
-                >
-                  {investment.title}
-                </Text>
+                  {/* Title */}
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      fontWeight: "700",
+                      color: "#ffffff",
+                      marginBottom: 20,
+                      letterSpacing: -0.5,
+                    }}
+                  >
+                    {investment.title}
+                  </Text>
 
-                {/* Items List */}
-                <View style={{ gap: 12 }}>
-                  {investment.items.map((item, itemIndex) => (
-                    <View
-                      key={itemIndex}
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "flex-start",
-                        gap: 12,
-                      }}
-                    >
+                  {/* Items List */}
+                  <View style={{ gap: 12 }}>
+                    {investment.items.map((item, itemIndex) => (
                       <View
+                        key={itemIndex}
                         style={{
-                          marginTop: 6,
-                          width: 6,
-                          height: 6,
-                          borderRadius: 3,
-                          backgroundColor: "#ba9988",
-                        }}
-                      />
-                      <Text
-                        style={{
-                          flex: 1,
-                          fontSize: 15,
-                          color: "rgba(255, 255, 255, 0.8)",
-                          lineHeight: 24,
+                          flexDirection: "row",
+                          alignItems: "flex-start",
+                          gap: 12,
                         }}
                       >
-                        {item}
-                      </Text>
-                    </View>
-                  ))}
+                        <View
+                          style={{
+                            marginTop: 6,
+                            width: 6,
+                            height: 6,
+                            borderRadius: 3,
+                            backgroundColor: "#ba9988",
+                          }}
+                        />
+                        <Text
+                          style={{
+                            flex: 1,
+                            fontSize: 15,
+                            color: "rgba(255, 255, 255, 0.8)",
+                            lineHeight: 24,
+                          }}
+                        >
+                          {item}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ))}
+            </View>
+          ) : (
+            // Desktop: Grid layout based on percentages - compact version
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 16,
+                alignItems: "stretch",
+              }}
+            >
+              {/* Left Column: 40% Infrastructure - stretches to match right column height */}
+              <View
+                style={{
+                  flex: 0.4,
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
+                  borderRadius: 16,
+                  padding: 20,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                }}
+              >
+                {/* First Row: Text Content */}
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 52,
+                      fontWeight: "800",
+                      color: "#ba9988",
+                      marginBottom: 8,
+                    }}
+                  >
+                    {INVESTMENTS[0].percentage}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      fontWeight: "700",
+                      color: "#ffffff",
+                      marginBottom: 16,
+                      letterSpacing: -0.5,
+                    }}
+                  >
+                    {INVESTMENTS[0].title}
+                  </Text>
+                  <View style={{ gap: 10 }}>
+                    {INVESTMENTS[0].items.map((item, itemIndex) => (
+                      <View
+                        key={itemIndex}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "flex-start",
+                          gap: 10,
+                        }}
+                      >
+                        <View
+                          style={{
+                            marginTop: 5,
+                            width: 5,
+                            height: 5,
+                            borderRadius: 2.5,
+                            backgroundColor: "#ba9988",
+                          }}
+                        />
+                        <Text
+                          style={{
+                            flex: 1,
+                            fontSize: 14,
+                            color: "rgba(255, 255, 255, 0.8)",
+                            lineHeight: 20,
+                          }}
+                        >
+                          {item}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+                {/* Second Row: Image - fills remaining space */}
+                <View style={{ marginTop: 20, borderRadius: 12, overflow: "hidden", flex: 1, minHeight: 0 }}>
+                  <Image
+                    source={require("@/assets/images/public/impact-business-owner.png")}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                    }}
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                  />
                 </View>
               </View>
-            ))}
-          </View>
+
+              {/* Right Column: Stacked cards (25%, 20%, 15%) */}
+              <View style={{ flex: 0.6, gap: 16 }}>
+                {/* 25% Community Outreach */}
+                <View
+                  style={{
+                    backgroundColor: "rgba(71, 71, 71, 0.4)",
+                    borderRadius: 16,
+                    padding: 20,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.3)",
+                    flexDirection: "row",
+                    gap: 16,
+                  }}
+                >
+                  {/* First Column: Text Content */}
+                  <View style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        fontSize: 52,
+                        fontWeight: "800",
+                        color: "#ba9988",
+                        marginBottom: 8,
+                      }}
+                    >
+                      {INVESTMENTS[1].percentage}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 22,
+                        fontWeight: "700",
+                        color: "#ffffff",
+                        marginBottom: 16,
+                        letterSpacing: -0.5,
+                      }}
+                    >
+                      {INVESTMENTS[1].title}
+                    </Text>
+                    <View style={{ gap: 10 }}>
+                      {INVESTMENTS[1].items.map((item, itemIndex) => (
+                        <View
+                          key={itemIndex}
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "flex-start",
+                            gap: 10,
+                          }}
+                        >
+                          <View
+                            style={{
+                              marginTop: 5,
+                              width: 5,
+                              height: 5,
+                              borderRadius: 2.5,
+                              backgroundColor: "#ba9988",
+                            }}
+                          />
+                          <Text
+                            style={{
+                              flex: 1,
+                              fontSize: 14,
+                              color: "rgba(255, 255, 255, 0.8)",
+                              lineHeight: 20,
+                            }}
+                          >
+                            {item}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                  {/* Second Column: Image */}
+                  <View style={{ flex: 1, borderRadius: 12, overflow: "hidden" }}>
+                    <Image
+                      source={require("@/assets/images/public/hero-professional.png")}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        minHeight: 140,
+                      }}
+                      contentFit="cover"
+                      cachePolicy="memory-disk"
+                    />
+                  </View>
+                </View>
+
+                {/* Bottom Row: 20% and 15% side by side */}
+                <View style={{ flexDirection: "row", gap: 16 }}>
+                  {/* 20% Marketing & Growth */}
+                  <View
+                    style={{
+                      flex: 0.5714, // 20/35 = 0.5714 of remaining 35%
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
+                      borderRadius: 16,
+                      padding: 20,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.3)",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 52,
+                        fontWeight: "800",
+                        color: "#ba9988",
+                        marginBottom: 8,
+                      }}
+                    >
+                      {INVESTMENTS[2].percentage}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 22,
+                        fontWeight: "700",
+                        color: "#ffffff",
+                        marginBottom: 16,
+                        letterSpacing: -0.5,
+                      }}
+                    >
+                      {INVESTMENTS[2].title}
+                    </Text>
+                    <View style={{ gap: 10 }}>
+                      {INVESTMENTS[2].items.map((item, itemIndex) => (
+                        <View
+                          key={itemIndex}
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "flex-start",
+                            gap: 10,
+                          }}
+                        >
+                          <View
+                            style={{
+                              marginTop: 5,
+                              width: 5,
+                              height: 5,
+                              borderRadius: 2.5,
+                              backgroundColor: "#ba9988",
+                            }}
+                          />
+                          <Text
+                            style={{
+                              flex: 1,
+                              fontSize: 14,
+                              color: "rgba(255, 255, 255, 0.8)",
+                              lineHeight: 20,
+                            }}
+                          >
+                            {item}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+
+                  {/* 15% Operations & Support */}
+                  <View
+                    style={{
+                      flex: 0.4286, // 15/35 = 0.4286 of remaining 35%
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
+                      borderRadius: 16,
+                      padding: 20,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.3)",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 52,
+                        fontWeight: "800",
+                        color: "#ba9988",
+                        marginBottom: 8,
+                      }}
+                    >
+                      {INVESTMENTS[3].percentage}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 22,
+                        fontWeight: "700",
+                        color: "#ffffff",
+                        marginBottom: 16,
+                        letterSpacing: -0.5,
+                      }}
+                    >
+                      {INVESTMENTS[3].title}
+                    </Text>
+                    <View style={{ gap: 10 }}>
+                      {INVESTMENTS[3].items.map((item, itemIndex) => (
+                        <View
+                          key={itemIndex}
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "flex-start",
+                            gap: 10,
+                          }}
+                        >
+                          <View
+                            style={{
+                              marginTop: 5,
+                              width: 5,
+                              height: 5,
+                              borderRadius: 2.5,
+                              backgroundColor: "#ba9988",
+                            }}
+                          />
+                          <Text
+                            style={{
+                              flex: 1,
+                              fontSize: 14,
+                              color: "rgba(255, 255, 255, 0.8)",
+                              lineHeight: 20,
+                            }}
+                          >
+                            {item}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          )}
         </View>
       </View>
     </ScrollAnimatedView>
