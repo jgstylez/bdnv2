@@ -206,7 +206,7 @@ export const SocialMediaSection: React.FC = () => {
                       }}
                     >
                       <View style={{ opacity: 0.9 }}>
-                        {React.cloneElement(social.icon as React.ReactElement, {
+                        {React.cloneElement(social.icon as React.ReactElement<{ fill?: string }>, {
                           fill: "#ba9988",
                         })}
                       </View>
@@ -271,7 +271,7 @@ export const SocialMediaSection: React.FC = () => {
                       }}
                     >
                       <View style={{ opacity: 0.9 }}>
-                        {React.cloneElement(social.icon as React.ReactElement, {
+                        {React.cloneElement(social.icon as React.ReactElement<{ fill?: string }>, {
                           fill: "#ba9988",
                         })}
                       </View>
