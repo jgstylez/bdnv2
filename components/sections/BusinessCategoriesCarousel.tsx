@@ -10,7 +10,7 @@ const INDUSTRY_IMAGES = [
 ];
 
 // Fixed height for all images
-const IMAGE_HEIGHT = 152;
+const IMAGE_HEIGHT = 130;
 
 export const BusinessCategoriesCarousel: React.FC = () => {
   const { width } = useWindowDimensions();
@@ -18,15 +18,25 @@ export const BusinessCategoriesCarousel: React.FC = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const scrollPosition = useRef(0);
-  const itemWidth = isMobile ? width - 40 : width * 0.8 - 20;
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Calculate container width respecting maxWidth: 1200
+  const containerPadding = isMobile ? 40 : 80;
+  const maxContainerWidth = 1200;
+  const availableWidth = Math.min(width, maxContainerWidth);
+  const itemWidth = availableWidth - containerPadding;
   
   // Create multiple sets for seamless infinite scroll (at least 3 sets)
   const allImages = [...INDUSTRY_IMAGES, ...INDUSTRY_IMAGES, ...INDUSTRY_IMAGES];
   const singleSetWidth = INDUSTRY_IMAGES.length * itemWidth;
+  
+  // Scroll speed: pixels per frame (16ms = ~60fps)
+  // 0.8px per frame = ~50px per second (smooth ticker effect)
+  const SCROLL_SPEED = 0.8;
 
   useEffect(() => {
     // Start at the middle set for seamless looping
-    if (scrollViewRef.current) {
+    if (scrollViewRef.current && singleSetWidth > 0) {
       scrollViewRef.current.scrollTo({
         x: singleSetWidth,
         animated: false,
@@ -36,38 +46,35 @@ export const BusinessCategoriesCarousel: React.FC = () => {
   }, [singleSetWidth]);
 
   useEffect(() => {
-    // Auto-scroll functionality
-    const interval = setInterval(() => {
+    // Continuous smooth scrolling animation using setInterval
+    if (singleSetWidth === 0) return;
+    
+    intervalRef.current = setInterval(() => {
       if (scrollViewRef.current && !isScrolling) {
-        scrollPosition.current += itemWidth;
+        scrollPosition.current += SCROLL_SPEED;
+        
+        // Reset to middle set when reaching the end (seamless loop)
+        if (scrollPosition.current >= singleSetWidth * 2) {
+          scrollPosition.current = singleSetWidth + (scrollPosition.current - singleSetWidth * 2);
+        }
+        
         scrollViewRef.current.scrollTo({
           x: scrollPosition.current,
-          animated: true,
+          animated: false,
         });
       }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [itemWidth, isScrolling]);
+    }, 16); // ~60fps
+    
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [singleSetWidth, isScrolling]);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollX = event.nativeEvent.contentOffset.x;
     scrollPosition.current = scrollX;
-    
-    // Reset to middle set when reaching the end (seamless loop)
-    if (scrollX >= singleSetWidth * 2 - itemWidth) {
-      scrollViewRef.current?.scrollTo({
-        x: singleSetWidth,
-        animated: false,
-      });
-      scrollPosition.current = singleSetWidth;
-    } else if (scrollX <= itemWidth) {
-      scrollViewRef.current?.scrollTo({
-        x: singleSetWidth,
-        animated: false,
-      });
-      scrollPosition.current = singleSetWidth;
-    }
   };
 
   const handleScrollBeginDrag = () => {
@@ -178,7 +185,7 @@ export const BusinessCategoriesCarousel: React.FC = () => {
                     source={imageSource}
                     style={{
                       width: "100%",
-                      height: IMAGE_HEIGHT,
+                      height: "100%",
                     }}
                     contentFit="cover"
                     cachePolicy="memory-disk"

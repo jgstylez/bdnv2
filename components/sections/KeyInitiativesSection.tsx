@@ -10,7 +10,7 @@ const INITIATIVES = [
     number: "01",
     title: "Technology and Platform Development",
     description:
-      "Enhance the existing platform to ensure our technological solution remains cutting-edge with better usability and accessibility via mobile and web interfaces. Architecting an Amazon-like Black business marketplace and distribution network with the largest Black-owned service and product offerings.",
+      "Enhance the existing platform to ensure our technological solution remains cutting-edge with better usability and accessibility. Architecting an Amazon-like Black business marketplace and distribution network with the largest Black-owned service and product offerings.",
   },
   {
     number: "02",
@@ -147,6 +147,7 @@ export const KeyInitiativesSection: React.FC = () => {
                   borderWidth: 1,
                   borderColor: "rgba(186, 153, 136, 0.3)",
                   position: "relative",
+                  alignItems: "center",
                 }}
               >
                 {/* Number Badge */}
@@ -154,7 +155,7 @@ export const KeyInitiativesSection: React.FC = () => {
                   style={{
                     position: "absolute",
                     top: -20,
-                    left: 24,
+                    alignSelf: "center",
                     width: 56,
                     height: 56,
                     borderRadius: 28,
@@ -177,23 +178,31 @@ export const KeyInitiativesSection: React.FC = () => {
                 </View>
 
                 {/* Content */}
-                <View style={{ marginTop: 20 }}>
+                <View 
+                  style={{ 
+                    marginTop: 20,
+                    width: "100%",
+                    alignItems: "center",
+                  }}
+                >
                   <Text
                     style={{
-                      fontSize: isMobile ? 22 : 26,
+                      fontSize: isMobile ? 20 : 24,
                       fontWeight: "700",
                       color: "#ffffff",
-                      marginBottom: 16,
+                      marginBottom: isMobile ? 12 : 16,
                       letterSpacing: -0.5,
+                      textAlign: "center",
                     }}
                   >
                     {initiative.title}
                   </Text>
                   <Text
                     style={{
-                      fontSize: 15,
+                      fontSize: isMobile ? 14 : 15,
                       color: "rgba(255, 255, 255, 0.8)",
-                      lineHeight: 24,
+                      lineHeight: isMobile ? 22 : 24,
+                      textAlign: "justify",
                     }}
                   >
                     {initiative.description}

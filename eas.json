@@ -41,7 +41,7 @@
       },
       "android": {
         "serviceAccountKeyPath": "./path-to-service-account.json",
-        "track": "internal"
+        "track": "production"
       }
     }
   }
