@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
+import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { BlogArticle } from '@/types/media';
@@ -17,6 +18,7 @@ const mockArticles: BlogArticle[] = [
     },
     category: "updates",
     tags: ["merchant", "features", "announcement"],
+    featuredImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=450&fit=crop",
     publishedAt: "2024-02-15T10:00:00Z",
     updatedAt: "2024-02-15T10:00:00Z",
     readTime: 5,
@@ -34,6 +36,7 @@ const mockArticles: BlogArticle[] = [
     },
     category: "features",
     tags: ["points", "rewards", "tips"],
+    featuredImage: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=450&fit=crop",
     publishedAt: "2024-02-10T14:00:00Z",
     updatedAt: "2024-02-10T14:00:00Z",
     readTime: 7,
@@ -51,6 +54,7 @@ const mockArticles: BlogArticle[] = [
     },
     category: "community",
     tags: ["community", "businesses", "spotlight"],
+    featuredImage: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=450&fit=crop",
     publishedAt: "2024-02-05T09:00:00Z",
     updatedAt: "2024-02-05T09:00:00Z",
     readTime: 10,
@@ -140,17 +144,31 @@ export default function MediaBlog() {
                   overflow: "hidden",
                   borderWidth: 1,
                   borderColor: "rgba(186, 153, 136, 0.2)",
+                  flexDirection: isMobile ? "column" : "row",
                 }}
               >
+                {/* Featured Image */}
                 {article.featuredImage && (
                   <View
                     style={{
-                      height: 200,
+                      width: isMobile ? "100%" : 280,
+                      height: isMobile ? 200 : 280,
                       backgroundColor: "#232323",
+                      overflow: "hidden",
                     }}
-                  />
+                  >
+                    <Image
+                      source={{ uri: article.featuredImage }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                      contentFit="cover"
+                      cachePolicy="memory-disk"
+                    />
+                  </View>
                 )}
-                <View style={{ padding: 20 }}>
+                <View style={{ flex: 1, padding: isMobile ? 20 : 24 }}>
                   <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 }}>
                     <View
                       style={{

@@ -81,64 +81,122 @@ export default function Tokens() {
           marginBottom={24}
         />
 
-        {isMobile ? (
-          <>
-            <TokenBalanceCard
-              totalTokens={totalTokens}
-              onViewCertificate={handleViewCertificate}
-              onDownloadCertificate={handleDownloadCertificate}
-              isMobile={true}
-            />
-
-            <TokenTabs activeTab={activeTab} onTabChange={setActiveTab} />
-
-            {activeTab === 'purchase' && (
-              <TokenPurchaseForm
-                purchaseType={purchaseType}
-                setPurchaseType={setPurchaseType}
-                tokenAmount={tokenAmount}
-                setTokenAmount={setTokenAmount}
-                recurringFrequency={recurringFrequency}
-                setRecurringFrequency={setRecurringFrequency}
-                handleSetupRecurringPurchase={handleSetupRecurringPurchase}
-                handlePurchase={handlePurchase}
-                TOKEN_PRICE={TOKEN_PRICE}
-                getFrequencyLabel={getFrequencyLabel}
+        <View style={{ maxWidth: 1400, width: "100%", alignSelf: "center" }}>
+          {isMobile ? (
+            <>
+              <TokenBalanceCard
+                totalTokens={totalTokens}
+                onViewCertificate={handleViewCertificate}
+                onDownloadCertificate={handleDownloadCertificate}
+                isMobile={true}
               />
-            )}
 
-            {activeTab === 'manage' && (
-              <View>
-                <RecurringPurchaseManager 
-                  recurringPurchases={mockRecurringPurchase} // to be replaced with recurringPurchases
-                  isEditingRecurring={isEditingRecurring}
-                  editRecurringTokens={editRecurringTokens}
-                  setEditRecurringTokens={setEditRecurringTokens}
-                  editRecurringFrequency={editRecurringFrequency}
-                  setEditRecurringFrequency={setEditRecurringFrequency}
-                  handleEditRecurring={handleEditRecurring}
-                  handleSaveRecurring={handleSaveRecurring}
-                  handleCancelEdit={handleCancelEdit}
-                  handlePauseRecurring={handlePauseRecurring}
-                  handleResumeRecurring={handleResumeRecurring}
-                  handleCancelRecurring={handleCancelRecurring}
+              <TokenTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+              {activeTab === 'purchase' && (
+                <TokenPurchaseForm
+                  purchaseType={purchaseType}
+                  setPurchaseType={setPurchaseType}
+                  tokenAmount={tokenAmount}
+                  setTokenAmount={setTokenAmount}
+                  recurringFrequency={recurringFrequency}
+                  setRecurringFrequency={setRecurringFrequency}
+                  handleSetupRecurringPurchase={handleSetupRecurringPurchase}
+                  handlePurchase={handlePurchase}
+                  TOKEN_PRICE={TOKEN_PRICE}
                   getFrequencyLabel={getFrequencyLabel}
-                  getPaymentMethodDisplay={getPaymentMethodDisplay}
-                  formatDate={formatDate}
                 />
-                <TokenLedgerEntries 
-                  ledgerEntries={mockLedgerEntries} 
-                  getTransactionIcon={getTransactionIcon} 
-                  formatDate={formatDate} 
+              )}
+
+              {activeTab === 'manage' && (
+                <View>
+                  <RecurringPurchaseManager 
+                    recurringPurchases={mockRecurringPurchase} // to be replaced with recurringPurchases
+                    isEditingRecurring={isEditingRecurring}
+                    editRecurringTokens={editRecurringTokens}
+                    setEditRecurringTokens={setEditRecurringTokens}
+                    editRecurringFrequency={editRecurringFrequency}
+                    setEditRecurringFrequency={setEditRecurringFrequency}
+                    handleEditRecurring={handleEditRecurring}
+                    handleSaveRecurring={handleSaveRecurring}
+                    handleCancelEdit={handleCancelEdit}
+                    handlePauseRecurring={handlePauseRecurring}
+                    handleResumeRecurring={handleResumeRecurring}
+                    handleCancelRecurring={handleCancelRecurring}
+                    getFrequencyLabel={getFrequencyLabel}
+                    getPaymentMethodDisplay={getPaymentMethodDisplay}
+                    formatDate={formatDate}
+                  />
+                  <TokenLedgerEntries 
+                    ledgerEntries={mockLedgerEntries} 
+                    getTransactionIcon={getTransactionIcon} 
+                    formatDate={formatDate} 
+                  />
+                </View>
+              )}
+            </>
+          ) : (
+            <View style={{ flexDirection: "row", gap: 24, alignItems: "flex-start" }}>
+              {/* Left Column: Balance Card and Tabs */}
+              <View style={{ width: 400, flexShrink: 0 }}>
+                <TokenBalanceCard
+                  totalTokens={totalTokens}
+                  onViewCertificate={handleViewCertificate}
+                  onDownloadCertificate={handleDownloadCertificate}
+                  isMobile={false}
                 />
+                <View style={{ marginTop: 24 }}>
+                  <TokenTabs activeTab={activeTab} onTabChange={setActiveTab} />
+                </View>
               </View>
-            )}
-          </>
-        ) : (
-          <>
-            {/* Desktop Layout Here */}
-          </>
-        )}
+
+              {/* Right Column: Content */}
+              <View style={{ flex: 1, minWidth: 0 }}>
+                {activeTab === 'purchase' && (
+                  <TokenPurchaseForm
+                    purchaseType={purchaseType}
+                    setPurchaseType={setPurchaseType}
+                    tokenAmount={tokenAmount}
+                    setTokenAmount={setTokenAmount}
+                    recurringFrequency={recurringFrequency}
+                    setRecurringFrequency={setRecurringFrequency}
+                    handleSetupRecurringPurchase={handleSetupRecurringPurchase}
+                    handlePurchase={handlePurchase}
+                    TOKEN_PRICE={TOKEN_PRICE}
+                    getFrequencyLabel={getFrequencyLabel}
+                  />
+                )}
+
+                {activeTab === 'manage' && (
+                  <View style={{ gap: 24 }}>
+                    <RecurringPurchaseManager 
+                      recurringPurchases={mockRecurringPurchase} // to be replaced with recurringPurchases
+                      isEditingRecurring={isEditingRecurring}
+                      editRecurringTokens={editRecurringTokens}
+                      setEditRecurringTokens={setEditRecurringTokens}
+                      editRecurringFrequency={editRecurringFrequency}
+                      setEditRecurringFrequency={setEditRecurringFrequency}
+                      handleEditRecurring={handleEditRecurring}
+                      handleSaveRecurring={handleSaveRecurring}
+                      handleCancelEdit={handleCancelEdit}
+                      handlePauseRecurring={handlePauseRecurring}
+                      handleResumeRecurring={handleResumeRecurring}
+                      handleCancelRecurring={handleCancelRecurring}
+                      getFrequencyLabel={getFrequencyLabel}
+                      getPaymentMethodDisplay={getPaymentMethodDisplay}
+                      formatDate={formatDate}
+                    />
+                    <TokenLedgerEntries 
+                      ledgerEntries={mockLedgerEntries} 
+                      getTransactionIcon={getTransactionIcon} 
+                      formatDate={formatDate} 
+                    />
+                  </View>
+                )}
+              </View>
+            </View>
+          )}
+        </View>
       </OptimizedScrollView>
 
       <CertificateModal

@@ -58,6 +58,11 @@ export const navigationMenu: NavGroup[] = [
         icon: "favorite",
       },
       {
+        label: "Pay It Forward",
+        href: "/pages/pay-it-forward",
+        icon: "favorite",
+      },
+      {
         label: "BDN Tokens",
         href: "/pages/tokens?tab=manage",
         icon: "account-balance-wallet",
@@ -179,11 +184,6 @@ export const navigationMenu: NavGroup[] = [
         label: "QR Code",
         href: "/pages/nonprofit/qrcode",
         icon: "qr-code",
-      },
-      {
-        label: "Pay It Forward",
-        href: "/pages/pay-it-forward",
-        icon: "favorite",
       },
       {
         label: "Settings",

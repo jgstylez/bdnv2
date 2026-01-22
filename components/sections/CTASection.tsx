@@ -90,6 +90,20 @@ export const CTASection: React.FC<CTASectionProps> = ({ onPress }) => {
               }}
             >
               <View style={{ alignItems: "center" }}>
+                {/* Icon */}
+                <View
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 20,
+                    backgroundColor: "rgba(186, 153, 136, 0.2)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 24,
+                  }}
+                >
+                  <MaterialIcons name="local-florist" size={32} color="#ba9988" />
+                </View>
                 {/* Heading */}
                 <Text
                   style={{

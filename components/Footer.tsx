@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, useWindowDimensions, Linking } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Svg, { G, Path } from "react-native-svg";
 
@@ -90,6 +90,19 @@ export const Footer: React.FC = () => {
             alignItems: "center",
           }}
         >
+          <View
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: 20,
+              backgroundColor: "rgba(186, 153, 136, 0.2)",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 24,
+            }}
+          >
+            <MaterialIcons name="trending-up" size={32} color="#ba9988" />
+          </View>
           <Text
             style={{
               fontSize: isMobile ? 28 : 36,
