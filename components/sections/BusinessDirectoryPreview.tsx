@@ -82,7 +82,7 @@ export const BusinessDirectoryPreview: React.FC = () => {
           >
             <View
               style={{
-                flexDirection: "row",
+                flexDirection: "column",
                 alignItems: "center",
                 gap: 12,
                 marginBottom: 16,
@@ -106,6 +106,7 @@ export const BusinessDirectoryPreview: React.FC = () => {
                   fontWeight: "700",
                   color: "#ffffff",
                   letterSpacing: -0.5,
+                  textAlign: "center",
                 }}
               >
                 Discover Black-Owned Businesses
