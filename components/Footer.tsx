@@ -13,20 +13,12 @@ export const Footer: React.FC = () => {
 
   const footerSections = [
     {
-      title: "Learn",
-      links: [
-        { label: "Educational Hub", href: "/public_pages/learn" },
-        { label: "Black Spending Power", href: "/public_pages/learn/black-spending-power" },
-        { label: "Group Economics", href: "/public_pages/learn/group-economics" },
-        { label: "Community Impact", href: "/public_pages/learn/community-impact" },
-      ],
-    },
-    {
       title: "Product",
       links: [
         { label: "Features", href: "/public_pages/features" },
         { label: "BDN+", href: "/public_pages/pricing" },
         { label: "Updates", href: "/public_pages/updates" },
+        { label: "Roadmap", href: "/public_pages/roadmap" },
       ],
     },
     {
@@ -36,6 +28,15 @@ export const Footer: React.FC = () => {
         { label: "Blog", href: "/public_pages/blog" },
         { label: "Careers", href: "/public_pages/careers" },
         { label: "Contact", href: "/public_pages/contact" },
+      ],
+    },
+    {
+      title: "Learn",
+      links: [
+        { label: "Educational Hub", href: "/public_pages/learn" },
+        { label: "Spending Power", href: "/public_pages/learn/black-spending-power" },
+        { label: "Group Economics", href: "/public_pages/learn/group-economics" },
+        { label: "Community Impact", href: "/public_pages/learn/community-impact" },
       ],
     },
     {
@@ -110,56 +111,27 @@ export const Footer: React.FC = () => {
           >
             Join thousands of members and businesses circulating Black dollars and creating lasting impact.
           </Text>
-          <View
+          <TouchableOpacity
+            onPress={() => router.push("/(auth)/signup")}
             style={{
-              flexDirection: isMobile ? "column" : "row",
-              gap: 16,
               width: "100%",
               maxWidth: 500,
+              backgroundColor: "#ba9988",
+              paddingVertical: 14,
+              borderRadius: 12,
+              alignItems: "center",
             }}
           >
-            <TouchableOpacity
-              onPress={() => router.push("/(auth)/signup")}
+            <Text
               style={{
-                flex: 1,
-                backgroundColor: "#ba9988",
-                paddingVertical: 14,
-                borderRadius: 12,
-                alignItems: "center",
+                fontSize: 15,
+                fontWeight: "600",
+                color: "#ffffff",
               }}
             >
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontWeight: "600",
-                  color: "#ffffff",
-                }}
-              >
-                Get Started Free
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => router.push("/pages/merchant/onboarding")}
-              style={{
-                flex: 1,
-                borderWidth: 2,
-                borderColor: "#ba9988",
-                paddingVertical: 14,
-                borderRadius: 12,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontWeight: "600",
-                  color: "#ba9988",
-                }}
-              >
-                List Your Business
-              </Text>
-            </TouchableOpacity>
-          </View>
+              Get Started Free
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* Main Footer Content */}

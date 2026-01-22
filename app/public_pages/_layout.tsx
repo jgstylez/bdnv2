@@ -43,6 +43,7 @@ export default function PublicPagesLayout() {
         <Stack.Screen name="for-consumers" />
         <Stack.Screen name="for-businesses" />
         <Stack.Screen name="learn" />
+        <Stack.Screen name="roadmap" />
       </Stack>
     </View>
   );
