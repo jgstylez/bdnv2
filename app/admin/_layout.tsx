@@ -5,7 +5,6 @@ import { AdminSidebar } from '@/components/AdminSidebar';
 import { AdminHeader } from '@/components/AdminHeader';
 import { AdminMenuPanel } from '@/components/AdminMenuPanel';
 import { AdminGuard } from '@/components/AdminGuard';
-import { AuthProvider } from '@/contexts/AuthContext';
 
 export default function AdminLayout() {
   const { width } = useWindowDimensions();
@@ -13,41 +12,39 @@ export default function AdminLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <AuthProvider>
-      <AdminGuard>
-        <View style={{ flex: 1, flexDirection: isDesktop ? "row" : "column" }}>
-          {isDesktop && <AdminSidebar />}
-          <View style={{ flex: 1, flexDirection: "column", position: "relative" }}>
-            <AdminHeader onMenuPress={() => setMenuOpen(true)} />
-            <View style={{ flex: 1 }}>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: { backgroundColor: "#232323" },
-                }}
-              >
-                <Stack.Screen name="index" />
-                <Stack.Screen name="users" />
-                <Stack.Screen name="businesses" />
-                <Stack.Screen name="nonprofits" />
-                <Stack.Screen name="token-holders" />
-                <Stack.Screen name="transactions" />
-                <Stack.Screen name="gift-cards" />
-                <Stack.Screen name="blkd-purchases" />
-                <Stack.Screen name="subscription-boxes" />
-                <Stack.Screen name="disputes" />
-                <Stack.Screen name="notifications" />
-                <Stack.Screen name="emails" />
-                <Stack.Screen name="content" />
-                <Stack.Screen name="analytics" />
-                <Stack.Screen name="settings" />
-                <Stack.Screen name="bi" />
-              </Stack>
-            </View>
+    <AdminGuard>
+      <View style={{ flex: 1, flexDirection: isDesktop ? "row" : "column" }}>
+        {isDesktop && <AdminSidebar />}
+        <View style={{ flex: 1, flexDirection: "column", position: "relative" }}>
+          <AdminHeader onMenuPress={() => setMenuOpen(true)} />
+          <View style={{ flex: 1 }}>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: "#232323" },
+              }}
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen name="users" />
+              <Stack.Screen name="businesses" />
+              <Stack.Screen name="nonprofits" />
+              <Stack.Screen name="token-holders" />
+              <Stack.Screen name="transactions" />
+              <Stack.Screen name="gift-cards" />
+              <Stack.Screen name="blkd-purchases" />
+              <Stack.Screen name="subscription-boxes" />
+              <Stack.Screen name="disputes" />
+              <Stack.Screen name="notifications" />
+              <Stack.Screen name="emails" />
+              <Stack.Screen name="content" />
+              <Stack.Screen name="analytics" />
+              <Stack.Screen name="settings" />
+              <Stack.Screen name="bi" />
+            </Stack>
           </View>
-          <AdminMenuPanel isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
         </View>
-      </AdminGuard>
-    </AuthProvider>
+        <AdminMenuPanel isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      </View>
+    </AdminGuard>
   );
 }

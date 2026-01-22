@@ -23,14 +23,15 @@ const DEV_MODE_AUTH = !FIREBASE_ENABLED;
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(DEV_MODE_AUTH);
   const [isLoading, setIsLoading] = useState(!DEV_MODE_AUTH);
-  const [user, setUser] = useState<any>(DEV_MODE_AUTH ? { email: 'dev@example.com', role: 'user' } : null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState<any>(DEV_MODE_AUTH ? { email: 'dev@example.com', role: 'admin' } : null);
+  const [isAdmin, setIsAdmin] = useState(DEV_MODE_AUTH); // Allow admin access in dev mode
   const router = useRouter();
 
   useEffect(() => {
     // If Firebase is not configured, run in development mode
     if (DEV_MODE_AUTH) {
       setIsLoading(false);
+      setIsAdmin(true); // Ensure admin is set in dev mode
       return;
     }
 
@@ -73,7 +74,8 @@ export function useAuth() {
     if (DEV_MODE_AUTH) {
       // Development mode: auto-login
       setIsAuthenticated(true);
-      setUser({ email, role: 'user' });
+      setUser({ email, role: 'admin' });
+      setIsAdmin(true); // Set admin in dev mode
       router.push('/(tabs)/dashboard');
       return;
     }
@@ -95,7 +97,8 @@ export function useAuth() {
     if (DEV_MODE_AUTH) {
       // Development mode: auto-signup
       setIsAuthenticated(true);
-      setUser({ email, role: 'user' });
+      setUser({ email, role: 'admin' });
+      setIsAdmin(true); // Set admin in dev mode
       router.push('/(tabs)/dashboard');
       return;
     }

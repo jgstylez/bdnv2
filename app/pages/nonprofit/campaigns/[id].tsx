@@ -193,10 +193,7 @@ export default function CampaignDetail() {
         {/* Campaign Stats - Campaign-Specific */}
         <View
           style={{
-            width: "100%",
             flexDirection: "row",
-            flexWrap: "nowrap",
-            alignItems: "stretch",
             gap: spacing.md,
             marginBottom: spacing.xl,
           }}
@@ -204,10 +201,6 @@ export default function CampaignDetail() {
           <View
             style={{
               flex: 1,
-              flexShrink: 1,
-              flexGrow: 1,
-              minWidth: 0,
-              maxWidth: "50%",
               backgroundColor: colors.secondary.bg,
               borderRadius: borderRadius.lg,
               padding: spacing.lg,
@@ -248,10 +241,6 @@ export default function CampaignDetail() {
           <View
             style={{
               flex: 1,
-              flexShrink: 1,
-              flexGrow: 1,
-              minWidth: 0,
-              maxWidth: "50%",
               backgroundColor: colors.secondary.bg,
               borderRadius: borderRadius.lg,
               padding: spacing.lg,

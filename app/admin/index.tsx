@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AdminDashboardStats } from '@/types/admin';
+import { AdminRedirect } from '@/components/AdminRedirect';
 
 // Mock admin stats
 const mockStats: AdminDashboardStats = {
@@ -140,7 +141,7 @@ const adminSections = [
   },
 ];
 
-export default function AdminDashboard() {
+function AdminDashboardContent() {
   const { width } = useWindowDimensions();
   const router = useRouter();
   const isMobile = width < 768;
@@ -402,6 +403,14 @@ export default function AdminDashboard() {
         </View>
       </ScrollView>
     </View>
+  );
+}
+
+export default function AdminDashboard() {
+  return (
+    <AdminRedirect>
+      <AdminDashboardContent />
+    </AdminRedirect>
   );
 }
 
