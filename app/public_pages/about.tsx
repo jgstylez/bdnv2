@@ -251,6 +251,28 @@ export default function About() {
           </View>
         </ScrollAnimatedView>
 
+        {/* Owners Collage Section - Full Width */}
+        <ScrollAnimatedView delay={300}>
+          <View
+            style={{
+              width: "100%",
+              backgroundColor: "#232323",
+            }}
+          >
+            <Image
+              source={require("@/assets/images/public/BDN-Owners-Collage-v4.jpg")}
+              style={{
+                width: "100%",
+                height: isMobile ? 180 : 350,
+              }}
+              contentFit="cover"
+              contentPosition="50% 100%"
+              cachePolicy="memory-disk"
+              transition={200}
+            />
+          </View>
+        </ScrollAnimatedView>
+
         {/* Story Section */}
         <ScrollAnimatedView delay={400}>
           <View
@@ -366,17 +388,23 @@ export default function About() {
               >
                 <TouchableOpacity
                   onPress={() => router.push("/public_pages/for-consumers")}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Navigate to For Consumers page"
+                  accessibilityHint="Double tap to view information for consumers"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     flex: 1,
                     backgroundColor: "#ba9988",
-                    paddingVertical: 14,
+                    paddingVertical: isMobile ? 22 : 14,
                     borderRadius: 12,
                     alignItems: "center",
+                    minHeight: isMobile ? 60 : 44,
                   }}
                 >
                   <Text
                     style={{
-                      fontSize: 15,
+                      fontSize: isMobile ? 16 : 15,
                       fontWeight: "600",
                       color: "#ffffff",
                     }}
@@ -386,18 +414,24 @@ export default function About() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => router.push("/public_pages/for-businesses")}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Navigate to For Businesses page"
+                  accessibilityHint="Double tap to view information for businesses"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     flex: 1,
                     borderWidth: 2,
                     borderColor: "#ba9988",
-                    paddingVertical: 14,
+                    paddingVertical: isMobile ? 22 : 14,
                     borderRadius: 12,
                     alignItems: "center",
+                    minHeight: isMobile ? 60 : 44,
                   }}
                 >
                   <Text
                     style={{
-                      fontSize: 15,
+                      fontSize: isMobile ? 16 : 15,
                       fontWeight: "600",
                       color: "#ba9988",
                     }}

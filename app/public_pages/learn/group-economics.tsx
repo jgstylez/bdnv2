@@ -422,12 +422,18 @@ export default function GroupEconomics() {
               </Text>
               <TouchableOpacity
                 onPress={() => router.push("/(auth)/signup")}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Get started for free"
+                accessibilityHint="Double tap to sign up for a free account"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 style={{
                   backgroundColor: "#ba9988",
                   paddingHorizontal: 48,
                   paddingVertical: 18,
                   borderRadius: 14,
                   minWidth: 200,
+                  minHeight: 44,
                   alignItems: "center",
                 }}
               >

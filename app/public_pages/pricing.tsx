@@ -70,6 +70,12 @@ export default function Pricing() {
               >
           <TouchableOpacity
             onPress={() => setBillingCycle("monthly")}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Select monthly billing"
+            accessibilityHint="Double tap to select monthly billing cycle"
+            accessibilityState={{ selected: billingCycle === "monthly" }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={{
               flex: 1,
               backgroundColor: billingCycle === "monthly" ? "#ba9988" : "transparent",
@@ -77,6 +83,7 @@ export default function Pricing() {
               paddingVertical: 12,
               paddingHorizontal: 16,
               alignItems: "center",
+              minHeight: 44,
             }}
           >
             <Text
@@ -91,6 +98,12 @@ export default function Pricing() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setBillingCycle("yearly")}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Select yearly billing, save 17 percent"
+            accessibilityHint="Double tap to select yearly billing cycle and save 17 percent"
+            accessibilityState={{ selected: billingCycle === "yearly" }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={{
               flex: 1,
               backgroundColor: billingCycle === "yearly" ? "#ba9988" : "transparent",
@@ -98,6 +111,7 @@ export default function Pricing() {
               paddingVertical: 12,
               paddingHorizontal: 16,
               alignItems: "center",
+              minHeight: 44,
             }}
           >
             <Text
@@ -252,6 +266,11 @@ export default function Pricing() {
 
                 <TouchableOpacity
                   onPress={() => handleSubscribe(plan)}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={plan.tier === "free" ? `Get started with ${plan.name} plan` : `Subscribe to ${plan.name} plan`}
+                  accessibilityHint={plan.tier === "free" ? "Double tap to sign up for free" : "Double tap to subscribe"}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     backgroundColor: isPopular ? "#ba9988" : "#232323",
                     borderRadius: 12,
@@ -259,6 +278,7 @@ export default function Pricing() {
                     alignItems: "center",
                     borderWidth: 1,
                     borderColor: isPopular ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                    minHeight: 44,
                   }}
                 >
                   <Text

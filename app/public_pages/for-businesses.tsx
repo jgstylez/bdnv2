@@ -56,12 +56,18 @@ export default function ForBusinesses() {
             >
               <TouchableOpacity
                 onPress={() => router.push("/pages/merchant/onboarding")}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="List your business on BDN"
+                accessibilityHint="Double tap to start business onboarding"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 style={{
                   backgroundColor: "#ba9988",
                   paddingHorizontal: isMobile ? 40 : 48,
                   paddingVertical: isMobile ? 16 : 18,
                   borderRadius: 14,
                   minWidth: isMobile ? "100%" : 200,
+                  minHeight: 44,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -78,6 +84,11 @@ export default function ForBusinesses() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push("/public_pages/features")}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="View platform features"
+                accessibilityHint="Double tap to view all platform features"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 style={{
                   borderWidth: 2,
                   borderColor: "#ba9988",
@@ -85,6 +96,7 @@ export default function ForBusinesses() {
                   paddingVertical: isMobile ? 16 : 18,
                   borderRadius: 14,
                   minWidth: isMobile ? "100%" : 200,
+                  minHeight: 44,
                   alignItems: "center",
                   justifyContent: "center",
                 }}

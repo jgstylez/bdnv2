@@ -130,6 +130,12 @@ export default function Updates() {
                 <TouchableOpacity
                   key={filter.key}
                   onPress={() => setSelectedType(filter.key)}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Filter updates by ${filter.label.toLowerCase()}`}
+                  accessibilityHint={`Double tap to ${selectedType === filter.key ? "deselect" : "select"} ${filter.label.toLowerCase()} filter`}
+                  accessibilityState={{ selected: selectedType === filter.key }}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     backgroundColor: selectedType === filter.key ? "#ba9988" : "#474747",
                     paddingHorizontal: 20,
@@ -137,6 +143,8 @@ export default function Updates() {
                     borderRadius: 12,
                     borderWidth: 1,
                     borderColor: selectedType === filter.key ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                    minHeight: 44,
+                    minWidth: 44,
                   }}
                 >
                   <Text

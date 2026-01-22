@@ -105,6 +105,11 @@ export default function Docs() {
                 {quickLinks.map((link, index) => (
                   <TouchableOpacity
                     key={index}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Navigate to ${link.title}`}
+                    accessibilityHint={`Double tap to go to ${link.title}`}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       flex: 1,
                       backgroundColor: "rgba(71, 71, 71, 0.4)",
@@ -115,6 +120,7 @@ export default function Docs() {
                       flexDirection: "row",
                       alignItems: "center",
                       gap: 12,
+                      minHeight: 44,
                     }}
                   >
                     <View
@@ -189,11 +195,18 @@ export default function Docs() {
                       onPress={() =>
                         setExpandedCategory(expandedCategory === category.title ? null : category.title)
                       }
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${expandedCategory === category.title ? "Collapse" : "Expand"} ${category.title} documentation`}
+                      accessibilityHint={`Double tap to ${expandedCategory === category.title ? "collapse" : "expand"} ${category.title} documentation`}
+                      accessibilityState={{ expanded: expandedCategory === category.title }}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "space-between",
                         padding: 24,
+                        minHeight: 44,
                       }}
                     >
                       <View style={{ flexDirection: "row", alignItems: "center", gap: 16, flex: 1 }}>
@@ -231,6 +244,11 @@ export default function Docs() {
                         {category.docs.map((doc, docIndex) => (
                           <TouchableOpacity
                             key={docIndex}
+                            accessible={true}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Read documentation: ${doc.title}`}
+                            accessibilityHint={`Double tap to read documentation about ${doc.title}`}
+                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                             style={{
                               paddingVertical: 16,
                               paddingHorizontal: 16,
@@ -238,6 +256,7 @@ export default function Docs() {
                               borderRadius: 10,
                               borderWidth: 1,
                               borderColor: "rgba(186, 153, 136, 0.1)",
+                              minHeight: 44,
                             }}
                           >
                             <Text

@@ -133,6 +133,12 @@ export default function Partnerships() {
                   <TouchableOpacity
                     key={category.key}
                     onPress={() => setSelectedCategory(category.key)}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Filter partners by ${category.label.toLowerCase()}`}
+                    accessibilityHint={`Double tap to ${selectedCategory === category.key ? "deselect" : "select"} ${category.label.toLowerCase()} filter`}
+                    accessibilityState={{ selected: selectedCategory === category.key }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       backgroundColor: selectedCategory === category.key ? "#ba9988" : "#474747",
                       paddingHorizontal: 20,
@@ -143,6 +149,8 @@ export default function Partnerships() {
                       flexDirection: "row",
                       alignItems: "center",
                       gap: 8,
+                      minHeight: 44,
+                      minWidth: 44,
                     }}
                   >
                     <MaterialIcons 
@@ -194,7 +202,12 @@ export default function Partnerships() {
                     <TouchableOpacity
                       key={partner.id}
                       onPress={() => handlePartnerClick(partner)}
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={`View partner: ${partner.name}`}
+                      accessibilityHint={partner.website ? "Double tap to visit partner website" : "Double tap to view partner details"}
                       activeOpacity={0.8}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                       style={{
                         flex: 1,
                         minWidth: isMobile ? "100%" : "45%",
@@ -206,6 +219,7 @@ export default function Partnerships() {
                         borderColor: "rgba(186, 153, 136, 0.3)",
                         alignItems: "center",
                         gap: 16,
+                        minHeight: 44,
                       }}
                     >
                       {/* Logo Placeholder */}
@@ -224,6 +238,9 @@ export default function Partnerships() {
                         {partner.logo ? (
                           <Image
                             source={{ uri: partner.logo }}
+                            accessible={true}
+                            accessibilityRole="image"
+                            accessibilityLabel={`Logo for ${partner.name}`}
                             style={{ width: "100%", height: "100%" }}
                             contentFit="contain"
                           />
@@ -381,11 +398,17 @@ export default function Partnerships() {
                 </Text>
                 <TouchableOpacity
                   onPress={() => Linking.openURL("mailto:partnerships@bdn.com")}
+                  accessible={true}
+                  accessibilityRole="link"
+                  accessibilityLabel="Contact partnerships team via email"
+                  accessibilityHint="Double tap to open email client"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     backgroundColor: "#ba9988",
                     paddingHorizontal: 32,
                     paddingVertical: 14,
                     borderRadius: 12,
+                    minHeight: 44,
                   }}
                 >
                   <Text

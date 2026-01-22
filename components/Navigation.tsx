@@ -89,19 +89,19 @@ export const Navigation: React.FC<NavigationProps> = ({ includeSafeAreaPadding =
             <View
               style={{
                 backgroundColor: "rgba(186, 153, 136, 0.15)",
-                paddingHorizontal: 12,
-                paddingVertical: 6,
-                borderRadius: 12,
+                paddingHorizontal: isMobile ? 8 : 12,
+                paddingVertical: isMobile ? 4 : 6,
+                borderRadius: isMobile ? 8 : 12,
                 borderWidth: 1,
                 borderColor: "rgba(186, 153, 136, 0.2)",
               }}
             >
               <Text
                 style={{
-                  fontSize: 11,
+                  fontSize: isMobile ? 9 : 11,
                   color: "#ba9988",
                   fontWeight: "600",
-                  letterSpacing: 0.5,
+                  letterSpacing: isMobile ? 0.3 : 0.5,
                 }}
               >
                 EDUCATE • EQUIP • EMPOWER®

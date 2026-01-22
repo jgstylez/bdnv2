@@ -318,11 +318,17 @@ export default function Careers() {
                         </View>
                       </View>
                       <TouchableOpacity
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Apply for ${position.title} position`}
+                        accessibilityHint="Double tap to apply for this position"
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         style={{
                           backgroundColor: "#ba9988",
                           paddingHorizontal: 24,
                           paddingVertical: 12,
                           borderRadius: 10,
+                          minHeight: 44,
                         }}
                       >
                         <Text
@@ -383,11 +389,17 @@ export default function Careers() {
                   We're always looking for talented people. Send us your resume and we'll keep you in mind for future opportunities.
                 </Text>
                 <TouchableOpacity
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Send resume for general consideration"
+                  accessibilityHint="Double tap to send your resume"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     backgroundColor: "#ba9988",
                     paddingHorizontal: 32,
                     paddingVertical: 12,
                     borderRadius: 10,
+                    minHeight: 44,
                   }}
                 >
                   <Text

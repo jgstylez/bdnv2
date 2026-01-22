@@ -153,12 +153,18 @@ export default function Community() {
                     </Text>
                     <TouchableOpacity
                       onPress={() => router.push(feature.href as any)}
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${feature.action}: ${feature.title}`}
+                      accessibilityHint={`Double tap to ${feature.action.toLowerCase()}`}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                       style={{
                         backgroundColor: "#ba9988",
                         paddingVertical: 12,
                         paddingHorizontal: 24,
                         borderRadius: 10,
                         alignSelf: "flex-start",
+                        minHeight: 44,
                       }}
                     >
                       <Text
@@ -306,12 +312,18 @@ export default function Community() {
               </Text>
               <TouchableOpacity
                 onPress={() => router.push("/(auth)/signup")}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Join the BDN community"
+                accessibilityHint="Double tap to sign up and join the community"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 style={{
                   backgroundColor: "#ba9988",
                   paddingHorizontal: 48,
                   paddingVertical: 16,
                   borderRadius: 12,
                   minWidth: 200,
+                  minHeight: 44,
                   alignItems: "center",
                 }}
               >

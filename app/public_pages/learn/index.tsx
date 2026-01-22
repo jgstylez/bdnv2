@@ -218,6 +218,11 @@ export default function LearnIndex() {
                   <TouchableOpacity
                     key={index}
                     onPress={() => router.push(topic.href as any)}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Learn about ${topic.title}`}
+                    accessibilityHint={`Double tap to read about ${topic.title.toLowerCase()}`}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       flex: 1,
                       minWidth: isMobile ? "100%" : "30%",
@@ -226,6 +231,7 @@ export default function LearnIndex() {
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
                       borderColor: "rgba(186, 153, 136, 0.3)",
+                      minHeight: 44,
                     }}
                   >
                     {/* Decorative Background Pattern */}
@@ -341,6 +347,11 @@ export default function LearnIndex() {
                   <TouchableOpacity
                     key={index}
                     onPress={() => router.push(resource.href as any)}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Read ${resource.type.toLowerCase()}: ${resource.title}`}
+                    accessibilityHint={`Double tap to read ${resource.title}`}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       flex: 1,
                       backgroundColor: "rgba(71, 71, 71, 0.6)",
@@ -348,6 +359,7 @@ export default function LearnIndex() {
                       padding: isMobile ? 24 : 32,
                       borderWidth: 1,
                       borderColor: "rgba(186, 153, 136, 0.3)",
+                      minHeight: 44,
                     }}
                   >
                     {/* Image Placeholder */}
@@ -526,6 +538,11 @@ export default function LearnIndex() {
               </Text>
               <TouchableOpacity
                 onPress={() => router.push("/public_pages/contact")}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Subscribe to newsletter"
+                accessibilityHint="Double tap to subscribe to the newsletter"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 style={{
                   backgroundColor: "#ba9988",
                   paddingVertical: 14,
@@ -534,6 +551,7 @@ export default function LearnIndex() {
                   alignItems: "center",
                   position: "relative",
                   zIndex: 1,
+                  minHeight: 44,
                 }}
               >
                 <Text

@@ -57,12 +57,18 @@ export default function ForConsumers() {
             >
               <TouchableOpacity
                 onPress={() => router.push("/(auth)/signup")}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Get started for free"
+                accessibilityHint="Double tap to sign up for a free account"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 style={{
                   backgroundColor: "#ba9988",
                   paddingHorizontal: isMobile ? 40 : 48,
                   paddingVertical: isMobile ? 16 : 18,
                   borderRadius: 14,
                   minWidth: isMobile ? "100%" : 200,
+                  minHeight: 44,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -79,6 +85,11 @@ export default function ForConsumers() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push("/public_pages/features")}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="View platform features"
+                accessibilityHint="Double tap to view all platform features"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 style={{
                   borderWidth: 2,
                   borderColor: "#ba9988",
@@ -86,6 +97,7 @@ export default function ForConsumers() {
                   paddingVertical: isMobile ? 16 : 18,
                   borderRadius: 14,
                   minWidth: isMobile ? "100%" : 200,
+                  minHeight: 44,
                   alignItems: "center",
                   justifyContent: "center",
                 }}

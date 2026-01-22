@@ -80,6 +80,12 @@ export default function Features() {
                   <TouchableOpacity
                     key={filter.key}
                     onPress={() => setSelectedFilter(filter.key as any)}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Filter features by ${filter.label.toLowerCase()}`}
+                    accessibilityHint={`Double tap to ${selectedFilter === filter.key ? "deselect" : "select"} ${filter.label.toLowerCase()} filter`}
+                    accessibilityState={{ selected: selectedFilter === filter.key }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       backgroundColor: selectedFilter === filter.key ? "#ba9988" : "#474747",
                       paddingHorizontal: 24,
@@ -87,6 +93,8 @@ export default function Features() {
                       borderRadius: 12,
                       borderWidth: selectedFilter === filter.key ? 0 : 1,
                       borderColor: "rgba(186, 153, 136, 0.2)",
+                      minHeight: 44,
+                      minWidth: 44,
                     }}
                   >
                     <Text
@@ -185,12 +193,18 @@ export default function Features() {
               >
                 <TouchableOpacity
                   onPress={() => router.push("/public_pages/for-consumers")}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Navigate to For Consumers page"
+                  accessibilityHint="Double tap to view information for consumers"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     flex: 1,
                     backgroundColor: "#ba9988",
                     paddingVertical: 14,
                     borderRadius: 12,
                     alignItems: "center",
+                    minHeight: 44,
                   }}
                 >
                   <Text
@@ -205,6 +219,11 @@ export default function Features() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => router.push("/public_pages/for-businesses")}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Navigate to For Businesses page"
+                  accessibilityHint="Double tap to view information for businesses"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     flex: 1,
                     borderWidth: 2,
@@ -212,6 +231,7 @@ export default function Features() {
                     paddingVertical: 14,
                     borderRadius: 12,
                     alignItems: "center",
+                    minHeight: 44,
                   }}
                 >
                   <Text

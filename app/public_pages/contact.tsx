@@ -119,6 +119,12 @@ export default function Contact() {
                   <TouchableOpacity
                     key={type.key}
                     onPress={() => setUserType(type.key as UserType)}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Select ${type.label} as contact type`}
+                    accessibilityHint={`Double tap to select ${type.label}`}
+                    accessibilityState={{ selected: userType === type.key }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       backgroundColor: userType === type.key ? "#ba9988" : "#474747",
                       paddingHorizontal: 24,
@@ -126,6 +132,8 @@ export default function Contact() {
                       borderRadius: 12,
                       borderWidth: userType === type.key ? 0 : 1,
                       borderColor: "rgba(186, 153, 136, 0.2)",
+                      minHeight: 44,
+                      minWidth: 44,
                     }}
                   >
                     <Text
@@ -143,12 +151,18 @@ export default function Contact() {
               {userType === "business" && (
                 <TouchableOpacity
                   onPress={() => {}}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Schedule a demo for business"
+                  accessibilityHint="Double tap to schedule a demo"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     backgroundColor: "#ba9988",
                     paddingVertical: 12,
                     borderRadius: 12,
                     alignItems: "center",
                     marginTop: 20,
+                    minHeight: 44,
                   }}
                 >
                   <Text
@@ -241,7 +255,14 @@ export default function Contact() {
                       {method.title}
                     </Text>
                     {method.action ? (
-                      <TouchableOpacity onPress={() => Linking.openURL(method.action!)}>
+                      <TouchableOpacity
+                        onPress={() => Linking.openURL(method.action!)}
+                        accessible={true}
+                        accessibilityRole="link"
+                        accessibilityLabel={`${method.title}: ${method.value}`}
+                        accessibilityHint={`Double tap to ${method.title === "Email" ? "open email" : "call"}`}
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                      >
                         <Text
                           style={{
                             fontSize: 14,
@@ -254,6 +275,8 @@ export default function Contact() {
                       </TouchableOpacity>
                     ) : (
                       <Text
+                        accessible={true}
+                        accessibilityRole="text"
                         style={{
                           fontSize: 14,
                           color: "rgba(255, 255, 255, 0.7)",
@@ -327,6 +350,11 @@ export default function Contact() {
                       onChangeText={(text) => setFormData({ ...formData, name: text })}
                       placeholder="Your name"
                       placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                      accessible={true}
+                      accessibilityRole="textbox"
+                      accessibilityLabel="Name input field"
+                      accessibilityHint="Enter your full name"
+                      accessibilityState={{ required: true }}
                       style={{
                         backgroundColor: "#474747",
                         borderRadius: 12,
@@ -335,6 +363,7 @@ export default function Contact() {
                         color: "#ffffff",
                         borderWidth: 1,
                         borderColor: "rgba(186, 153, 136, 0.2)",
+                        minHeight: 44,
                       }}
                     />
                   </View>
@@ -356,6 +385,11 @@ export default function Contact() {
                       placeholderTextColor="rgba(255, 255, 255, 0.4)"
                       keyboardType="email-address"
                       autoCapitalize="none"
+                      accessible={true}
+                      accessibilityRole="textbox"
+                      accessibilityLabel="Email input field"
+                      accessibilityHint="Enter your email address"
+                      accessibilityState={{ required: true }}
                       style={{
                         backgroundColor: "#474747",
                         borderRadius: 12,
@@ -364,6 +398,7 @@ export default function Contact() {
                         color: "#ffffff",
                         borderWidth: 1,
                         borderColor: "rgba(186, 153, 136, 0.2)",
+                        minHeight: 44,
                       }}
                     />
                   </View>
@@ -385,6 +420,10 @@ export default function Contact() {
                     onChangeText={(text) => setFormData({ ...formData, subject: text })}
                     placeholder="What's this about?"
                     placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                    accessible={true}
+                    accessibilityRole="textbox"
+                    accessibilityLabel="Subject input field"
+                    accessibilityHint="Enter the subject of your message"
                     style={{
                       backgroundColor: "#474747",
                       borderRadius: 12,
@@ -393,6 +432,7 @@ export default function Contact() {
                       color: "#ffffff",
                       borderWidth: 1,
                       borderColor: "rgba(186, 153, 136, 0.2)",
+                      minHeight: 44,
                     }}
                   />
                 </View>
@@ -416,6 +456,11 @@ export default function Contact() {
                     multiline
                     numberOfLines={6}
                     textAlignVertical="top"
+                    accessible={true}
+                    accessibilityRole="textbox"
+                    accessibilityLabel="Message input field"
+                    accessibilityHint="Enter your message"
+                    accessibilityState={{ required: true }}
                     style={{
                       backgroundColor: "#474747",
                       borderRadius: 12,
@@ -432,12 +477,19 @@ export default function Contact() {
                 <TouchableOpacity
                   onPress={handleSubmit}
                   disabled={isSubmitting}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={isSubmitting ? "Sending message" : "Send message"}
+                  accessibilityHint="Double tap to submit the contact form"
+                  accessibilityState={{ disabled: isSubmitting }}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     backgroundColor: "#ba9988",
                     paddingVertical: 16,
                     borderRadius: 12,
                     alignItems: "center",
                     opacity: isSubmitting ? 0.7 : 1,
+                    minHeight: 44,
                   }}
                 >
                   <Text

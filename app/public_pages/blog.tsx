@@ -183,6 +183,12 @@ export default function Blog() {
                   <TouchableOpacity
                     key={category.key}
                     onPress={() => setSelectedCategory(category.key)}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Filter blog posts by ${category.label.toLowerCase()}`}
+                    accessibilityHint={`Double tap to ${selectedCategory === category.key ? "deselect" : "select"} ${category.label.toLowerCase()} filter`}
+                    accessibilityState={{ selected: selectedCategory === category.key }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       backgroundColor: selectedCategory === category.key ? "#ba9988" : "#474747",
                       paddingHorizontal: 20,
@@ -190,6 +196,8 @@ export default function Blog() {
                       borderRadius: 12,
                       borderWidth: 1,
                       borderColor: selectedCategory === category.key ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                      minHeight: 44,
+                      minWidth: 44,
                     }}
                   >
                     <Text
@@ -284,12 +292,18 @@ export default function Blog() {
                           </Text>
                           <TouchableOpacity
                             onPress={() => router.push("/(auth)/signup")}
+                            accessible={true}
+                            accessibilityRole="button"
+                            accessibilityLabel="Sign up for free to read this article"
+                            accessibilityHint="Double tap to create a free account"
+                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                             style={{
                               backgroundColor: "#ba9988",
                               paddingHorizontal: 32,
                               paddingVertical: 14,
                               borderRadius: 12,
                               marginTop: 8,
+                              minHeight: 44,
                             }}
                           >
                             <Text
@@ -312,11 +326,17 @@ export default function Blog() {
                             router.push(`/pages/university/blog/${post.id}`);
                           }
                         }}
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel={isGated ? `Sign up to read: ${post.title}` : `Read article: ${post.title}`}
+                        accessibilityHint={isGated ? "Double tap to sign up and unlock this article" : "Double tap to read the full article"}
                         activeOpacity={0.9}
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         style={{
                           flexDirection: isMobile ? "column" : "row",
                           flex: 1,
                           alignItems: "stretch",
+                          minHeight: 44,
                         }}
                       >
                       {/* Featured Image */}
@@ -336,6 +356,9 @@ export default function Blog() {
                         {post.featuredImage ? (
                           <Image
                             source={{ uri: post.featuredImage }}
+                            accessible={true}
+                            accessibilityRole="image"
+                            accessibilityLabel={`Featured image for article: ${post.title}`}
                             style={{
                               width: "100%",
                               height: "100%",

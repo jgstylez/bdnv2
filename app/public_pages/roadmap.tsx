@@ -261,6 +261,11 @@ export default function Roadmap() {
                 </Text>
                 <TouchableOpacity
                   onPress={() => setShowAddModal(true)}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Suggest a new feature"
+                  accessibilityHint="Double tap to open the feature suggestion form"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     backgroundColor: "#ba9988",
                     paddingHorizontal: 32,
@@ -269,6 +274,7 @@ export default function Roadmap() {
                     flexDirection: "row",
                     alignItems: "center",
                     gap: 8,
+                    minHeight: 44,
                   }}
                 >
                   <MaterialIcons name="add" size={20} color="#ffffff" />
@@ -341,6 +347,12 @@ export default function Roadmap() {
                       <TouchableOpacity
                         key={item.key}
                         onPress={() => setFilter(item.key as any)}
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Filter by ${item.label.toLowerCase()}`}
+                        accessibilityHint={`Double tap to ${filter === item.key ? "deselect" : "select"} ${item.label.toLowerCase()} filter`}
+                        accessibilityState={{ selected: filter === item.key }}
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         style={{
                           backgroundColor: filter === item.key ? "#ba9988" : "#474747",
                           paddingHorizontal: 16,
@@ -348,6 +360,8 @@ export default function Roadmap() {
                           borderRadius: 8,
                           borderWidth: filter === item.key ? 0 : 1,
                           borderColor: "rgba(186, 153, 136, 0.2)",
+                          minHeight: 44,
+                          minWidth: 44,
                         }}
                       >
                         <Text
@@ -384,6 +398,12 @@ export default function Roadmap() {
                       <TouchableOpacity
                         key={item.key}
                         onPress={() => setSortBy(item.key as any)}
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Sort by ${item.label.toLowerCase()}`}
+                        accessibilityHint={`Double tap to sort features by ${item.label.toLowerCase()}`}
+                        accessibilityState={{ selected: sortBy === item.key }}
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         style={{
                           backgroundColor: sortBy === item.key ? "#ba9988" : "#474747",
                           paddingHorizontal: 16,
@@ -391,6 +411,8 @@ export default function Roadmap() {
                           borderRadius: 8,
                           borderWidth: sortBy === item.key ? 0 : 1,
                           borderColor: "rgba(186, 153, 136, 0.2)",
+                          minHeight: 44,
+                          minWidth: 44,
                         }}
                       >
                         <Text
@@ -448,11 +470,18 @@ export default function Roadmap() {
                       {/* Upvote Section */}
                       <TouchableOpacity
                         onPress={() => handleUpvote(feature.id)}
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel={`${feature.userVoted ? "Remove upvote from" : "Upvote"} feature: ${feature.title}`}
+                        accessibilityHint={`Double tap to ${feature.userVoted ? "remove your upvote" : "upvote this feature"}`}
+                        accessibilityState={{ selected: feature.userVoted }}
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         style={{
                           alignItems: "center",
                           justifyContent: "flex-start",
                           paddingTop: 4,
                           minWidth: 60,
+                          minHeight: 44,
                         }}
                       >
                         <MaterialIcons
@@ -643,7 +672,15 @@ export default function Roadmap() {
               >
                 Suggest a Feature
               </Text>
-              <TouchableOpacity onPress={() => setShowAddModal(false)}>
+              <TouchableOpacity
+                onPress={() => setShowAddModal(false)}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Close feature suggestion modal"
+                accessibilityHint="Double tap to close the modal"
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                style={{ minWidth: 44, minHeight: 44, alignItems: "center", justifyContent: "center" }}
+              >
                 <MaterialIcons name="close" size={24} color="rgba(255, 255, 255, 0.7)" />
               </TouchableOpacity>
             </View>
@@ -666,6 +703,11 @@ export default function Roadmap() {
                     onChangeText={(text) => setNewFeature({ ...newFeature, title: text })}
                     placeholder="e.g., Dark Mode Support"
                     placeholderTextColor="rgba(255, 255, 255, 0.3)"
+                    accessible={true}
+                    accessibilityRole="textbox"
+                    accessibilityLabel="Feature title input field"
+                    accessibilityHint="Enter a title for your feature suggestion"
+                    accessibilityState={{ required: true }}
                     style={{
                       backgroundColor: "#474747",
                       borderRadius: 12,
@@ -674,6 +716,7 @@ export default function Roadmap() {
                       color: "#ffffff",
                       borderWidth: 1,
                       borderColor: "rgba(186, 153, 136, 0.2)",
+                      minHeight: 44,
                     }}
                   />
                 </View>
@@ -696,6 +739,11 @@ export default function Roadmap() {
                     placeholderTextColor="rgba(255, 255, 255, 0.3)"
                     multiline
                     numberOfLines={6}
+                    accessible={true}
+                    accessibilityRole="textbox"
+                    accessibilityLabel="Feature description input field"
+                    accessibilityHint="Enter a detailed description of your feature idea"
+                    accessibilityState={{ required: true }}
                     style={{
                       backgroundColor: "#474747",
                       borderRadius: 12,
@@ -737,6 +785,12 @@ export default function Roadmap() {
                       <TouchableOpacity
                         key={item.key}
                         onPress={() => setNewFeature({ ...newFeature, category: item.key as any })}
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Select ${item.label.toLowerCase()} category`}
+                        accessibilityHint={`Double tap to select ${item.label.toLowerCase()} as the feature category`}
+                        accessibilityState={{ selected: newFeature.category === item.key }}
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         style={{
                           backgroundColor: newFeature.category === item.key ? "#ba9988" : "#474747",
                           paddingHorizontal: 16,
@@ -744,6 +798,8 @@ export default function Roadmap() {
                           borderRadius: 8,
                           borderWidth: newFeature.category === item.key ? 0 : 1,
                           borderColor: "rgba(186, 153, 136, 0.2)",
+                          minHeight: 44,
+                          minWidth: 44,
                         }}
                       >
                         <Text
@@ -769,12 +825,18 @@ export default function Roadmap() {
                 >
                   <TouchableOpacity
                     onPress={() => setShowAddModal(false)}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Cancel feature suggestion"
+                    accessibilityHint="Double tap to cancel and close the modal"
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       flex: 1,
                       backgroundColor: "#474747",
                       paddingVertical: 14,
                       borderRadius: 12,
                       alignItems: "center",
+                      minHeight: 44,
                     }}
                   >
                     <Text
@@ -789,12 +851,18 @@ export default function Roadmap() {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={handleAddFeature}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Submit feature suggestion"
+                    accessibilityHint="Double tap to submit your feature suggestion"
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       flex: 1,
                       backgroundColor: "#ba9988",
                       paddingVertical: 14,
                       borderRadius: 12,
                       alignItems: "center",
+                      minHeight: 44,
                     }}
                   >
                     <Text

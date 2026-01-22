@@ -150,6 +150,11 @@ export default function KnowledgeBase() {
                 {popularArticles.map((article, index) => (
                   <TouchableOpacity
                     key={index}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Read article: ${article.title}`}
+                    accessibilityHint={`Double tap to read article about ${article.title}`}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       flex: 1,
                       minWidth: isMobile ? "100%" : "45%",
@@ -161,6 +166,7 @@ export default function KnowledgeBase() {
                       flexDirection: "row",
                       alignItems: "center",
                       gap: 12,
+                      minHeight: 44,
                     }}
                   >
                     <View
@@ -292,11 +298,18 @@ export default function KnowledgeBase() {
                       onPress={() =>
                         setExpandedCategory(expandedCategory === category.title ? null : category.title)
                       }
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${expandedCategory === category.title ? "Collapse" : "Expand"} ${category.title} category`}
+                      accessibilityHint={`Double tap to ${expandedCategory === category.title ? "collapse" : "expand"} ${category.title} category`}
+                      accessibilityState={{ expanded: expandedCategory === category.title }}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "space-between",
                         padding: 24,
+                        minHeight: 44,
                       }}
                     >
                       <View style={{ flexDirection: "row", alignItems: "center", gap: 16, flex: 1 }}>
@@ -345,6 +358,11 @@ export default function KnowledgeBase() {
                         {category.articles.map((article, articleIndex) => (
                           <TouchableOpacity
                             key={articleIndex}
+                            accessible={true}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Read article: ${article.title}`}
+                            accessibilityHint={`Double tap to read article about ${article.title}`}
+                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                             style={{
                               paddingVertical: 16,
                               paddingHorizontal: 16,
@@ -352,6 +370,7 @@ export default function KnowledgeBase() {
                               borderRadius: 10,
                               borderWidth: 1,
                               borderColor: "rgba(186, 153, 136, 0.1)",
+                              minHeight: 44,
                             }}
                           >
                             <Text
@@ -460,11 +479,17 @@ export default function KnowledgeBase() {
                 </Text>
                 <TouchableOpacity
                   onPress={() => router.push("/pages/support")}
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Contact support team"
+                  accessibilityHint="Double tap to contact support"
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{
                     backgroundColor: "#ba9988",
                     paddingHorizontal: 32,
                     paddingVertical: 14,
                     borderRadius: 12,
+                    minHeight: 44,
                   }}
                 >
                   <Text
