@@ -150,6 +150,7 @@ export default function Home() {
           videoTitle="WHAT WE DO - WATCH VIDEO"
         />
         <DevelopmentStatusSection />
+        <BusinessDirectoryPreview />
         <InvestmentBreakdownSection />
         <KeyInitiativesSection />
         <BusinessCategoriesCarousel />
@@ -158,7 +159,6 @@ export default function Home() {
         <SocialMediaSection />
         <QuickValuePropsSection />
         <FintechFeaturesSection />
-        <BusinessDirectoryPreview />
         <BentoGrid />
         <FeatureHighlight />
         <FeaturesSection />

@@ -57,6 +57,29 @@ export const TrademarkSection: React.FC = () => {
                 alignItems: "center",
               }}
             >
+              {/* Badge */}
+              <View
+                style={{
+                  backgroundColor: "rgba(186, 153, 136, 0.15)",
+                  paddingVertical: 6,
+                  paddingHorizontal: 12,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  marginBottom: 16,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: "600",
+                    color: "#ba9988",
+                    letterSpacing: 1,
+                  }}
+                >
+                  TRADEMARKS
+                </Text>
+              </View>
               <Text
                 style={{
                   fontSize: isMobile ? 32 : 44,
@@ -85,10 +108,11 @@ export const TrademarkSection: React.FC = () => {
             {/* Trademark Images Grid */}
             <View
               style={{
-                flexDirection: isMobile ? "column" : "row",
+                flexDirection: "row",
                 gap: 16,
                 justifyContent: "center",
                 alignItems: "center",
+                flexWrap: "wrap",
               }}
             >
               {TRADEMARKS.map((trademark, index) => (
@@ -97,9 +121,8 @@ export const TrademarkSection: React.FC = () => {
                   onPress={() => handleImagePress(trademark.image, trademark.title)}
                   activeOpacity={0.9}
                   style={{
-                    flex: isMobile ? 1 : 0,
-                    minWidth: isMobile ? "100%" : 180,
-                    maxWidth: isMobile ? "100%" : 200,
+                    width: 140,
+                    height: 200,
                     borderRadius: 12,
                     overflow: "hidden",
                     backgroundColor: "rgba(71, 71, 71, 0.4)",
@@ -117,7 +140,7 @@ export const TrademarkSection: React.FC = () => {
                     source={trademark.image}
                     style={{
                       width: "100%",
-                      height: isMobile ? 150 : 180,
+                      height: "100%",
                     }}
                     contentFit="cover"
                     cachePolicy="memory-disk"

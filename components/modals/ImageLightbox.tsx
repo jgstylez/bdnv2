@@ -65,8 +65,8 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
         {/* Image Container */}
         <View
           style={{
-            width: isMobile ? width - 40 : Math.min(1000, width - 80),
-            maxHeight: isMobile ? height - 100 : height - 120,
+            width: isMobile ? width - 40 : Math.min(1200, width - 80),
+            height: isMobile ? height - 140 : height - 160,
             backgroundColor: "#1a1a1a",
             borderRadius: 16,
             overflow: "hidden",
@@ -78,14 +78,14 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
           {title && (
             <View
               style={{
-                padding: 20,
+                padding: 16,
                 borderBottomWidth: 1,
                 borderBottomColor: "rgba(186, 153, 136, 0.2)",
               }}
             >
               <Text
                 style={{
-                  fontSize: isMobile ? 18 : 20,
+                  fontSize: isMobile ? 16 : 18,
                   fontWeight: "700",
                   color: "#ffffff",
                   textAlign: "center",
@@ -103,7 +103,6 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
               flex: 1,
               justifyContent: "center",
               alignItems: "center",
-              minHeight: 400,
             }}
           >
             {imageSource && (
@@ -112,7 +111,6 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
                 style={{
                   width: "100%",
                   height: "100%",
-                  minHeight: 400,
                 }}
                 contentFit="contain"
                 cachePolicy="memory-disk"

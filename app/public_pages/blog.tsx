@@ -220,18 +220,19 @@ export default function Blog() {
                         overflow: "hidden",
                         borderWidth: 1,
                         borderColor: "rgba(186, 153, 136, 0.3)",
-                        flexDirection: isMobile ? "column" : "row",
+                        flexDirection: "row",
                       }}
                     >
                       {/* Featured Image */}
                       <View
                         style={{
-                          width: isMobile ? "100%" : 320,
-                          height: isMobile ? 220 : 320,
+                          width: 120,
+                          height: 180,
                           backgroundColor: "rgba(186, 153, 136, 0.05)",
                           overflow: "hidden",
                           alignItems: "center",
                           justifyContent: "center",
+                          flexShrink: 0,
                         }}
                       >
                         {post.featuredImage ? (
@@ -244,7 +245,7 @@ export default function Blog() {
                             contentFit="cover"
                           />
                         ) : (
-                          <ArticlePlaceholder width={isMobile ? 300 : 280} height={isMobile ? 200 : 280} />
+                          <ArticlePlaceholder width={120} height={180} />
                         )}
                       </View>
                       
