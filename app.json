@@ -2,7 +2,7 @@
   "expo": {
     "name": "BDN",
     "slug": "bdn",
-    "version": "2.0.0",
+    "version": "3.19.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -11,25 +11,40 @@
       "resizeMode": "contain",
       "backgroundColor": "#232323"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bdn.app",
-      "buildNumber": "1"
+      "bundleIdentifier": "com.blackdollarnetwork.mobile",
+      "buildNumber": "223"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#232323"
       },
-      "package": "com.bdn.app",
-      "versionCode": 1
+      "package": "com.blackdollarnetwork.mobile",
+      "versionCode": 223
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": ["expo-router"],
-    "scheme": "bdn"
+    "plugins": [
+      "expo-router"
+    ],
+    "scheme": "bdn",
+    "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5dec71d3-e780-438e-97a4-b749b0c72c0e"
+      }
+    }
   }
 }
