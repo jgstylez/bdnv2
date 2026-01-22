@@ -156,7 +156,7 @@ export const BusinessDirectoryPreview: React.FC = () => {
                   flex: 1,
                 }}
               >
-                Search businesses, categories, or locations...
+                Search Black-owned businesses...
               </Text>
               <MaterialIcons name="arrow-forward-ios" size={18} color="rgba(255, 255, 255, 0.5)" />
             </TouchableOpacity>
