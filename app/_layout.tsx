@@ -1,3 +1,8 @@
+// Polyfill for Node.js buffer module (required by react-native-svg)
+if (typeof global.Buffer === 'undefined') {
+  global.Buffer = require('buffer').Buffer;
+}
+
 import "../nativewind-setup";
 import "../global.css";
 import { Stack } from "expo-router";

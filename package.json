@@ -16,6 +16,7 @@
     "@nativecn/cli": "^0.3.7",
     "@prisma/adapter-pg": "^7.1.0",
     "@react-native-community/datetimepicker": "8.4.4",
+    "buffer": "^6.0.3",
     "clsx": "^2.1.1",
     "expo": "^54.0.0",
     "expo-blur": "~15.0.8",

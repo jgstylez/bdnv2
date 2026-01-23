@@ -49,7 +49,7 @@ const sections = [
       "You have the right to access, update, or delete your personal information at any time.",
       "You can opt out of marketing communications by updating your preferences in your account settings.",
       "You may request a copy of your data or request that we delete your account and associated data.",
-      "If you have questions or concerns about your privacy, please contact us at privacy@blackdollarnetwork.com.",
+      "If you have questions or concerns about your privacy, please contact us at support@blackdollarnetwork.com.",
     ],
   },
   {
@@ -185,7 +185,7 @@ export default function Privacy() {
                   }}
                 >
                   If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at{" "}
-                  <Text style={{ color: "#ba9988" }}>privacy@blackdollarnetwork.com</Text>.
+                  <Text style={{ color: "#ba9988" }}>support@blackdollarnetwork.com</Text>.
                 </Text>
               </View>
             </View>

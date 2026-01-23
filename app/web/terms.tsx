@@ -193,7 +193,7 @@ export default function Terms() {
                   }}
                 >
                   If you have any questions about these Terms of Service, please contact us at{" "}
-                  <Text style={{ color: "#ba9988" }}>legal@blackdollarnetwork.com</Text>.
+                  <Text style={{ color: "#ba9988" }}>support@blackdollarnetwork.com</Text>.
                 </Text>
               </View>
             </View>
