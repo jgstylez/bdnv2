@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Linking } from "react-native";
+import { usePathname } from 'expo-router';
 import { colors, spacing, typography } from '@/constants/theme';
 
 const DEVELOPER_URL = "https://developer.blackdollarnetwork.com";
+const MAIN_DOMAIN = "https://blackdollarnetwork.com";
 
 /**
  * Checks if we're currently on the developer subdomain
@@ -45,10 +47,13 @@ interface DeveloperRedirectProps {
 /**
  * DeveloperRedirect component that handles context-aware redirects for /developer route
  * - Localhost: Shows developer dashboard locally (no redirect)
- * - Developer subdomain: Shows developer dashboard (no redirect)
- * - Sandbox/Other domains: Redirects to developer.blackdollarnetwork.com
+ * - Developer subdomain: Redirects to blackdollarnetwork.com/developer
+ * - Sandbox/Other domains with /developer: Redirects to blackdollarnetwork.com/developer
+ * - Main domain with /developer: Shows developer dashboard (no redirect)
  */
 export function DeveloperRedirect({ children }: DeveloperRedirectProps) {
+  const pathname = usePathname();
+  
   // Initialize shouldShowContent based on synchronous check to avoid flash
   const getInitialState = () => {
     if (Platform.OS !== 'web' || typeof window === 'undefined' || !window.location) {
@@ -62,10 +67,12 @@ export function DeveloperRedirect({ children }: DeveloperRedirectProps) {
                     hostname === 'developer.localhost' ||
                     hostname.startsWith('developer.localhost:');
     const isDeveloper = hostname === 'developer.blackdollarnetwork.com' || hostname.startsWith('developer.');
+    // On main domain /developer path, show content. Otherwise redirect.
+    const isOnMainDomainPath = hostname === 'blackdollarnetwork.com' || hostname === 'www.blackdollarnetwork.com' || hostname.includes('sandbox.blackdollarnetwork.com');
     
     return {
-      shouldShowContent: isLocal || isDeveloper,
-      shouldRedirect: !isLocal && !isDeveloper,
+      shouldShowContent: isLocal || (isOnMainDomainPath && window.location.pathname.startsWith('/developer')),
+      shouldRedirect: !isLocal && (isDeveloper || !isOnMainDomainPath || !window.location.pathname.startsWith('/developer')),
       isRedirecting: false,
     };
   };
@@ -99,13 +106,20 @@ export function DeveloperRedirect({ children }: DeveloperRedirectProps) {
 
       const hostname = window.location.hostname.toLowerCase();
 
-      // Case 1: Already on developer subdomain - don't redirect, show content
+      // Case 1: Already on developer subdomain - redirect to main domain path
       if (isDeveloperSubdomain()) {
-        setShouldRedirect(false);
-        setIsRedirecting(false);
-        setShouldShowContent(true);
-        if (__DEV__) {
-          console.log('[DeveloperRedirect] Already on developer subdomain, no redirect needed');
+        setIsRedirecting(true);
+        setShouldRedirect(true);
+        setShouldShowContent(false);
+        try {
+          if (__DEV__) {
+            console.log('[DeveloperRedirect] Redirecting from developer subdomain to main domain');
+          }
+          window.location.href = `${MAIN_DOMAIN}/developer${window.location.pathname === '/' ? '' : window.location.pathname}${window.location.search}`;
+        } catch (error) {
+          console.error('Failed to redirect:', error);
+          setIsRedirecting(false);
+          setShouldShowContent(true); // Fallback to showing content on error
         }
         return;
       }
@@ -121,25 +135,35 @@ export function DeveloperRedirect({ children }: DeveloperRedirectProps) {
         return;
       }
 
-      // Case 3: On sandbox or any other domain - redirect to developer.blackdollarnetwork.com
-      setIsRedirecting(true);
-      setShouldRedirect(true);
-      setShouldShowContent(false);
-      
-      try {
-        if (__DEV__) {
-          console.log('[DeveloperRedirect] Redirecting from', hostname, 'to', DEVELOPER_URL);
+      // Case 3: On sandbox or any other domain with /developer path - redirect to main domain /developer path
+      // Only redirect if we're actually on the /developer route
+      if (pathname?.startsWith('/developer')) {
+        setIsRedirecting(true);
+        setShouldRedirect(true);
+        setShouldShowContent(false);
+        
+        try {
+          if (__DEV__) {
+            console.log('[DeveloperRedirect] Redirecting from', hostname, 'to', `${MAIN_DOMAIN}/developer`);
+          }
+          const remainingPath = pathname === '/developer' ? '' : pathname.replace('/developer', '');
+          window.location.href = `${MAIN_DOMAIN}/developer${remainingPath}${window.location.search}`;
+        } catch (error) {
+          console.error('Failed to redirect to developer site:', error);
+          setIsRedirecting(false);
+          setShouldShowContent(true); // Fallback to showing content on error
         }
-        window.location.href = DEVELOPER_URL;
-      } catch (error) {
-        console.error('Failed to redirect to developer site:', error);
-        setIsRedirecting(false);
-        setShouldShowContent(true); // Fallback to showing content on error
+        return;
       }
+      
+      // Not on /developer path, show content (or let app handle routing)
+      setShouldShowContent(true);
+      setShouldRedirect(false);
+      setIsRedirecting(false);
     };
 
     checkAndRedirect();
-  }, []);
+  }, [pathname]);
 
   // If we're on developer subdomain or localhost, show the developer dashboard
   if (shouldShowContent && !shouldRedirect && !isRedirecting) {

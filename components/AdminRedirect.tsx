@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Linking } from "react-native";
+import { usePathname } from 'expo-router';
 import { colors, spacing, typography } from '@/constants/theme';
 
 const OPERATOR_URL = "https://operator.blackdollarnetwork.com";
+const MAIN_DOMAIN = "https://blackdollarnetwork.com";
 
 /**
  * Checks if we're currently on the operator subdomain
@@ -45,10 +47,13 @@ interface AdminRedirectProps {
 /**
  * AdminRedirect component that handles context-aware redirects for /admin route
  * - Localhost: Shows admin dashboard locally (no redirect)
- * - Operator subdomain: Shows admin dashboard (no redirect)
- * - Sandbox/Other domains: Redirects to operator.blackdollarnetwork.com
+ * - Operator subdomain: Redirects to blackdollarnetwork.com/admin
+ * - Sandbox/Other domains with /admin: Redirects to blackdollarnetwork.com/admin
+ * - Main domain with /admin: Shows admin dashboard (no redirect)
  */
 export function AdminRedirect({ children }: AdminRedirectProps) {
+  const pathname = usePathname();
+  
   // Initialize shouldShowContent based on synchronous check to avoid flash
   const getInitialState = () => {
     if (Platform.OS !== 'web' || typeof window === 'undefined' || !window.location) {
@@ -62,10 +67,12 @@ export function AdminRedirect({ children }: AdminRedirectProps) {
                     hostname === 'operator.localhost' ||
                     hostname.startsWith('operator.localhost:');
     const isOperator = hostname === 'operator.blackdollarnetwork.com' || hostname.startsWith('operator.');
+    // On main domain /admin path, show content. Otherwise redirect.
+    const isOnMainDomainPath = hostname === 'blackdollarnetwork.com' || hostname === 'www.blackdollarnetwork.com' || hostname.includes('sandbox.blackdollarnetwork.com');
     
     return {
-      shouldShowContent: isLocal || isOperator,
-      shouldRedirect: !isLocal && !isOperator,
+      shouldShowContent: isLocal || (isOnMainDomainPath && window.location.pathname.startsWith('/admin')),
+      shouldRedirect: !isLocal && (isOperator || !isOnMainDomainPath || !window.location.pathname.startsWith('/admin')),
       isRedirecting: false,
     };
   };
@@ -99,13 +106,20 @@ export function AdminRedirect({ children }: AdminRedirectProps) {
 
       const hostname = window.location.hostname.toLowerCase();
 
-      // Case 1: Already on operator subdomain - don't redirect, show content
+      // Case 1: Already on operator subdomain - redirect to main domain path
       if (isOperatorSubdomain()) {
-        setShouldRedirect(false);
-        setIsRedirecting(false);
-        setShouldShowContent(true);
-        if (__DEV__) {
-          console.log('[AdminRedirect] Already on operator subdomain, no redirect needed');
+        setIsRedirecting(true);
+        setShouldRedirect(true);
+        setShouldShowContent(false);
+        try {
+          if (__DEV__) {
+            console.log('[AdminRedirect] Redirecting from operator subdomain to main domain');
+          }
+          window.location.href = `${MAIN_DOMAIN}/admin${window.location.pathname === '/' ? '' : window.location.pathname}${window.location.search}`;
+        } catch (error) {
+          console.error('Failed to redirect:', error);
+          setIsRedirecting(false);
+          setShouldShowContent(true); // Fallback to showing content on error
         }
         return;
       }
@@ -121,25 +135,35 @@ export function AdminRedirect({ children }: AdminRedirectProps) {
         return;
       }
 
-      // Case 3: On sandbox or any other domain - redirect to operator.blackdollarnetwork.com
-      setIsRedirecting(true);
-      setShouldRedirect(true);
-      setShouldShowContent(false);
-      
-      try {
-        if (__DEV__) {
-          console.log('[AdminRedirect] Redirecting from', hostname, 'to', OPERATOR_URL);
+      // Case 3: On sandbox or any other domain with /admin path - redirect to main domain /admin path
+      // Only redirect if we're actually on the /admin route
+      if (pathname?.startsWith('/admin')) {
+        setIsRedirecting(true);
+        setShouldRedirect(true);
+        setShouldShowContent(false);
+        
+        try {
+          if (__DEV__) {
+            console.log('[AdminRedirect] Redirecting from', hostname, 'to', `${MAIN_DOMAIN}/admin`);
+          }
+          const remainingPath = pathname === '/admin' ? '' : pathname.replace('/admin', '');
+          window.location.href = `${MAIN_DOMAIN}/admin${remainingPath}${window.location.search}`;
+        } catch (error) {
+          console.error('Failed to redirect to operator site:', error);
+          setIsRedirecting(false);
+          setShouldShowContent(true); // Fallback to showing content on error
         }
-        window.location.href = OPERATOR_URL;
-      } catch (error) {
-        console.error('Failed to redirect to operator site:', error);
-        setIsRedirecting(false);
-        setShouldShowContent(true); // Fallback to showing content on error
+        return;
       }
+      
+      // Not on /admin path, show content (or let app handle routing)
+      setShouldShowContent(true);
+      setShouldRedirect(false);
+      setIsRedirecting(false);
     };
 
     checkAndRedirect();
-  }, []);
+  }, [pathname]);
 
   // If we're on operator subdomain or localhost, show the admin dashboard
   if (shouldShowContent && !shouldRedirect && !isRedirecting) {
