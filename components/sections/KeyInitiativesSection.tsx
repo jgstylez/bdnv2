@@ -123,7 +123,7 @@ export const KeyInitiativesSection: React.FC = () => {
                 letterSpacing: -0.5,
               }}
             >
-              Key Initiatives
+              Our Key Initiatives
             </Text>
           </View>
 

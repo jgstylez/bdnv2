@@ -90,7 +90,7 @@ export const TrademarkSection: React.FC = () => {
                   letterSpacing: -0.5,
                 }}
               >
-                SOLID FOUNDATION
+                Solid Foundation
               </Text>
               <Text
                 style={{

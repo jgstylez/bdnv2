@@ -89,7 +89,7 @@ export const FeaturesSection: React.FC = () => {
                 letterSpacing: -0.5,
               }}
             >
-              Features
+              Features & Benefits
             </Text>
             <Text
               style={{

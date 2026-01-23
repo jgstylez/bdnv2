@@ -168,7 +168,7 @@ export const SocialMediaSection: React.FC = () => {
                 letterSpacing: -0.5,
               }}
             >
-              SOCIAL MEDIA
+              Social Media
             </Text>
           </View>
 
