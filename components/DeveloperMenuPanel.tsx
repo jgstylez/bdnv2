@@ -1,13 +1,13 @@
-import React from "react";
-import { View, Text, TouchableOpacity, ScrollView, useWindowDimensions } from "react-native";
-import { useRouter } from "expo-router";
+import React, { useMemo } from "react";
+import { View, Text, Pressable, ScrollView, useWindowDimensions, Platform } from "react-native";
+import { useRouter, usePathname } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-  withSpring,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface DeveloperMenuPanelProps {
   isOpen: boolean;
@@ -27,14 +27,18 @@ const developerMenuItems = [
 
 export const DeveloperMenuPanel: React.FC<DeveloperMenuPanelProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { width } = useWindowDimensions();
-  const translateX = useSharedValue(width);
+  const insets = useSafeAreaInsets();
+  
+  const panelWidth = useMemo(() => Math.min(320, width * 0.85), [width]);
+  const translateX = useSharedValue(panelWidth);
 
   React.useEffect(() => {
-    translateX.value = withTiming(isOpen ? 0 : width, {
+    translateX.value = withTiming(isOpen ? 0 : panelWidth, {
       duration: 300,
     });
-  }, [isOpen, width]);
+  }, [isOpen, panelWidth, translateX]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
@@ -50,7 +54,14 @@ export const DeveloperMenuPanel: React.FC<DeveloperMenuPanelProps> = ({ isOpen, 
     opacity: overlayOpacity.value,
   }));
 
-  if (!isOpen && translateX.value === width) {
+  const isActive = (href: string) => {
+    if (href === "/developer") {
+      return pathname === "/developer" || pathname === "/developer/";
+    }
+    return pathname?.includes(href);
+  };
+
+  if (!isOpen && translateX.value === panelWidth) {
     return null;
   }
 
@@ -68,14 +79,22 @@ export const DeveloperMenuPanel: React.FC<DeveloperMenuPanelProps> = ({ isOpen, 
             backgroundColor: "#000000",
             zIndex: 1100,
             elevation: 1100,
+            ...(Platform.OS === "web" && {
+              // @ts-ignore - Web-only CSS properties
+              position: "fixed" as any,
+            }),
           },
           overlayStyle,
         ]}
+        pointerEvents={isOpen ? "auto" : "none"}
       >
-        <TouchableOpacity
+        <Pressable
           style={{ flex: 1 }}
-          activeOpacity={1}
           onPress={onClose}
+          {...(Platform.OS === "web" && {
+            // @ts-ignore - Web-only CSS properties
+            style: { flex: 1, cursor: "pointer" },
+          })}
         />
       </Animated.View>
 
@@ -87,131 +106,183 @@ export const DeveloperMenuPanel: React.FC<DeveloperMenuPanelProps> = ({ isOpen, 
             top: 0,
             right: 0,
             bottom: 0,
-            width: 320,
+            width: panelWidth,
             backgroundColor: "#232323",
-            borderLeftWidth: 1,
-            borderLeftColor: "#474747",
             zIndex: 1101,
             elevation: 1101,
+            shadowColor: "#000",
+            shadowOffset: { width: -4, height: 0 },
+            shadowOpacity: 0.3,
+            shadowRadius: 8,
+            ...(Platform.OS === "web" && {
+              // @ts-ignore - Web-only CSS properties
+              position: "fixed" as any,
+            }),
           },
           animatedStyle,
         ]}
+        pointerEvents={isOpen ? "auto" : "none"}
       >
-        <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-          {/* Close Button */}
-          <View style={{ padding: 20, alignItems: "flex-end" }}>
-            <TouchableOpacity onPress={onClose}>
-              <MaterialIcons name="close" size={24} color="rgba(255, 255, 255, 0.7)" />
-            </TouchableOpacity>
-          </View>
-
-          {/* Developer Badge */}
-          <View
-            style={{
-              alignItems: "center",
-              marginBottom: 32,
-              paddingHorizontal: 20,
+        <View
+          style={{
+            flex: 1,
+            borderLeftWidth: 1,
+            borderLeftColor: "#474747",
+            overflow: "hidden",
+            backgroundColor: "#232323",
+          }}
+        >
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ 
+              paddingTop: Platform.OS === "ios" ? insets.top : 0,
+              paddingBottom: Platform.OS === "ios" ? Math.max(20, insets.bottom + 20) : 20,
+              paddingHorizontal: 0,
             }}
+            showsVerticalScrollIndicator={false}
+            bounces={true}
+            alwaysBounceVertical={false}
+            contentInsetAdjustmentBehavior="automatic"
           >
+            {/* Header */}
             <View
               style={{
-                width: 80,
-                height: 80,
-                borderRadius: 40,
-                backgroundColor: "#2196f3",
+                minHeight: 64,
+                paddingHorizontal: Platform.OS === "ios" ? 24 : 20,
+                paddingVertical: 16,
+                borderBottomWidth: 1,
+                borderBottomColor: "#474747",
+                flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 12,
+                justifyContent: "space-between",
               }}
             >
-              <MaterialIcons name="developer-mode" size={40} color="#ffffff" />
-            </View>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "700",
-                color: "#ffffff",
-                marginBottom: 4,
-              }}
-            >
-              Developer Portal
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(255, 255, 255, 0.7)",
-              }}
-            >
-              API Integration Tools
-            </Text>
-          </View>
-
-          {/* Menu Items */}
-          <View style={{ paddingHorizontal: 20, gap: 4 }}>
-            {developerMenuItems.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => {
-                  router.push(item.href as any);
-                  onClose();
-                }}
+              <Text
                 style={{
-                  backgroundColor: "#474747",
-                  borderRadius: 12,
-                  padding: 16,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  borderWidth: 1,
-                  borderColor: "rgba(33, 150, 243, 0.2)",
-                  marginBottom: index === developerMenuItems.length - 1 ? 20 : 0,
+                  fontSize: 20,
+                  fontWeight: "700",
+                  color: "#ffffff",
                 }}
               >
-                <MaterialIcons name={item.icon as any} size={20} color="#2196f3" style={{ marginRight: 12 }} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: "500",
-                    color: "#ffffff",
-                    flex: 1,
-                  }}
-                >
-                  {item.label}
-                </Text>
-                <MaterialIcons name="chevron-right" size={16} color="rgba(255, 255, 255, 0.5)" />
-              </TouchableOpacity>
-            ))}
-          </View>
+                Menu
+              </Text>
+              <Pressable
+                onPress={onClose}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.7 : 1,
+                  padding: 8,
+                  ...(Platform.OS === "web" && {
+                    cursor: "pointer",
+                    userSelect: "none",
+                  }),
+                })}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                {...(Platform.OS !== 'web' && {
+                  accessible: true,
+                  accessibilityRole: "button" as const,
+                  accessibilityLabel: "Close menu",
+                })}
+              >
+                <MaterialIcons
+                  name="close"
+                  size={24}
+                  color="rgba(255, 255, 255, 0.7)"
+                />
+              </Pressable>
+            </View>
 
-          {/* Back to User View */}
-          <TouchableOpacity
-            onPress={() => {
-              router.push("/(tabs)/dashboard");
-              onClose();
-            }}
-            style={{
-              backgroundColor: "#474747",
-              borderRadius: 12,
-              paddingVertical: 16,
-              alignItems: "center",
-              marginHorizontal: 20,
-              marginTop: 20,
-              flexDirection: "row",
-              justifyContent: "center",
-              gap: 8,
-            }}
-          >
-            <MaterialIcons name="arrow-back" size={18} color="#2196f3" />
-            <Text
+            {/* Developer Portal Header - Keep in place */}
+            <View
               style={{
-                fontSize: 16,
-                fontWeight: "600",
-                color: "#2196f3",
+                alignItems: "center",
+                marginBottom: 32,
+                paddingTop: Platform.OS === "ios" ? 28 : 24,
+                paddingHorizontal: Platform.OS === "ios" ? 24 : 20,
               }}
             >
-              Back to User View
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "rgba(255, 255, 255, 0.9)",
+                  textTransform: "uppercase",
+                  letterSpacing: 0.5,
+                }}
+              >
+                Developer Portal
+              </Text>
+            </View>
+
+            {/* Menu Items */}
+            <View style={{ 
+              paddingTop: Platform.OS === "ios" ? 4 : 8,
+              paddingHorizontal: 0,
+            }}>
+              {developerMenuItems.map((item, index) => {
+                const active = isActive(item.href);
+                return (
+                  <Pressable
+                    key={index}
+                    onPress={() => {
+                      router.push(item.href as any);
+                      onClose();
+                    }}
+                    style={({ pressed }) => ({
+                      backgroundColor: active
+                        ? "rgba(186, 153, 136, 0.15)"
+                        : "transparent",
+                      opacity: pressed ? 0.7 : 1,
+                      ...(Platform.OS === "web" && {
+                        cursor: "pointer",
+                        userSelect: "none",
+                      }),
+                    })}
+                    {...(Platform.OS !== 'web' && {
+                      accessible: true,
+                      accessibilityRole: "button" as const,
+                      accessibilityLabel: item.label,
+                      accessibilityState: { selected: active },
+                      accessibilityHint: `Navigate to ${item.label}`,
+                    })}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        paddingVertical: Platform.OS === "ios" ? 14 : 12,
+                        paddingHorizontal: Platform.OS === "ios" ? 24 : 20,
+                        paddingLeft: Platform.OS === "ios" ? 64 : 52,
+                      }}
+                    >
+                      <MaterialIcons
+                        name={item.icon as any}
+                        size={18}
+                        color={
+                          active
+                            ? "#ba9988"
+                            : "rgba(255, 255, 255, 0.7)"
+                        }
+                        style={{ marginRight: Platform.OS === "ios" ? 14 : 12 }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: active ? "600" : "500",
+                          color: active
+                            ? "#ffffff"
+                            : "rgba(255, 255, 255, 0.8)",
+                          flex: 1,
+                        }}
+                      >
+                        {item.label}
+                      </Text>
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </ScrollView>
+        </View>
       </Animated.View>
     </>
   );

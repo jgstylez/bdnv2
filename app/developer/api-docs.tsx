@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { DeveloperPageHeader } from '@/components/developer/DeveloperPageHeader';
 
 const copyToClipboard = async (text: string): Promise<boolean> => {
   if (Platform.OS === "web") {
@@ -85,35 +86,39 @@ export default function ApiDocs() {
   const [expandedEndpoint, setExpandedEndpoint] = useState<string | null>(null);
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: isMobile ? spacing.mobile : spacing.desktop,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
         }}
       >
+        <DeveloperPageHeader
+          title="API Documentation"
+          description="Complete API reference with endpoints"
+        />
 
         {/* Getting Started */}
         <View
           style={{
-            backgroundColor: colors.secondary.bg,
-            borderRadius: borderRadius.lg,
-            padding: spacing.lg,
+            backgroundColor: "#474747",
+            borderRadius: 16,
+            padding: 20,
             borderWidth: 1,
-            borderColor: colors.border.light,
-            marginBottom: spacing["2xl"],
+            borderColor: "rgba(186, 153, 136, 0.2)",
+            marginBottom: 32,
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: spacing.md }}>
-            <MaterialIcons name="rocket-launch" size={24} color={colors.accent} />
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
+            <MaterialIcons name="rocket-launch" size={24} color="#ba9988" />
             <Text
               style={{
-                fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
-                color: colors.text.primary,
-                marginLeft: spacing.sm,
+                fontSize: 20,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginLeft: 8,
               }}
             >
               Getting Started
@@ -121,9 +126,9 @@ export default function ApiDocs() {
           </View>
           <Text
             style={{
-              fontSize: typography.fontSize.sm,
-              color: colors.text.secondary,
-              marginBottom: spacing.md,
+              fontSize: 14,
+              color: "rgba(255, 255, 255, 0.7)",
+              marginBottom: 16,
               lineHeight: 20,
             }}
           >
@@ -131,33 +136,33 @@ export default function ApiDocs() {
           </Text>
           <Text
             style={{
-              fontSize: typography.fontSize.sm,
-              color: colors.text.secondary,
-              marginBottom: spacing.md,
+              fontSize: 14,
+              color: "rgba(255, 255, 255, 0.7)",
+              marginBottom: 16,
               lineHeight: 20,
             }}
           >
-            2. Include your API key in the Authorization header: <Text style={{ fontFamily: "monospace", color: colors.accent }}>Bearer YOUR_API_KEY</Text>
+            2. Include your API key in the Authorization header: <Text style={{ fontFamily: "monospace", color: "#ba9988" }}>Bearer YOUR_API_KEY</Text>
           </Text>
           <Text
             style={{
-              fontSize: typography.fontSize.sm,
-              color: colors.text.secondary,
+              fontSize: 14,
+              color: "rgba(255, 255, 255, 0.7)",
               lineHeight: 20,
             }}
           >
-            3. Make requests to <Text style={{ fontFamily: "monospace", color: colors.accent }}>https://api.bdn.com/api/v1</Text>
+            3. Make requests to <Text style={{ fontFamily: "monospace", color: "#ba9988" }}>https://api.bdn.com/api/v1</Text>
           </Text>
         </View>
 
         {/* Code Examples */}
-        <View style={{ marginBottom: spacing["2xl"] }}>
+        <View style={{ marginBottom: 32 }}>
           <Text
             style={{
-              fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
-              marginBottom: spacing.md,
+              fontSize: 20,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
             }}
           >
             Code Examples
@@ -165,8 +170,8 @@ export default function ApiDocs() {
           <View
             style={{
               flexDirection: "row",
-              gap: spacing.sm,
-              marginBottom: spacing.md,
+              gap: 8,
+              marginBottom: 16,
             }}
           >
             {Object.keys(codeExamples).map((lang) => (
@@ -174,19 +179,19 @@ export default function ApiDocs() {
                 key={lang}
                 onPress={() => setSelectedExample(lang as keyof typeof codeExamples)}
                 style={{
-                  paddingHorizontal: spacing.md,
-                  paddingVertical: spacing.sm,
-                  borderRadius: borderRadius.md,
-                  backgroundColor: selectedExample === lang ? colors.accent : colors.secondary.bg,
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  borderRadius: 8,
+                  backgroundColor: selectedExample === lang ? "#ba9988" : "#474747",
                   borderWidth: 1,
-                  borderColor: selectedExample === lang ? colors.accent : colors.border.light,
+                  borderColor: selectedExample === lang ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
                 }}
               >
                 <Text
                   style={{
-                    fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: selectedExample === lang ? colors.text.primary : colors.text.secondary,
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: selectedExample === lang ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
                     textTransform: "uppercase",
                   }}
                 >
@@ -197,31 +202,31 @@ export default function ApiDocs() {
           </View>
           <View
             style={{
-              backgroundColor: colors.background.primary,
-              borderRadius: borderRadius.md,
-              padding: spacing.lg,
+              backgroundColor: "#232323",
+              borderRadius: 8,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
-            <View style={{ flexDirection: "row", justifyContent: "flex-end", marginBottom: spacing.sm }}>
+            <View style={{ flexDirection: "row", justifyContent: "flex-end", marginBottom: 8 }}>
               <TouchableOpacity
                 onPress={() => copyToClipboard(codeExamples[selectedExample])}
                 style={{
-                  paddingHorizontal: spacing.sm,
-                  paddingVertical: spacing.xs,
-                  borderRadius: borderRadius.sm,
-                  backgroundColor: colors.secondary.bg,
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                  borderRadius: 4,
+                  backgroundColor: "#474747",
                 }}
               >
-                <MaterialIcons name="content-copy" size={16} color={colors.accent} />
+                <MaterialIcons name="content-copy" size={16} color="#ba9988" />
               </TouchableOpacity>
             </View>
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
+                fontSize: 14,
                 fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                color: colors.text.primary,
+                color: "#ffffff",
                 lineHeight: 20,
               }}
             >
@@ -234,15 +239,15 @@ export default function ApiDocs() {
         <View>
           <Text
             style={{
-              fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
-              marginBottom: spacing.md,
+              fontSize: 20,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
             }}
           >
             API Endpoints
           </Text>
-          <View style={{ gap: spacing.md }}>
+          <View style={{ gap: 12 }}>
             {apiEndpoints.map((endpoint, index) => {
               const isExpanded = expandedEndpoint === endpoint.path;
               const methodColor =
@@ -256,35 +261,36 @@ export default function ApiDocs() {
                 <View
                   key={index}
                   style={{
-                    backgroundColor: colors.secondary.bg,
-                    borderRadius: borderRadius.md,
+                    backgroundColor: "#474747",
+                    borderRadius: 16,
                     borderWidth: 1,
-                    borderColor: colors.border.light,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
                     overflow: "hidden",
+                    marginBottom: 12,
                   }}
                 >
                   <TouchableOpacity
                     onPress={() => setExpandedEndpoint(isExpanded ? null : endpoint.path)}
                     style={{
-                      padding: spacing.md,
+                      padding: 20,
                       flexDirection: "row",
                       alignItems: "center",
                       justifyContent: "space-between",
                     }}
                   >
-                    <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: spacing.md }}>
+                    <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 12 }}>
                       <View
                         style={{
-                          paddingHorizontal: spacing.sm,
-                          paddingVertical: spacing.xs,
-                          borderRadius: borderRadius.sm,
+                          paddingHorizontal: 10,
+                          paddingVertical: 6,
+                          borderRadius: 6,
                           backgroundColor: `${methodColor}20`,
                         }}
                       >
                         <Text
                           style={{
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: typography.fontWeight.bold,
+                            fontSize: 12,
+                            fontWeight: "700",
                             color: methodColor,
                           }}
                         >
@@ -294,18 +300,19 @@ export default function ApiDocs() {
                       <View style={{ flex: 1 }}>
                         <Text
                           style={{
-                            fontSize: typography.fontSize.sm,
+                            fontSize: 14,
                             fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                            color: colors.text.primary,
-                            marginBottom: spacing.xs,
+                            color: "#ffffff",
+                            marginBottom: 4,
+                            fontWeight: "600",
                           }}
                         >
                           {endpoint.path}
                         </Text>
                         <Text
                           style={{
-                            fontSize: typography.fontSize.xs,
-                            color: colors.text.secondary,
+                            fontSize: 13,
+                            color: "rgba(255, 255, 255, 0.7)",
                           }}
                         >
                           {endpoint.description}
@@ -314,36 +321,36 @@ export default function ApiDocs() {
                     </View>
                     <MaterialIcons
                       name={isExpanded ? "expand-less" : "expand-more"}
-                      size={20}
-                      color={colors.text.secondary}
+                      size={24}
+                      color="rgba(255, 255, 255, 0.5)"
                     />
                   </TouchableOpacity>
                   {isExpanded && (
                     <View
                       style={{
-                        padding: spacing.md,
+                        padding: 20,
                         borderTopWidth: 1,
-                        borderTopColor: colors.border.light,
-                        backgroundColor: colors.background.primary,
+                        borderTopColor: "rgba(186, 153, 136, 0.2)",
+                        backgroundColor: "#232323",
                       }}
                     >
                       <Text
                         style={{
-                          fontSize: typography.fontSize.xs,
-                          color: colors.text.secondary,
-                          marginBottom: spacing.sm,
+                          fontSize: 12,
+                          color: "rgba(255, 255, 255, 0.7)",
+                          marginBottom: 8,
                         }}
                       >
                         Category: {endpoint.category}
                       </Text>
                       <Text
                         style={{
-                          fontSize: typography.fontSize.xs,
+                          fontSize: 12,
                           fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                          color: colors.text.primary,
-                          backgroundColor: colors.secondary.bg,
-                          padding: spacing.sm,
-                          borderRadius: borderRadius.sm,
+                          color: "#ffffff",
+                          backgroundColor: "#474747",
+                          padding: 8,
+                          borderRadius: 4,
                         }}
                       >
                         {endpoint.method} https://api.bdn.com{endpoint.path}
@@ -359,22 +366,22 @@ export default function ApiDocs() {
         {/* Rate Limits */}
         <View
           style={{
-            marginTop: spacing["2xl"],
-            backgroundColor: colors.secondary.bg,
-            borderRadius: borderRadius.lg,
-            padding: spacing.lg,
+            marginTop: 32,
+            backgroundColor: "#474747",
+            borderRadius: 16,
+            padding: 20,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: "rgba(186, 153, 136, 0.2)",
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: spacing.md }}>
-            <MaterialIcons name="speed" size={24} color={colors.status.warning} />
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
+            <MaterialIcons name="speed" size={24} color="#ff9800" />
             <Text
               style={{
-                fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
-                color: colors.text.primary,
-                marginLeft: spacing.sm,
+                fontSize: 20,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginLeft: 8,
               }}
             >
               Rate Limits
@@ -382,8 +389,8 @@ export default function ApiDocs() {
           </View>
           <Text
             style={{
-              fontSize: typography.fontSize.sm,
-              color: colors.text.secondary,
+              fontSize: 14,
+              color: "rgba(255, 255, 255, 0.7)",
               lineHeight: 20,
             }}
           >
@@ -391,17 +398,17 @@ export default function ApiDocs() {
           </Text>
           <View
             style={{
-              marginTop: spacing.md,
-              backgroundColor: colors.background.primary,
-              padding: spacing.md,
-              borderRadius: borderRadius.sm,
+              marginTop: 16,
+              backgroundColor: "#232323",
+              padding: 16,
+              borderRadius: 4,
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.xs,
+                fontSize: 12,
                 fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                color: colors.text.primary,
+                color: "#ffffff",
               }}
             >
               X-RateLimit-Limit: 10000{"\n"}

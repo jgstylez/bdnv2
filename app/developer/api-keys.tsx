@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInpu
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { DeveloperPageHeader } from '@/components/developer/DeveloperPageHeader';
 
 const copyToClipboard = async (text: string): Promise<boolean> => {
   if (Platform.OS === "web") {
@@ -115,98 +116,81 @@ export default function ApiKeys() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: isMobile ? spacing.mobile : spacing.desktop,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
         }}
       >
-        {/* Header */}
-        <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", marginBottom: spacing["2xl"] }}>
-          <TouchableOpacity
-            onPress={() => setShowCreateForm(!showCreateForm)}
-            style={{
-              paddingHorizontal: spacing.lg,
-              paddingVertical: spacing.md,
-              borderRadius: borderRadius.md,
-              backgroundColor: colors.accent,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: spacing.sm,
-            }}
-          >
-            <MaterialIcons name="add" size={20} color={colors.text.primary} />
-            <Text
-              style={{
-                fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.semibold,
-                color: colors.text.primary,
-              }}
-            >
-              Create Key
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <DeveloperPageHeader
+          title="API Keys"
+          description="Manage your API keys and access credentials"
+          actionButton={{
+            label: "Create Key",
+            icon: "add",
+            onPress: () => setShowCreateForm(!showCreateForm),
+          }}
+        />
 
         {/* Create Form */}
         {showCreateForm && (
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.lg,
-              padding: spacing.lg,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
-              marginBottom: spacing["2xl"],
+              borderColor: "rgba(186, 153, 136, 0.2)",
+              marginBottom: 32,
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.lg,
-                fontWeight: typography.fontWeight.bold,
-                color: colors.text.primary,
-                marginBottom: spacing.md,
+                fontSize: 20,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginBottom: 16,
               }}
             >
               Create New API Key
             </Text>
             <TextInput
               placeholder="API Key Name"
-              placeholderTextColor={colors.text.placeholder}
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
               value={newKeyName}
               onChangeText={setNewKeyName}
               style={{
-                backgroundColor: colors.background.primary,
-                borderRadius: borderRadius.md,
-                padding: spacing.md,
-                color: colors.text.primary,
-                fontSize: typography.fontSize.base,
-                marginBottom: spacing.md,
+                backgroundColor: "#232323",
+                borderRadius: 8,
+                padding: 16,
+                color: "#ffffff",
+                fontSize: 16,
+                marginBottom: 16,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: "rgba(186, 153, 136, 0.2)",
               }}
             />
-            <View style={{ flexDirection: "row", gap: spacing.md, marginBottom: spacing.md }}>
+            <View style={{ flexDirection: "row", gap: 16, marginBottom: 16 }}>
               <TouchableOpacity
                 onPress={() => setNewKeyEnvironment("sandbox")}
                 style={{
                   flex: 1,
-                  padding: spacing.md,
-                  borderRadius: borderRadius.md,
-                  backgroundColor: newKeyEnvironment === "sandbox" ? colors.status.warning + "20" : colors.background.primary,
+                  padding: 16,
+                  borderRadius: 8,
+                  backgroundColor: newKeyEnvironment === "sandbox" ? "#ff980020" : "#232323",
                   borderWidth: 1,
-                  borderColor: newKeyEnvironment === "sandbox" ? colors.status.warning : colors.border.light,
+                  borderColor: newKeyEnvironment === "sandbox" ? "#ff9800" : "rgba(186, 153, 136, 0.2)",
                   alignItems: "center",
                 }}
               >
                 <Text
                   style={{
-                    fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: newKeyEnvironment === "sandbox" ? colors.status.warning : colors.text.secondary,
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: newKeyEnvironment === "sandbox" ? "#ff9800" : "rgba(255, 255, 255, 0.7)",
                   }}
                 >
                   Sandbox
@@ -216,26 +200,26 @@ export default function ApiKeys() {
                 onPress={() => setNewKeyEnvironment("live")}
                 style={{
                   flex: 1,
-                  padding: spacing.md,
-                  borderRadius: borderRadius.md,
-                  backgroundColor: newKeyEnvironment === "live" ? colors.status.error + "20" : colors.background.primary,
+                  padding: 16,
+                  borderRadius: 8,
+                  backgroundColor: newKeyEnvironment === "live" ? "#f7414120" : "#232323",
                   borderWidth: 1,
-                  borderColor: newKeyEnvironment === "live" ? colors.status.error : colors.border.light,
+                  borderColor: newKeyEnvironment === "live" ? "#f74141" : "rgba(186, 153, 136, 0.2)",
                   alignItems: "center",
                 }}
               >
                 <Text
                   style={{
-                    fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: newKeyEnvironment === "live" ? colors.status.error : colors.text.secondary,
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: newKeyEnvironment === "live" ? "#f74141" : "rgba(255, 255, 255, 0.7)",
                   }}
                 >
                   Live
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: "row", gap: spacing.md }}>
+            <View style={{ flexDirection: "row", gap: 16 }}>
               <TouchableOpacity
                 onPress={() => {
                   setShowCreateForm(false);
@@ -243,19 +227,19 @@ export default function ApiKeys() {
                 }}
                 style={{
                   flex: 1,
-                  padding: spacing.md,
-                  borderRadius: borderRadius.md,
-                  backgroundColor: colors.secondary.bg,
+                  padding: 16,
+                  borderRadius: 8,
+                  backgroundColor: "#474747",
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
                   alignItems: "center",
                 }}
               >
                 <Text
                   style={{
-                    fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: colors.text.secondary,
+                    fontSize: 16,
+                    fontWeight: "600",
+                    color: "rgba(255, 255, 255, 0.7)",
                   }}
                 >
                   Cancel
@@ -265,17 +249,17 @@ export default function ApiKeys() {
                 onPress={handleCreateKey}
                 style={{
                   flex: 1,
-                  padding: spacing.md,
-                  borderRadius: borderRadius.md,
-                  backgroundColor: colors.accent,
+                  padding: 16,
+                  borderRadius: 8,
+                  backgroundColor: "#ba9988",
                   alignItems: "center",
                 }}
               >
                 <Text
                   style={{
-                    fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: colors.text.primary,
+                    fontSize: 16,
+                    fontWeight: "600",
+                    color: "#ffffff",
                   }}
                 >
                   Create
@@ -286,7 +270,7 @@ export default function ApiKeys() {
         )}
 
         {/* API Keys List */}
-        <View style={{ gap: spacing.md }}>
+        <View style={{ gap: 16 }}>
           {apiKeys.map((apiKey) => {
             const isExpanded = selectedKey === apiKey.id;
             const isLive = apiKey.environment === "live";
@@ -295,46 +279,46 @@ export default function ApiKeys() {
               <View
                 key={apiKey.id}
                 style={{
-                  backgroundColor: colors.secondary.bg,
-                  borderRadius: borderRadius.lg,
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
                   borderWidth: 1,
-                  borderColor: apiKey.status === "revoked" ? colors.status.error + "40" : isLive ? colors.status.error + "40" : colors.border.light,
+                  borderColor: apiKey.status === "revoked" ? "#f7414140" : isLive ? "#f7414140" : "rgba(186, 153, 136, 0.2)",
                   overflow: "hidden",
                 }}
               >
                 <TouchableOpacity
                   onPress={() => setSelectedKey(isExpanded ? null : apiKey.id)}
                   style={{
-                    padding: spacing.lg,
+                    padding: 20,
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "space-between",
                   }}
                 >
                   <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.xs }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
                       <Text
                         style={{
-                          fontSize: typography.fontSize.base,
-                          fontWeight: typography.fontWeight.bold,
-                          color: colors.text.primary,
+                          fontSize: 16,
+                          fontWeight: "700",
+                          color: "#ffffff",
                         }}
                       >
                         {apiKey.name}
                       </Text>
                       <View
                         style={{
-                          paddingHorizontal: spacing.xs,
+                          paddingHorizontal: 4,
                           paddingVertical: 2,
-                          borderRadius: borderRadius.sm,
-                          backgroundColor: isLive ? colors.status.error + "20" : colors.status.warning + "20",
+                          borderRadius: 4,
+                          backgroundColor: isLive ? "#f7414120" : "#ff980020",
                         }}
                       >
                         <Text
                           style={{
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: typography.fontWeight.semibold,
-                            color: isLive ? colors.status.error : colors.status.warning,
+                            fontSize: 12,
+                            fontWeight: "600",
+                            color: isLive ? "#f74141" : "#ff9800",
                             textTransform: "uppercase",
                           }}
                         >
@@ -344,17 +328,17 @@ export default function ApiKeys() {
                       {apiKey.status === "revoked" && (
                         <View
                           style={{
-                            paddingHorizontal: spacing.xs,
+                            paddingHorizontal: 4,
                             paddingVertical: 2,
-                            borderRadius: borderRadius.sm,
-                            backgroundColor: colors.status.error + "20",
+                            borderRadius: 4,
+                            backgroundColor: "#f7414120",
                           }}
                         >
                           <Text
                             style={{
-                              fontSize: typography.fontSize.xs,
-                              fontWeight: typography.fontWeight.semibold,
-                              color: colors.status.error,
+                              fontSize: 12,
+                              fontWeight: "600",
+                              color: "#f74141",
                               textTransform: "uppercase",
                             }}
                           >
@@ -365,8 +349,8 @@ export default function ApiKeys() {
                     </View>
                     <Text
                       style={{
-                        fontSize: typography.fontSize.xs,
-                        color: colors.text.secondary,
+                        fontSize: 12,
+                        color: "rgba(255, 255, 255, 0.7)",
                       }}
                     >
                       Created: {apiKey.createdAt} • Last used: {apiKey.lastUsed}
@@ -375,34 +359,34 @@ export default function ApiKeys() {
                   <MaterialIcons
                     name={isExpanded ? "expand-less" : "expand-more"}
                     size={20}
-                    color={colors.text.secondary}
+                    color="rgba(255, 255, 255, 0.5)"
                   />
                 </TouchableOpacity>
                 {isExpanded && (
                   <View
                     style={{
-                      padding: spacing.lg,
+                      padding: 20,
                       borderTopWidth: 1,
-                      borderTopColor: colors.border.light,
-                      backgroundColor: colors.background.primary,
+                      borderTopColor: "rgba(186, 153, 136, 0.2)",
+                      backgroundColor: "#232323",
                     }}
                   >
                     <View
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
-                        backgroundColor: colors.secondary.bg,
-                        borderRadius: borderRadius.md,
-                        padding: spacing.md,
-                        marginBottom: spacing.md,
+                        backgroundColor: "#474747",
+                        borderRadius: 8,
+                        padding: 16,
+                        marginBottom: 16,
                       }}
                     >
                       <Text
                         style={{
                           flex: 1,
-                          fontSize: typography.fontSize.sm,
+                          fontSize: 14,
                           fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                          color: colors.text.primary,
+                          color: "#ffffff",
                         }}
                         numberOfLines={1}
                       >
@@ -411,34 +395,34 @@ export default function ApiKeys() {
                       <TouchableOpacity
                         onPress={() => handleCopyKey(apiKey.key)}
                         style={{
-                          marginLeft: spacing.sm,
-                          padding: spacing.xs,
-                          borderRadius: borderRadius.sm,
-                          backgroundColor: colors.accent + "20",
+                          marginLeft: 8,
+                          padding: 4,
+                          borderRadius: 4,
+                          backgroundColor: "#ba998820",
                         }}
                       >
-                        <MaterialIcons name="content-copy" size={18} color={colors.accent} />
+                        <MaterialIcons name="content-copy" size={18} color="#ba9988" />
                       </TouchableOpacity>
                     </View>
-                    <View style={{ flexDirection: "row", gap: spacing.md }}>
+                    <View style={{ flexDirection: "row", gap: 16 }}>
                       {apiKey.status === "active" && (
                         <TouchableOpacity
                           onPress={() => handleRevokeKey(apiKey.id)}
                           style={{
                             flex: 1,
-                            padding: spacing.md,
-                            borderRadius: borderRadius.md,
-                            backgroundColor: colors.status.error + "20",
+                            padding: 16,
+                            borderRadius: 8,
+                            backgroundColor: "#f7414120",
                             borderWidth: 1,
-                            borderColor: colors.status.error,
+                            borderColor: "#f74141",
                             alignItems: "center",
                           }}
                         >
                           <Text
                             style={{
-                              fontSize: typography.fontSize.sm,
-                              fontWeight: typography.fontWeight.semibold,
-                              color: colors.status.error,
+                              fontSize: 14,
+                              fontWeight: "600",
+                              color: "#f74141",
                             }}
                           >
                             Revoke Key
@@ -456,31 +440,31 @@ export default function ApiKeys() {
         {/* Security Notice */}
         <View
           style={{
-            marginTop: spacing["2xl"],
-            backgroundColor: colors.status.warning + "20",
-            borderRadius: borderRadius.lg,
-            padding: spacing.lg,
+            marginTop: 32,
+            backgroundColor: "#ff980020",
+            borderRadius: 16,
+            padding: 20,
             borderWidth: 1,
-            borderColor: colors.status.warning + "40",
+            borderColor: "#ff980040",
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "flex-start", marginBottom: spacing.sm }}>
-            <MaterialIcons name="security" size={20} color={colors.status.warning} style={{ marginRight: spacing.sm, marginTop: 2 }} />
+          <View style={{ flexDirection: "row", alignItems: "flex-start", marginBottom: 8 }}>
+            <MaterialIcons name="security" size={20} color="#ff9800" style={{ marginRight: 8, marginTop: 2 }} />
             <View style={{ flex: 1 }}>
               <Text
                 style={{
-                  fontSize: typography.fontSize.base,
-                  fontWeight: typography.fontWeight.bold,
-                  color: colors.status.warning,
-                  marginBottom: spacing.xs,
+                  fontSize: 16,
+                  fontWeight: "700",
+                  color: "#ff9800",
+                  marginBottom: 4,
                 }}
               >
                 Security Best Practices
               </Text>
               <Text
                 style={{
-                  fontSize: typography.fontSize.sm,
-                  color: colors.text.secondary,
+                  fontSize: 14,
+                  color: "rgba(255, 255, 255, 0.7)",
                   lineHeight: 20,
                 }}
               >

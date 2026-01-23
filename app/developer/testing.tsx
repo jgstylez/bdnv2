@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInpu
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { DeveloperPageHeader } from '@/components/developer/DeveloperPageHeader';
 
 const copyToClipboard = async (text: string): Promise<boolean> => {
   if (Platform.OS === "web") {
@@ -95,55 +96,59 @@ export default function Testing() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: isMobile ? spacing.mobile : spacing.desktop,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
         }}
       >
+        <DeveloperPageHeader
+          title="Testing Tools"
+          description="Test API endpoints and validate integrations"
+        />
 
         {/* Test Scenarios */}
-        <View style={{ marginBottom: spacing["2xl"] }}>
+        <View style={{ marginBottom: 32 }}>
           <Text
             style={{
-              fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
-              marginBottom: spacing.md,
+              fontSize: 20,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
             }}
           >
             Quick Test Scenarios
           </Text>
-          <View style={{ gap: spacing.sm }}>
+          <View style={{ gap: 12 }}>
             {testScenarios.map((scenario, index) => (
               <TouchableOpacity
                 key={index}
                 onPress={() => handleSelectScenario(scenario)}
                 style={{
-                  backgroundColor: colors.secondary.bg,
-                  borderRadius: borderRadius.md,
-                  padding: spacing.md,
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: 20,
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
                 }}
               >
-                <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.xs }}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
                   <View
                     style={{
-                      paddingHorizontal: spacing.xs,
-                      paddingVertical: 2,
-                      borderRadius: borderRadius.sm,
-                      backgroundColor: colors.status.info + "20",
+                      paddingHorizontal: 8,
+                      paddingVertical: 4,
+                      borderRadius: 4,
+                      backgroundColor: "#2196f320",
                     }}
                   >
                     <Text
                       style={{
-                        fontSize: typography.fontSize.xs,
-                        fontWeight: typography.fontWeight.bold,
-                        color: colors.status.info,
+                        fontSize: 12,
+                        fontWeight: "700",
+                        color: "#2196f3",
                       }}
                     >
                       {scenario.method}
@@ -151,9 +156,9 @@ export default function Testing() {
                   </View>
                   <Text
                     style={{
-                      fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.primary,
+                      fontSize: 16,
+                      fontWeight: "600",
+                      color: "#ffffff",
                     }}
                   >
                     {scenario.name}
@@ -161,18 +166,18 @@ export default function Testing() {
                 </View>
                 <Text
                   style={{
-                    fontSize: typography.fontSize.xs,
+                    fontSize: 12,
                     fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                    color: colors.text.secondary,
-                    marginBottom: spacing.xs,
+                    color: "rgba(255, 255, 255, 0.7)",
+                    marginBottom: 4,
                   }}
                 >
                   {scenario.endpoint}
                 </Text>
                 <Text
                   style={{
-                    fontSize: typography.fontSize.xs,
-                    color: colors.text.secondary,
+                    fontSize: 12,
+                    color: "rgba(255, 255, 255, 0.7)",
                   }}
                 >
                   {scenario.description}
@@ -183,58 +188,58 @@ export default function Testing() {
         </View>
 
         {/* Request Builder */}
-        <View style={{ marginBottom: spacing["2xl"] }}>
+        <View style={{ marginBottom: 32 }}>
           <Text
             style={{
-              fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
-              marginBottom: spacing.md,
+              fontSize: 20,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
             }}
           >
             Request Builder
           </Text>
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.lg,
-              padding: spacing.lg,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
             {/* Method Selector */}
-            <View style={{ marginBottom: spacing.md }}>
+            <View style={{ marginBottom: 16 }}>
               <Text
                 style={{
-                  fontSize: typography.fontSize.sm,
-                  fontWeight: typography.fontWeight.semibold,
-                  color: colors.text.primary,
-                  marginBottom: spacing.sm,
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
                 }}
               >
                 HTTP Method
               </Text>
-              <View style={{ flexDirection: "row", gap: spacing.sm }}>
+              <View style={{ flexDirection: "row", gap: 8 }}>
                 {["GET", "POST", "PUT", "DELETE"].map((method) => (
                   <TouchableOpacity
                     key={method}
                     onPress={() => setSelectedMethod(method)}
                     style={{
                       flex: 1,
-                      padding: spacing.sm,
-                      borderRadius: borderRadius.md,
-                      backgroundColor: selectedMethod === method ? colors.accent : colors.background.primary,
+                      padding: 12,
+                      borderRadius: 8,
+                      backgroundColor: selectedMethod === method ? "#ba9988" : "#232323",
                       borderWidth: 1,
-                      borderColor: selectedMethod === method ? colors.accent : colors.border.light,
+                      borderColor: selectedMethod === method ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
                       alignItems: "center",
                     }}
                   >
                     <Text
                       style={{
-                        fontSize: typography.fontSize.sm,
-                        fontWeight: typography.fontWeight.semibold,
-                        color: selectedMethod === method ? colors.text.primary : colors.text.secondary,
+                        fontSize: 14,
+                        fontWeight: "600",
+                        color: selectedMethod === method ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
                       }}
                     >
                       {method}
@@ -245,64 +250,64 @@ export default function Testing() {
             </View>
 
             {/* Endpoint Input */}
-            <View style={{ marginBottom: spacing.md }}>
+            <View style={{ marginBottom: 16 }}>
               <Text
                 style={{
-                  fontSize: typography.fontSize.sm,
-                  fontWeight: typography.fontWeight.semibold,
-                  color: colors.text.primary,
-                  marginBottom: spacing.sm,
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: 8,
                 }}
               >
                 Endpoint
               </Text>
               <TextInput
                 placeholder="/api/v1/businesses"
-                placeholderTextColor={colors.text.placeholder}
+                placeholderTextColor="rgba(255, 255, 255, 0.5)"
                 value={endpoint}
                 onChangeText={setEndpoint}
                 style={{
-                  backgroundColor: colors.background.primary,
-                  borderRadius: borderRadius.md,
-                  padding: spacing.md,
-                  color: colors.text.primary,
-                  fontSize: typography.fontSize.base,
+                  backgroundColor: "#232323",
+                  borderRadius: 8,
+                  padding: 16,
+                  color: "#ffffff",
+                  fontSize: 16,
                   fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
                 }}
               />
             </View>
 
             {/* Request Body */}
             {selectedMethod !== "GET" && (
-              <View style={{ marginBottom: spacing.md }}>
+              <View style={{ marginBottom: 16 }}>
                 <Text
                   style={{
-                    fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: colors.text.primary,
-                    marginBottom: spacing.sm,
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: "#ffffff",
+                    marginBottom: 8,
                   }}
                 >
                   Request Body (JSON)
                 </Text>
                 <TextInput
                   placeholder='{"key": "value"}'
-                  placeholderTextColor={colors.text.placeholder}
+                  placeholderTextColor="rgba(255, 255, 255, 0.5)"
                   value={requestBody}
                   onChangeText={setRequestBody}
                   multiline
                   numberOfLines={6}
                   style={{
-                    backgroundColor: colors.background.primary,
-                    borderRadius: borderRadius.md,
-                    padding: spacing.md,
-                    color: colors.text.primary,
-                    fontSize: typography.fontSize.sm,
+                    backgroundColor: "#232323",
+                    borderRadius: 8,
+                    padding: 16,
+                    color: "#ffffff",
+                    fontSize: 14,
                     fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
                     borderWidth: 1,
-                    borderColor: colors.border.light,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
                     minHeight: 120,
                     textAlignVertical: "top",
                   }}
@@ -315,18 +320,18 @@ export default function Testing() {
               onPress={handleTestRequest}
               disabled={isLoading}
               style={{
-                padding: spacing.md,
-                borderRadius: borderRadius.md,
-                backgroundColor: colors.accent,
+                padding: 16,
+                borderRadius: 8,
+                backgroundColor: "#ba9988",
                 alignItems: "center",
                 opacity: isLoading ? 0.6 : 1,
               }}
             >
               <Text
                 style={{
-                  fontSize: typography.fontSize.base,
-                  fontWeight: typography.fontWeight.semibold,
-                  color: colors.text.primary,
+                  fontSize: 16,
+                  fontWeight: "600",
+                  color: "#ffffff",
                 }}
               >
                 {isLoading ? "Testing..." : "Test Request"}
@@ -337,13 +342,13 @@ export default function Testing() {
 
         {/* Response */}
         {response && (
-          <View style={{ marginBottom: spacing["2xl"] }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.md }}>
+          <View style={{ marginBottom: 32 }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <Text
                 style={{
-                  fontSize: typography.fontSize.xl,
-                  fontWeight: typography.fontWeight.bold,
-                  color: colors.text.primary,
+                  fontSize: 20,
+                  fontWeight: "700",
+                  color: "#ffffff",
                 }}
               >
                 Response
@@ -351,28 +356,28 @@ export default function Testing() {
               <TouchableOpacity
                 onPress={() => copyToClipboard(response)}
                 style={{
-                  padding: spacing.sm,
-                  borderRadius: borderRadius.sm,
-                  backgroundColor: colors.accent + "20",
+                  padding: 8,
+                  borderRadius: 4,
+                  backgroundColor: "#ba998820",
                 }}
               >
-                <MaterialIcons name="content-copy" size={16} color={colors.accent} />
+                <MaterialIcons name="content-copy" size={16} color="#ba9988" />
               </TouchableOpacity>
             </View>
             <View
               style={{
-                backgroundColor: colors.background.primary,
-                borderRadius: borderRadius.md,
-                padding: spacing.md,
+                backgroundColor: "#232323",
+                borderRadius: 8,
+                padding: 20,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: "rgba(186, 153, 136, 0.2)",
               }}
             >
               <Text
                 style={{
-                  fontSize: typography.fontSize.sm,
+                  fontSize: 14,
                   fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                  color: colors.text.primary,
+                  color: "#ffffff",
                   lineHeight: 20,
                 }}
               >
@@ -384,12 +389,12 @@ export default function Testing() {
 
         {/* cURL Command */}
         <View>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.md }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
             <Text
               style={{
-                fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
-                color: colors.text.primary,
+                fontSize: 20,
+                fontWeight: "700",
+                color: "#ffffff",
               }}
             >
               cURL Command
@@ -397,28 +402,28 @@ export default function Testing() {
             <TouchableOpacity
               onPress={() => copyToClipboard(generateCurlCommand())}
               style={{
-                padding: spacing.sm,
-                borderRadius: borderRadius.sm,
-                backgroundColor: colors.accent + "20",
+                padding: 8,
+                borderRadius: 4,
+                backgroundColor: "#ba998820",
               }}
             >
-              <MaterialIcons name="content-copy" size={16} color={colors.accent} />
+              <MaterialIcons name="content-copy" size={16} color="#ba9988" />
             </TouchableOpacity>
           </View>
           <View
             style={{
-              backgroundColor: colors.background.primary,
-              borderRadius: borderRadius.md,
-              padding: spacing.md,
+              backgroundColor: "#232323",
+              borderRadius: 8,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
+                fontSize: 14,
                 fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                color: colors.text.primary,
+                color: "#ffffff",
                 lineHeight: 20,
               }}
             >

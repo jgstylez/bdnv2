@@ -1,10 +1,11 @@
 import React from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { DeveloperRedirect } from '@/components/DeveloperRedirect';
+import { DeveloperPageHeader } from '@/components/developer/DeveloperPageHeader';
 
 // Mock developer stats
 const mockStats = {
@@ -22,7 +23,7 @@ const developerSections = [
   {
     id: "api-docs",
     name: "API Documentation",
-    description: "Complete API reference with endpoints, parameters, and examples",
+    description: "Complete API reference with endpoints",
     icon: "menu-book",
     color: "#2196f3",
     route: "/developer/api-docs",
@@ -77,50 +78,65 @@ function DeveloperDashboardContent() {
   const rateLimitPercentage = (mockStats.rateLimitRemaining / mockStats.rateLimitTotal) * 100;
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: isMobile ? spacing.mobile : spacing.desktop,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
         }}
       >
+        {/* Description */}
+        <View style={{ marginBottom: 32, paddingTop: 20 }}>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "600",
+              color: "rgba(255, 255, 255, 0.9)",
+              textTransform: "uppercase",
+              letterSpacing: 0.5,
+            }}
+          >
+            Developer Portal
+          </Text>
+        </View>
 
         {/* Quick Stats */}
         <View
           style={{
-            flexDirection: isMobile ? "column" : "row",
-            flexWrap: "wrap",
-            gap: spacing.md,
-            marginBottom: spacing["2xl"],
+            flexDirection: "row",
+            flexWrap: isMobile ? "wrap" : "nowrap",
+            gap: 12,
+            marginBottom: 32,
           }}
         >
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.lg,
-              padding: spacing.lg,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.secondary,
-                marginBottom: spacing.sm,
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
               }}
             >
               API Calls Today
             </Text>
             <Text
               style={{
-                fontSize: typography.fontSize["3xl"],
-                fontWeight: typography.fontWeight.bold,
-                color: colors.status.info,
+                fontSize: 28,
+                fontWeight: "700",
+                color: "#2196f3",
               }}
             >
               {mockStats.apiCallsToday.toLocaleString()}
@@ -128,38 +144,39 @@ function DeveloperDashboardContent() {
           </View>
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.lg,
-              padding: spacing.lg,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.secondary,
-                marginBottom: spacing.sm,
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
               }}
             >
               Rate Limit Remaining
             </Text>
             <Text
               style={{
-                fontSize: typography.fontSize["3xl"],
-                fontWeight: typography.fontWeight.bold,
-                color: colors.status.success,
+                fontSize: 28,
+                fontWeight: "700",
+                color: "#4caf50",
               }}
             >
               {mockStats.rateLimitRemaining.toLocaleString()}
             </Text>
             <View
               style={{
-                marginTop: spacing.sm,
+                marginTop: 8,
                 height: 4,
-                backgroundColor: colors.background.primary,
+                backgroundColor: "#232323",
                 borderRadius: 2,
                 overflow: "hidden",
               }}
@@ -168,7 +185,7 @@ function DeveloperDashboardContent() {
                 style={{
                   height: "100%",
                   width: `${rateLimitPercentage}%`,
-                  backgroundColor: colors.status.success,
+                  backgroundColor: "#4caf50",
                   borderRadius: 2,
                 }}
               />
@@ -176,29 +193,30 @@ function DeveloperDashboardContent() {
           </View>
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.lg,
-              padding: spacing.lg,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.secondary,
-                marginBottom: spacing.sm,
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
               }}
             >
               Active API Keys
             </Text>
             <Text
               style={{
-                fontSize: typography.fontSize["3xl"],
-                fontWeight: typography.fontWeight.bold,
-                color: colors.accent,
+                fontSize: 28,
+                fontWeight: "700",
+                color: "#ba9988",
               }}
             >
               {mockStats.totalApiKeys}
@@ -206,29 +224,30 @@ function DeveloperDashboardContent() {
           </View>
           <View
             style={{
-              flex: 1,
-              minWidth: isMobile ? "100%" : 200,
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.lg,
-              padding: spacing.lg,
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
-                color: colors.text.secondary,
-                marginBottom: spacing.sm,
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
               }}
             >
               Avg Response Time
             </Text>
             <Text
               style={{
-                fontSize: typography.fontSize["3xl"],
-                fontWeight: typography.fontWeight.bold,
-                color: colors.status.warning,
+                fontSize: 28,
+                fontWeight: "700",
+                color: "#ff9800",
               }}
             >
               {mockStats.avgResponseTime}ms
@@ -237,96 +256,105 @@ function DeveloperDashboardContent() {
         </View>
 
         {/* Developer Tools */}
-        <View>
+        <View style={{ marginBottom: 32 }}>
           <Text
             style={{
-              fontSize: typography.fontSize["2xl"],
-              fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
-              marginBottom: spacing.lg,
+              fontSize: 24,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 24,
             }}
           >
             Developer Tools
           </Text>
           <View
             style={{
-              flexDirection: isMobile ? "column" : "row",
+              flexDirection: "row",
               flexWrap: "wrap",
-              gap: spacing.lg,
+              marginHorizontal: -6,
             }}
           >
             {developerSections.map((section) => (
-              <TouchableOpacity
+              <View
                 key={section.id}
-                onPress={() => router.push(section.route as any)}
                 style={{
-                  width: isMobile ? "100%" : "48%",
-                  backgroundColor: colors.secondary.bg,
-                  borderRadius: borderRadius.lg,
-                  padding: spacing.lg,
-                  borderWidth: 1,
-                  borderColor: colors.border.light,
-                  minHeight: 140,
+                  flex: 1,
+                  minWidth: "48%",
+                  maxWidth: "48%",
+                  paddingHorizontal: 6,
+                  marginBottom: 12,
                 }}
               >
-                <View
+                <TouchableOpacity
+                  onPress={() => router.push(section.route as any)}
                   style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 24,
-                    backgroundColor: `${section.color}20`,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: spacing.md,
+                    backgroundColor: "#474747",
+                    borderRadius: 16,
+                    padding: 20,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    minHeight: 140,
                   }}
                 >
-                  <MaterialIcons name={section.icon as any} size={24} color={section.color} />
-                </View>
-                <Text
-                  style={{
-                    fontSize: typography.fontSize.lg,
-                    fontWeight: typography.fontWeight.bold,
-                    color: colors.text.primary,
-                    marginBottom: spacing.xs,
-                  }}
-                >
-                  {section.name}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: typography.fontSize.sm,
-                    color: colors.text.secondary,
-                  }}
-                >
-                  {section.description}
-                </Text>
-              </TouchableOpacity>
+                  <View
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 24,
+                      backgroundColor: `${section.color}20`,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: 16,
+                    }}
+                  >
+                    <MaterialIcons name={section.icon as any} size={24} color={section.color} />
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "700",
+                      color: "#ffffff",
+                      marginBottom: 4,
+                    }}
+                  >
+                    {section.name}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "rgba(255, 255, 255, 0.7)",
+                    }}
+                  >
+                    {section.description}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             ))}
           </View>
         </View>
 
         {/* Quick Links */}
-        <View style={{ marginTop: spacing["2xl"] }}>
+        <View>
           <Text
             style={{
-              fontSize: typography.fontSize["2xl"],
-              fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
-              marginBottom: spacing.lg,
+              fontSize: 24,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 24,
             }}
           >
             Quick Links
           </Text>
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.lg,
-              padding: spacing.lg,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
-            <View style={{ gap: spacing.md }}>
+            <View style={{ gap: 16 }}>
               {[
                 {
                   title: "Getting Started Guide",
@@ -353,33 +381,33 @@ function DeveloperDashboardContent() {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    paddingVertical: spacing.md,
+                    paddingVertical: 16,
                     borderBottomWidth: index < 2 ? 1 : 0,
-                    borderBottomColor: colors.border.light,
+                    borderBottomColor: "rgba(186, 153, 136, 0.2)",
                   }}
                 >
-                  <MaterialIcons name={link.icon as any} size={20} color={colors.accent} style={{ marginRight: spacing.md }} />
+                  <MaterialIcons name={link.icon as any} size={20} color="#ba9988" style={{ marginRight: 16 }} />
                   <View style={{ flex: 1 }}>
                     <Text
                       style={{
-                        fontSize: typography.fontSize.base,
-                        fontWeight: typography.fontWeight.semibold,
-                        color: colors.text.primary,
-                        marginBottom: spacing.xs,
+                        fontSize: 16,
+                        fontWeight: "600",
+                        color: "#ffffff",
+                        marginBottom: 4,
                       }}
                     >
                       {link.title}
                     </Text>
                     <Text
                       style={{
-                        fontSize: typography.fontSize.sm,
-                        color: colors.text.secondary,
+                        fontSize: 14,
+                        color: "rgba(255, 255, 255, 0.7)",
                       }}
                     >
                       {link.description}
                     </Text>
                   </View>
-                  <MaterialIcons name="chevron-right" size={20} color={colors.text.secondary} />
+                  <MaterialIcons name="chevron-right" size={20} color="rgba(255, 255, 255, 0.5)" />
                 </TouchableOpacity>
               ))}
             </View>

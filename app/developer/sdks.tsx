@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { DeveloperPageHeader } from '@/components/developer/DeveloperPageHeader';
 
 const copyToClipboard = async (text: string): Promise<boolean> => {
   if (Platform.OS === "web") {
@@ -113,78 +114,82 @@ export default function SDKs() {
   const [selectedLanguage, setSelectedLanguage] = useState<keyof typeof codeExamples>("javascript");
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: isMobile ? spacing.mobile : spacing.desktop,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
         }}
       >
+        <DeveloperPageHeader
+          title="SDKs & Examples"
+          description="Download SDKs and view code examples"
+        />
 
         {/* SDKs List */}
-        <View style={{ marginBottom: spacing["2xl"] }}>
+        <View style={{ marginBottom: 32 }}>
           <Text
             style={{
-              fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
-              marginBottom: spacing.md,
+              fontSize: 20,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
             }}
           >
             Official SDKs
           </Text>
-          <View style={{ gap: spacing.md }}>
+          <View style={{ gap: 16 }}>
             {sdks.map((sdk, index) => (
               <View
                 key={index}
                 style={{
-                  backgroundColor: colors.secondary.bg,
-                  borderRadius: borderRadius.lg,
-                  padding: spacing.lg,
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
+                  padding: 20,
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
                 }}
               >
-                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: spacing.md }}>
+                <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
                   <View
                     style={{
                       width: 48,
                       height: 48,
-                      borderRadius: borderRadius.md,
+                      borderRadius: 8,
                       backgroundColor: `${sdk.color}20`,
                       alignItems: "center",
                       justifyContent: "center",
-                      marginRight: spacing.md,
+                      marginRight: 16,
                     }}
                   >
                     <MaterialIcons name={sdk.icon as any} size={24} color={sdk.color} />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.xs }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
                       <Text
                         style={{
-                          fontSize: typography.fontSize.lg,
-                          fontWeight: typography.fontWeight.bold,
-                          color: colors.text.primary,
+                          fontSize: 18,
+                          fontWeight: "700",
+                          color: "#ffffff",
                         }}
                       >
                         {sdk.name}
                       </Text>
                       <View
                         style={{
-                          paddingHorizontal: spacing.xs,
+                          paddingHorizontal: 4,
                           paddingVertical: 2,
-                          borderRadius: borderRadius.sm,
-                          backgroundColor: colors.accent + "20",
+                          borderRadius: 4,
+                          backgroundColor: "#ba998820",
                         }}
                       >
                         <Text
                           style={{
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: typography.fontWeight.semibold,
-                            color: colors.accent,
+                            fontSize: 12,
+                            fontWeight: "600",
+                            color: "#ba9988",
                           }}
                         >
                           v{sdk.version}
@@ -193,9 +198,9 @@ export default function SDKs() {
                     </View>
                     <Text
                       style={{
-                        fontSize: typography.fontSize.sm,
-                        color: colors.text.secondary,
-                        marginBottom: spacing.sm,
+                        fontSize: 14,
+                        color: "rgba(255, 255, 255, 0.7)",
+                        marginBottom: 8,
                       }}
                     >
                       {sdk.description}
@@ -204,17 +209,17 @@ export default function SDKs() {
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
-                        backgroundColor: colors.background.primary,
-                        borderRadius: borderRadius.md,
-                        padding: spacing.sm,
+                        backgroundColor: "#232323",
+                        borderRadius: 8,
+                        padding: 8,
                       }}
                     >
                       <Text
                         style={{
                           flex: 1,
-                          fontSize: typography.fontSize.sm,
+                          fontSize: 14,
                           fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                          color: colors.text.primary,
+                          color: "#ffffff",
                         }}
                       >
                         {sdk.install}
@@ -222,13 +227,13 @@ export default function SDKs() {
                       <TouchableOpacity
                         onPress={() => copyToClipboard(sdk.install)}
                         style={{
-                          marginLeft: spacing.sm,
-                          padding: spacing.xs,
-                          borderRadius: borderRadius.sm,
-                          backgroundColor: colors.accent + "20",
+                          marginLeft: 8,
+                          padding: 4,
+                          borderRadius: 4,
+                          backgroundColor: "#ba998820",
                         }}
                       >
-                        <MaterialIcons name="content-copy" size={16} color={colors.accent} />
+                        <MaterialIcons name="content-copy" size={16} color="#ba9988" />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -242,10 +247,10 @@ export default function SDKs() {
         <View>
           <Text
             style={{
-              fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
-              color: colors.text.primary,
-              marginBottom: spacing.md,
+              fontSize: 20,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
             }}
           >
             Quick Start Examples
@@ -253,8 +258,8 @@ export default function SDKs() {
           <View
             style={{
               flexDirection: "row",
-              gap: spacing.sm,
-              marginBottom: spacing.md,
+              gap: 8,
+              marginBottom: 16,
             }}
           >
             {Object.keys(codeExamples).map((lang) => (
@@ -262,19 +267,19 @@ export default function SDKs() {
                 key={lang}
                 onPress={() => setSelectedLanguage(lang as keyof typeof codeExamples)}
                 style={{
-                  paddingHorizontal: spacing.md,
-                  paddingVertical: spacing.sm,
-                  borderRadius: borderRadius.md,
-                  backgroundColor: selectedLanguage === lang ? colors.accent : colors.secondary.bg,
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  borderRadius: 8,
+                  backgroundColor: selectedLanguage === lang ? "#ba9988" : "#474747",
                   borderWidth: 1,
-                  borderColor: selectedLanguage === lang ? colors.accent : colors.border.light,
+                  borderColor: selectedLanguage === lang ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
                 }}
               >
                 <Text
                   style={{
-                    fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: selectedLanguage === lang ? colors.text.primary : colors.text.secondary,
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: selectedLanguage === lang ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
                     textTransform: "capitalize",
                   }}
                 >
@@ -285,31 +290,31 @@ export default function SDKs() {
           </View>
           <View
             style={{
-              backgroundColor: colors.background.primary,
-              borderRadius: borderRadius.md,
-              padding: spacing.lg,
+              backgroundColor: "#232323",
+              borderRadius: 8,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: "rgba(186, 153, 136, 0.2)",
             }}
           >
-            <View style={{ flexDirection: "row", justifyContent: "flex-end", marginBottom: spacing.sm }}>
+            <View style={{ flexDirection: "row", justifyContent: "flex-end", marginBottom: 8 }}>
               <TouchableOpacity
                 onPress={() => copyToClipboard(codeExamples[selectedLanguage])}
                 style={{
-                  paddingHorizontal: spacing.sm,
-                  paddingVertical: spacing.xs,
-                  borderRadius: borderRadius.sm,
-                  backgroundColor: colors.secondary.bg,
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                  borderRadius: 4,
+                  backgroundColor: "#474747",
                 }}
               >
-                <MaterialIcons name="content-copy" size={16} color={colors.accent} />
+                <MaterialIcons name="content-copy" size={16} color="#ba9988" />
               </TouchableOpacity>
             </View>
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
+                fontSize: 14,
                 fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                color: colors.text.primary,
+                color: "#ffffff",
                 lineHeight: 20,
               }}
             >
@@ -321,28 +326,28 @@ export default function SDKs() {
         {/* Additional Resources */}
         <View
           style={{
-            marginTop: spacing["2xl"],
-            backgroundColor: colors.secondary.bg,
-            borderRadius: borderRadius.lg,
-            padding: spacing.lg,
+            marginTop: 32,
+            backgroundColor: "#474747",
+            borderRadius: 16,
+            padding: 20,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: "rgba(186, 153, 136, 0.2)",
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: spacing.md }}>
-            <MaterialIcons name="book" size={24} color={colors.accent} />
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
+            <MaterialIcons name="book" size={24} color="#ba9988" />
             <Text
               style={{
-                fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
-                color: colors.text.primary,
-                marginLeft: spacing.sm,
+                fontSize: 20,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginLeft: 8,
               }}
             >
               Additional Resources
             </Text>
           </View>
-          <View style={{ gap: spacing.md }}>
+          <View style={{ gap: 16 }}>
             {[
               {
                 title: "GitHub Repository",
@@ -368,33 +373,33 @@ export default function SDKs() {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  paddingVertical: spacing.md,
+                  paddingVertical: 16,
                   borderBottomWidth: index < 2 ? 1 : 0,
-                  borderBottomColor: colors.border.light,
+                  borderBottomColor: "rgba(186, 153, 136, 0.2)",
                 }}
               >
-                <MaterialIcons name={resource.icon as any} size={20} color={colors.accent} style={{ marginRight: spacing.md }} />
+                <MaterialIcons name={resource.icon as any} size={20} color="#ba9988" style={{ marginRight: 16 }} />
                 <View style={{ flex: 1 }}>
                   <Text
                     style={{
-                      fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.primary,
-                      marginBottom: spacing.xs,
+                      fontSize: 16,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                      marginBottom: 4,
                     }}
                   >
                     {resource.title}
                   </Text>
                   <Text
                     style={{
-                      fontSize: typography.fontSize.sm,
-                      color: colors.text.secondary,
+                      fontSize: 14,
+                      color: "rgba(255, 255, 255, 0.7)",
                     }}
                   >
                     {resource.description}
                   </Text>
                 </View>
-                <MaterialIcons name="chevron-right" size={20} color={colors.text.secondary} />
+                <MaterialIcons name="chevron-right" size={20} color="rgba(255, 255, 255, 0.5)" />
               </TouchableOpacity>
             ))}
           </View>

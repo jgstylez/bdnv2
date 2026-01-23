@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInpu
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { DeveloperPageHeader } from '@/components/developer/DeveloperPageHeader';
 
 interface Webhook {
   id: string;
@@ -125,125 +126,108 @@ export default function Webhooks() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: isMobile ? spacing.mobile : spacing.desktop,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing["4xl"],
+          paddingHorizontal: isMobile ? 20 : 40,
+          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingBottom: 40,
         }}
       >
-        {/* Header */}
-        <View style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", marginBottom: spacing["2xl"] }}>
-          <TouchableOpacity
-            onPress={() => setShowCreateForm(!showCreateForm)}
-            style={{
-              paddingHorizontal: spacing.lg,
-              paddingVertical: spacing.md,
-              borderRadius: borderRadius.md,
-              backgroundColor: colors.accent,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: spacing.sm,
-            }}
-          >
-            <MaterialIcons name="add" size={20} color={colors.text.primary} />
-            <Text
-              style={{
-                fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.semibold,
-                color: colors.text.primary,
-              }}
-            >
-              Create Webhook
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <DeveloperPageHeader
+          title="Webhooks"
+          description="Configure and manage webhook endpoints"
+          actionButton={{
+            label: "Create Webhook",
+            icon: "add",
+            onPress: () => setShowCreateForm(!showCreateForm),
+          }}
+        />
 
         {/* Create Form */}
         {showCreateForm && (
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
-              borderRadius: borderRadius.lg,
-              padding: spacing.lg,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
               borderWidth: 1,
-              borderColor: colors.border.light,
-              marginBottom: spacing["2xl"],
+              borderColor: "rgba(186, 153, 136, 0.2)",
+              marginBottom: 32,
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.lg,
-                fontWeight: typography.fontWeight.bold,
-                color: colors.text.primary,
-                marginBottom: spacing.md,
+                fontSize: 20,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginBottom: 16,
               }}
             >
               Create New Webhook
             </Text>
             <TextInput
               placeholder="Webhook Name"
-              placeholderTextColor={colors.text.placeholder}
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
               value={newWebhookName}
               onChangeText={setNewWebhookName}
               style={{
-                backgroundColor: colors.background.primary,
-                borderRadius: borderRadius.md,
-                padding: spacing.md,
-                color: colors.text.primary,
-                fontSize: typography.fontSize.base,
-                marginBottom: spacing.md,
+                backgroundColor: "#232323",
+                borderRadius: 8,
+                padding: 16,
+                color: "#ffffff",
+                fontSize: 16,
+                marginBottom: 16,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: "rgba(186, 153, 136, 0.2)",
               }}
             />
             <TextInput
               placeholder="Webhook URL (https://...)"
-              placeholderTextColor={colors.text.placeholder}
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
               value={newWebhookUrl}
               onChangeText={setNewWebhookUrl}
               style={{
-                backgroundColor: colors.background.primary,
-                borderRadius: borderRadius.md,
-                padding: spacing.md,
-                color: colors.text.primary,
-                fontSize: typography.fontSize.base,
-                marginBottom: spacing.md,
+                backgroundColor: "#232323",
+                borderRadius: 8,
+                padding: 16,
+                color: "#ffffff",
+                fontSize: 16,
+                marginBottom: 16,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: "rgba(186, 153, 136, 0.2)",
               }}
             />
             <Text
               style={{
-                fontSize: typography.fontSize.sm,
-                fontWeight: typography.fontWeight.semibold,
-                color: colors.text.primary,
-                marginBottom: spacing.sm,
+                fontSize: 14,
+                fontWeight: "600",
+                color: "#ffffff",
+                marginBottom: 8,
               }}
             >
               Select Events
             </Text>
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.sm, marginBottom: spacing.md }}>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
               {availableEvents.map((event) => (
                 <TouchableOpacity
                   key={event}
                   onPress={() => handleToggleEvent(event)}
                   style={{
-                    paddingHorizontal: spacing.md,
-                    paddingVertical: spacing.sm,
-                    borderRadius: borderRadius.md,
-                    backgroundColor: selectedEvents.includes(event) ? colors.accent : colors.background.primary,
+                    paddingHorizontal: 16,
+                    paddingVertical: 8,
+                    borderRadius: 8,
+                    backgroundColor: selectedEvents.includes(event) ? "#ba9988" : "#232323",
                     borderWidth: 1,
-                    borderColor: selectedEvents.includes(event) ? colors.accent : colors.border.light,
+                    borderColor: selectedEvents.includes(event) ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
                   }}
                 >
                   <Text
                     style={{
-                      fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: selectedEvents.includes(event) ? colors.text.primary : colors.text.secondary,
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: selectedEvents.includes(event) ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
                     }}
                   >
                     {event}
@@ -251,7 +235,7 @@ export default function Webhooks() {
                 </TouchableOpacity>
               ))}
             </View>
-            <View style={{ flexDirection: "row", gap: spacing.md }}>
+            <View style={{ flexDirection: "row", gap: 16 }}>
               <TouchableOpacity
                 onPress={() => {
                   setShowCreateForm(false);
@@ -261,19 +245,19 @@ export default function Webhooks() {
                 }}
                 style={{
                   flex: 1,
-                  padding: spacing.md,
-                  borderRadius: borderRadius.md,
-                  backgroundColor: colors.secondary.bg,
+                  padding: 16,
+                  borderRadius: 8,
+                  backgroundColor: "#474747",
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: "rgba(186, 153, 136, 0.2)",
                   alignItems: "center",
                 }}
               >
                 <Text
                   style={{
-                    fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: colors.text.secondary,
+                    fontSize: 16,
+                    fontWeight: "600",
+                    color: "rgba(255, 255, 255, 0.7)",
                   }}
                 >
                   Cancel
@@ -283,17 +267,17 @@ export default function Webhooks() {
                 onPress={handleCreateWebhook}
                 style={{
                   flex: 1,
-                  padding: spacing.md,
-                  borderRadius: borderRadius.md,
-                  backgroundColor: colors.accent,
+                  padding: 16,
+                  borderRadius: 8,
+                  backgroundColor: "#ba9988",
                   alignItems: "center",
                 }}
               >
                 <Text
                   style={{
-                    fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: colors.text.primary,
+                    fontSize: 16,
+                    fontWeight: "600",
+                    color: "#ffffff",
                   }}
                 >
                   Create
@@ -304,7 +288,7 @@ export default function Webhooks() {
         )}
 
         {/* Webhooks List */}
-        <View style={{ gap: spacing.md }}>
+        <View style={{ gap: 12 }}>
           {webhooks.map((webhook) => {
             const isExpanded = selectedWebhook === webhook.id;
 
@@ -312,46 +296,46 @@ export default function Webhooks() {
               <View
                 key={webhook.id}
                 style={{
-                  backgroundColor: colors.secondary.bg,
-                  borderRadius: borderRadius.lg,
+                  backgroundColor: "#474747",
+                  borderRadius: 16,
                   borderWidth: 1,
-                  borderColor: webhook.status === "active" ? colors.status.success + "40" : colors.border.light,
+                  borderColor: webhook.status === "active" ? "#4caf5040" : "rgba(186, 153, 136, 0.2)",
                   overflow: "hidden",
                 }}
               >
                 <TouchableOpacity
                   onPress={() => setSelectedWebhook(isExpanded ? null : webhook.id)}
                   style={{
-                    padding: spacing.lg,
+                    padding: 20,
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "space-between",
                   }}
                 >
                   <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.xs }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
                       <Text
                         style={{
-                          fontSize: typography.fontSize.base,
-                          fontWeight: typography.fontWeight.bold,
-                          color: colors.text.primary,
+                          fontSize: 16,
+                          fontWeight: "700",
+                          color: "#ffffff",
                         }}
                       >
                         {webhook.name}
                       </Text>
                       <View
                         style={{
-                          paddingHorizontal: spacing.xs,
+                          paddingHorizontal: 6,
                           paddingVertical: 2,
-                          borderRadius: borderRadius.sm,
-                          backgroundColor: webhook.status === "active" ? colors.status.success + "20" : colors.status.error + "20",
+                          borderRadius: 4,
+                          backgroundColor: webhook.status === "active" ? "#4caf5020" : "#f7414120",
                         }}
                       >
                         <Text
                           style={{
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: typography.fontWeight.semibold,
-                            color: webhook.status === "active" ? colors.status.success : colors.status.error,
+                            fontSize: 12,
+                            fontWeight: "600",
+                            color: webhook.status === "active" ? "#4caf50" : "#f74141",
                             textTransform: "uppercase",
                           }}
                         >
@@ -361,10 +345,10 @@ export default function Webhooks() {
                     </View>
                     <Text
                       style={{
-                        fontSize: typography.fontSize.xs,
+                        fontSize: 12,
                         fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                        color: colors.text.secondary,
-                        marginBottom: spacing.xs,
+                        color: "rgba(255, 255, 255, 0.7)",
+                        marginBottom: 4,
                       }}
                       numberOfLines={1}
                     >
@@ -372,8 +356,8 @@ export default function Webhooks() {
                     </Text>
                     <Text
                       style={{
-                        fontSize: typography.fontSize.xs,
-                        color: colors.text.secondary,
+                        fontSize: 12,
+                        color: "rgba(255, 255, 255, 0.7)",
                       }}
                     >
                       {webhook.events.length} event(s) • Last triggered: {webhook.lastTriggered}
@@ -381,45 +365,45 @@ export default function Webhooks() {
                   </View>
                   <MaterialIcons
                     name={isExpanded ? "expand-less" : "expand-more"}
-                    size={20}
-                    color={colors.text.secondary}
+                    size={24}
+                    color="rgba(255, 255, 255, 0.5)"
                   />
                 </TouchableOpacity>
                 {isExpanded && (
                   <View
                     style={{
-                      padding: spacing.lg,
+                      padding: 20,
                       borderTopWidth: 1,
-                      borderTopColor: colors.border.light,
-                      backgroundColor: colors.background.primary,
+                      borderTopColor: "rgba(186, 153, 136, 0.2)",
+                      backgroundColor: "#232323",
                     }}
                   >
-                    <View style={{ marginBottom: spacing.md }}>
+                    <View style={{ marginBottom: 16 }}>
                       <Text
                         style={{
-                          fontSize: typography.fontSize.sm,
-                          fontWeight: typography.fontWeight.semibold,
-                          color: colors.text.primary,
-                          marginBottom: spacing.sm,
+                          fontSize: 14,
+                          fontWeight: "600",
+                          color: "#ffffff",
+                          marginBottom: 8,
                         }}
                       >
                         Events
                       </Text>
-                      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs }}>
+                      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
                         {webhook.events.map((event) => (
                           <View
                             key={event}
                             style={{
-                              paddingHorizontal: spacing.sm,
-                              paddingVertical: spacing.xs,
-                              borderRadius: borderRadius.sm,
-                              backgroundColor: colors.accent + "20",
+                              paddingHorizontal: 10,
+                              paddingVertical: 4,
+                              borderRadius: 4,
+                              backgroundColor: "#ba998820",
                             }}
                           >
                             <Text
                               style={{
-                                fontSize: typography.fontSize.xs,
-                                color: colors.accent,
+                                fontSize: 12,
+                                color: "#ba9988",
                               }}
                             >
                               {event}
@@ -428,13 +412,13 @@ export default function Webhooks() {
                         ))}
                       </View>
                     </View>
-                    <View style={{ marginBottom: spacing.md }}>
+                    <View style={{ marginBottom: 16 }}>
                       <Text
                         style={{
-                          fontSize: typography.fontSize.sm,
-                          fontWeight: typography.fontWeight.semibold,
-                          color: colors.text.primary,
-                          marginBottom: spacing.sm,
+                          fontSize: 14,
+                          fontWeight: "600",
+                          color: "#ffffff",
+                          marginBottom: 8,
                         }}
                       >
                         Webhook Secret
@@ -443,41 +427,41 @@ export default function Webhooks() {
                         style={{
                           flexDirection: "row",
                           alignItems: "center",
-                          backgroundColor: colors.secondary.bg,
-                          borderRadius: borderRadius.md,
-                          padding: spacing.md,
+                          backgroundColor: "#474747",
+                          borderRadius: 8,
+                          padding: 16,
                         }}
                       >
                         <Text
                           style={{
                             flex: 1,
-                            fontSize: typography.fontSize.sm,
+                            fontSize: 14,
                             fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                            color: colors.text.primary,
+                            color: "#ffffff",
                           }}
                         >
                           {webhook.secret}
                         </Text>
                       </View>
                     </View>
-                    <View style={{ flexDirection: "row", gap: spacing.md }}>
+                    <View style={{ flexDirection: "row", gap: 16 }}>
                       <TouchableOpacity
                         onPress={() => handleToggleWebhook(webhook.id)}
                         style={{
                           flex: 1,
-                          padding: spacing.md,
-                          borderRadius: borderRadius.md,
-                          backgroundColor: webhook.status === "active" ? colors.status.error + "20" : colors.status.success + "20",
+                          padding: 16,
+                          borderRadius: 8,
+                          backgroundColor: webhook.status === "active" ? "#f7414120" : "#4caf5020",
                           borderWidth: 1,
-                          borderColor: webhook.status === "active" ? colors.status.error : colors.status.success,
+                          borderColor: webhook.status === "active" ? "#f74141" : "#4caf50",
                           alignItems: "center",
                         }}
                       >
                         <Text
                           style={{
-                            fontSize: typography.fontSize.sm,
-                            fontWeight: typography.fontWeight.semibold,
-                            color: webhook.status === "active" ? colors.status.error : colors.status.success,
+                            fontSize: 14,
+                            fontWeight: "600",
+                            color: webhook.status === "active" ? "#f74141" : "#4caf50",
                           }}
                         >
                           {webhook.status === "active" ? "Deactivate" : "Activate"}
@@ -487,19 +471,19 @@ export default function Webhooks() {
                         onPress={() => handleDeleteWebhook(webhook.id)}
                         style={{
                           flex: 1,
-                          padding: spacing.md,
-                          borderRadius: borderRadius.md,
-                          backgroundColor: colors.status.error + "20",
+                          padding: 16,
+                          borderRadius: 8,
+                          backgroundColor: "#f7414120",
                           borderWidth: 1,
-                          borderColor: colors.status.error,
+                          borderColor: "#f74141",
                           alignItems: "center",
                         }}
                       >
                         <Text
                           style={{
-                            fontSize: typography.fontSize.sm,
-                            fontWeight: typography.fontWeight.semibold,
-                            color: colors.status.error,
+                            fontSize: 14,
+                            fontWeight: "600",
+                            color: "#f74141",
                           }}
                         >
                           Delete
@@ -516,22 +500,22 @@ export default function Webhooks() {
         {/* Webhook Documentation */}
         <View
           style={{
-            marginTop: spacing["2xl"],
-            backgroundColor: colors.secondary.bg,
-            borderRadius: borderRadius.lg,
-            padding: spacing.lg,
+            marginTop: 32,
+            backgroundColor: "#474747",
+            borderRadius: 16,
+            padding: 20,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: "rgba(186, 153, 136, 0.2)",
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: spacing.md }}>
-            <MaterialIcons name="info" size={24} color={colors.status.info} />
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
+            <MaterialIcons name="info" size={24} color="#2196f3" />
             <Text
               style={{
-                fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
-                color: colors.text.primary,
-                marginLeft: spacing.sm,
+                fontSize: 20,
+                fontWeight: "700",
+                color: "#ffffff",
+                marginLeft: 8,
               }}
             >
               Webhook Documentation
@@ -539,27 +523,27 @@ export default function Webhooks() {
           </View>
           <Text
             style={{
-              fontSize: typography.fontSize.sm,
-              color: colors.text.secondary,
+              fontSize: 14,
+              color: "rgba(255, 255, 255, 0.7)",
               lineHeight: 20,
-              marginBottom: spacing.md,
+              marginBottom: 16,
             }}
           >
             Webhooks allow you to receive real-time notifications when events occur in the BDN platform. Each webhook request includes:
           </Text>
           <View
             style={{
-              backgroundColor: colors.background.primary,
-              padding: spacing.md,
-              borderRadius: borderRadius.md,
-              marginBottom: spacing.md,
+              backgroundColor: "#232323",
+              padding: 16,
+              borderRadius: 8,
+              marginBottom: 16,
             }}
           >
             <Text
               style={{
-                fontSize: typography.fontSize.xs,
+                fontSize: 12,
                 fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                color: colors.text.primary,
+                color: "#ffffff",
                 lineHeight: 18,
               }}
             >
@@ -572,8 +556,8 @@ export default function Webhooks() {
           </View>
           <Text
             style={{
-              fontSize: typography.fontSize.sm,
-              color: colors.text.secondary,
+              fontSize: 14,
+              color: "rgba(255, 255, 255, 0.7)",
               lineHeight: 20,
             }}
           >
