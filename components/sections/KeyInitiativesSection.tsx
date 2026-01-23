@@ -133,14 +133,18 @@ export const KeyInitiativesSection: React.FC = () => {
               flexDirection: isMobile ? "column" : "row",
               flexWrap: "wrap",
               gap: 24,
+              alignItems: "stretch",
             }}
           >
             {INITIATIVES.map((initiative, index) => (
               <View
                 key={index}
                 style={{
-                  flex: isMobile ? 1 : 0,
-                  minWidth: isMobile ? "100%" : "calc(33.333% - 16px)",
+                  flexGrow: isMobile ? 0 : 1,
+                  flexShrink: 1,
+                  flexBasis: isMobile ? "auto" : 0,
+                  width: isMobile ? "100%" : undefined,
+                  minWidth: isMobile ? undefined : 280,
                   backgroundColor: "rgba(71, 71, 71, 0.4)",
                   borderRadius: 20,
                   padding: isMobile ? 24 : 32,
@@ -197,12 +201,21 @@ export const KeyInitiativesSection: React.FC = () => {
                   >
                     {initiative.title}
                   </Text>
+                  {/* Divider */}
+                  <View
+                    style={{
+                      width: "100%",
+                      height: 1,
+                      backgroundColor: "rgba(255, 255, 255, 0.15)",
+                      marginBottom: isMobile ? 12 : 16,
+                    }}
+                  />
                   <Text
                     style={{
                       fontSize: isMobile ? 14 : 15,
                       color: "rgba(255, 255, 255, 0.8)",
                       lineHeight: isMobile ? 22 : 24,
-                      textAlign: "justify",
+                      textAlign: "left",
                     }}
                   >
                     {initiative.description}
