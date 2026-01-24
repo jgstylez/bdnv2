@@ -453,6 +453,75 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
             )}
           </View>
         </ScrollView>
+
+        {/* Support Button - Fixed at bottom */}
+        <View
+          style={{
+            borderTopWidth: 1,
+            borderTopColor: "#474747",
+            paddingTop: Platform.OS === "ios" ? 16 : 14,
+            paddingBottom: Platform.OS === "ios" ? Math.max(insets.bottom, 16) : 14,
+            paddingHorizontal: Platform.OS === "ios" ? 24 : 20,
+            backgroundColor: "#232323",
+          }}
+        >
+          <Pressable
+            onPress={() => handleItemPress("/pages/support")}
+            style={({ pressed }) => ({
+              backgroundColor: isActive("/pages/support")
+                ? "rgba(186, 153, 136, 0.15)"
+                : "rgba(71, 71, 71, 0.3)",
+              opacity: pressed ? 0.7 : 1,
+              borderRadius: 8,
+              paddingVertical: Platform.OS === "ios" ? 12 : 10,
+              paddingHorizontal: Platform.OS === "ios" ? 16 : 14,
+              borderWidth: 1,
+              borderColor: isActive("/pages/support")
+                ? "rgba(186, 153, 136, 0.3)"
+                : "rgba(186, 153, 136, 0.1)",
+              ...(Platform.OS === "web" && {
+                cursor: "pointer",
+                userSelect: "none",
+              }),
+            })}
+            {...(Platform.OS !== 'web' && {
+              accessible: true,
+              accessibilityRole: "button" as const,
+              accessibilityLabel: "Support",
+              accessibilityState: { selected: isActive("/pages/support") },
+              accessibilityHint: "Navigate to Support",
+            })}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons
+                name="support-agent"
+                size={18}
+                color={
+                  isActive("/pages/support")
+                    ? "#ba9988"
+                    : "rgba(255, 255, 255, 0.8)"
+                }
+                style={{ marginRight: Platform.OS === "ios" ? 14 : 12 }}
+              />
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: isActive("/pages/support") ? "600" : "500",
+                  color: isActive("/pages/support")
+                    ? "#ffffff"
+                    : "rgba(255, 255, 255, 0.9)",
+                }}
+              >
+                Support
+              </Text>
+            </View>
+          </Pressable>
+        </View>
         </View>
       </Animated.View>
     </>

@@ -233,7 +233,6 @@ export const navigationMenu: NavGroup[] = [
         icon: "play-circle",
       },
       { label: "Help Center", href: "/pages/university/help", icon: "help" },
-      { label: "Support", href: "/pages/support", icon: "support-agent" },
     ],
   },
   {

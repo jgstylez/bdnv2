@@ -4,7 +4,8 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
-import { PageHeader } from '@/components/admin/AdminPageHeader';
+import { BackButton } from '@/components/navigation/BackButton';
+import { HeroSection } from '@/components/layouts/HeroSection';
 import { FormInput, FormTextArea } from '@/components/forms';
 import { SubscriptionBoxPlan, SubscriptionFrequency, SubscriptionDuration, getFrequencyLabel, getDurationLabel } from '@/types/subscription-box';
 import { Currency } from '@/types/international';
@@ -128,10 +129,11 @@ export default function EditSubscriptionPlan() {
           paddingBottom: 40,
         }}
       >
-        <PageHeader
+        <BackButton />
+        
+        <HeroSection
           title="Edit Plan"
-          description="Edit the details of your subscription plan."
-          showBackButton
+          subtitle="Edit the details of your subscription plan."
         />
 
         <View style={{ gap: spacing.lg }}>

@@ -434,6 +434,125 @@ export const Sidebar: React.FC = () => {
           })}
         </ScrollView>
 
+        {/* Support Button - Above collapse button */}
+        <View
+          style={{
+            paddingHorizontal: isCollapsed ? 12 : 12,
+            paddingVertical: 8,
+            borderTopWidth: 1,
+            borderTopColor: "rgba(71, 71, 71, 0.3)",
+          }}
+        >
+          {isCollapsed ? (
+            // Collapsed: Show only icon
+            <TouchableOpacity
+              onPress={() => {
+                // Prevent duplicate navigation calls
+                if (navigatingRef.current) {
+                  return;
+                }
+                // Check if we're already on the target route
+                if (pathname === "/pages/support") {
+                  return;
+                }
+                // Set navigating flag to prevent duplicate calls
+                navigatingRef.current = true;
+                // Navigate - router.push() is synchronous and doesn't return a Promise
+                try {
+                  router.push("/pages/support" as any);
+                } catch (error) {
+                  logger.error("Navigation error", { error, href: "/pages/support" });
+                  navigatingRef.current = false;
+                }
+              }}
+              style={{
+                width: "100%",
+                height: 40,
+                borderRadius: 8,
+                backgroundColor: isActive("/pages/support")
+                  ? "rgba(186, 153, 136, 0.15)"
+                  : "rgba(71, 71, 71, 0.3)",
+                alignItems: "center",
+                justifyContent: "center",
+                borderWidth: 1,
+                borderColor: isActive("/pages/support")
+                  ? "rgba(186, 153, 136, 0.3)"
+                  : "rgba(186, 153, 136, 0.1)",
+              }}
+            >
+              <MaterialIcons
+                name="support-agent"
+                size={20}
+                color={
+                  isActive("/pages/support")
+                    ? "#ba9988"
+                    : "rgba(255, 255, 255, 0.8)"
+                }
+              />
+            </TouchableOpacity>
+          ) : (
+            // Expanded: Show icon and text
+            <TouchableOpacity
+              onPress={() => {
+                // Prevent duplicate navigation calls
+                if (navigatingRef.current) {
+                  return;
+                }
+                // Check if we're already on the target route
+                if (pathname === "/pages/support") {
+                  return;
+                }
+                // Set navigating flag to prevent duplicate calls
+                navigatingRef.current = true;
+                // Navigate - router.push() is synchronous and doesn't return a Promise
+                try {
+                  router.push("/pages/support" as any);
+                } catch (error) {
+                  logger.error("Navigation error", { error, href: "/pages/support" });
+                  navigatingRef.current = false;
+                }
+              }}
+              style={{
+                width: "100%",
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                borderRadius: 8,
+                backgroundColor: isActive("/pages/support")
+                  ? "rgba(186, 153, 136, 0.15)"
+                  : "rgba(71, 71, 71, 0.3)",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                borderWidth: 1,
+                borderColor: isActive("/pages/support")
+                  ? "rgba(186, 153, 136, 0.3)"
+                  : "rgba(186, 153, 136, 0.1)",
+              }}
+            >
+              <MaterialIcons
+                name="support-agent"
+                size={18}
+                color={
+                  isActive("/pages/support")
+                    ? "#ba9988"
+                    : "rgba(255, 255, 255, 0.8)"
+                }
+              />
+              <Text
+                style={{
+                  fontSize: 13,
+                  fontWeight: isActive("/pages/support") ? "600" : "500",
+                  color: isActive("/pages/support")
+                    ? "#ffffff"
+                    : "rgba(255, 255, 255, 0.9)",
+                }}
+              >
+                Support
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
         {/* Toggle Button - Inside sidebar at bottom */}
         <View
           style={{

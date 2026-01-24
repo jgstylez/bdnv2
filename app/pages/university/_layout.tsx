@@ -15,6 +15,7 @@ export default function UniversityLayout() {
       <Stack.Screen name="videos" />
       <Stack.Screen name="videos/[id]" />
       <Stack.Screen name="help" />
+      <Stack.Screen name="help/[id]" />
       <Stack.Screen name="blog" />
       <Stack.Screen name="blog/[id]" />
     </Stack>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HelpArticle } from '@/types/education';
 
@@ -63,6 +64,7 @@ const categories = [
 ];
 
 export default function Help() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [searchQuery, setSearchQuery] = useState("");
@@ -155,6 +157,8 @@ export default function Help() {
             {filteredArticles.map((article) => (
               <TouchableOpacity
                 key={article.id}
+                onPress={() => router.push(`/pages/university/help/${article.id}`)}
+                activeOpacity={0.8}
                 style={{
                   backgroundColor: "#474747",
                   borderRadius: 16,
