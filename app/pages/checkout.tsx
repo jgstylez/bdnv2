@@ -1,32 +1,47 @@
 /**
  * Checkout Page
- * 
+ *
  * Handles both Buy Now (single product) and Cart checkout flows
  * Includes service fee calculation and payment processing
  */
 
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Alert, Platform } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  Platform,
+} from "react-native";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useResponsive } from '@/hooks/useResponsive';
-import { colors, spacing, borderRadius, typography } from '@/constants/theme';
-import { HeroSection } from '@/components/layouts/HeroSection';
-import { useCart } from '@/contexts/CartContext';
-import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '@/lib/fees';
-import { formatCurrency } from '@/lib/international';
-import { Product } from '@/types/merchant';
-import { Currency } from '@/types/wallet';
-import { ProductPlaceholder } from '@/components/ProductPlaceholder';
-import { FeeBreakdown } from '@/components/FeeBreakdown';
-import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelector';
-import { Wallet, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
-import { getMerchantName } from '@/lib/merchant-lookup';
-import { BackButton } from '@/components/navigation/BackButton';
-import { mockProducts as centralizedMockProducts, getMockProduct } from '@/data/mocks/products';
-import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { useResponsive } from "@/hooks/useResponsive";
+import { colors, spacing, borderRadius, typography } from "@/constants/theme";
+import { HeroSection } from "@/components/layouts/HeroSection";
+import { useCart } from "@/contexts/CartContext";
+import {
+  calculateConsumerTotalWithFee,
+  checkBDNPlusSubscription,
+} from "@/lib/fees";
+import { formatCurrency } from "@/lib/international";
+import { Product } from "@/types/merchant";
+import { Currency } from "@/types/wallet";
+import { ProductPlaceholder } from "@/components/ProductPlaceholder";
+import { FeeBreakdown } from "@/components/FeeBreakdown";
+import { PaymentMethodSelector } from "@/components/checkout/PaymentMethodSelector";
+import { ShippingAddressSelector } from "@/components/checkout/ShippingAddressSelector";
+import { Wallet, BankAccountWallet, CreditCardWallet } from "@/types/wallet";
+import { getMerchantName } from "@/lib/merchant-lookup";
+import { BackButton } from "@/components/navigation/BackButton";
+import {
+  mockProducts as centralizedMockProducts,
+  getMockProduct,
+} from "@/data/mocks/products";
+import { OptimizedScrollView } from "@/components/optimized/OptimizedScrollView";
+import { ShippingAddress } from "@/types/orders";
 
 // Extended wallet type for mock data with additional properties
 type MockWallet = Wallet & {
@@ -44,13 +59,30 @@ centralizedMockProducts.forEach((product) => {
   mockProducts[product.id] = product;
 });
 
-type CheckoutStep = "review" | "shipping" | "payment" | "processing" | "success" | "error";
+type CheckoutStep =
+  | "review"
+  | "shipping"
+  | "payment"
+  | "processing"
+  | "success"
+  | "error";
 
 export default function Checkout() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ buyNow?: string; productId?: string; quantity?: string }>();
-  const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
-  const { items: cartItems, businessOrders, getSubtotal, getShippingTotal, clearCart } = useCart();
+  const params = useLocalSearchParams<{
+    buyNow?: string;
+    productId?: string;
+    quantity?: string;
+  }>();
+  const { isMobile, paddingHorizontal, scrollViewBottomPadding } =
+    useResponsive();
+  const {
+    items: cartItems,
+    businessOrders,
+    getSubtotal,
+    getShippingTotal,
+    clearCart,
+  } = useCart();
   const [step, setStep] = useState<CheckoutStep>("review");
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null);
@@ -59,6 +91,11 @@ export default function Checkout() {
   const [useBLKD, setUseBLKD] = useState(true); // Preselected as true
   const [wallets, setWallets] = useState<MockWallet[]>([]);
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
+  const [selectedShippingAddressId, setSelectedShippingAddressId] = useState<
+    string | null
+  >(null);
+  const [shippingAddress, setShippingAddress] =
+    useState<ShippingAddress | null>(null);
 
   // Mock wallets - in production, fetch from API/context
   useEffect(() => {
@@ -117,7 +154,9 @@ export default function Checkout() {
     setWallets(mockWallets);
 
     // Pre-select default wallet
-    const defaultWallet = mockWallets.find((w) => w.isDefault && w.currency === "USD");
+    const defaultWallet = mockWallets.find(
+      (w) => w.isDefault && w.currency === "USD",
+    );
     if (defaultWallet) {
       setSelectedWalletId(defaultWallet.id);
     }
@@ -128,17 +167,24 @@ export default function Checkout() {
   const buyNowQuantity = parseInt(params?.quantity || "1", 10);
 
   // Get buy now product if exists - try centralized first, then local fallback
-  const buyNowProduct = buyNowProductId 
-    ? (getMockProduct(buyNowProductId) || mockProducts[buyNowProductId] || null)
+  const buyNowProduct = buyNowProductId
+    ? getMockProduct(buyNowProductId) || mockProducts[buyNowProductId] || null
     : null;
 
   // Get items to checkout
-  const checkoutItems = isBuyNow && buyNowProduct
-    ? [{ ...buyNowProduct, quantity: buyNowQuantity }]
-    : cartItems;
+  const checkoutItems =
+    isBuyNow && buyNowProduct
+      ? [{ ...buyNowProduct, quantity: buyNowQuantity }]
+      : cartItems;
 
   // Determine back button destination
   const getBackDestination = () => {
+    if (step === "shipping") {
+      return null; // Will handle with onPress
+    }
+    if (step === "payment") {
+      return null; // Will handle with onPress
+    }
     if (isBuyNow && buyNowProductId && buyNowProduct) {
       return `/pages/products/${buyNowProductId}`;
     }
@@ -146,49 +192,81 @@ export default function Checkout() {
   };
 
   const getBackLabel = () => {
+    if (step === "shipping") {
+      return "Back to Review";
+    }
+    if (step === "payment") {
+      return requiresShipping ? "Back to Shipping" : "Back to Review";
+    }
     if (isBuyNow && buyNowProduct) {
       return "Back to Product";
     }
     return "Back to Cart";
   };
 
+  const handleBack = () => {
+    if (step === "shipping") {
+      setStep("review");
+    } else if (step === "payment") {
+      if (requiresShipping) {
+        setStep("shipping");
+      } else {
+        setStep("review");
+      }
+    } else {
+      router.back();
+    }
+  };
+
   // Get business orders for checkout (only if not Buy Now)
-  const checkoutBusinessOrders = isBuyNow && buyNowProduct ? [] : businessOrders;
+  const checkoutBusinessOrders =
+    isBuyNow && buyNowProduct ? [] : businessOrders;
 
   // Calculate totals
-  const subtotal = isBuyNow && buyNowProduct
-    ? buyNowProduct.price * buyNowQuantity
-    : getSubtotal();
+  const subtotal =
+    isBuyNow && buyNowProduct
+      ? buyNowProduct.price * buyNowQuantity
+      : getSubtotal();
 
-  const shippingTotal = isBuyNow && buyNowProduct
-    ? (buyNowProduct.shippingRequired && buyNowProduct.shippingCost
-      ? buyNowProduct.shippingCost!
-      : 0)
-    : getShippingTotal();
+  const shippingTotal =
+    isBuyNow && buyNowProduct
+      ? buyNowProduct.shippingRequired && buyNowProduct.shippingCost
+        ? buyNowProduct.shippingCost!
+        : 0
+      : getShippingTotal();
 
   const orderSubtotal = subtotal + shippingTotal;
 
   // Calculate service fee
   const hasBDNPlus = checkBDNPlusSubscription("current-user-id");
-  const feeCalculation = calculateConsumerTotalWithFee(orderSubtotal, "USD", hasBDNPlus);
+  const feeCalculation = calculateConsumerTotalWithFee(
+    orderSubtotal,
+    "USD",
+    hasBDNPlus,
+  );
   const serviceFee = feeCalculation.serviceFee;
   const finalTotal = feeCalculation.total;
 
   // Get BLKD balance
-  const blkdWallet = wallets.find((w) => w.type === "myimpact" && w.currency === "BLKD");
+  const blkdWallet = wallets.find(
+    (w) => w.type === "myimpact" && w.currency === "BLKD",
+  );
   const blkdBalance = blkdWallet?.balance || 0;
 
   // Calculate remaining amount after BLKD
-  const blkdCoverage = useBLKD && blkdBalance > 0 ? Math.min(blkdBalance, finalTotal) : 0;
+  const blkdCoverage =
+    useBLKD && blkdBalance > 0 ? Math.min(blkdBalance, finalTotal) : 0;
   const remainingAfterBLKD = finalTotal - blkdCoverage;
 
   // Check if user has payment methods before allowing checkout
   useEffect(() => {
     if (wallets.length > 0 && step === "review") {
       const paymentWallets = wallets.filter(
-        (w) => w.type !== "myimpact" && w.currency === "USD" && w.isActive
+        (w) => w.type !== "myimpact" && w.currency === "USD" && w.isActive,
       );
-      const blkdWallet = wallets.find((w) => w.type === "myimpact" && w.currency === "BLKD");
+      const blkdWallet = wallets.find(
+        (w) => w.type === "myimpact" && w.currency === "BLKD",
+      );
       const hasBLKD = blkdWallet && (blkdWallet.balance || 0) >= finalTotal;
 
       // If no payment methods and BLKD can't cover the full amount, redirect to add payment method
@@ -206,7 +284,7 @@ export default function Checkout() {
               style: "cancel",
               onPress: () => router.back(),
             },
-          ]
+          ],
         );
       }
     }
@@ -214,7 +292,28 @@ export default function Checkout() {
 
   const itemCount = checkoutItems.reduce((sum, item) => sum + item.quantity, 0);
 
+  // Check if any products require shipping
+  const requiresShipping = checkoutItems.some(
+    (item) => item.productType === "physical" && item.shippingRequired,
+  );
+
   const handleProceedToPayment = () => {
+    // If shipping is required, go to shipping step first
+    if (requiresShipping) {
+      setStep("shipping");
+    } else {
+      setStep("payment");
+    }
+  };
+
+  const handleProceedFromShipping = () => {
+    if (!shippingAddress) {
+      Alert.alert(
+        "Shipping Address Required",
+        "Please select or add a shipping address.",
+      );
+      return;
+    }
     setStep("payment");
   };
 
@@ -235,7 +334,7 @@ export default function Checkout() {
 
         // Simulate potential errors (for testing - remove in production)
         const shouldFail = false; // Set to true to test error handling
-        
+
         if (shouldFail) {
           throw new Error("Payment processing failed");
         }
@@ -253,7 +352,7 @@ export default function Checkout() {
       } catch (error) {
         // Set user-friendly error message
         setErrorMessage(
-          "We couldn't complete your payment right now. Please check your payment method and try again, or contact support if the issue persists."
+          "We couldn't complete your payment right now. Please check your payment method and try again, or contact support if the issue persists.",
         );
         setStep("error");
       } finally {
@@ -281,7 +380,11 @@ export default function Checkout() {
             minHeight: "100%",
           }}
         >
-          <MaterialIcons name="error-outline" size={64} color={colors.text.tertiary} />
+          <MaterialIcons
+            name="error-outline"
+            size={64}
+            color={colors.text.tertiary}
+          />
           <Text
             style={{
               fontSize: typography.fontSize.xl,
@@ -348,7 +451,11 @@ export default function Checkout() {
             minHeight: "100%",
           }}
         >
-          <MaterialIcons name="shopping-cart" size={64} color={colors.text.tertiary} />
+          <MaterialIcons
+            name="shopping-cart"
+            size={64}
+            color={colors.text.tertiary}
+          />
           <Text
             style={{
               fontSize: typography.fontSize.xl,
@@ -403,7 +510,17 @@ export default function Checkout() {
         }}
       >
         {/* Back Button */}
-        <BackButton label={getBackLabel()} to={getBackDestination()} />
+        <BackButton
+          label={getBackLabel()}
+          to={
+            step === "shipping" || step === "payment"
+              ? undefined
+              : getBackDestination()
+          }
+          onPress={
+            step === "shipping" || step === "payment" ? handleBack : undefined
+          }
+        />
 
         <HeroSection
           title="Checkout"
@@ -456,22 +573,28 @@ export default function Checkout() {
                         borderColor: colors.border,
                       }}
                     >
-                      {item.images && 
-                       item.images.length > 0 && 
-                       item.images[0] && 
-                       item.images[0].trim() !== "" &&
-                       !imageErrors.has(item.id) ? (
+                      {item.images &&
+                      item.images.length > 0 &&
+                      item.images[0] &&
+                      item.images[0].trim() !== "" &&
+                      !imageErrors.has(item.id) ? (
                         <Image
                           source={{ uri: item.images[0] }}
                           style={{ width: "100%", height: "100%" }}
                           contentFit="cover"
                           cachePolicy="memory-disk"
                           onError={() => {
-                            setImageErrors((prev) => new Set(prev).add(item.id));
+                            setImageErrors((prev) =>
+                              new Set(prev).add(item.id),
+                            );
                           }}
                         />
                       ) : (
-                        <ProductPlaceholder width="100%" height={80} aspectRatio={1} />
+                        <ProductPlaceholder
+                          width="100%"
+                          height={80}
+                          aspectRatio={1}
+                        />
                       )}
                     </View>
                     <View style={{ flex: 1 }}>
@@ -492,7 +615,8 @@ export default function Checkout() {
                           marginBottom: spacing.xs,
                         }}
                       >
-                        {getMerchantName(item.merchantId)} • Quantity: {item.quantity}
+                        {getMerchantName(item.merchantId)} • Quantity:{" "}
+                        {item.quantity}
                       </Text>
                       <Text
                         style={{
@@ -501,7 +625,10 @@ export default function Checkout() {
                           color: colors.accent,
                         }}
                       >
-                        {formatCurrency(item.price * item.quantity, item.currency as Currency)}
+                        {formatCurrency(
+                          item.price * item.quantity,
+                          item.currency as Currency,
+                        )}
                       </Text>
                     </View>
                   </View>
@@ -510,25 +637,61 @@ export default function Checkout() {
 
               {/* Price Breakdown */}
               <View style={{ gap: spacing.md }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.base,
+                      color: colors.text.secondary,
+                    }}
+                  >
                     Subtotal ({itemCount} {itemCount === 1 ? "item" : "items"})
                   </Text>
-                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.base,
+                      color: colors.text.primary,
+                    }}
+                  >
                     {formatCurrency(subtotal, "USD")}
                   </Text>
                 </View>
                 {shippingTotal > 0 && (
-                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.base,
+                        color: colors.text.secondary,
+                      }}
+                    >
                       Shipping
                     </Text>
-                    <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.base,
+                        color: colors.text.primary,
+                      }}
+                    >
                       {formatCurrency(shippingTotal, "USD")}
                     </Text>
                   </View>
                 )}
-                <View style={{ height: 1, backgroundColor: colors.border, marginVertical: spacing.sm }} />
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: colors.border,
+                    marginVertical: spacing.sm,
+                  }}
+                />
 
                 {/* Service Fee */}
                 <FeeBreakdown
@@ -558,8 +721,19 @@ export default function Checkout() {
                       gap: spacing.md,
                     }}
                   >
-                    <View style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
-                      <MaterialIcons name="workspace-premium" size={24} color={colors.accent} />
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: spacing.sm,
+                      }}
+                    >
+                      <MaterialIcons
+                        name="workspace-premium"
+                        size={24}
+                        color={colors.accent}
+                      />
                       <View style={{ flex: 1 }}>
                         <Text
                           style={{
@@ -603,8 +777,19 @@ export default function Checkout() {
                   </TouchableOpacity>
                 )}
 
-                <View style={{ height: 1, backgroundColor: colors.border, marginVertical: spacing.sm }} />
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: colors.border,
+                    marginVertical: spacing.sm,
+                  }}
+                />
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <Text
                     style={{
                       fontSize: typography.fontSize.xl,
@@ -644,7 +829,42 @@ export default function Checkout() {
                   color: colors.textColors.onAccent,
                 }}
               >
-                Proceed to Payment
+                {requiresShipping
+                  ? "Proceed to Shipping"
+                  : "Proceed to Payment"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {step === "shipping" && (
+          <View style={{ gap: spacing.xl }}>
+            <ShippingAddressSelector
+              selectedAddressId={selectedShippingAddressId}
+              onSelectAddress={setSelectedShippingAddressId}
+              onAddressChange={setShippingAddress}
+            />
+
+            {/* Continue to Payment Button */}
+            <TouchableOpacity
+              onPress={handleProceedFromShipping}
+              disabled={!shippingAddress}
+              style={{
+                backgroundColor: shippingAddress ? colors.accent : colors.input,
+                paddingVertical: spacing.md + 2,
+                borderRadius: borderRadius.md,
+                alignItems: "center",
+                opacity: shippingAddress ? 1 : 0.5,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: typography.fontSize.lg,
+                  fontWeight: typography.fontWeight.bold,
+                  color: colors.textColors.onAccent,
+                }}
+              >
+                Continue to Payment
               </Text>
             </TouchableOpacity>
           </View>
@@ -663,6 +883,77 @@ export default function Checkout() {
               onToggleBLKD={setUseBLKD}
               onAddPaymentMethod={() => router.push("/(tabs)/pay")}
             />
+
+            {/* Shipping Address Summary (if shipping required) */}
+            {requiresShipping && shippingAddress && (
+              <View
+                style={{
+                  backgroundColor: colors.input,
+                  borderRadius: borderRadius.lg,
+                  padding: spacing.xl,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.lg,
+                    fontWeight: typography.fontWeight.bold,
+                    color: colors.text.primary,
+                    marginBottom: spacing.md,
+                  }}
+                >
+                  Shipping To
+                </Text>
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.base,
+                    color: colors.text.primary,
+                    marginBottom: spacing.xs / 2,
+                  }}
+                >
+                  {shippingAddress.fullName}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.sm,
+                    color: colors.text.secondary,
+                    marginBottom: spacing.xs / 2,
+                  }}
+                >
+                  {shippingAddress.street}
+                  {shippingAddress.street2 && `, ${shippingAddress.street2}`}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.sm,
+                    color: colors.text.secondary,
+                  }}
+                >
+                  {shippingAddress.city}, {shippingAddress.state}{" "}
+                  {shippingAddress.postalCode}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => setStep("shipping")}
+                  style={{
+                    marginTop: spacing.md,
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons name="edit" size={16} color={colors.accent} />
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.sm,
+                      color: colors.accent,
+                      marginLeft: spacing.xs,
+                    }}
+                  >
+                    Change Address
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
 
             {/* Payment Summary */}
             <View
@@ -685,26 +976,67 @@ export default function Checkout() {
                 Payment Summary
               </Text>
               <View style={{ gap: spacing.sm }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.base,
+                      color: colors.text.secondary,
+                    }}
+                  >
                     Order Total
                   </Text>
-                  <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.base,
+                      color: colors.text.primary,
+                    }}
+                  >
                     {formatCurrency(finalTotal, "USD")}
                   </Text>
                 </View>
                 {useBLKD && blkdCoverage > 0 && (
                   <>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.base,
+                          color: colors.text.secondary,
+                        }}
+                      >
                         BLKD Applied
                       </Text>
-                      <Text style={{ fontSize: typography.fontSize.base, color: colors.accent }}>
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.base,
+                          color: colors.accent,
+                        }}
+                      >
                         -{formatCurrency(blkdCoverage, "BLKD")}
                       </Text>
                     </View>
-                    <View style={{ height: 1, backgroundColor: colors.border, marginVertical: spacing.sm }} />
-                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <View
+                      style={{
+                        height: 1,
+                        backgroundColor: colors.border,
+                        marginVertical: spacing.sm,
+                      }}
+                    />
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <Text
                         style={{
                           fontSize: typography.fontSize.base,
@@ -734,7 +1066,10 @@ export default function Checkout() {
               onPress={handleProcessPayment}
               disabled={!selectedWalletId && remainingAfterBLKD > 0}
               style={{
-                backgroundColor: selectedWalletId || remainingAfterBLKD === 0 ? colors.accent : colors.input,
+                backgroundColor:
+                  selectedWalletId || remainingAfterBLKD === 0
+                    ? colors.accent
+                    : colors.input,
                 paddingVertical: spacing.md + 2,
                 paddingHorizontal: paddingHorizontal,
                 borderRadius: borderRadius.md,
@@ -802,8 +1137,14 @@ export default function Checkout() {
         )}
 
         {step === "processing" && (
-          <View style={{ alignItems: "center", paddingVertical: spacing["4xl"] }}>
-            <MaterialIcons name="hourglass-empty" size={64} color={colors.accent} />
+          <View
+            style={{ alignItems: "center", paddingVertical: spacing["4xl"] }}
+          >
+            <MaterialIcons
+              name="hourglass-empty"
+              size={64}
+              color={colors.accent}
+            />
             <Text
               style={{
                 fontSize: typography.fontSize.xl,
@@ -818,7 +1159,13 @@ export default function Checkout() {
         )}
 
         {step === "success" && (
-          <View style={{ alignItems: "center", paddingVertical: spacing["4xl"], paddingHorizontal: paddingHorizontal }}>
+          <View
+            style={{
+              alignItems: "center",
+              paddingVertical: spacing["4xl"],
+              paddingHorizontal: paddingHorizontal,
+            }}
+          >
             <View
               style={{
                 width: 80,
@@ -830,7 +1177,11 @@ export default function Checkout() {
                 marginBottom: spacing.lg,
               }}
             >
-              <MaterialIcons name="check" size={48} color={colors.text.primary} />
+              <MaterialIcons
+                name="check"
+                size={48}
+                color={colors.text.primary}
+              />
             </View>
             <Text
               style={{
@@ -851,9 +1202,10 @@ export default function Checkout() {
                 textAlign: "center",
               }}
             >
-              Your order has been processed successfully. You will receive a confirmation email shortly.
+              Your order has been processed successfully. You will receive a
+              confirmation email shortly.
             </Text>
-            
+
             {/* Transaction Details */}
             {transactionId && (
               <View
@@ -867,27 +1219,77 @@ export default function Checkout() {
                   borderColor: colors.border,
                 }}
               >
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.sm }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginBottom: spacing.sm,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.sm,
+                      color: colors.text.secondary,
+                    }}
+                  >
                     Transaction ID
                   </Text>
-                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.semibold,
+                      color: colors.text.primary,
+                    }}
+                  >
                     {transactionId}
                   </Text>
                 </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.sm }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginBottom: spacing.sm,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.sm,
+                      color: colors.text.secondary,
+                    }}
+                  >
                     Total Amount
                   </Text>
-                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.accent }}>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.semibold,
+                      color: colors.accent,
+                    }}
+                  >
                     {formatCurrency(finalTotal, "USD")}
                   </Text>
                 </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.sm,
+                      color: colors.text.secondary,
+                    }}
+                  >
                     Items
                   </Text>
-                  <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.semibold,
+                      color: colors.text.primary,
+                    }}
+                  >
                     {itemCount} {itemCount === 1 ? "item" : "items"}
                   </Text>
                 </View>
@@ -923,7 +1325,13 @@ export default function Checkout() {
         )}
 
         {step === "error" && (
-          <View style={{ alignItems: "center", paddingVertical: spacing["4xl"], paddingHorizontal: paddingHorizontal }}>
+          <View
+            style={{
+              alignItems: "center",
+              paddingVertical: spacing["4xl"],
+              paddingHorizontal: paddingHorizontal,
+            }}
+          >
             <View
               style={{
                 width: 80,
@@ -935,7 +1343,11 @@ export default function Checkout() {
                 marginBottom: spacing.lg,
               }}
             >
-              <MaterialIcons name="info-outline" size={48} color={colors.status.error} />
+              <MaterialIcons
+                name="info-outline"
+                size={48}
+                color={colors.status.error}
+              />
             </View>
             <Text
               style={{
@@ -957,10 +1369,13 @@ export default function Checkout() {
                 lineHeight: typography.lineHeight.relaxed,
               }}
             >
-              {errorMessage || "We couldn't complete your payment right now. Please check your payment method and try again."}
+              {errorMessage ||
+                "We couldn't complete your payment right now. Please check your payment method and try again."}
             </Text>
-            
-            <View style={{ flexDirection: "row", gap: spacing.md, width: "100%" }}>
+
+            <View
+              style={{ flexDirection: "row", gap: spacing.md, width: "100%" }}
+            >
               <TouchableOpacity
                 onPress={() => {
                   setStep("payment");
@@ -1023,4 +1438,3 @@ export default function Checkout() {
     </View>
   );
 }
-

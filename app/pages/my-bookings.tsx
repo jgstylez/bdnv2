@@ -14,6 +14,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { BackButton } from '@/components/navigation/BackButton';
+import { HeroSection } from '@/components/layouts/HeroSection';
 import { formatCurrency } from '@/lib/international';
 import { ProductPlaceholder } from '@/components/ProductPlaceholder';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
@@ -175,22 +176,16 @@ export default function MyBookings() {
       >
         <BackButton />
 
-        <Text
-          style={{
-            fontSize: isMobile ? typography.fontSize["2xl"] : typography.fontSize["3xl"],
-            fontWeight: typography.fontWeight.bold,
-            color: colors.text.primary,
-            marginBottom: spacing.lg,
-          }}
-        >
-          My Bookings
-        </Text>
+        <HeroSection
+          title="My Bookings"
+          subtitle={`${filteredBookings.length} ${filteredBookings.length === 1 ? "booking" : "bookings"}`}
+        />
 
         {/* Filter Tabs */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: spacing.sm, marginBottom: spacing.lg }}
+          contentContainerStyle={{ gap: spacing.md, marginBottom: spacing.xl, paddingRight: paddingHorizontal }}
         >
           {(["all", "confirmed", "pending", "completed", "cancelled"] as const).map((status) => (
             <TouchableOpacity
@@ -200,9 +195,9 @@ export default function MyBookings() {
                 paddingVertical: spacing.sm,
                 paddingHorizontal: spacing.md,
                 borderRadius: borderRadius.full,
-                backgroundColor: filter === status ? colors.accent : colors.secondary.bg,
+                backgroundColor: filter === status ? colors.accent : colors.secondary,
                 borderWidth: 1,
-                borderColor: filter === status ? colors.accent : colors.border.light,
+                borderColor: filter === status ? colors.accent : colors.accentLight,
               }}
             >
               <Text
@@ -223,12 +218,12 @@ export default function MyBookings() {
         {filteredBookings.length === 0 ? (
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.secondary,
               borderRadius: borderRadius.lg,
               padding: spacing["2xl"],
               alignItems: "center",
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.accentLight,
             }}
           >
             <MaterialIcons name="event-busy" size={64} color={colors.text.secondary} />
@@ -256,17 +251,17 @@ export default function MyBookings() {
             </Text>
           </View>
         ) : (
-          <View style={{ gap: spacing.md }}>
+          <View style={{ gap: spacing.lg }}>
             {filteredBookings.map((booking) => (
               <TouchableOpacity
                 key={booking.id}
                 onPress={() => handleViewDetails(booking)}
                 style={{
-                  backgroundColor: colors.secondary.bg,
+                  backgroundColor: colors.secondary,
                   borderRadius: borderRadius.lg,
-                  padding: spacing.md,
+                  padding: spacing.lg,
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: colors.accentLight,
                   ...(Platform.OS === "web" && {
                     // @ts-ignore - Web-only CSS properties
                     cursor: "pointer",
@@ -282,7 +277,9 @@ export default function MyBookings() {
                       height: 80,
                       borderRadius: borderRadius.md,
                       overflow: "hidden",
-                      backgroundColor: colors.secondary.bg,
+                      backgroundColor: colors.background,
+                      borderWidth: 1,
+                      borderColor: colors.accentLight,
                     }}
                   >
                     {booking.imageUrl ? (
@@ -297,8 +294,8 @@ export default function MyBookings() {
                   </View>
 
                   {/* Booking Info */}
-                  <View style={{ flex: 1, gap: spacing.xs }}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <View style={{ flex: 1, gap: spacing.sm }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: spacing.xs }}>
                       <View style={{ flex: 1 }}>
                         <Text
                           style={{
@@ -315,7 +312,6 @@ export default function MyBookings() {
                           style={{
                             fontSize: typography.fontSize.sm,
                             color: colors.text.secondary,
-                            marginBottom: spacing.xs,
                           }}
                         >
                           {booking.merchantName}
@@ -327,6 +323,7 @@ export default function MyBookings() {
                           paddingVertical: spacing.xs / 2,
                           paddingHorizontal: spacing.sm,
                           borderRadius: borderRadius.sm,
+                          marginLeft: spacing.sm,
                         }}
                       >
                         <Text
@@ -342,8 +339,8 @@ export default function MyBookings() {
                       </View>
                     </View>
 
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
-                      <MaterialIcons name="event" size={16} color={colors.text.secondary} />
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.xs / 2 }}>
+                      <MaterialIcons name="event" size={18} color={colors.text.secondary} />
                       <Text
                         style={{
                           fontSize: typography.fontSize.sm,
@@ -355,12 +352,12 @@ export default function MyBookings() {
                     </View>
 
                     <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
-                      <MaterialIcons name="attach-money" size={16} color={colors.text.secondary} />
+                      <MaterialIcons name="attach-money" size={18} color={colors.accent} />
                       <Text
                         style={{
-                          fontSize: typography.fontSize.sm,
-                          color: colors.text.primary,
-                          fontWeight: typography.fontWeight.semibold,
+                          fontSize: typography.fontSize.base,
+                          color: colors.accent,
+                          fontWeight: typography.fontWeight.bold,
                         }}
                       >
                         {formatCurrency(booking.price, booking.currency as any)}
@@ -368,11 +365,11 @@ export default function MyBookings() {
                     </View>
 
                     {booking.specialRequirements && (
-                      <View style={{ marginTop: spacing.xs }}>
+                      <View style={{ marginTop: spacing.xs, paddingTop: spacing.xs, borderTopWidth: 1, borderTopColor: colors.border.light }}>
                         <Text
                           style={{
-                            fontSize: typography.fontSize.xs,
-                            color: colors.text.tertiary,
+                            fontSize: typography.fontSize.sm,
+                            color: colors.text.secondary,
                             fontStyle: "italic",
                           }}
                           numberOfLines={2}
@@ -389,9 +386,9 @@ export default function MyBookings() {
                   <View
                     style={{
                       flexDirection: "row",
-                      gap: spacing.sm,
-                      marginTop: spacing.md,
-                      paddingTop: spacing.md,
+                      gap: spacing.md,
+                      marginTop: spacing.lg,
+                      paddingTop: spacing.lg,
                       borderTopWidth: 1,
                       borderTopColor: colors.border.light,
                     }}
@@ -400,17 +397,17 @@ export default function MyBookings() {
                       onPress={() => router.push(`/pages/products/${booking.productId}`)}
                       style={{
                         flex: 1,
-                        backgroundColor: colors.secondary.bg,
-                        paddingVertical: spacing.sm,
+                        backgroundColor: colors.background,
+                        paddingVertical: spacing.md,
                         borderRadius: borderRadius.md,
                         alignItems: "center",
                         borderWidth: 1,
-                        borderColor: colors.border.light,
+                        borderColor: colors.accentLight,
                       }}
                     >
                       <Text
                         style={{
-                          fontSize: typography.fontSize.sm,
+                          fontSize: typography.fontSize.base,
                           fontWeight: typography.fontWeight.semibold,
                           color: colors.text.primary,
                         }}
@@ -422,8 +419,8 @@ export default function MyBookings() {
                       onPress={() => handleCancelBooking(booking.id)}
                       style={{
                         flex: 1,
-                        backgroundColor: colors.status.error + "20",
-                        paddingVertical: spacing.sm,
+                        backgroundColor: colors.status.errorLight,
+                        paddingVertical: spacing.md,
                         borderRadius: borderRadius.md,
                         alignItems: "center",
                         borderWidth: 1,
@@ -432,7 +429,7 @@ export default function MyBookings() {
                     >
                       <Text
                         style={{
-                          fontSize: typography.fontSize.sm,
+                          fontSize: typography.fontSize.base,
                           fontWeight: typography.fontWeight.semibold,
                           color: colors.status.error,
                         }}

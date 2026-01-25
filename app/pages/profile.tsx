@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { FormSelect } from '@/components/forms/FormSelect';
 
 // Mock user data
 const mockUser = {
@@ -50,80 +51,116 @@ export default function Profile() {
   });
 
   const ethnicities = [
-    "African American",
-    "Afro-Caribbean",
-    "Afro-Latino",
-    "African",
-    "Multiracial (Black)",
-    "Other",
-    "Prefer not to say",
+    { label: "African American", value: "African American" },
+    { label: "Afro-Caribbean", value: "Afro-Caribbean" },
+    { label: "Afro-Latino", value: "Afro-Latino" },
+    { label: "African", value: "African" },
+    { label: "Multiracial (Black)", value: "Multiracial (Black)" },
+    { label: "Other", value: "Other" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
   ];
 
   const industries = [
-    "Technology",
-    "Healthcare",
-    "Finance",
-    "Education",
-    "Retail",
-    "Food & Beverage",
-    "Real Estate",
-    "Entertainment",
-    "Legal",
-    "Marketing & Advertising",
-    "Construction",
-    "Transportation",
-    "Other",
-    "Prefer not to say",
+    { label: "Technology", value: "Technology" },
+    { label: "Healthcare", value: "Healthcare" },
+    { label: "Finance", value: "Finance" },
+    { label: "Education", value: "Education" },
+    { label: "Retail", value: "Retail" },
+    { label: "Food & Beverage", value: "Food & Beverage" },
+    { label: "Real Estate", value: "Real Estate" },
+    { label: "Entertainment", value: "Entertainment" },
+    { label: "Legal", value: "Legal" },
+    { label: "Marketing & Advertising", value: "Marketing & Advertising" },
+    { label: "Construction", value: "Construction" },
+    { label: "Transportation", value: "Transportation" },
+    { label: "Other", value: "Other" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
   ];
 
-  const ageRanges = ["18-24", "25-34", "35-44", "45-54", "55-64", "65+", "Prefer not to say"];
+  const ageRanges = [
+    { label: "18-24", value: "18-24" },
+    { label: "25-34", value: "25-34" },
+    { label: "35-44", value: "35-44" },
+    { label: "45-54", value: "45-54" },
+    { label: "55-64", value: "55-64" },
+    { label: "65+", value: "65+" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
+  ];
 
-  const genders = ["Male", "Female", "Non-binary", "Other", "Prefer not to say"];
+  const genders = [
+    { label: "Male", value: "Male" },
+    { label: "Female", value: "Female" },
+    { label: "Non-binary", value: "Non-binary" },
+    { label: "Other", value: "Other" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
+  ];
 
   const educationLevels = [
-    "High School",
-    "Some College",
-    "Associate's Degree",
-    "Bachelor's Degree",
-    "Master's Degree",
-    "Doctorate/PhD",
-    "Professional Degree",
-    "Other",
-    "Prefer not to say",
+    { label: "High School", value: "High School" },
+    { label: "Some College", value: "Some College" },
+    { label: "Associate's Degree", value: "Associate's Degree" },
+    { label: "Bachelor's Degree", value: "Bachelor's Degree" },
+    { label: "Master's Degree", value: "Master's Degree" },
+    { label: "Doctorate/PhD", value: "Doctorate/PhD" },
+    { label: "Professional Degree", value: "Professional Degree" },
+    { label: "Other", value: "Other" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
   ];
 
   const hbcuList = [
-    "Howard University",
-    "Spelman College",
-    "Morehouse College",
-    "Hampton University",
-    "Tuskegee University",
-    "Fisk University",
-    "Xavier University of Louisiana",
-    "North Carolina A&T State University",
-    "Florida A&M University",
-    "Clark Atlanta University",
-    "Other HBCU",
-    "Not an HBCU graduate",
-    "Prefer not to say",
+    { label: "Howard University", value: "Howard University" },
+    { label: "Spelman College", value: "Spelman College" },
+    { label: "Morehouse College", value: "Morehouse College" },
+    { label: "Hampton University", value: "Hampton University" },
+    { label: "Tuskegee University", value: "Tuskegee University" },
+    { label: "Fisk University", value: "Fisk University" },
+    { label: "Xavier University of Louisiana", value: "Xavier University of Louisiana" },
+    { label: "North Carolina A&T State University", value: "North Carolina A&T State University" },
+    { label: "Florida A&M University", value: "Florida A&M University" },
+    { label: "Clark Atlanta University", value: "Clark Atlanta University" },
+    { label: "Other HBCU", value: "Other HBCU" },
+    { label: "Not an HBCU graduate", value: "Not an HBCU graduate" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
   ];
 
   const incomeRanges = [
-    "Under $25,000",
-    "$25,000 - $49,999",
-    "$50,000 - $74,999",
-    "$75,000 - $99,999",
-    "$100,000 - $149,999",
-    "$150,000 - $199,999",
-    "$200,000+",
-    "Prefer not to say",
+    { label: "Under $25,000", value: "Under $25,000" },
+    { label: "$25,000 - $49,999", value: "$25,000 - $49,999" },
+    { label: "$50,000 - $74,999", value: "$50,000 - $74,999" },
+    { label: "$75,000 - $99,999", value: "$75,000 - $99,999" },
+    { label: "$100,000 - $149,999", value: "$100,000 - $149,999" },
+    { label: "$150,000 - $199,999", value: "$150,000 - $199,999" },
+    { label: "$200,000+", value: "$200,000+" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
   ];
 
-  const employmentStatuses = ["Employed Full-time", "Employed Part-time", "Self-employed", "Unemployed", "Retired", "Student", "Prefer not to say"];
+  const employmentStatuses = [
+    { label: "Employed Full-time", value: "Employed Full-time" },
+    { label: "Employed Part-time", value: "Employed Part-time" },
+    { label: "Self-employed", value: "Self-employed" },
+    { label: "Unemployed", value: "Unemployed" },
+    { label: "Retired", value: "Retired" },
+    { label: "Student", value: "Student" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
+  ];
 
-  const householdSizes = ["1", "2", "3", "4", "5", "6+", "Prefer not to say"];
+  const householdSizes = [
+    { label: "1", value: "1" },
+    { label: "2", value: "2" },
+    { label: "3", value: "3" },
+    { label: "4", value: "4" },
+    { label: "5", value: "5" },
+    { label: "6+", value: "6+" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
+  ];
 
-  const languages = ["English", "Spanish", "French", "Other", "Prefer not to say"];
+  const languages = [
+    { label: "English", value: "English" },
+    { label: "Spanish", value: "Spanish" },
+    { label: "French", value: "French" },
+    { label: "Other", value: "Other" },
+    { label: "Prefer not to say", value: "Prefer not to say" },
+  ];
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -573,404 +610,94 @@ export default function Profile() {
               }}
             >
               {/* Ethnicity */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Ethnicity
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {ethnicities.map((ethnicity) => (
-                    <TouchableOpacity
-                      key={ethnicity}
-                      onPress={() => setDemographicsData({ ...demographicsData, ethnicity })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.ethnicity === ethnicity ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.ethnicity === ethnicity ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.ethnicity === ethnicity ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {ethnicity}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="Ethnicity"
+                value={demographicsData.ethnicity}
+                options={ethnicities}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, ethnicity: value })}
+                placeholder="Select ethnicity"
+              />
 
               {/* Industry */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Industry
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {industries.map((industry) => (
-                    <TouchableOpacity
-                      key={industry}
-                      onPress={() => setDemographicsData({ ...demographicsData, industry })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.industry === industry ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.industry === industry ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.industry === industry ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {industry}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="Industry"
+                value={demographicsData.industry}
+                options={industries}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, industry: value })}
+                placeholder="Select industry"
+              />
 
               {/* Age Range */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Age Range
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {ageRanges.map((range) => (
-                    <TouchableOpacity
-                      key={range}
-                      onPress={() => setDemographicsData({ ...demographicsData, ageRange: range })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.ageRange === range ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.ageRange === range ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.ageRange === range ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {range}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="Age Range"
+                value={demographicsData.ageRange}
+                options={ageRanges}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, ageRange: value })}
+                placeholder="Select age range"
+              />
 
               {/* Gender */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Gender
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {genders.map((gender) => (
-                    <TouchableOpacity
-                      key={gender}
-                      onPress={() => setDemographicsData({ ...demographicsData, gender })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.gender === gender ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.gender === gender ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.gender === gender ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {gender}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="Gender"
+                value={demographicsData.gender}
+                options={genders}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, gender: value })}
+                placeholder="Select gender"
+              />
 
               {/* Educational Background */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Educational Background
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {educationLevels.map((level) => (
-                    <TouchableOpacity
-                      key={level}
-                      onPress={() => setDemographicsData({ ...demographicsData, educationalBackground: level })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.educationalBackground === level ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.educationalBackground === level ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.educationalBackground === level ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {level}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="Educational Background"
+                value={demographicsData.educationalBackground}
+                options={educationLevels}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, educationalBackground: value })}
+                placeholder="Select educational background"
+              />
 
               {/* HBCU */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  HBCU (Historically Black Colleges and Universities)
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {hbcuList.map((hbcu) => (
-                    <TouchableOpacity
-                      key={hbcu}
-                      onPress={() => setDemographicsData({ ...demographicsData, hbcu })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.hbcu === hbcu ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.hbcu === hbcu ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.hbcu === hbcu ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {hbcu}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="HBCU (Historically Black Colleges and Universities)"
+                value={demographicsData.hbcu}
+                options={hbcuList}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, hbcu: value })}
+                placeholder="Select HBCU"
+              />
 
               {/* Income Range */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Annual Household Income Range
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {incomeRanges.map((range) => (
-                    <TouchableOpacity
-                      key={range}
-                      onPress={() => setDemographicsData({ ...demographicsData, incomeRange: range })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.incomeRange === range ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.incomeRange === range ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.incomeRange === range ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {range}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="Annual Household Income Range"
+                value={demographicsData.incomeRange}
+                options={incomeRanges}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, incomeRange: value })}
+                placeholder="Select income range"
+              />
 
               {/* Employment Status */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Employment Status
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {employmentStatuses.map((status) => (
-                    <TouchableOpacity
-                      key={status}
-                      onPress={() => setDemographicsData({ ...demographicsData, employmentStatus: status })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.employmentStatus === status ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.employmentStatus === status ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.employmentStatus === status ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {status}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="Employment Status"
+                value={demographicsData.employmentStatus}
+                options={employmentStatuses}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, employmentStatus: value })}
+                placeholder="Select employment status"
+              />
 
               {/* Household Size */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Household Size
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {householdSizes.map((size) => (
-                    <TouchableOpacity
-                      key={size}
-                      onPress={() => setDemographicsData({ ...demographicsData, householdSize: size })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.householdSize === size ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.householdSize === size ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.householdSize === size ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {size}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="Household Size"
+                value={demographicsData.householdSize}
+                options={householdSizes}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, householdSize: value })}
+                placeholder="Select household size"
+              />
 
               {/* Preferred Language */}
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    marginBottom: 8,
-                  }}
-                >
-                  Preferred Language
-                </Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                  {languages.map((language) => (
-                    <TouchableOpacity
-                      key={language}
-                      onPress={() => setDemographicsData({ ...demographicsData, preferredLanguage: language })}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 10,
-                        borderRadius: 20,
-                        backgroundColor: demographicsData.preferredLanguage === language ? "#ba9988" : "rgba(186, 153, 136, 0.15)",
-                        borderWidth: 1,
-                        borderColor: demographicsData.preferredLanguage === language ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          fontWeight: "600",
-                          color: demographicsData.preferredLanguage === language ? "#ffffff" : "#ba9988",
-                        }}
-                      >
-                        {language}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
+              <FormSelect
+                label="Preferred Language"
+                value={demographicsData.preferredLanguage}
+                options={languages}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, preferredLanguage: value })}
+                placeholder="Select preferred language"
+              />
 
               {/* Save Button */}
               <TouchableOpacity

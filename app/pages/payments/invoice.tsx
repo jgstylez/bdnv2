@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -10,6 +10,11 @@ import { formatCurrency } from '@/lib/international';
 import { Invoice } from '@/types/invoices';
 import { getAllMockBusinesses } from '@/data/mocks/businesses';
 import { useResponsive } from '@/hooks/useResponsive';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { HeroSection } from '@/components/layouts/HeroSection';
+import { BackButton } from '@/components/navigation/BackButton';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { FeeBreakdown } from '@/components/FeeBreakdown';
 
 // Extended wallet type for mock data with additional properties
 type MockWallet = WalletType & {
@@ -196,33 +201,72 @@ export default function InvoicePayment() {
   // If invoice not found, show error with helpful message
   if (!invoice) {
     return (
-      <View style={{ flex: 1, backgroundColor: "#232323", justifyContent: "center", alignItems: "center", padding: 20 }}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
         <StatusBar style="light" />
-        <MaterialIcons name="error-outline" size={64} color="#f44336" />
-        <Text style={{ fontSize: 20, fontWeight: "700", color: "#ffffff", marginTop: 24, marginBottom: 8 }}>
-          Invoice Not Found
-        </Text>
-        <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)", textAlign: "center", marginBottom: 8 }}>
-          The invoice you're trying to pay could not be found.
-        </Text>
-        {invoiceId && (
-          <Text style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.5)", textAlign: "center", marginBottom: 24 }}>
-            Invoice ID: {invoiceId}
-          </Text>
-        )}
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={{
-            backgroundColor: "#ba9988",
-            borderRadius: 12,
-            paddingVertical: 16,
-            paddingHorizontal: 32,
+        <OptimizedScrollView
+          contentContainerStyle={{
+            paddingHorizontal,
+            paddingTop: spacing.xl,
+            paddingBottom: scrollViewBottomPadding,
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "100%",
           }}
         >
-          <Text style={{ fontSize: 16, fontWeight: "600", color: "#ffffff" }}>
-            Go Back
+          <MaterialIcons name="error-outline" size={64} color={colors.status.error} />
+          <Text
+            style={{
+              fontSize: typography.fontSize.xl,
+              fontWeight: typography.fontWeight.bold,
+              color: colors.text.primary,
+              marginTop: spacing.lg,
+              marginBottom: spacing.sm,
+            }}
+          >
+            Invoice Not Found
           </Text>
-        </TouchableOpacity>
+          <Text
+            style={{
+              fontSize: typography.fontSize.base,
+              color: colors.text.secondary,
+              textAlign: "center",
+              marginBottom: spacing.sm,
+            }}
+          >
+            The invoice you're trying to pay could not be found.
+          </Text>
+          {invoiceId && (
+            <Text
+              style={{
+                fontSize: typography.fontSize.sm,
+                color: colors.text.tertiary,
+                textAlign: "center",
+                marginBottom: spacing.xl,
+              }}
+            >
+              Invoice ID: {invoiceId}
+            </Text>
+          )}
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={{
+              backgroundColor: colors.accent,
+              borderRadius: borderRadius.md,
+              paddingVertical: spacing.md + 2,
+              paddingHorizontal: paddingHorizontal,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.semibold,
+                color: colors.textColors.onAccent,
+              }}
+            >
+              Go Back
+            </Text>
+          </TouchableOpacity>
+        </OptimizedScrollView>
       </View>
     );
   }
@@ -255,7 +299,7 @@ export default function InvoicePayment() {
   const handleProceed = () => {
     if (step === "payment-method") {
       if (remainingAfterBLKD > 0 && !selectedWallet && !useBLKD) {
-        alert("Please select a payment method");
+        Alert.alert("Payment Method Required", "Please select a payment method.");
         return;
       }
       setStep("review");
@@ -302,140 +346,80 @@ export default function InvoicePayment() {
   };
 
   const renderPaymentMethodStep = () => (
-    <View style={{ gap: 24 }}>
-      <View>
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: "700",
-            color: "#ffffff",
-            marginBottom: 8,
-          }}
-        >
-          Pay Invoice
-        </Text>
-        <Text
-          style={{
-            fontSize: 14,
-            color: "rgba(255, 255, 255, 0.7)",
-          }}
-        >
-          Select a payment method to pay {formatCurrency(invoice.amountDue, invoice.currency)} to {invoice.issuerName}
-        </Text>
-      </View>
-
+    <View style={{ gap: spacing.xl }}>
       {/* Invoice Summary Card */}
       <View
         style={{
-          backgroundColor: "#474747",
-          borderRadius: 16,
-          padding: 20,
+          backgroundColor: colors.input,
+          borderRadius: borderRadius.lg,
+          padding: spacing.xl,
           borderWidth: 1,
-          borderColor: "rgba(186, 153, 136, 0.2)",
+          borderColor: colors.border,
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 16 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.md, marginBottom: spacing.md }}>
           {business && <BusinessPlaceholder width={40} height={40} aspectRatio={1} />}
           <View style={{ flex: 1 }}>
             <Text
               style={{
-                fontSize: 14,
-                fontWeight: "700",
-                color: "#ffffff",
-                marginBottom: 2,
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.bold,
+                color: colors.text.primary,
+                marginBottom: spacing.xs / 2,
               }}
             >
               {invoice.invoiceNumber}
             </Text>
             <Text
               style={{
-                fontSize: 12,
-                color: "rgba(255, 255, 255, 0.6)",
+                fontSize: typography.fontSize.sm,
+                color: colors.text.secondary,
               }}
             >
               {invoice.issuerName}
             </Text>
           </View>
         </View>
-        
-        <View style={{ gap: 8 }}>
+
+        <View style={{ gap: spacing.sm }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Invoice Amount</Text>
-            <Text style={{ fontSize: 16, fontWeight: "600", color: "#ffffff" }}>
+            <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>Invoice Amount</Text>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
               {formatCurrency(invoice.amountDue, invoice.currency)}
             </Text>
           </View>
-          
+
           {/* Service Fee */}
-          {serviceFee > 0 ? (
-            <>
-              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                  <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Service Fee (10%)</Text>
-                  {hasBDNPlus && (
-                    <View
-                      style={{
-                        backgroundColor: "rgba(186, 153, 136, 0.2)",
-                        paddingHorizontal: 6,
-                        paddingVertical: 2,
-                        borderRadius: 4,
-                      }}
-                    >
-                      <Text style={{ fontSize: 10, color: "#ba9988", fontWeight: "600" }}>BDN+</Text>
-                    </View>
-                  )}
-                </View>
-                <Text style={{ fontSize: 14, fontWeight: "600", color: "rgba(255, 255, 255, 0.7)" }}>
-                  {formatCurrency(serviceFee, currency)}
-                </Text>
-              </View>
-              {hasBDNPlus && (
-                <View style={{ marginBottom: 8 }}>
-                  <Text style={{ fontSize: 12, color: "#ba9988", fontStyle: "italic" }}>
-                    ✓ Service fee waived with BDN+
-                  </Text>
-                </View>
-              )}
-            </>
-          ) : hasBDNPlus ? (
-            <View style={{ marginBottom: 8 }}>
-              <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 4 }}>
-                <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Service Fee</Text>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ba9988", textDecorationLine: "line-through" }}>
-                    {formatCurrency(numericAmount * 0.10, currency)}
-                  </Text>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ba9988" }}>
-                    {formatCurrency(0, currency)}
-                  </Text>
-                </View>
-              </View>
-              <Text style={{ fontSize: 12, color: "#ba9988", fontStyle: "italic" }}>
-                ✓ Service fee waived with BDN+
-              </Text>
-            </View>
-          ) : null}
-          
-          <View style={{ height: 1, backgroundColor: "rgba(186, 153, 136, 0.2)", marginTop: 8, marginBottom: 8 }} />
+          <FeeBreakdown
+            amount={numericAmount}
+            fee={serviceFee}
+            currency={currency}
+            feeType="service"
+            hasBDNPlus={hasBDNPlus}
+            showTotal={false}
+            showTooltip={true}
+          />
+
+          <View style={{ height: 1, backgroundColor: colors.border, marginVertical: spacing.sm }} />
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <Text style={{ fontSize: 16, fontWeight: "700", color: "#ffffff" }}>Total</Text>
-            <Text style={{ fontSize: 20, fontWeight: "700", color: "#ba9988" }}>
+            <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>Total</Text>
+            <Text style={{ fontSize: typography.fontSize.xl, fontWeight: typography.fontWeight.bold, color: colors.accent }}>
               {formatCurrency(totalAmount, currency)}
             </Text>
           </View>
         </View>
       </View>
 
-      <View style={{ gap: 12 }}>
+      <View style={{ gap: spacing.md }}>
         {/* BLKD Toggle Option */}
         {blkdWallet && blkdBalance > 0 && (
           <View
             style={{
-              backgroundColor: "#474747",
-              borderRadius: 16,
-              padding: 16,
-              borderWidth: 1,
-              borderColor: useBLKD ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+              backgroundColor: colors.input,
+              borderRadius: borderRadius.lg,
+              padding: spacing.md,
+              borderWidth: 2,
+              borderColor: useBLKD ? colors.accent : colors.border,
             }}
           >
             <TouchableOpacity
@@ -443,7 +427,7 @@ export default function InvoicePayment() {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                gap: 12,
+                gap: spacing.md,
               }}
             >
               <View
@@ -452,22 +436,22 @@ export default function InvoicePayment() {
                   height: 24,
                   borderRadius: 12,
                   borderWidth: 2,
-                  borderColor: useBLKD ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                  backgroundColor: useBLKD ? "#ba9988" : "transparent",
+                  borderColor: useBLKD ? colors.accent : colors.border,
+                  backgroundColor: useBLKD ? colors.accent : "transparent",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                {useBLKD && <MaterialIcons name="check" size={16} color="#ffffff" />}
+                {useBLKD && <MaterialIcons name="check" size={16} color={colors.textColors.onAccent} />}
               </View>
               <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                  <MaterialIcons name="stars" size={20} color="#ba9988" />
+                <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xs, marginBottom: spacing.xs / 2 }}>
+                  <MaterialIcons name="stars" size={20} color={colors.accent} />
                   <Text
                     style={{
-                      fontSize: 16,
-                      fontWeight: "700",
-                      color: "#ffffff",
+                      fontSize: typography.fontSize.base,
+                      fontWeight: typography.fontWeight.bold,
+                      color: colors.text.primary,
                     }}
                   >
                     Apply BLKD
@@ -475,8 +459,8 @@ export default function InvoicePayment() {
                 </View>
                 <Text
                   style={{
-                    fontSize: 12,
-                    color: "rgba(255, 255, 255, 0.6)",
+                    fontSize: typography.fontSize.sm,
+                    color: colors.text.secondary,
                   }}
                 >
                   Available: {blkdBalance.toFixed(2)} BLKD
@@ -497,14 +481,14 @@ export default function InvoicePayment() {
                   key={wallet.id}
                   onPress={() => setSelectedWallet(wallet)}
                   style={{
-                    backgroundColor: isSelected ? "#ba9988" : "#474747",
-                    borderRadius: 16,
-                    padding: 20,
+                    backgroundColor: isSelected ? colors.accent : colors.input,
+                    borderRadius: borderRadius.lg,
+                    padding: spacing.lg,
                     borderWidth: 2,
-                    borderColor: isSelected ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                    borderColor: isSelected ? colors.accent : colors.border,
                     flexDirection: "row",
                     alignItems: "center",
-                    gap: 16,
+                    gap: spacing.md,
                   }}
                 >
                   <View
@@ -512,7 +496,7 @@ export default function InvoicePayment() {
                       width: 48,
                       height: 48,
                       borderRadius: 24,
-                      backgroundColor: isSelected ? "rgba(255, 255, 255, 0.2)" : "rgba(186, 153, 136, 0.2)",
+                      backgroundColor: isSelected ? "rgba(255, 255, 255, 0.2)" : colors.accent + "20",
                       alignItems: "center",
                       justifyContent: "center",
                     }}
@@ -528,16 +512,16 @@ export default function InvoicePayment() {
                           : "account-balance-wallet"
                       }
                       size={24}
-                      color={isSelected ? "#ffffff" : "#ba9988"}
+                      color={isSelected ? colors.textColors.onAccent : colors.accent}
                     />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text
                       style={{
-                        fontSize: 16,
-                        fontWeight: "700",
-                        color: "#ffffff",
-                        marginBottom: 4,
+                        fontSize: typography.fontSize.base,
+                        fontWeight: typography.fontWeight.bold,
+                        color: isSelected ? colors.textColors.onAccent : colors.text.primary,
+                        marginBottom: spacing.xs / 2,
                       }}
                     >
                       {(wallet as MockWallet).name}
@@ -545,8 +529,8 @@ export default function InvoicePayment() {
                     {(wallet as MockWallet).type === "creditcard" && (
                       <Text
                         style={{
-                          fontSize: 12,
-                          color: "rgba(255, 255, 255, 0.6)",
+                          fontSize: typography.fontSize.sm,
+                          color: isSelected ? colors.textColors.onAccent + "CC" : colors.text.secondary,
                         }}
                       >
                         •••• {(wallet as CreditCardWallet).last4}
@@ -555,8 +539,8 @@ export default function InvoicePayment() {
                     {(wallet as MockWallet).type === "bankaccount" && (
                       <Text
                         style={{
-                          fontSize: 12,
-                          color: "rgba(255, 255, 255, 0.6)",
+                          fontSize: typography.fontSize.sm,
+                          color: isSelected ? colors.textColors.onAccent + "CC" : colors.text.secondary,
                         }}
                       >
                         •••• {(wallet as MockWallet).last4}
@@ -566,24 +550,24 @@ export default function InvoicePayment() {
                   <View style={{ alignItems: "flex-end" }}>
                     <Text
                       style={{
-                        fontSize: 14,
-                        fontWeight: "600",
-                        color: isSelected ? "#ffffff" : "#ba9988",
+                        fontSize: typography.fontSize.base,
+                        fontWeight: typography.fontWeight.semibold,
+                        color: isSelected ? colors.textColors.onAccent : colors.accent,
                       }}
                     >
-                      {currency === "USD" ? "$" : ""}{balance.toFixed(2)}{currency === "BLKD" ? " BLKD" : ""}
+                      {formatCurrency(balance, currency)}
                     </Text>
                     <Text
                       style={{
-                        fontSize: 12,
-                        color: "rgba(255, 255, 255, 0.6)",
+                        fontSize: typography.fontSize.xs,
+                        color: isSelected ? colors.textColors.onAccent + "CC" : colors.text.secondary,
                       }}
                     >
                       Available
                     </Text>
                   </View>
                   {isSelected && (
-                    <MaterialIcons name="check-circle" size={24} color="#ffffff" />
+                    <MaterialIcons name="check-circle" size={24} color={colors.textColors.onAccent} />
                   )}
                 </TouchableOpacity>
               );
@@ -597,57 +581,36 @@ export default function InvoicePayment() {
   const renderReviewStep = () => {
     const balance = selectedWallet ? ((selectedWallet as MockWallet).availableBalance || selectedWallet.balance) : 0;
     return (
-      <View style={{ gap: 24 }}>
-        <View>
-          <Text
-            style={{
-              fontSize: 24,
-              fontWeight: "700",
-              color: "#ffffff",
-              marginBottom: 8,
-            }}
-          >
-            Review Payment
-          </Text>
-          <Text
-            style={{
-              fontSize: 14,
-              color: "rgba(255, 255, 255, 0.7)",
-            }}
-          >
-            Please review your payment details before confirming.
-          </Text>
-        </View>
-
+      <View style={{ gap: spacing.xl }}>
         {/* Invoice Info */}
         <View
           style={{
-            backgroundColor: "rgba(71, 71, 71, 0.3)",
-            borderRadius: 12,
-            padding: 12,
+            backgroundColor: colors.input,
+            borderRadius: borderRadius.md,
+            padding: spacing.md,
             borderWidth: 1,
-            borderColor: "rgba(186, 153, 136, 0.2)",
+            borderColor: colors.border,
             flexDirection: "row",
             alignItems: "center",
-            gap: 12,
+            gap: spacing.md,
           }}
         >
           {business && <BusinessPlaceholder width={40} height={40} aspectRatio={1} />}
           <View style={{ flex: 1 }}>
             <Text
               style={{
-                fontSize: 14,
-                fontWeight: "700",
-                color: "#ffffff",
-                marginBottom: 2,
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.bold,
+                color: colors.text.primary,
+                marginBottom: spacing.xs / 2,
               }}
             >
               {invoice.invoiceNumber}
             </Text>
             <Text
               style={{
-                fontSize: 11,
-                color: "rgba(255, 255, 255, 0.6)",
+                fontSize: typography.fontSize.xs,
+                color: colors.text.secondary,
               }}
             >
               {invoice.issuerName}
@@ -658,29 +621,29 @@ export default function InvoicePayment() {
         {/* Payment Summary */}
         <View
           style={{
-            backgroundColor: "#474747",
-            borderRadius: 16,
-            padding: 20,
+            backgroundColor: colors.input,
+            borderRadius: borderRadius.lg,
+            padding: spacing.xl,
             borderWidth: 1,
-            borderColor: "rgba(186, 153, 136, 0.2)",
-            gap: 16,
+            borderColor: colors.border,
+            gap: spacing.md,
           }}
         >
           <View>
             <Text
               style={{
-                fontSize: 14,
-                color: "rgba(255, 255, 255, 0.6)",
-                marginBottom: 8,
+                fontSize: typography.fontSize.base,
+                color: colors.text.secondary,
+                marginBottom: spacing.sm,
               }}
             >
               Invoice Amount
             </Text>
             <Text
               style={{
-                fontSize: 24,
-                fontWeight: "700",
-                color: "#ba9988",
+                fontSize: typography.fontSize["2xl"],
+                fontWeight: typography.fontWeight.bold,
+                color: colors.accent,
               }}
             >
               {formatCurrency(totalAmount, currency)}
@@ -690,82 +653,45 @@ export default function InvoicePayment() {
           {useBLKD && blkdCoverage > 0 && (
             <>
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>BLKD Applied</Text>
-                <Text style={{ fontSize: 14, fontWeight: "600", color: "#ba9988" }}>
-                  -{blkdCoverage.toFixed(2)} BLKD
+                <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>BLKD Applied</Text>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.accent }}>
+                  -{formatCurrency(blkdCoverage, "BLKD")}
                 </Text>
               </View>
-              <View style={{ height: 1, backgroundColor: "rgba(186, 153, 136, 0.2)" }} />
+              <View style={{ height: 1, backgroundColor: colors.border }} />
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontSize: 16, fontWeight: "700", color: "#ffffff" }}>Amount to Pay</Text>
-                <Text style={{ fontSize: 18, fontWeight: "700", color: "#ba9988" }}>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>Amount to Pay</Text>
+                <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.accent }}>
                   {formatCurrency(remainingAfterBLKD, currency)}
                 </Text>
               </View>
             </>
           )}
 
-          <View style={{ height: 1, backgroundColor: "rgba(186, 153, 136, 0.2)" }} />
-          <View style={{ gap: 12 }}>
-            {serviceFee > 0 ? (
-              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                  <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Service Fee (10%)</Text>
-                  {hasBDNPlus && (
-                    <View
-                      style={{
-                        backgroundColor: "rgba(186, 153, 136, 0.2)",
-                        paddingHorizontal: 6,
-                        paddingVertical: 2,
-                        borderRadius: 4,
-                      }}
-                    >
-                      <Text style={{ fontSize: 10, color: "#ba9988", fontWeight: "600" }}>BDN+</Text>
-                    </View>
-                  )}
-                </View>
-                <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>
-                  {formatCurrency(serviceFee, currency)}
-                </Text>
-              </View>
-            ) : hasBDNPlus ? (
-              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                  <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Service Fee</Text>
-                  <View
-                    style={{
-                      backgroundColor: "rgba(186, 153, 136, 0.2)",
-                      paddingHorizontal: 6,
-                      paddingVertical: 2,
-                      borderRadius: 4,
-                    }}
-                  >
-                    <Text style={{ fontSize: 10, color: "#ba9988", fontWeight: "600" }}>BDN+</Text>
-                  </View>
-                </View>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ba9988", textDecorationLine: "line-through" }}>
-                    {formatCurrency(numericAmount * 0.10, currency)}
-                  </Text>
-                  <Text style={{ fontSize: 14, fontWeight: "600", color: "#ba9988" }}>
-                    {formatCurrency(0, currency)}
-                  </Text>
-                </View>
-              </View>
-            ) : null}
+          <View style={{ height: 1, backgroundColor: colors.border }} />
+          <View style={{ gap: spacing.sm }}>
+            <FeeBreakdown
+              amount={numericAmount}
+              fee={serviceFee}
+              currency={currency}
+              feeType="service"
+              hasBDNPlus={hasBDNPlus}
+              showTotal={false}
+              showTooltip={true}
+            />
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-              <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Payment Method</Text>
-              <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>
+              <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>Payment Method</Text>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
                 {useBLKD && blkdCoverage > 0 ? "BLKD" : ""}
                 {useBLKD && blkdCoverage > 0 && remainingAfterBLKD > 0 ? " + " : ""}
                 {remainingAfterBLKD > 0 ? selectedWallet?.name : ""}
               </Text>
             </View>
           </View>
-          <View style={{ height: 1, backgroundColor: "rgba(186, 153, 136, 0.2)" }} />
+          <View style={{ height: 1, backgroundColor: colors.border }} />
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <Text style={{ fontSize: 18, fontWeight: "700", color: "#ffffff" }}>Total</Text>
-            <Text style={{ fontSize: 24, fontWeight: "700", color: "#ba9988" }}>
+            <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>Total</Text>
+            <Text style={{ fontSize: typography.fontSize["2xl"], fontWeight: typography.fontWeight.bold, color: colors.accent }}>
               {formatCurrency(remainingAfterBLKD > 0 ? remainingAfterBLKD : totalAmount, currency)}
             </Text>
           </View>
@@ -773,22 +699,22 @@ export default function InvoicePayment() {
           {remainingAfterBLKD > 0 && selectedWallet && (
             <View
               style={{
-                backgroundColor: "#232323",
-                borderRadius: 12,
-                padding: 16,
-                marginTop: 8,
+                backgroundColor: colors.background,
+                borderRadius: borderRadius.md,
+                padding: spacing.md,
+                marginTop: spacing.sm,
               }}
             >
-              <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
-                <Text style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.6)" }}>Current Balance</Text>
-                <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>
-                  {currency === "USD" ? "$" : ""}{balance.toFixed(2)}{currency === "BLKD" ? " BLKD" : ""}
+              <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.sm }}>
+                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>Current Balance</Text>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                  {formatCurrency(balance, currency)}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.6)" }}>After Payment</Text>
-                <Text style={{ fontSize: 14, fontWeight: "600", color: "#4caf50" }}>
-                  {currency === "USD" ? "$" : ""}{(balance - remainingAfterBLKD).toFixed(2)}{currency === "BLKD" ? " BLKD" : ""}
+                <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>After Payment</Text>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.status.success }}>
+                  {formatCurrency(balance - remainingAfterBLKD, currency)}
                 </Text>
               </View>
             </View>
@@ -799,21 +725,21 @@ export default function InvoicePayment() {
   };
 
   const renderProcessingStep = () => (
-    <View style={{ alignItems: "center", paddingVertical: 60, gap: 24 }}>
-      <MaterialIcons name="hourglass-empty" size={64} color="#ba9988" />
+    <View style={{ alignItems: "center", paddingVertical: spacing["4xl"], gap: spacing.xl }}>
+      <MaterialIcons name="hourglass-empty" size={64} color={colors.accent} />
       <Text
         style={{
-          fontSize: 20,
-          fontWeight: "700",
-          color: "#ffffff",
+          fontSize: typography.fontSize.xl,
+          fontWeight: typography.fontWeight.bold,
+          color: colors.text.primary,
         }}
       >
         Processing Payment...
       </Text>
       <Text
         style={{
-          fontSize: 14,
-          color: "rgba(255, 255, 255, 0.7)",
+          fontSize: typography.fontSize.base,
+          color: colors.text.secondary,
           textAlign: "center",
         }}
       >
@@ -823,42 +749,41 @@ export default function InvoicePayment() {
   );
 
   const renderErrorStep = () => (
-    <View style={{ alignItems: "center", paddingVertical: 60, gap: 24 }}>
+    <View style={{ alignItems: "center", paddingVertical: spacing["4xl"], paddingHorizontal: paddingHorizontal, gap: spacing.xl }}>
       <View
         style={{
           width: 80,
           height: 80,
           borderRadius: 40,
-          backgroundColor: "rgba(244, 67, 54, 0.2)",
+          backgroundColor: colors.status.errorLight,
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <MaterialIcons name="info-outline" size={48} color="#f44336" />
+        <MaterialIcons name="info-outline" size={48} color={colors.status.error} />
       </View>
-      <View style={{ alignItems: "center", gap: 8 }}>
+      <View style={{ alignItems: "center", gap: spacing.sm }}>
         <Text
           style={{
-            fontSize: 24,
-            fontWeight: "700",
-            color: "#ffffff",
+            fontSize: typography.fontSize["2xl"],
+            fontWeight: typography.fontWeight.bold,
+            color: colors.text.primary,
           }}
         >
           Payment Not Completed
         </Text>
         <Text
           style={{
-            fontSize: 14,
-            color: "rgba(255, 255, 255, 0.7)",
+            fontSize: typography.fontSize.base,
+            color: colors.text.secondary,
             textAlign: "center",
-            lineHeight: 20,
-            paddingHorizontal: 20,
+            lineHeight: typography.lineHeight.relaxed,
           }}
         >
           {errorMessage || "We couldn't complete your payment right now. Please check your payment method and try again, or contact support if the issue persists."}
         </Text>
       </View>
-      <View style={{ flexDirection: "row", gap: 12, width: "100%", marginTop: 8 }}>
+      <View style={{ flexDirection: "row", gap: spacing.md, width: "100%", marginTop: spacing.sm }}>
         <TouchableOpacity
           onPress={() => {
             setStep("payment-method");
@@ -866,17 +791,17 @@ export default function InvoicePayment() {
           }}
           style={{
             flex: 1,
-            backgroundColor: "#ba9988",
-            borderRadius: 12,
-            paddingVertical: 16,
+            backgroundColor: colors.accent,
+            borderRadius: borderRadius.md,
+            paddingVertical: spacing.md + 2,
             alignItems: "center",
           }}
         >
           <Text
             style={{
-              fontSize: 16,
-              fontWeight: "600",
-              color: "#ffffff",
+              fontSize: typography.fontSize.base,
+              fontWeight: typography.fontWeight.semibold,
+              color: colors.textColors.onAccent,
             }}
           >
             Try Again
@@ -886,19 +811,19 @@ export default function InvoicePayment() {
           onPress={() => router.back()}
           style={{
             flex: 1,
-            backgroundColor: "#232323",
-            borderRadius: 12,
-            paddingVertical: 16,
+            backgroundColor: colors.input,
+            borderRadius: borderRadius.md,
+            paddingVertical: spacing.md + 2,
             alignItems: "center",
             borderWidth: 1,
-            borderColor: "rgba(186, 153, 136, 0.2)",
+            borderColor: colors.border,
           }}
         >
           <Text
             style={{
-              fontSize: 16,
-              fontWeight: "600",
-              color: "#ffffff",
+              fontSize: typography.fontSize.base,
+              fontWeight: typography.fontWeight.semibold,
+              color: colors.text.primary,
             }}
           >
             Go Back
@@ -909,34 +834,35 @@ export default function InvoicePayment() {
   );
 
   const renderSuccessStep = () => (
-    <View style={{ alignItems: "center", paddingVertical: 60, gap: 24 }}>
+    <View style={{ alignItems: "center", paddingVertical: spacing["4xl"], paddingHorizontal: paddingHorizontal, gap: spacing.xl }}>
       <View
         style={{
           width: 80,
           height: 80,
           borderRadius: 40,
-          backgroundColor: "#4caf50",
+          backgroundColor: colors.status.success,
           alignItems: "center",
           justifyContent: "center",
+          marginBottom: spacing.lg,
         }}
       >
-        <MaterialIcons name="check" size={48} color="#ffffff" />
+        <MaterialIcons name="check" size={48} color={colors.text.primary} />
       </View>
-      <View style={{ alignItems: "center", gap: 8 }}>
+      <View style={{ alignItems: "center", gap: spacing.sm }}>
         <Text
           style={{
-            fontSize: 24,
-            fontWeight: "700",
-            color: "#ffffff",
+            fontSize: typography.fontSize["2xl"],
+            fontWeight: typography.fontWeight.bold,
+            color: colors.text.primary,
           }}
         >
           Payment Successful!
         </Text>
         <Text
           style={{
-            fontSize: 16,
-            fontWeight: "600",
-            color: "#ba9988",
+            fontSize: typography.fontSize.lg,
+            fontWeight: typography.fontWeight.semibold,
+            color: colors.accent,
           }}
         >
           {formatCurrency(numericAmount, currency)} paid for {invoice.invoiceNumber}
@@ -945,51 +871,51 @@ export default function InvoicePayment() {
 
       <View
         style={{
-          backgroundColor: "#474747",
-          borderRadius: 16,
-          padding: 20,
+          backgroundColor: colors.input,
+          borderRadius: borderRadius.lg,
+          padding: spacing.lg,
           borderWidth: 1,
-          borderColor: "rgba(186, 153, 136, 0.2)",
+          borderColor: colors.border,
           width: "100%",
-          gap: 12,
+          gap: spacing.sm,
         }}
       >
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Invoice</Text>
-          <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>{invoice.invoiceNumber}</Text>
+          <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>Invoice</Text>
+          <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>{invoice.invoiceNumber}</Text>
         </View>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Transaction ID</Text>
-          <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>{transactionId}</Text>
+          <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>Transaction ID</Text>
+          <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>{transactionId}</Text>
         </View>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Amount</Text>
-          <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>
+          <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>Amount</Text>
+          <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
             {formatCurrency(numericAmount, currency)}
           </Text>
         </View>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>Recipient</Text>
-          <Text style={{ fontSize: 14, fontWeight: "600", color: "#ffffff" }}>{invoice.issuerName}</Text>
+          <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>Recipient</Text>
+          <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>{invoice.issuerName}</Text>
         </View>
       </View>
 
       <TouchableOpacity
         onPress={handleComplete}
         style={{
-          backgroundColor: "#ba9988",
-          borderRadius: 12,
-          paddingVertical: 16,
-          paddingHorizontal: 32,
+          backgroundColor: colors.accent,
+          borderRadius: borderRadius.md,
+          paddingVertical: spacing.md + 2,
+          paddingHorizontal: paddingHorizontal,
           width: "100%",
           alignItems: "center",
         }}
       >
         <Text
           style={{
-            fontSize: 16,
-            fontWeight: "600",
-            color: "#ffffff",
+            fontSize: typography.fontSize.base,
+            fontWeight: typography.fontWeight.semibold,
+            color: colors.textColors.onAccent,
           }}
         >
           Done
@@ -999,19 +925,29 @@ export default function InvoicePayment() {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#232323" }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
           paddingHorizontal,
-          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingTop: spacing.lg,
           paddingBottom: scrollViewBottomPadding,
         }}
       >
+        {/* Back Button */}
+        <BackButton label="Back" />
+
+        {/* Hero Section */}
+        <HeroSection
+          title="Pay Invoice"
+          subtitle={`${invoice.invoiceNumber} • ${formatCurrency(invoice.amountDue, invoice.currency)}`}
+        />
+
         {/* Progress Steps */}
         {step !== "processing" && step !== "success" && step !== "error" && (
-          <View style={{ marginBottom: 24 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 12 }}>
+          <View style={{ marginBottom: spacing.xl }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.md }}>
               {[
                 { step: "payment-method", label: "Payment" },
                 { step: "review", label: "Review" },
@@ -1026,17 +962,17 @@ export default function InvoicePayment() {
                         width: 40,
                         height: 40,
                         borderRadius: 20,
-                        backgroundColor: isActive ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                        backgroundColor: isActive ? colors.accent : colors.accent + "20",
                         alignItems: "center",
                         justifyContent: "center",
-                        marginBottom: 8,
+                        marginBottom: spacing.sm,
                       }}
                     >
                       <Text
                         style={{
-                          fontSize: 16,
-                          fontWeight: "700",
-                          color: isActive ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
+                          fontSize: typography.fontSize.base,
+                          fontWeight: typography.fontWeight.bold,
+                          color: isActive ? colors.textColors.onAccent : colors.text.secondary,
                         }}
                       >
                         {index + 1}
@@ -1044,8 +980,8 @@ export default function InvoicePayment() {
                     </View>
                     <Text
                       style={{
-                        fontSize: 12,
-                        color: isCurrent ? "#ba9988" : "rgba(255, 255, 255, 0.5)",
+                        fontSize: typography.fontSize.sm,
+                        color: isCurrent ? colors.accent : colors.text.secondary,
                       }}
                     >
                       {s.label}
@@ -1066,24 +1002,24 @@ export default function InvoicePayment() {
 
         {/* Navigation Buttons */}
         {step !== "processing" && step !== "success" && step !== "error" && (
-          <View style={{ flexDirection: "row", gap: 12, marginTop: 24 }}>
+          <View style={{ flexDirection: "row", gap: spacing.md, marginTop: spacing.xl }}>
             <TouchableOpacity
               onPress={() => router.back()}
               style={{
                 flex: 1,
-                paddingVertical: 16,
-                borderRadius: 12,
-                backgroundColor: "#232323",
+                paddingVertical: spacing.md + 2,
+                borderRadius: borderRadius.md,
+                backgroundColor: colors.input,
                 borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
+                borderColor: colors.border,
                 alignItems: "center",
               }}
             >
               <Text
                 style={{
-                  fontSize: 16,
-                  fontWeight: "600",
-                  color: "#ffffff",
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.semibold,
+                  color: colors.text.primary,
                 }}
               >
                 Cancel
@@ -1096,21 +1032,22 @@ export default function InvoicePayment() {
               }
               style={{
                 flex: 1,
-                paddingVertical: 16,
-                paddingHorizontal: isMobile ? 20 : 32,
-                borderRadius: 12,
+                paddingVertical: spacing.md + 2,
+                paddingHorizontal: paddingHorizontal,
+                borderRadius: borderRadius.md,
                 backgroundColor:
                   step === "payment-method" && remainingAfterBLKD > 0 && !selectedWallet && !useBLKD
-                    ? "rgba(186, 153, 136, 0.3)"
-                    : "#ba9988",
+                    ? colors.input
+                    : colors.accent,
                 alignItems: "center",
+                opacity: step === "payment-method" && remainingAfterBLKD > 0 && !selectedWallet && !useBLKD ? 0.5 : 1,
               }}
             >
               <Text
                 style={{
-                  fontSize: 16,
-                  fontWeight: "600",
-                  color: "#ffffff",
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.semibold,
+                  color: colors.textColors.onAccent,
                 }}
               >
                 {step === "review" ? "Confirm Payment" : "Continue"}
@@ -1118,7 +1055,7 @@ export default function InvoicePayment() {
             </TouchableOpacity>
           </View>
         )}
-      </ScrollView>
+      </OptimizedScrollView>
     </View>
   );
 }

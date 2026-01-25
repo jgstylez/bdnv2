@@ -335,14 +335,14 @@ export default function CreateInvoice() {
           {recipientUserId || recipientEmail ? (
             <View
               style={{
-                backgroundColor: "rgba(71, 71, 71, 0.3)",
-                borderRadius: 12,
-                padding: 12,
+                backgroundColor: colors.secondary.bg,
+                borderRadius: borderRadius.md,
+                padding: spacing.md,
                 borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
+                borderColor: colors.border.light,
                 flexDirection: "row",
                 alignItems: "center",
-                gap: 12,
+                gap: spacing.md,
               }}
             >
               <MaterialIcons name="person" size={40} color="rgba(255, 255, 255, 0.5)" />
@@ -396,14 +396,14 @@ export default function CreateInvoice() {
             <TouchableOpacity
               onPress={() => setShowRecipientModal(true)}
               style={{
-                backgroundColor: "#474747",
-                borderRadius: 16,
-                padding: 16,
+                backgroundColor: colors.secondary.bg,
+                borderRadius: borderRadius.md,
+                padding: spacing.lg,
                 borderWidth: 1,
-                borderColor: "rgba(186, 153, 136, 0.2)",
+                borderColor: colors.border.light,
                 flexDirection: "row",
                 alignItems: "center",
-                gap: 16,
+                gap: spacing.md,
               }}
             >
               <MaterialIcons name="person-add" size={24} color="rgba(255, 255, 255, 0.5)" />
@@ -467,20 +467,22 @@ export default function CreateInvoice() {
               />
             </View>
           </View>
-          <FilterDropdown
-            label="Payment Terms"
-            value={paymentTerms}
-            onSelect={setPaymentTerms}
-            options={[
-              { value: "Immediately", label: "Immediately" },
-              { value: "Due on receipt", label: "Due on receipt" },
-              { value: "Net 15", label: "Net 15" },
-              { value: "Net 30", label: "Net 30" },
-              { value: "Net 45", label: "Net 45" },
-              { value: "Net 60", label: "Net 60" },
-            ]}
-            placeholder="Select payment terms"
-          />
+          <View style={{ marginTop: spacing.md }}>
+            <FilterDropdown
+              label="Payment Terms"
+              value={paymentTerms}
+              onSelect={setPaymentTerms}
+              options={[
+                { value: "Immediately", label: "Immediately" },
+                { value: "Due on receipt", label: "Due on receipt" },
+                { value: "Net 15", label: "Net 15" },
+                { value: "Net 30", label: "Net 30" },
+                { value: "Net 45", label: "Net 45" },
+                { value: "Net 60", label: "Net 60" },
+              ]}
+              placeholder="Select payment terms"
+            />
+          </View>
         </View>
 
         {/* Recurring Settings */}
@@ -545,7 +547,7 @@ export default function CreateInvoice() {
 
         {/* Line Items */}
         <View style={{ marginBottom: spacing.xl }}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.md }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.lg }}>
             <Text
               style={{
                 fontSize: typography.fontSize.lg,
@@ -585,14 +587,14 @@ export default function CreateInvoice() {
               key={item.id}
               style={{
                 backgroundColor: colors.secondary.bg,
-                borderRadius: borderRadius.md,
-                padding: spacing.md,
-                marginBottom: spacing.md,
+                borderRadius: borderRadius.lg,
+                padding: spacing.lg,
+                marginBottom: spacing.lg,
                 borderWidth: 1,
                 borderColor: colors.border.light,
               }}
             >
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.sm }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.md }}>
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
@@ -603,21 +605,26 @@ export default function CreateInvoice() {
                   Item {index + 1}
                 </Text>
                 {lineItems.length > 1 && (
-                  <TouchableOpacity onPress={() => removeLineItem(item.id)}>
+                  <TouchableOpacity 
+                    onPress={() => removeLineItem(item.id)}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
                     <MaterialIcons name="delete" size={20} color={colors.status.error} />
                   </TouchableOpacity>
                 )}
               </View>
 
-              <FormInput
-                label="Description"
-                value={item.description}
-                onChangeText={(value) => updateLineItem(item.id, "description", value)}
-                required
-                placeholder="Item description"
-              />
+              <View style={{ marginBottom: spacing.md }}>
+                <FormInput
+                  label="Description"
+                  value={item.description}
+                  onChangeText={(value) => updateLineItem(item.id, "description", value)}
+                  required
+                  placeholder="Item description"
+                />
+              </View>
 
-              <View style={{ flexDirection: "row", gap: spacing.sm }}>
+              <View style={{ flexDirection: isMobile ? "column" : "row", gap: isMobile ? spacing.md : spacing.md, marginBottom: spacing.md }}>
                 <View style={{ flex: 1 }}>
                   <FormInput
                     label="Quantity"
@@ -640,7 +647,7 @@ export default function CreateInvoice() {
                 </View>
               </View>
 
-              <View style={{ flexDirection: "row", gap: spacing.sm }}>
+              <View style={{ flexDirection: isMobile ? "column" : "row", gap: isMobile ? spacing.md : spacing.md, marginBottom: spacing.md }}>
                 <View style={{ flex: 1 }}>
                   <FormInput
                     label="Tax"
@@ -663,8 +670,8 @@ export default function CreateInvoice() {
 
               <View
                 style={{
-                  marginTop: spacing.sm,
-                  paddingTop: spacing.sm,
+                  marginTop: spacing.md,
+                  paddingTop: spacing.md,
                   borderTopWidth: 1,
                   borderTopColor: colors.border.light,
                 }}
@@ -700,12 +707,12 @@ export default function CreateInvoice() {
               fontSize: typography.fontSize.xl,
               fontWeight: typography.fontWeight.bold,
               color: colors.text.primary,
-              marginBottom: spacing.md,
+              marginBottom: spacing.lg,
             }}
           >
             Summary
           </Text>
-          <View style={{ gap: spacing.sm, marginBottom: spacing.md }}>
+          <View style={{ gap: spacing.md }}>
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
               <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary }}>Subtotal</Text>
               <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>${subtotal.toFixed(2)}</Text>
@@ -754,13 +761,15 @@ export default function CreateInvoice() {
 
         {/* Notes & Terms */}
         <View style={{ marginBottom: spacing.xl }}>
-          <FormTextArea
-            label="Notes (Optional)"
-            value={notes}
-            onChangeText={setNotes}
-            placeholder="Additional notes for the recipient"
-            rows={4}
-          />
+          <View style={{ marginBottom: spacing.lg }}>
+            <FormTextArea
+              label="Notes (Optional)"
+              value={notes}
+              onChangeText={setNotes}
+              placeholder="Additional notes for the recipient"
+              rows={4}
+            />
+          </View>
           <FormTextArea
             label="Terms & Conditions (Optional)"
             value={terms}
