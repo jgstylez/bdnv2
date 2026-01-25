@@ -7,6 +7,8 @@ import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { MessageAttachment } from '@/types/messages';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { HelpArticle } from '@/types/education';
+import { useRouter } from "expo-router";
 
 interface Message {
   id: string;
@@ -22,9 +24,91 @@ const mockAuthenticatedUser = {
   email: "john.doe@example.com",
 };
 
+// Mock help articles for help center panel
+const mockHelpArticles: HelpArticle[] = [
+  {
+    id: "1",
+    title: "How do I reset my password?",
+    content: "To reset your password, go to the login page and click 'Forgot Password'. Enter your email address and follow the instructions sent to your email.",
+    category: "account",
+    tags: ["password", "security", "account"],
+    helpful: 45,
+    notHelpful: 2,
+    createdAt: "2024-01-15T00:00:00Z",
+    updatedAt: "2024-02-01T00:00:00Z",
+  },
+  {
+    id: "2",
+    title: "How do I earn cashback?",
+    content: "Cashback is automatically earned when you make purchases at Black-owned businesses. The percentage varies by merchant and is credited to your account after the transaction is processed.",
+    category: "rewards",
+    tags: ["cashback", "rewards", "purchases"],
+    helpful: 89,
+    notHelpful: 5,
+    createdAt: "2024-01-20T00:00:00Z",
+    updatedAt: "2024-02-05T00:00:00Z",
+  },
+  {
+    id: "3",
+    title: "How do I add a payment method?",
+    content: "Go to the Pay section, tap 'Add Wallet', and select your payment method type. Follow the prompts to securely add your card or bank account.",
+    category: "payments",
+    tags: ["payments", "wallet", "cards"],
+    helpful: 67,
+    notHelpful: 3,
+    createdAt: "2024-02-01T00:00:00Z",
+    updatedAt: "2024-02-10T00:00:00Z",
+  },
+  {
+    id: "4",
+    title: "How do I enroll my business?",
+    content: "Navigate to your profile, select 'Enroll Business', and complete the multi-step onboarding process. You'll need business information, tax ID, and verification documents.",
+    category: "merchant",
+    tags: ["merchant", "business", "onboarding"],
+    helpful: 34,
+    notHelpful: 1,
+    createdAt: "2024-02-05T00:00:00Z",
+    updatedAt: "2024-02-12T00:00:00Z",
+  },
+  {
+    id: "5",
+    title: "Why is my payment failing?",
+    content: "Payment failures can occur due to insufficient funds, expired cards, or network issues. Check your payment method, ensure sufficient balance, and try again.",
+    category: "troubleshooting",
+    tags: ["payments", "troubleshooting", "errors"],
+    helpful: 52,
+    notHelpful: 4,
+    createdAt: "2024-02-08T00:00:00Z",
+    updatedAt: "2024-02-15T00:00:00Z",
+  },
+  {
+    id: "6",
+    title: "What is BDN?",
+    content: "BDN (Black Dollar Network) is a platform that connects consumers with Black-owned businesses, enabling cashback rewards and community impact.",
+    category: "faq",
+    tags: ["faq", "about", "platform"],
+    helpful: 120,
+    notHelpful: 2,
+    createdAt: "2024-01-10T00:00:00Z",
+    updatedAt: "2024-02-01T00:00:00Z",
+  },
+];
+
+const helpCategories = [
+  { key: "all", label: "All Topics" },
+  { key: "account", label: "Account" },
+  { key: "payments", label: "Payments" },
+  { key: "merchant", label: "Merchant" },
+  { key: "rewards", label: "Rewards" },
+  { key: "troubleshooting", label: "Troubleshooting" },
+  { key: "faq", label: "FAQ" },
+];
+
 export default function Support() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
+  const isDesktop = width >= 768;
   const [activeTab, setActiveTab] = useState<"form" | "chat">("form");
   const [formData, setFormData] = useState({
     subject: "",
@@ -47,6 +131,11 @@ export default function Support() {
   const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
   const [formAttachments, setFormAttachments] = useState<MessageAttachment[]>([]);
   const [showFormAttachmentMenu, setShowFormAttachmentMenu] = useState(false);
+  
+  // Help center panel state
+  const [helpCenterExpanded, setHelpCenterExpanded] = useState(isDesktop);
+  const [helpSearchQuery, setHelpSearchQuery] = useState("");
+  const [selectedHelpCategory, setSelectedHelpCategory] = useState<string>("all");
 
   const categories = [
     "Account Issues",
@@ -56,6 +145,15 @@ export default function Support() {
     "Feature Request",
     "General Inquiry",
   ];
+
+  // Filter help articles based on search and category
+  const filteredHelpArticles = mockHelpArticles.filter((article) => {
+    const matchesCategory = selectedHelpCategory === "all" || article.category === selectedHelpCategory;
+    const matchesSearch = helpSearchQuery === "" || 
+      article.title.toLowerCase().includes(helpSearchQuery.toLowerCase()) ||
+      article.content.toLowerCase().includes(helpSearchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const handleSubmitForm = () => {
     if (!formData.subject || !formData.category || !formData.message || !formData.email || !formData.name) {
@@ -315,16 +413,32 @@ export default function Support() {
           paddingBottom: 40,
         }}
       >
-        {/* Tab Selector */}
+        {/* Main Content Container - Two columns on desktop */}
         <View
           style={{
-            flexDirection: "row",
-            backgroundColor: "#474747",
-            borderRadius: 12,
-            padding: 4,
-            marginBottom: 24,
+            flexDirection: isDesktop ? "row" : "column",
+            gap: isDesktop ? 24 : 0,
+            alignItems: isDesktop ? "stretch" : "stretch",
           }}
         >
+          {/* Left Column - Contact Form/Chat */}
+          <View
+            style={{
+              flex: isDesktop ? 1 : undefined,
+              width: isDesktop ? undefined : "100%",
+              minWidth: isDesktop ? 0 : undefined,
+            }}
+          >
+            {/* Tab Selector */}
+            <View
+              style={{
+                flexDirection: "row",
+                backgroundColor: "#474747",
+                borderRadius: 12,
+                padding: 4,
+                marginBottom: 24,
+              }}
+            >
           <TouchableOpacity
             onPress={() => setActiveTab("form")}
             style={{
@@ -1545,6 +1659,244 @@ cachePolicy="memory-disk"
             </Modal>
           </View>
         )}
+          </View>
+
+          {/* Right Column - Help Center Panel (Desktop only) */}
+          {isDesktop && (
+            <>
+              {helpCenterExpanded ? (
+                <View
+                  style={{
+                    flex: 1,
+                    maxWidth: "50%",
+                    backgroundColor: "#474747",
+                    borderRadius: 16,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    overflow: "hidden",
+                    alignSelf: "stretch",
+                  }}
+                >
+                  {/* Help Center Header - Expanded */}
+                  <TouchableOpacity
+                    onPress={() => setHelpCenterExpanded(false)}
+                    activeOpacity={0.7}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: 16,
+                      borderBottomWidth: 1,
+                      borderBottomColor: "rgba(186, 153, 136, 0.2)",
+                      minHeight: 56,
+                      width: "100%",
+                    }}
+                  >
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 12, flex: 1 }}>
+                      <MaterialIcons name="help-outline" size={24} color="#ba9988" />
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: "700",
+                          color: "#ffffff",
+                        }}
+                      >
+                        Help Center
+                      </Text>
+                    </View>
+                    <MaterialIcons
+                      name="chevron-right"
+                      size={24}
+                      color="#ba9988"
+                    />
+                  </TouchableOpacity>
+
+                  {/* Expanded Content */}
+                  <View style={{ flex: 1 }}>
+                    {/* Search Bar */}
+                  <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: "rgba(186, 153, 136, 0.2)" }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        backgroundColor: "#232323",
+                        borderRadius: 12,
+                        paddingHorizontal: 12,
+                        borderWidth: 1,
+                        borderColor: "rgba(186, 153, 136, 0.2)",
+                      }}
+                    >
+                      <MaterialIcons name="search" size={18} color="rgba(255, 255, 255, 0.5)" />
+                      <TextInput
+                        value={helpSearchQuery}
+                        onChangeText={setHelpSearchQuery}
+                        placeholder="Search help articles..."
+                        placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                        style={{
+                          flex: 1,
+                          paddingVertical: 10,
+                          paddingHorizontal: 8,
+                          fontSize: 14,
+                          color: "#ffffff",
+                        }}
+                      />
+                    </View>
+                  </View>
+
+                  {/* Category Filters */}
+                  <View style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: "rgba(186, 153, 136, 0.2)" }}>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={{ gap: 8, alignItems: "center" }}
+                    >
+                      {helpCategories.map((category) => (
+                        <TouchableOpacity
+                          key={category.key}
+                          onPress={() => setSelectedHelpCategory(category.key)}
+                          style={{
+                            backgroundColor: selectedHelpCategory === category.key ? "#ba9988" : "#232323",
+                            paddingHorizontal: 12,
+                            paddingVertical: 6,
+                            borderRadius: 8,
+                            borderWidth: 1,
+                            borderColor: selectedHelpCategory === category.key ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                            alignSelf: "flex-start",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              fontWeight: "600",
+                              color: selectedHelpCategory === category.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                            }}
+                          >
+                            {category.label}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+
+                  {/* Articles List */}
+                  <ScrollView
+                    style={{ flex: 1 }}
+                    contentContainerStyle={{ padding: 16, gap: 12 }}
+                    showsVerticalScrollIndicator={false}
+                  >
+                    {filteredHelpArticles.length > 0 ? (
+                      filteredHelpArticles.map((article) => (
+                        <TouchableOpacity
+                          key={article.id}
+                          onPress={() => router.push(`/pages/university/help/${article.id}`)}
+                          style={{
+                            backgroundColor: "#232323",
+                            borderRadius: 12,
+                            padding: 12,
+                            borderWidth: 1,
+                            borderColor: "rgba(186, 153, 136, 0.2)",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontWeight: "600",
+                              color: "#ffffff",
+                              marginBottom: 6,
+                            }}
+                            numberOfLines={2}
+                          >
+                            {article.title}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: "rgba(255, 255, 255, 0.6)",
+                            }}
+                            numberOfLines={2}
+                          >
+                            {article.content}
+                          </Text>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              marginTop: 8,
+                              paddingTop: 8,
+                              borderTopWidth: 1,
+                              borderTopColor: "rgba(186, 153, 136, 0.1)",
+                            }}
+                          >
+                            <MaterialIcons name="thumb-up" size={14} color="#4caf50" />
+                            <Text
+                              style={{
+                                fontSize: 11,
+                                color: "rgba(255, 255, 255, 0.5)",
+                                marginLeft: 4,
+                              }}
+                            >
+                              {article.helpful} helpful
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      ))
+                    ) : (
+                      <View
+                        style={{
+                          backgroundColor: "#232323",
+                          borderRadius: 12,
+                          padding: 24,
+                          alignItems: "center",
+                          borderWidth: 1,
+                          borderColor: "rgba(186, 153, 136, 0.2)",
+                        }}
+                      >
+                        <MaterialIcons name="search-off" size={32} color="rgba(186, 153, 136, 0.5)" />
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: "rgba(255, 255, 255, 0.6)",
+                            textAlign: "center",
+                            marginTop: 12,
+                          }}
+                        >
+                          {helpSearchQuery ? "No articles found matching your search" : "No articles found for this category"}
+                        </Text>
+                      </View>
+                    )}
+                  </ScrollView>
+                  </View>
+                </View>
+              ) : (
+                /* Collapsed State - Small icon button at top */
+                <TouchableOpacity
+                  onPress={() => setHelpCenterExpanded(true)}
+                  activeOpacity={0.7}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  style={{
+                    width: 48,
+                    height: 48,
+                    backgroundColor: "#474747",
+                    borderRadius: 12,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.4)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignSelf: "flex-start",
+                    ...(Platform.OS === "web" ? { cursor: "pointer" } : {}),
+                  }}
+                >
+                  <MaterialIcons
+                    name="help-outline"
+                    size={24}
+                    color="#ba9988"
+                  />
+                </TouchableOpacity>
+              )}
+            </>
+          )}
+        </View>
       </OptimizedScrollView>
     </View>
   );

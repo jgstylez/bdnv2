@@ -75,8 +75,8 @@ export function KeyFeatures({ isMobile }: KeyFeaturesProps) {
               "bg-dark-card border border-primary/20 rounded-2xl p-5",
               {
                 "w-[48%]": isMobile,
-                "flex-1 min-w-[200px]": !isMobile,
-              }
+                "w-[19%] max-w-[200px]": !isMobile,
+              },
             )}
           >
             <View
