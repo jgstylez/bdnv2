@@ -55,8 +55,8 @@ export const Sidebar: React.FC = () => {
     if (href === "/(tabs)/account") {
       return pathname === "/(tabs)/account";
     }
-    if (href === "/(tabs)/businesses" || href === "/pages/businesses/businesses") {
-      return pathname === "/(tabs)/businesses" || pathname === "/pages/businesses/businesses" || pathname?.includes("/pages/businesses");
+    if (href === "/(tabs)/businesses" || href === "/pages/businesses") {
+      return pathname === "/(tabs)/businesses" || pathname === "/pages/businesses" || pathname?.includes("/pages/businesses");
     }
     if (href === "/(tabs)/pay") {
       return pathname === "/(tabs)/pay";
@@ -77,8 +77,8 @@ export const Sidebar: React.FC = () => {
       if (href === "/(tabs)/profile") {
         return pathname === "/(tabs)/profile";
       }
-      if (href === "/(tabs)/businesses" || href === "/pages/businesses/businesses") {
-        return pathname === "/(tabs)/businesses" || pathname === "/pages/businesses/businesses" || pathname?.includes("/pages/businesses");
+      if (href === "/(tabs)/businesses" || href === "/pages/businesses") {
+        return pathname === "/(tabs)/businesses" || pathname === "/pages/businesses" || pathname?.includes("/pages/businesses");
       }
       if (href === "/(tabs)/pay") {
         return pathname === "/(tabs)/pay";

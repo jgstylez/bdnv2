@@ -131,7 +131,6 @@ export default function PagesLayout() {
                 }}
               >
                   <Stack.Screen name="referrals" />
-                  <Stack.Screen name="businesses" />
                   <Stack.Screen name="merchant" />
                   <Stack.Screen name="myimpact" />
                   <Stack.Screen name="university" />
@@ -147,7 +146,6 @@ export default function PagesLayout() {
                   <Stack.Screen name="profile" />
                   <Stack.Screen name="payments" />
                   <Stack.Screen name="cart" />
-                  <Stack.Screen name="invoices" />
                   <Stack.Screen name="account" />
               </Stack>
             </View>

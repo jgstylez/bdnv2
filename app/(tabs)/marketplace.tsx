@@ -748,7 +748,7 @@ export default function Marketplace() {
 
         {/* Business Directory CTA */}
         <TouchableOpacity
-          onPress={() => router.push("/pages/businesses/businesses")}
+          onPress={() => router.push("/pages/businesses")}
           activeOpacity={0.8}
           accessible={true}
           accessibilityRole="button"

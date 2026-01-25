@@ -9,6 +9,7 @@ import { Footer } from '@/components/Footer';
 import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { navigateToAuthenticatedRoute, requiresAuthentication } from '@/lib/navigation-utils';
 
 export default function ForBusinesses() {
   const { width } = useWindowDimensions();
@@ -46,7 +47,11 @@ export default function ForBusinesses() {
               }}
             >
               <TouchableOpacity
-                onPress={() => router.push("/pages/merchant/onboarding")}
+                onPress={() => {
+                  // TODO: When actual authentication is implemented, check if user is authenticated
+                  // before navigating to authenticated routes. For now, redirect to login.
+                  navigateToAuthenticatedRoute(router, "/pages/merchant/onboarding");
+                }}
                 accessible={true}
                 accessibilityRole="button"
                 accessibilityLabel="List your business on BDN"
@@ -775,7 +780,11 @@ export default function ForBusinesses() {
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => router.push("/pages/university")}
+                  onPress={() => {
+                    // TODO: When actual authentication is implemented, check if user is authenticated
+                    // before navigating to authenticated routes. For now, redirect to login.
+                    navigateToAuthenticatedRoute(router, "/pages/university");
+                  }}
                   style={{
                     flex: 1,
                     borderWidth: 2,
@@ -841,7 +850,11 @@ export default function ForBusinesses() {
                 Join 500+ Black-owned businesses growing on BDN. List your business for free and start reaching customers today.
               </Text>
               <TouchableOpacity
-                onPress={() => router.push("/pages/merchant/onboarding")}
+                onPress={() => {
+                  // TODO: When actual authentication is implemented, check if user is authenticated
+                  // before navigating to authenticated routes. For now, redirect to login.
+                  navigateToAuthenticatedRoute(router, "/pages/merchant/onboarding");
+                }}
                 style={{
                   backgroundColor: "#ba9988",
                   paddingHorizontal: 48,

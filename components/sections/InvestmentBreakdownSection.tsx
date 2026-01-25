@@ -279,9 +279,9 @@ export const InvestmentBreakdownSection: React.FC = () => {
                   </View>
                 </View>
                 {/* Second Row: Image - fills remaining space */}
-                <View style={{ marginTop: 20, borderRadius: 12, overflow: "hidden", flex: 1, minHeight: 0 }}>
+                <View style={{ marginTop: 20, borderRadius: 12, overflow: "hidden", flex: 1, minHeight: 0, borderWidth: 1, borderColor: "rgba(186, 153, 136, 0.3)" }}>
                   <Image
-                    source={require("@/assets/images/public/impact-business-owner.png")}
+                    source={require("@/assets/images/public/technical_infrastructure_img.png")}
                     style={{
                       width: "100%",
                       height: "100%",
@@ -363,9 +363,9 @@ export const InvestmentBreakdownSection: React.FC = () => {
                     </View>
                   </View>
                   {/* Second Column: Image */}
-                  <View style={{ flex: 1, borderRadius: 12, overflow: "hidden" }}>
+                  <View style={{ flex: 1, borderRadius: 12, overflow: "hidden", borderWidth: 1, borderColor: "rgba(186, 153, 136, 0.3)" }}>
                     <Image
-                      source={require("@/assets/images/public/hero-professional.png")}
+                      source={require("@/assets/images/public/community_outreach_img.jpg")}
                       style={{
                         width: "100%",
                         height: "100%",

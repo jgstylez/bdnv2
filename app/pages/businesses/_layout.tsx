@@ -9,7 +9,7 @@ export default function BusinessesLayout() {
         contentStyle: { backgroundColor: "#232323" },
       }}
     >
-      <Stack.Screen name="businesses" />
+      <Stack.Screen name="index" />
       <Stack.Screen name="[id]" />
     </Stack>
   );

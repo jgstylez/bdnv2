@@ -186,7 +186,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
                     width: "100%",
                     height: "100%",
                   }}
-                  resizeMode="cover"
+                  contentFit="cover"
                   cachePolicy="memory-disk"
                   {...(Platform.OS !== 'web' && {
                     accessible: true,

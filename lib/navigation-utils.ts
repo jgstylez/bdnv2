@@ -7,6 +7,53 @@
 import { NavGroup, NavItem } from '@/config/navigation';
 import { FeatureFlags } from '@/types/feature-flags';
 
+// Router type from expo-router - has push, replace, back methods
+type Router = {
+  push: (href: string) => void;
+  replace: (href: string) => void;
+  back: () => void;
+};
+
+/**
+ * Routes that require authentication
+ * These routes are part of the authenticated app area
+ */
+const AUTHENTICATED_ROUTES = [
+  '/(tabs)/',
+  '/pages/',
+  '/admin/',
+];
+
+/**
+ * Check if a route requires authentication
+ */
+export function requiresAuthentication(route: string): boolean {
+  return AUTHENTICATED_ROUTES.some(prefix => route.startsWith(prefix));
+}
+
+/**
+ * Navigate to an authenticated route
+ * 
+ * TODO: When actual authentication is implemented, check if user is authenticated
+ * before navigating. If not authenticated, redirect to login page.
+ * 
+ * For now, all authenticated routes redirect to login page.
+ * 
+ * @param router - Expo Router instance
+ * @param route - Route to navigate to (if authenticated)
+ */
+export function navigateToAuthenticatedRoute(router: Router, route: string): void {
+  // TODO: Add authentication check when auth is implemented
+  // if (!isAuthenticated) {
+  //   router.push('/(auth)/login');
+  //   return;
+  // }
+  // router.push(route);
+  
+  // For now, redirect to login page
+  router.push('/(auth)/login');
+}
+
 /**
  * Feature flag mappings for navigation items
  * Maps navigation hrefs to their required feature flags
@@ -14,7 +61,7 @@ import { FeatureFlags } from '@/types/feature-flags';
 const navigationFeatureFlags: Record<string, keyof FeatureFlags> = {
   // Main
   '/(tabs)/marketplace': 'businessDirectory', // Marketplace uses directory
-  '/pages/businesses/businesses': 'businessDirectory',
+  '/pages/businesses': 'businessDirectory',
   '/pages/search': 'search',
   
   // MyImpact

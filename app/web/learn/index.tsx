@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { navigateToAuthenticatedRoute, requiresAuthentication } from '@/lib/navigation-utils';
 import Svg, { Rect, Circle, Path, Defs, LinearGradient as SvgLinearGradient, Stop } from "react-native-svg";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -217,7 +218,15 @@ export default function LearnIndex() {
                 {EDUCATIONAL_TOPICS.map((topic, index) => (
                   <TouchableOpacity
                     key={index}
-                    onPress={() => router.push(topic.href as any)}
+                    onPress={() => {
+                      // TODO: When actual authentication is implemented, check if user is authenticated
+                      // before navigating to authenticated routes. For now, redirect to login.
+                      if (requiresAuthentication(topic.href)) {
+                        navigateToAuthenticatedRoute(router, topic.href);
+                      } else {
+                        router.push(topic.href as any);
+                      }
+                    }}
                     accessible={true}
                     accessibilityRole="button"
                     accessibilityLabel={`Learn about ${topic.title}`}
@@ -346,7 +355,15 @@ export default function LearnIndex() {
                 {FEATURED_RESOURCES.map((resource, index) => (
                   <TouchableOpacity
                     key={index}
-                    onPress={() => router.push(resource.href as any)}
+                    onPress={() => {
+                      // TODO: When actual authentication is implemented, check if user is authenticated
+                      // before navigating to authenticated routes. For now, redirect to login.
+                      if (requiresAuthentication(resource.href)) {
+                        navigateToAuthenticatedRoute(router, resource.href);
+                      } else {
+                        router.push(resource.href as any);
+                      }
+                    }}
                     accessible={true}
                     accessibilityRole="button"
                     accessibilityLabel={`Read ${resource.type.toLowerCase()}: ${resource.title}`}

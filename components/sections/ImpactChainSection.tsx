@@ -64,7 +64,7 @@ export const ImpactChainSection: React.FC = () => {
               height: "100%",
             }}
             contentFit="cover"
-            contentPosition={isMobile ? "center" : "center top"}
+            contentPosition="center"
             cachePolicy="memory-disk"
           />
           <LinearGradient

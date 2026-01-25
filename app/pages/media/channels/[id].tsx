@@ -183,7 +183,7 @@ export default function ChannelDetail() {
             borderRadius: 8,
           }}
         >
-          <Text style={{ color: "#ffffff", fontWeight: "600" }}>Go Back</Text>
+          <Text style={{ color: "#232323", fontWeight: "600" }}>Go Back</Text>
         </TouchableOpacity>
       </View>
     );
@@ -447,7 +447,7 @@ export default function ChannelDetail() {
                       style={{
                         fontSize: 14,
                         fontWeight: "600",
-                        color: "#ffffff",
+                        color: isSubscribed ? "#ffffff" : "#232323",
                       }}
                     >
                       Processing...
@@ -457,7 +457,7 @@ export default function ChannelDetail() {
                       style={{
                         fontSize: 14,
                         fontWeight: "600",
-                        color: "#ffffff",
+                        color: isSubscribed ? "#ffffff" : "#232323",
                       }}
                     >
                       {isSubscribed ? (channel.subscriptionRequired ? "Manage" : "Unsubscribe") : (channel.subscriptionRequired ? "Subscribe" : "Follow")}
@@ -493,7 +493,7 @@ export default function ChannelDetail() {
                 style={{
                   fontSize: 14,
                   fontWeight: "600",
-                  color: selectedFilter === filter.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                  color: selectedFilter === filter.key ? "#232323" : "rgba(255, 255, 255, 0.7)",
                 }}
               >
                 {filter.label}
@@ -533,7 +533,7 @@ export default function ChannelDetail() {
                       <Image
                         source={{ uri: item.thumbnailUrl }}
                         style={{ width: "100%", height: "100%" }}
-                        resizeMode="cover"
+                        contentFit="cover"
                       />
                     ) : (
                       <MaterialIcons
@@ -588,7 +588,7 @@ export default function ChannelDetail() {
                             borderRadius: 6,
                           }}
                         >
-                          <Text style={{ color: "#ffffff", fontSize: 10, fontWeight: "700" }}>PREMIUM</Text>
+                          <Text style={{ color: "#232323", fontSize: 10, fontWeight: "700" }}>PREMIUM</Text>
                         </View>
                       )}
                       <View

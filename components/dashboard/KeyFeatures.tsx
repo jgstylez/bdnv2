@@ -44,7 +44,7 @@ const features = [
     title: "Business Directory",
     description: "Discover Black-owned businesses",
     icon: "store" as const,
-    onPress: (router: any) => router.push("/pages/businesses/businesses"),
+    onPress: (router: any) => router.push("/pages/businesses"),
     color: "#2196f3",
   },
 ];

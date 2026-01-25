@@ -12,6 +12,7 @@ import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { ArticlePlaceholder } from '@/components/placeholders/SVGPlaceholders';
 import { useAuth } from '@/hooks/useAuth';
+import { navigateToAuthenticatedRoute, requiresAuthentication } from '@/lib/navigation-utils';
 
 // Mock blog posts - sourced from university/blog
 const mockBlogPosts: BlogPost[] = [
@@ -323,7 +324,9 @@ export default function Blog() {
                           if (isGated) {
                             router.push("/(auth)/signup");
                           } else {
-                            router.push(`/pages/university/blog/${post.id}`);
+                            // TODO: When actual authentication is implemented, check if user is authenticated
+                            // before navigating to authenticated routes. For now, redirect to login.
+                            navigateToAuthenticatedRoute(router, `/pages/university/blog/${post.id}`);
                           }
                         }}
                         accessible={true}

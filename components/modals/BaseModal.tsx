@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { View, Text, Modal, TouchableOpacity, ScrollView, Platform, KeyboardAvoidingView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, spacing, borderRadius, typography } from '../../constants/theme';
@@ -29,6 +29,77 @@ export function BaseModal({
   maxWidth = 600,
 }: BaseModalProps) {
   const { isMobile, width } = useResponsive();
+  const modalContentRef = useRef<View>(null);
+  const closeButtonRef = useRef<TouchableOpacity>(null);
+  const firstActionRef = useRef<TouchableOpacity>(null);
+  const previousActiveElementRef = useRef<any>(null);
+
+  // Focus management for web
+  useEffect(() => {
+    if (Platform.OS === "web" && visible) {
+      // Store the previously focused element
+      previousActiveElementRef.current = document.activeElement;
+
+      // Focus the modal content or close button when modal opens
+      setTimeout(() => {
+        if (closeButtonRef.current) {
+          // @ts-ignore - Web-only focus method
+          closeButtonRef.current.focus?.();
+        }
+      }, 100);
+
+      // Handle Escape key to close modal
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          onClose();
+        }
+      };
+
+      // Trap focus within modal
+      const handleTabKey = (e: KeyboardEvent) => {
+        if (e.key !== "Tab") return;
+
+        const focusableElements = modalContentRef.current
+          ? // @ts-ignore - Web-only querySelector
+            modalContentRef.current.querySelectorAll?.(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            )
+          : [];
+
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+        if (e.shiftKey) {
+          // Shift + Tab
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Tab
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      };
+
+      document.addEventListener("keydown", handleEscape);
+      document.addEventListener("keydown", handleTabKey);
+
+      return () => {
+        document.removeEventListener("keydown", handleEscape);
+        document.removeEventListener("keydown", handleTabKey);
+        // Restore focus to previously focused element
+        if (previousActiveElementRef.current) {
+          // @ts-ignore - Web-only focus method
+          previousActiveElementRef.current.focus?.();
+        }
+      };
+    }
+  }, [visible, onClose]);
 
   if (!visible) return null;
 
@@ -38,6 +109,11 @@ export function BaseModal({
       transparent
       animationType="fade"
       onRequestClose={onClose}
+      {...(Platform.OS === "web" && {
+        // Prevent aria-hidden warnings by ensuring proper focus management
+        // The modal background will have aria-hidden, but we manage focus within
+        accessibilityViewIsModal: true,
+      })}
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -48,8 +124,16 @@ export function BaseModal({
           justifyContent: "center",
           padding: spacing.md,
         }}
+        {...(Platform.OS === "web" && {
+          // Prevent aria-hidden warnings by ensuring this view doesn't interfere with focus
+          accessible: false,
+        })}
       >
         <View
+          ref={modalContentRef}
+          accessible={true}
+          accessibilityRole="dialog"
+          accessibilityLabel={title}
           style={{
             width: "100%",
             maxWidth: isMobile ? width - 32 : maxWidth,
@@ -63,6 +147,10 @@ export function BaseModal({
             shadowOpacity: 0.5,
             shadowRadius: 20,
             elevation: 20,
+            ...(Platform.OS === "web" && {
+              // @ts-ignore - Web-only CSS properties
+              outline: "none",
+            }),
           }}
         >
           {/* Header */}
@@ -87,13 +175,30 @@ export function BaseModal({
               {title}
             </Text>
             <TouchableOpacity
+              ref={closeButtonRef}
               onPress={onClose}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="Close modal"
+              accessibilityHint="Closes this dialog"
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               style={{
                 padding: 4,
                 borderRadius: borderRadius.full,
                 backgroundColor: "transparent",
+                minWidth: 44,
+                minHeight: 44,
+                alignItems: "center",
+                justifyContent: "center",
+                ...(Platform.OS === "web" && {
+                  // @ts-ignore - Web-only CSS properties
+                  cursor: "pointer",
+                  ":focus": {
+                    outline: `2px solid ${colors.accent}`,
+                    outlineOffset: "2px",
+                  },
+                }),
               }}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <MaterialIcons name="close" size={20} color={colors.text.secondary} />
             </TouchableOpacity>
@@ -137,7 +242,9 @@ export function BaseModal({
                   switch (action.variant) {
                     case "secondary": return colors.text.primary;
                     case "outline": return colors.text.primary;
-                    default: return "#ffffff";
+                    case "primary": return colors.textColors.onAccent; // Dark text on accent background for WCAG AA compliance
+                    case "danger": return "#ffffff"; // White text on error background is OK
+                    default: return colors.textColors.onAccent; // Dark text on accent background
                   }
                 };
 
@@ -149,11 +256,19 @@ export function BaseModal({
                   }
                 };
 
+                const isFirstAction = index === 0;
                 return (
                   <TouchableOpacity
                     key={index}
+                    ref={isFirstAction ? firstActionRef : undefined}
                     onPress={action.onPress}
                     disabled={action.disabled}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={action.label}
+                    accessibilityState={{ disabled: action.disabled || false }}
+                    accessibilityHint={action.disabled ? `${action.label} is disabled` : `Double tap to ${action.label.toLowerCase()}`}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     style={{
                       paddingHorizontal: spacing.xl,
                       paddingVertical: spacing.md,
@@ -162,6 +277,18 @@ export function BaseModal({
                       borderWidth: 1,
                       borderColor: getBorderColor(),
                       opacity: action.disabled ? 0.5 : 1,
+                      minHeight: 44,
+                      minWidth: 44,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      ...(Platform.OS === "web" && {
+                        // @ts-ignore - Web-only CSS properties
+                        cursor: action.disabled ? "not-allowed" : "pointer",
+                        ":focus": {
+                          outline: `2px solid ${colors.accent}`,
+                          outlineOffset: "2px",
+                        },
+                      }),
                     }}
                   >
                     <Text

@@ -159,21 +159,28 @@ export const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
             });
           };
 
+          const tabLabel = typeof label === "string" ? label : route.name;
+          const accessibilityLabel = options.tabBarAccessibilityLabel || `${tabLabel} tab`;
+
           return (
             <TouchableOpacity
               key={route.key}
-              accessibilityRole="button"
+              accessible={true}
+              accessibilityRole="tab"
               accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
+              accessibilityLabel={accessibilityLabel}
+              accessibilityHint={isFocused ? `${tabLabel} tab, currently selected` : `Switch to ${tabLabel} tab`}
               testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               style={{
                 flex: 1,
                 alignItems: "center",
                 justifyContent: "center",
                 paddingVertical: 4,
                 paddingHorizontal: 4,
+                minHeight: 44,
               }}
               activeOpacity={0.7}
             >

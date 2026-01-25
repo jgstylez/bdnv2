@@ -20,7 +20,7 @@ export const navigationMenu: NavGroup[] = [
       { label: "Home", href: "/(tabs)/dashboard", icon: "dashboard" },
       {
         label: "Directory",
-        href: "/pages/businesses/businesses",
+        href: "/pages/businesses",
         icon: "store",
       },
       {

@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { navigateToAuthenticatedRoute, requiresAuthentication } from '@/lib/navigation-utils';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
@@ -478,7 +479,11 @@ export default function KnowledgeBase() {
                   Our support team is here to help you with any questions or issues you may have.
                 </Text>
                 <TouchableOpacity
-                  onPress={() => router.push("/pages/support")}
+                  onPress={() => {
+                    // TODO: When actual authentication is implemented, check if user is authenticated
+                    // before navigating to authenticated routes. For now, redirect to login.
+                    navigateToAuthenticatedRoute(router, "/pages/support");
+                  }}
                   accessible={true}
                   accessibilityRole="button"
                   accessibilityLabel="Contact support team"

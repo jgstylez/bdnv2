@@ -82,11 +82,14 @@ export const DeveloperMenuPanel: React.FC<DeveloperMenuPanelProps> = ({ isOpen, 
             ...(Platform.OS === "web" && {
               // @ts-ignore - Web-only CSS properties
               position: "fixed" as any,
+              pointerEvents: isOpen ? "auto" : "none",
+            }),
+            ...(Platform.OS !== "web" && {
+              pointerEvents: isOpen ? "auto" : "none",
             }),
           },
           overlayStyle,
         ]}
-        pointerEvents={isOpen ? "auto" : "none"}
       >
         <Pressable
           style={{ flex: 1 }}
@@ -110,18 +113,22 @@ export const DeveloperMenuPanel: React.FC<DeveloperMenuPanelProps> = ({ isOpen, 
             backgroundColor: "#232323",
             zIndex: 1101,
             elevation: 1101,
-            shadowColor: "#000",
-            shadowOffset: { width: -4, height: 0 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
             ...(Platform.OS === "web" && {
               // @ts-ignore - Web-only CSS properties
               position: "fixed" as any,
+              boxShadow: "-4px 0 8px rgba(0, 0, 0, 0.3)",
+              pointerEvents: isOpen ? "auto" : "none",
+            }),
+            ...(Platform.OS !== "web" && {
+              shadowColor: "#000",
+              shadowOffset: { width: -4, height: 0 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              pointerEvents: isOpen ? "auto" : "none",
             }),
           },
           animatedStyle,
         ]}
-        pointerEvents={isOpen ? "auto" : "none"}
       >
         <View
           style={{

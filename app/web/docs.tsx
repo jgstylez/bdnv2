@@ -3,11 +3,13 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "r
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { navigateToAuthenticatedRoute, requiresAuthentication } from '@/lib/navigation-utils';
 
 const docCategories = [
   {
@@ -40,13 +42,13 @@ const docCategories = [
     ],
   },
   {
-    title: "API & Integration",
+    title: "For Nonprofits",
     icon: "code",
     docs: [
-      { title: "API Overview", description: "Introduction to the BDN API" },
-      { title: "Authentication", description: "How to authenticate API requests" },
-      { title: "Webhooks", description: "Set up webhooks for real-time updates" },
-      { title: "SDKs", description: "Available SDKs and libraries" },
+      { title: "Getting Started", description: "Learn how nonprofits can partner with BDN" },
+      { title: "Partnership Programs", description: "Explore partnership opportunities and benefits" },
+      { title: "Donation Processing", description: "How to accept donations through the platform" },
+      { title: "Impact Tracking", description: "Track and report your organization's impact" },
     ],
   },
 ];
@@ -61,6 +63,7 @@ const quickLinks = [
 export default function Docs() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const isMobile = width < 768;
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
@@ -105,6 +108,15 @@ export default function Docs() {
                 {quickLinks.map((link, index) => (
                   <TouchableOpacity
                     key={index}
+                    onPress={() => {
+                      // TODO: When actual authentication is implemented, check if user is authenticated
+                      // before navigating to authenticated routes. For now, redirect to login.
+                      if (requiresAuthentication(link.href)) {
+                        navigateToAuthenticatedRoute(router, link.href);
+                      } else {
+                        router.push(link.href as any);
+                      }
+                    }}
                     accessible={true}
                     accessibilityRole="button"
                     accessibilityLabel={`Navigate to ${link.title}`}

@@ -9,6 +9,7 @@ import { Footer } from '@/components/Footer';
 import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { DecorativePattern } from '@/components/placeholders/SVGPlaceholders';
+import { navigateToAuthenticatedRoute, requiresAuthentication } from '@/lib/navigation-utils';
 
 export default function Community() {
   const { width } = useWindowDimensions();
@@ -29,7 +30,7 @@ export default function Community() {
       title: "Support Businesses",
       description: "Discover and support Black-owned businesses in your area. Every purchase strengthens our community.",
       action: "Browse Directory",
-      href: "/pages/businesses/businesses",
+      href: "/pages/businesses",
     },
     {
       icon: "trending-up",
@@ -152,7 +153,15 @@ export default function Community() {
                       {feature.description}
                     </Text>
                     <TouchableOpacity
-                      onPress={() => router.push(feature.href as any)}
+                      onPress={() => {
+                        // TODO: When actual authentication is implemented, check if user is authenticated
+                        // before navigating to authenticated routes. For now, redirect to login.
+                        if (requiresAuthentication(feature.href)) {
+                          navigateToAuthenticatedRoute(router, feature.href);
+                        } else {
+                          router.push(feature.href as any);
+                        }
+                      }}
                       accessible={true}
                       accessibilityRole="button"
                       accessibilityLabel={`${feature.action}: ${feature.title}`}

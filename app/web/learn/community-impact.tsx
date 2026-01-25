@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "r
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { navigateToAuthenticatedRoute, requiresAuthentication } from '@/lib/navigation-utils';
 import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
@@ -435,7 +436,11 @@ export default function CommunityImpact() {
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => router.push("/pages/merchant/onboarding")}
+                  onPress={() => {
+                    // TODO: When actual authentication is implemented, check if user is authenticated
+                    // before navigating to authenticated routes. For now, redirect to login.
+                    navigateToAuthenticatedRoute(router, "/pages/merchant/onboarding");
+                  }}
                   accessible={true}
                   accessibilityRole="button"
                   accessibilityLabel="List your business on BDN"

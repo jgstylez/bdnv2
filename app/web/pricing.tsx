@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
+import { navigateToAuthenticatedRoute, requiresAuthentication } from '@/lib/navigation-utils';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Navigation } from '@/components/Navigation';
@@ -22,7 +23,9 @@ export default function Pricing() {
     if (plan.tier === "free") {
       router.push("/(auth)/signup");
     } else {
-      router.push("/pages/bdn-plus");
+      // TODO: When actual authentication is implemented, check if user is authenticated
+      // before navigating to authenticated routes. For now, redirect to login.
+      navigateToAuthenticatedRoute(router, "/pages/bdn-plus");
     }
   };
 

@@ -25,7 +25,6 @@ export default function AdminLayout() {
               }}
             >
               <Stack.Screen name="index" />
-              <Stack.Screen name="users" />
               <Stack.Screen name="businesses" />
               <Stack.Screen name="nonprofits" />
               <Stack.Screen name="token-holders" />
