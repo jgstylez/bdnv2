@@ -19,6 +19,7 @@ import VariantSelector from '@/components/products/VariantSelector';
 import { mockProducts as centralizedMockProducts, getMockProduct } from '@/data/mocks/products';
 import { showSuccessToast, showErrorToast } from '@/lib/toast';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { logger } from '@/lib/logger';
 
 export default function ProductDetail() {
   const router = useRouter();
@@ -89,31 +90,32 @@ export default function ProductDetail() {
   const variantRequired = hasVariants && !selectedVariant;
 
   const handleAddToCart = async () => {
-    // Validate variant selection
-    if (variantRequired) {
-      showErrorToast("Selection Required", "Please select all variant options before adding to cart.");
-      return;
-    }
-
-    // Validate inventory
-    if (product.productType === "physical" && currentInventory > 0) {
-      const cartItem = getCartItem(product.id, selectedVariantId);
-      const currentCartQuantity = cartItem?.quantity || 0;
-      if (currentCartQuantity + quantity > currentInventory) {
-        showErrorToast(
-          "Insufficient Inventory",
-          `Only ${currentInventory} items available. Please adjust your quantity.`
-        );
+    try {
+      // Validate variant selection
+      if (variantRequired) {
+        showErrorToast("Selection Required", "Please select all variant options before adding to cart.");
         return;
       }
-    } else if (product.productType === "physical" && currentInventory <= 0) {
-      showErrorToast("Out of Stock", "This item is currently out of stock.");
-      return;
-    }
 
-    setIsAddingToCart(true);
-    try {
+      // Validate inventory
+      if (product.productType === "physical" && currentInventory > 0) {
+        const cartItem = getCartItem(product.id, selectedVariantId);
+        const currentCartQuantity = cartItem?.quantity || 0;
+        if (currentCartQuantity + quantity > currentInventory) {
+          showErrorToast(
+            "Insufficient Inventory",
+            `Only ${currentInventory} items available. Please adjust your quantity.`
+          );
+          return;
+        }
+      } else if (product.productType === "physical" && currentInventory <= 0) {
+        showErrorToast("Out of Stock", "This item is currently out of stock.");
+        return;
+      }
+
+      setIsAddingToCart(true);
       await addToCart(product, quantity, selectedVariantId);
+      
       // Show success toast with option to view cart
       showSuccessToast(
         "Added to Cart",
@@ -127,15 +129,44 @@ export default function ProductDetail() {
         }
       );
     } catch (error) {
+      logger.error("Error adding to cart", error);
       showErrorToast("Error", "Failed to add item to cart. Please try again.");
     } finally {
       setIsAddingToCart(false);
     }
   };
 
-  const handleBuyNow = () => {
-    // Navigate directly to checkout with this product
-    router.push(`/pages/checkout?buyNow=true&productId=${product.id}&quantity=${quantity}`);
+  const handleBuyNow = async () => {
+    try {
+      // Validate variant selection
+      if (variantRequired) {
+        showErrorToast("Selection Required", "Please select all variant options before purchasing.");
+        return;
+      }
+
+      // Validate inventory
+      if (product.productType === "physical" && currentInventory <= 0) {
+        showErrorToast("Out of Stock", "This item is currently out of stock.");
+        return;
+      }
+
+      if (product.productType === "physical" && currentInventory > 0) {
+        if (quantity > currentInventory) {
+          showErrorToast(
+            "Insufficient Inventory",
+            `Only ${currentInventory} items available. Please adjust your quantity.`
+          );
+          return;
+        }
+      }
+
+      // Navigate directly to checkout with this product
+      const url = `/pages/checkout?buyNow=true&productId=${product.id}&quantity=${quantity}${selectedVariantId ? `&variantId=${selectedVariantId}` : ""}`;
+      await router.push(url);
+    } catch (error) {
+      logger.error("Error navigating to checkout", error);
+      showErrorToast("Error", "Failed to proceed to checkout. Please try again.");
+    }
   };
 
   const handleBookService = () => {
@@ -730,13 +761,18 @@ export default function ProductDetail() {
                   <>
                     <TouchableOpacity
                       onPress={handleBuyNow}
+                      disabled={variantRequired || (currentInventory <= 0 && product.productType === "physical")}
+                      activeOpacity={0.7}
                       style={{
                         flex: 1,
-                        backgroundColor: colors.accent,
+                        backgroundColor: variantRequired || (currentInventory <= 0 && product.productType === "physical") 
+                          ? "rgba(186, 153, 136, 0.5)" 
+                          : colors.accent,
                         paddingVertical: spacing.md + 2,
                         paddingHorizontal: paddingHorizontal,
                         borderRadius: borderRadius.md,
                         alignItems: "center",
+                        opacity: variantRequired || (currentInventory <= 0 && product.productType === "physical") ? 0.6 : 1,
                       }}
                     >
                       <View style={{ alignItems: "center" }}>
@@ -791,6 +827,8 @@ export default function ProductDetail() {
                   <>
                     <TouchableOpacity
                       onPress={handleBuyNow}
+                      disabled={variantRequired || (currentInventory <= 0 && product.productType === "physical")}
+                      activeOpacity={0.7}
                       accessible={true}
                       accessibilityRole="button"
                       accessibilityLabel={`Buy now for ${formatCurrency(finalTotal, product.currency)}`}
@@ -799,11 +837,14 @@ export default function ProductDetail() {
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                       style={{
                         flex: 1,
-                        backgroundColor: colors.accent,
+                        backgroundColor: variantRequired || (currentInventory <= 0 && product.productType === "physical") 
+                          ? "rgba(186, 153, 136, 0.5)" 
+                          : colors.accent,
                         paddingVertical: spacing.md + 2,
                         paddingHorizontal: paddingHorizontal,
                         borderRadius: borderRadius.md,
                         alignItems: "center",
+                        opacity: variantRequired || (currentInventory <= 0 && product.productType === "physical") ? 0.6 : 1,
                       }}
                     >
                       <View style={{ alignItems: "center" }}>
@@ -832,6 +873,7 @@ export default function ProductDetail() {
                     <TouchableOpacity
                       onPress={handleAddToCart}
                       disabled={isAddingToCart || variantRequired || (currentInventory <= 0 && product.productType === "physical")}
+                      activeOpacity={0.7}
                       accessible={true}
                       accessibilityRole="button"
                       accessibilityLabel={

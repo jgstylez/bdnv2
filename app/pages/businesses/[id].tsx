@@ -778,11 +778,11 @@ export default function BusinessDetail() {
     level: 'basic' as const,
     description: business.description || '',
     address: business.location ? {
-      streetAddress: business.location.address,
+      street: business.location.address,
       city: business.location.city,
       state: business.location.state,
       postalCode: business.location.zipCode,
-      countryCode: 'US' as const,
+      country: 'US' as const,
     } : undefined,
     phone: business.phone,
     email: business.email,

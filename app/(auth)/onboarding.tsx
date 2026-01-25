@@ -5,6 +5,8 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { logger } from "@/lib/logger";
+import { setStorageItem } from "@/lib/storage";
 
 export default function Onboarding() {
   const { width } = useWindowDimensions();
@@ -47,9 +49,42 @@ export default function Onboarding() {
     }
   };
 
-  const handleComplete = () => {
-    // TODO: Save onboarding data
-    router.push("/(tabs)/dashboard");
+  const handleComplete = async () => {
+    try {
+      // Save onboarding data to user profile
+      // In production, this would call the API to update user profile
+      // For now, we'll save to local storage and simulate API call
+      
+      const onboardingData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        photo: formData.photo,
+        country: formData.country,
+        zipCode: formData.zipCode,
+        dateOfBirth: formData.dateOfBirth,
+        onboardingCompleted: true,
+        onboardingCompletedAt: new Date().toISOString(),
+      };
+
+      // TODO: Replace with actual API call when backend is ready
+      // await api.put('/api/users/me', onboardingData);
+      
+      // For now, save to storage as a placeholder
+      await setStorageItem('onboarding_data', JSON.stringify(onboardingData));
+
+      logger.info('Onboarding completed', { 
+        firstName: formData.firstName,
+        country: formData.country,
+      });
+
+      // Navigate to dashboard
+      router.push("/(tabs)/dashboard");
+    } catch (error) {
+      logger.error('Failed to save onboarding data', error);
+      // Still navigate to dashboard even if save fails
+      // User can complete profile later from settings
+      router.push("/(tabs)/dashboard");
+    }
   };
 
   const isStepValid = () => {

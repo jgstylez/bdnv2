@@ -774,18 +774,23 @@ const shuffleArrayWithSeed = <T>(array: T[], seed: number): T[] => {
  * Uses current hour + day to create a seed that changes daily but is stable within the hour
  */
 const getSessionSeed = (offset: number = 0): number => {
-  if (typeof window !== 'undefined') {
-    // Browser: use sessionStorage to maintain consistency within a session
-    const storageKey = `bdn_product_seed_${offset}`;
-    const stored = sessionStorage.getItem(storageKey);
-    if (stored) {
-      return parseInt(stored, 10);
+  // Check if sessionStorage is available (web only)
+  if (typeof window !== 'undefined' && typeof window.sessionStorage !== 'undefined') {
+    try {
+      // Browser: use sessionStorage to maintain consistency within a session
+      const storageKey = `bdn_product_seed_${offset}`;
+      const stored = window.sessionStorage.getItem(storageKey);
+      if (stored) {
+        return parseInt(stored, 10);
+      }
+      const seed = Math.floor(Date.now() / 1000) + offset * 1000000;
+      window.sessionStorage.setItem(storageKey, seed.toString());
+      return seed;
+    } catch {
+      // sessionStorage might be disabled or unavailable, fall through to time-based seed
     }
-    const seed = Math.floor(Date.now() / 1000) + offset * 1000000;
-    sessionStorage.setItem(storageKey, seed.toString());
-    return seed;
   }
-  // Server/Node: use time-based seed with offset
+  // Server/Node/React Native: use time-based seed with offset
   return Math.floor(Date.now() / 1000) + offset * 1000000;
 };
 

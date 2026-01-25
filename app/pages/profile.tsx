@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TextInput, TouchableOpacity, useWindowDimensions, Platform } from "react-native";
+import { View, Text, ScrollView, TextInput, TouchableOpacity, useWindowDimensions, Platform, Alert, ActivityIndicator } from "react-native";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -8,6 +8,10 @@ import * as ImagePicker from "expo-image-picker";
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 import { FormSelect } from '@/components/forms/FormSelect';
 import { BackButton } from '@/components/navigation/BackButton';
+import { api } from '@/lib/api-client';
+import { logger } from '@/lib/logger';
+import { showSuccessToast, showErrorToast } from '@/lib/toast';
+import { useLoading } from '@/hooks/useLoading';
 
 // Mock user data
 const mockUser = {
@@ -182,14 +186,86 @@ export default function Profile() {
     }
   };
 
-  const handleSaveProfile = () => {
-    // TODO: Save profile data to API
-    alert("Profile updated successfully!");
+  const { loading: savingProfile, execute: executeSaveProfile } = useLoading();
+  const { loading: savingDemographics, execute: executeSaveDemographics } = useLoading();
+
+  const handleSaveProfile = async () => {
+    try {
+      await executeSaveProfile(async () => {
+        // Prepare profile data for API
+        const profilePayload = {
+          name: profileData.name,
+          email: profileData.email,
+          phone: profileData.phone,
+          location: {
+            city: profileData.city,
+            state: profileData.state,
+            zipCode: profileData.zipCode,
+            country: profileData.country,
+          },
+          profileImage: profileData.profileImage,
+        };
+
+        // Upload profile image if changed
+        let imageUrl = profileData.profileImage;
+        if (profileData.profileImage && profileData.profileImage.startsWith('file://')) {
+          // TODO: Upload image to storage service and get URL
+          // For now, we'll just send the local URI
+          logger.info('Profile image upload would happen here', { imageUri: profileData.profileImage });
+        }
+
+        // Save profile data
+        const response = await api.put('/account/profile', profilePayload);
+        logger.info('Profile updated successfully', { response });
+        return response;
+      });
+
+      if (!savingProfile) {
+        showSuccessToast("Profile Updated", "Your profile has been updated successfully!");
+      }
+    } catch (error: any) {
+      logger.error('Failed to save profile', error);
+      showErrorToast(
+        "Failed to Update Profile",
+        error?.message || "Please check your information and try again"
+      );
+    }
   };
 
-  const handleSaveDemographics = () => {
-    // TODO: Save demographics data to API
-    alert("Demographics information saved! Thank you for contributing to our case study.");
+  const handleSaveDemographics = async () => {
+    try {
+      await executeSaveDemographics(async () => {
+        const demographicsPayload = {
+          ethnicity: demographicsData.ethnicity,
+          industry: demographicsData.industry,
+          ageRange: demographicsData.ageRange,
+          gender: demographicsData.gender,
+          educationalBackground: demographicsData.educationalBackground,
+          hbcu: demographicsData.hbcu,
+          incomeRange: demographicsData.incomeRange,
+          employmentStatus: demographicsData.employmentStatus,
+          householdSize: demographicsData.householdSize,
+          preferredLanguage: demographicsData.preferredLanguage,
+        };
+
+        const response = await api.put('/account/demographics', demographicsPayload);
+        logger.info('Demographics saved successfully', { response });
+        return response;
+      });
+
+      if (!savingDemographics) {
+        showSuccessToast(
+          "Demographics Saved",
+          "Thank you for contributing to our case study!"
+        );
+      }
+    } catch (error: any) {
+      logger.error('Failed to save demographics', error);
+      showErrorToast(
+        "Failed to Save Demographics",
+        error?.message || "Please try again"
+      );
+    }
   };
 
   return (
@@ -538,14 +614,21 @@ export default function Profile() {
               {/* Save Button */}
               <TouchableOpacity
                 onPress={handleSaveProfile}
+                disabled={savingProfile}
                 style={{
-                  backgroundColor: "#ba9988",
+                  backgroundColor: savingProfile ? "#474747" : "#ba9988",
                   borderRadius: 12,
                   paddingVertical: 16,
                   alignItems: "center",
                   marginTop: 8,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  gap: 8,
                 }}
               >
+                {savingProfile && (
+                  <ActivityIndicator size="small" color="#ffffff" />
+                )}
                 <Text
                   style={{
                     fontSize: 16,
@@ -553,7 +636,7 @@ export default function Profile() {
                     color: "#ffffff",
                   }}
                 >
-                  Save Changes
+                  {savingProfile ? "Saving..." : "Save Changes"}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -710,14 +793,21 @@ export default function Profile() {
               {/* Save Button */}
               <TouchableOpacity
                 onPress={handleSaveDemographics}
+                disabled={savingDemographics}
                 style={{
-                  backgroundColor: "#ba9988",
+                  backgroundColor: savingDemographics ? "#474747" : "#ba9988",
                   borderRadius: 12,
                   paddingVertical: 16,
                   alignItems: "center",
                   marginTop: 8,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  gap: 8,
                 }}
               >
+                {savingDemographics && (
+                  <ActivityIndicator size="small" color="#ffffff" />
+                )}
                 <Text
                   style={{
                     fontSize: 16,
@@ -725,7 +815,7 @@ export default function Profile() {
                     color: "#ffffff",
                   }}
                 >
-                  Save Demographics
+                  {savingDemographics ? "Saving..." : "Save Demographics"}
                 </Text>
               </TouchableOpacity>
             </View>

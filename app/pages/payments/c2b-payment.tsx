@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { PaymentKeypad } from '@/components/PaymentKeypad';
+import { StepIndicator } from '@/components/StepIndicator';
 import { Wallet as WalletType, Currency, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
 import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
 import { calculateConsumerTotalWithFee, checkBDNPlusSubscription } from '@/lib/fees';
@@ -1144,56 +1145,22 @@ export default function C2BPayment() {
           paddingBottom: 40,
         }}
       >
-        {/* Progress Steps */}
-        {step !== "processing" && step !== "success" && step !== "error" && (
-          <View style={{ marginBottom: 24 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 12 }}>
-              {[
-                { step: "select-business", label: "Business" },
-                { step: "amount", label: "Amount" },
-                { step: "payment-method", label: "Payment" },
-                { step: "review", label: "Review" },
-              ].map((s, index) => {
-                const stepIndex = ["select-business", "amount", "payment-method", "review"].indexOf(step);
-                const isActive = index <= stepIndex;
-                const isCurrent = index === stepIndex;
-                return (
-                  <View key={s.step} style={{ flex: 1, alignItems: "center" }}>
-                    <View
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        backgroundColor: isActive ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginBottom: 8,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "700",
-                          color: isActive ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
-                        }}
-                      >
-                        {index + 1}
-                      </Text>
-                    </View>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: isCurrent ? "#ba9988" : "rgba(255, 255, 255, 0.5)",
-                      }}
-                    >
-                      {s.label}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-          </View>
-        )}
+        {/* Step Indicator */}
+        {step !== "processing" && step !== "success" && step !== "error" && (() => {
+          const stepIndex = ["select-business", "amount", "payment-method", "review"].indexOf(step);
+          const currentStepNumber = stepIndex >= 0 ? stepIndex + 1 : 1;
+          return (
+            <StepIndicator
+              currentStep={currentStepNumber}
+              steps={[
+                { number: 1, label: "Business", key: "select-business" },
+                { number: 2, label: "Amount", key: "amount" },
+                { number: 3, label: "Payment", key: "payment-method" },
+                { number: 4, label: "Review", key: "review" },
+              ]}
+            />
+          );
+        })()}
 
         {/* Step Content */}
         {step === "select-business" && renderSelectBusinessStep()}

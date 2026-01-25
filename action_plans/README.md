@@ -32,6 +32,16 @@ These plans cover the complete technical architecture and implementation strateg
 - **[implementation-progress.md](./implementation-progress.md)** - Current implementation status and progress
 - **[api-integration-tracking.md](./api-integration-tracking.md)** - API integration TODO tracking
 - **[refactoring-progress.md](./refactoring-progress.md)** - Refactoring progress and status
+- **[RECENT-UPDATES-2025-01-25.md](./RECENT-UPDATES-2025-01-25.md)** - **NEW** - Summary of recent implementation work (January 25, 2025)
+
+### Recent Implementation Work (January 2025)
+- **[business-merchant-flows-implementation.md](./business-merchant-flows-implementation.md)** - Business onboarding, product management, order fulfillment, verification workflows
+- **[shopping-checkout-flow-implementation.md](./shopping-checkout-flow-implementation.md)** - Shopping cart, checkout, order confirmation, and tracking flows
+- **[navigation-flows-implementation.md](./navigation-flows-implementation.md)** - Critical navigation improvements and user flows
+- **[error-handling-implementation.md](./error-handling-implementation.md)** - Error handling and feedback system implementation
+- **[search-discovery-implementation.md](./search-discovery-implementation.md)** - Search filtering, sorting, map view, and category browsing
+- **[account-management-implementation.md](./account-management-implementation.md)** - Profile editing, account deletion, password/email change, notifications
+- **[invoice-flows-implementation.md](./invoice-flows-implementation.md)** - Invoice creation, draft saving, sending, and payment tracking
 
 ### Database & Compliance
 - **[database-design.md](./database-design.md)** - Database schema and design
@@ -140,7 +150,19 @@ When referring to "mobile" in this codebase, it encompasses **both** mobile brow
 
 ---
 
-**Last Updated:** 2025-01-XX
+**Last Updated:** 2025-01-25
 
-### Recent Updates
+### Recent Updates (January 2025)
+
+#### January 25, 2025
+- **[RECENT-UPDATES-2025-01-25.md](./RECENT-UPDATES-2025-01-25.md)** - **NEW** - Comprehensive summary of all recent implementation work
+- **[business-merchant-flows-implementation.md](./business-merchant-flows-implementation.md)** - **NEW** - Business/merchant flows complete with API integration
+- **[shopping-checkout-flow-implementation.md](./shopping-checkout-flow-implementation.md)** - **NEW** - Shopping & checkout flows with order tracking
+- **[navigation-flows-implementation.md](./navigation-flows-implementation.md)** - **UPDATED** - Added order tracking UI details
+
+#### Previous Updates
 - **[CODEBASE-REVIEW-UPDATE-2025.md](./CODEBASE-REVIEW-UPDATE-2025.md)** - Comprehensive codebase review and documentation update (January 2025)
+- **[error-handling-implementation.md](./error-handling-implementation.md)** - Error handling and feedback system
+- **[search-discovery-implementation.md](./search-discovery-implementation.md)** - Search and discovery improvements
+- **[account-management-implementation.md](./account-management-implementation.md)** - User account management features
+- **[invoice-flows-implementation.md](./invoice-flows-implementation.md)** - Invoice workflow completion

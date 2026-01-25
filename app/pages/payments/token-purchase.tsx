@@ -7,6 +7,7 @@ import { PaymentKeypad } from '@/components/PaymentKeypad';
 import { TOKEN_PRICE } from '@/types/token';
 import { Wallet as WalletType, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
 import { BackButton } from '@/components/navigation/BackButton';
+import { StepIndicator } from '@/components/StepIndicator';
 
 // Extended wallet type for mock data with additional properties
 type MockWallet = WalletType & {
@@ -618,55 +619,21 @@ export default function TokenPurchase() {
           <BackButton label="Back to Pay" to="/(tabs)/pay" marginBottom={16} />
         )}
 
-        {/* Progress Steps */}
-        {step !== "processing" && step !== "success" && step !== "error" && (
-          <View style={{ marginBottom: 24 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 12 }}>
-              {[
-                { step: "amount", label: "Amount" },
-                { step: "payment-method", label: "Payment" },
-                { step: "review", label: "Review" },
-              ].map((s, index) => {
-                const stepIndex = ["amount", "payment-method", "review"].indexOf(step);
-                const isActive = index <= stepIndex;
-                const isCurrent = index === stepIndex;
-                return (
-                  <View key={s.step} style={{ flex: 1, alignItems: "center" }}>
-                    <View
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        backgroundColor: isActive ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginBottom: 8,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "700",
-                          color: isActive ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
-                        }}
-                      >
-                        {index + 1}
-                      </Text>
-                    </View>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: isCurrent ? "#ba9988" : "rgba(255, 255, 255, 0.5)",
-                      }}
-                    >
-                      {s.label}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-          </View>
-        )}
+        {/* Step Indicator */}
+        {step !== "processing" && step !== "success" && step !== "error" && (() => {
+          const stepIndex = ["amount", "payment-method", "review"].indexOf(step);
+          const currentStepNumber = stepIndex >= 0 ? stepIndex + 1 : 1;
+          return (
+            <StepIndicator
+              currentStep={currentStepNumber}
+              steps={[
+                { number: 1, label: "Amount", key: "amount" },
+                { number: 2, label: "Payment", key: "payment-method" },
+                { number: 3, label: "Review", key: "review" },
+              ]}
+            />
+          );
+        })()}
 
         {/* Step Content */}
         {step === "amount" && renderAmountStep()}

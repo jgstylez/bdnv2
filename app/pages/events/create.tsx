@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { EventCategory } from '@/types/events';
 import { DateTimePickerComponent } from '@/components/forms/DateTimePicker';
+import { StepIndicator } from '@/components/StepIndicator';
 
 export default function CreateEvent() {
   const { width } = useWindowDimensions();
@@ -389,35 +390,21 @@ export default function CreateEvent() {
           paddingBottom: 40,
         }}
       >
-        {/* Back Button and Step Indicator */}
-        <View style={{ marginBottom: 32 }}>
-          <TouchableOpacity onPress={handleBack} style={{ marginBottom: 20, alignSelf: "flex-start" }}>
-            <Text style={{ fontSize: 20, color: "#ffffff" }}>← Back</Text>
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 16,
-              color: "rgba(255, 255, 255, 0.7)",
-            }}
-          >
-            Step {step} of 3
-          </Text>
-        </View>
+        {/* Back Button */}
+        <TouchableOpacity onPress={handleBack} style={{ marginBottom: 20, alignSelf: "flex-start" }}>
+          <Text style={{ fontSize: 20, color: "#ffffff" }}>← Back</Text>
+        </TouchableOpacity>
 
-        {/* Progress Indicator */}
-        <View style={{ flexDirection: "row", gap: 8, marginBottom: 32 }}>
-          {[1, 2, 3].map((s) => (
-            <View
-              key={s}
-              style={{
-                flex: 1,
-                height: 4,
-                backgroundColor: s <= step ? "#ba9988" : "#474747",
-                borderRadius: 2,
-              }}
-            />
-          ))}
-        </View>
+        {/* Step Indicator */}
+        <StepIndicator
+          currentStep={step}
+          steps={[
+            { number: 1, label: "Basic Info" },
+            { number: 2, label: "Date & Time" },
+            { number: 3, label: "Location" },
+          ]}
+          marginBottom={32}
+        />
 
         {/* Form Content */}
         <View

@@ -18,6 +18,9 @@ import { useBusiness } from '@/contexts/BusinessContext';
 import { useNonprofit } from '@/contexts/NonprofitContext';
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { api } from '@/lib/api-client';
+import { logger } from '@/lib/logger';
+import { useLoading } from '@/hooks/useLoading';
 
 interface ProductListProps {
   entityType: "business" | "nonprofit";
@@ -230,15 +233,35 @@ export function ProductList({ entityType, products: externalProducts, onProducts
     });
   }, [products, entityId, searchQuery, filterType]);
 
-  const handleDelete = () => {
-    if (selectedProduct) {
+  const { loading: deletingProduct, execute: executeDeleteProduct } = useLoading();
+
+  const handleDelete = async () => {
+    if (!selectedProduct) return;
+
+    try {
+      await executeDeleteProduct(async () => {
+        const endpoint = entityType === "nonprofit" 
+          ? `/nonprofits/products/${selectedProduct.id}`
+          : `/products/${selectedProduct.id}`;
+        
+        const response = await api.delete(endpoint);
+        logger.info('Product deleted', { productId: selectedProduct.id });
+        return response;
+      });
+
+      // Update local state after successful deletion
       const updatedProducts = products.filter(p => p.id !== selectedProduct.id);
       setProducts(updatedProducts);
       onProductsChange?.(updatedProducts);
       setShowDeleteModal(false);
       setSelectedProduct(null);
-      // In a real app, you would also make an API call to delete the product
       Alert.alert("Success", "Product deleted successfully");
+    } catch (error: any) {
+      logger.error('Failed to delete product', error);
+      Alert.alert(
+        "Failed to Delete Product",
+        error?.message || "Please try again or contact support if the problem persists."
+      );
     }
   };
 

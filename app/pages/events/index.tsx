@@ -25,8 +25,12 @@ export default function Events() {
   // Calculate card width for 3-column layout
   const getCardWidth = () => {
     if (isMobile) return "100%";
-    if (isTablet) return "calc(50% - 8px)"; // 2 columns on tablet
-    return "calc(33.333% - 11px)"; // 3 columns on desktop
+    if (isTablet) {
+      // 2 columns on tablet: (width - gap) / 2
+      return Platform.OS === 'web' ? "calc(50% - 8px)" : ((width - 16 - 16) / 2);
+    }
+    // 3 columns on desktop: (width - 2*gap) / 3
+    return Platform.OS === 'web' ? "calc(33.333% - 11px)" : ((width - 32 - 32) / 3);
   };
 
   const filteredEvents = Object.values(mockEvents).filter((event) => {
@@ -141,8 +145,8 @@ export default function Events() {
                 key={event.id}
                 onPress={() => router.push(`/pages/events/${event.id}`)}
                 style={{
-                  width: getCardWidth(),
-                  maxWidth: isMobile ? "100%" : "calc(33.333% - 11px)",
+                  width: getCardWidth() as any,
+                  maxWidth: isMobile ? "100%" : (Platform.OS === 'web' ? "calc(33.333% - 11px)" as any : undefined),
                   backgroundColor: "#474747",
                   borderRadius: 16,
                   overflow: "hidden",

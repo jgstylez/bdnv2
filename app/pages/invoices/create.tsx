@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform, Modal, Dimensions } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform, Modal, Dimensions, ActivityIndicator } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -10,6 +10,10 @@ import { HeroSection } from '@/components/layouts/HeroSection';
 import { FormInput, FormTextArea, FormSelect, FormToggle, DateTimePickerComponent } from '@/components/forms';
 import { FilterDropdown } from '@/components/admin/FilterDropdown';
 import { BackButton } from '@/components/navigation/BackButton';
+import { api } from '@/lib/api-client';
+import { logger } from '@/lib/logger';
+import { showSuccessToast, showErrorToast } from '@/lib/toast';
+import { useLoading } from '@/hooks/useLoading';
 
 // Mock user data for recipient search
 const mockUsers = [
@@ -198,15 +202,71 @@ export default function CreateInvoice() {
     }
   };
 
-  const handleSaveDraft = () => {
-    // TODO: Save as draft
-    alert("Invoice saved as draft!");
+  const { loading: savingDraft, execute: executeSaveDraft } = useLoading();
+  const { loading: sendingInvoice, execute: executeSendInvoice } = useLoading();
+
+  const handleSaveDraft = async () => {
+    try {
+      await executeSaveDraft(async () => {
+        // Calculate totals
+        const subtotal = lineItems.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
+        const tax = lineItems.reduce((sum, item) => sum + (item.tax || 0), 0);
+        const total = subtotal + tax;
+
+        const invoiceData = {
+          issuerType: issuerType,
+          recipientId: recipientUserId,
+          recipientName: recipientName,
+          recipientEmail: recipientEmail,
+          billingType,
+          status: "draft" as const,
+          currency: "USD" as const,
+          subtotal,
+          tax,
+          discount: 0,
+          total,
+          amountPaid: 0,
+          amountDue: total,
+          lineItems: lineItems.filter(item => item.description.trim() !== ""),
+          issueDate,
+          dueDate,
+          paymentTerms,
+          notes: notes.trim() || undefined,
+          terms: terms.trim() || undefined,
+          ...(billingType === "recurring" && {
+            recurringSettings: {
+              frequency: recurringFrequency,
+              startDate: recurringStartDate,
+              endDate: recurringEndDate || undefined,
+              billingCycleCount: billingCycleCount ? parseInt(billingCycleCount) : undefined,
+            },
+          }),
+        };
+
+        const response = isEditing && id
+          ? await api.put(`/invoices/${id}`, invoiceData)
+          : await api.post('/invoices', invoiceData);
+
+        logger.info('Invoice draft saved', { invoiceId: response.data?.id || id });
+        return response;
+      });
+
+      if (!savingDraft) {
+        showSuccessToast("Draft Saved", "Invoice saved as draft successfully");
+      }
+    } catch (error: any) {
+      logger.error('Failed to save invoice draft', error);
+      showErrorToast(
+        "Failed to Save Draft",
+        error?.message || "Please check your information and try again"
+      );
+    }
   };
 
-  const handleSendInvoice = () => {
-    // TODO: Validate and send invoice
+  const handleSendInvoice = async () => {
+    // Validation
     if (!recipientUserId && !recipientEmail) {
-      alert("Please select a recipient");
+      showErrorToast("Recipient Required", "Please select a recipient");
       return;
     }
     if (recipientUserId && !recipientName) {
@@ -218,11 +278,66 @@ export default function CreateInvoice() {
       }
     }
     if (lineItems.some((item) => !item.description || item.unitPrice <= 0)) {
-      alert("Please fill in all line items with valid amounts");
+      showErrorToast("Invalid Line Items", "Please fill in all line items with valid amounts");
       return;
     }
-    alert("Invoice sent!");
-    router.back();
+
+    try {
+      await executeSendInvoice(async () => {
+        // Calculate totals
+        const subtotal = lineItems.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
+        const tax = lineItems.reduce((sum, item) => sum + (item.tax || 0), 0);
+        const total = subtotal + tax;
+
+        const invoiceData = {
+          issuerType: issuerType,
+          recipientId: recipientUserId,
+          recipientName: recipientName,
+          recipientEmail: recipientEmail,
+          billingType,
+          status: "sent" as const,
+          currency: "USD" as const,
+          subtotal,
+          tax,
+          discount: 0,
+          total,
+          amountPaid: 0,
+          amountDue: total,
+          lineItems: lineItems.filter(item => item.description.trim() !== ""),
+          issueDate,
+          dueDate,
+          paymentTerms,
+          notes: notes.trim() || undefined,
+          terms: terms.trim() || undefined,
+          ...(billingType === "recurring" && {
+            recurringSettings: {
+              frequency: recurringFrequency,
+              startDate: recurringStartDate,
+              endDate: recurringEndDate || undefined,
+              billingCycleCount: billingCycleCount ? parseInt(billingCycleCount) : undefined,
+            },
+          }),
+        };
+
+        const response = isEditing && id
+          ? await api.put(`/invoices/${id}/send`, invoiceData)
+          : await api.post('/invoices/send', invoiceData);
+
+        logger.info('Invoice sent', { invoiceId: response.data?.id || id });
+        return response;
+      });
+
+      if (!sendingInvoice) {
+        showSuccessToast("Invoice Sent", "Invoice has been sent successfully");
+        router.back();
+      }
+    } catch (error: any) {
+      logger.error('Failed to send invoice', error);
+      showErrorToast(
+        "Failed to Send Invoice",
+        error?.message || "Please check your information and try again"
+      );
+    }
   };
 
   return (
@@ -783,6 +898,7 @@ export default function CreateInvoice() {
         <View style={{ flexDirection: isMobile ? "column" : "row", gap: spacing.md }}>
           <TouchableOpacity
             onPress={handleSaveDraft}
+            disabled={savingDraft}
             style={{
               flex: 1,
               paddingVertical: spacing.md,
@@ -791,8 +907,15 @@ export default function CreateInvoice() {
               borderWidth: 1,
               borderColor: colors.border.light,
               alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: spacing.sm,
+              opacity: savingDraft ? 0.6 : 1,
             }}
           >
+            {savingDraft && (
+              <ActivityIndicator size="small" color={colors.text.primary} />
+            )}
             <Text
               style={{
                 fontSize: typography.fontSize.base,
@@ -800,27 +923,35 @@ export default function CreateInvoice() {
                 color: colors.text.primary,
               }}
             >
-              Save as Draft
+              {savingDraft ? "Saving..." : "Save as Draft"}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleSendInvoice}
+            disabled={sendingInvoice}
             style={{
               flex: 1,
               paddingVertical: spacing.md,
               borderRadius: borderRadius.md,
-              backgroundColor: colors.accent,
+              backgroundColor: sendingInvoice ? colors.secondary.bg : colors.accent,
               alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: spacing.sm,
+              opacity: sendingInvoice ? 0.6 : 1,
             }}
           >
+            {sendingInvoice && (
+              <ActivityIndicator size="small" color={colors.textColors.onAccent} />
+            )}
             <Text
               style={{
                 fontSize: typography.fontSize.base,
                 fontWeight: typography.fontWeight.bold,
-                color: colors.textColors.onAccent,
+                color: sendingInvoice ? colors.text.primary : colors.textColors.onAccent,
               }}
             >
-              Send Invoice
+              {sendingInvoice ? "Sending..." : "Send Invoice"}
             </Text>
           </TouchableOpacity>
         </View>

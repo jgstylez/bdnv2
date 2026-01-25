@@ -44,13 +44,13 @@ export function FormTextArea({
         }}
         style={[
           {
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.lg,
             padding: spacing.md,
             color: colors.text.primary,
             fontSize: typography.fontSize.base,
             borderWidth: 1,
-            borderColor: error ? colors.status.error : colors.border.light,
+            borderColor: error ? colors.status.error : colors.border,
             minHeight: numberOfLines * 24 + spacing.md * 2,
           },
           style,

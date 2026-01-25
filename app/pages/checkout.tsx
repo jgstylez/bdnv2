@@ -178,12 +178,12 @@ export default function Checkout() {
       : cartItems;
 
   // Determine back button destination
-  const getBackDestination = () => {
+  const getBackDestination = (): string | undefined => {
     if (step === "shipping") {
-      return null; // Will handle with onPress
+      return undefined; // Will handle with onPress
     }
     if (step === "payment") {
-      return null; // Will handle with onPress
+      return undefined; // Will handle with onPress
     }
     if (isBuyNow && buyNowProductId && buyNowProduct) {
       return `/pages/products/${buyNowProductId}`;
@@ -339,8 +339,9 @@ export default function Checkout() {
           throw new Error("Payment processing failed");
         }
 
-        // Generate transaction ID
+        // Generate transaction ID and order ID
         const newTransactionId = `TXN-${Date.now()}`;
+        const newOrderId = `order-${Date.now()}`;
         setTransactionId(newTransactionId);
 
         // Clear cart if not Buy Now
@@ -348,7 +349,14 @@ export default function Checkout() {
           await clearCart();
         }
 
-        setStep("success");
+        // Navigate to order confirmation page
+        router.push({
+          pathname: "/pages/orders/[id]",
+          params: {
+            id: newOrderId,
+            transactionId: newTransactionId,
+          },
+        });
       } catch (error) {
         // Set user-friendly error message
         setErrorMessage(
@@ -388,7 +396,7 @@ export default function Checkout() {
           <Text
             style={{
               fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
+              fontWeight: typography.fontWeight.bold as '700',
               color: colors.text.primary,
               marginTop: spacing.lg,
               marginBottom: spacing.sm,
@@ -425,7 +433,7 @@ export default function Checkout() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.semibold,
+                fontWeight: typography.fontWeight.semibold as '600',
                 color: colors.textColors.onAccent,
               }}
             >
@@ -459,7 +467,7 @@ export default function Checkout() {
           <Text
             style={{
               fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
+              fontWeight: typography.fontWeight.bold as '700',
               color: colors.text.primary,
               marginTop: spacing.lg,
               marginBottom: spacing.sm,
@@ -486,7 +494,7 @@ export default function Checkout() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.semibold,
+                fontWeight: typography.fontWeight.semibold as '600',
                 color: colors.textColors.onAccent,
               }}
             >
@@ -542,7 +550,7 @@ export default function Checkout() {
               <Text
                 style={{
                   fontSize: typography.fontSize.xl,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.fontWeight.bold as '700',
                   color: colors.text.primary,
                   marginBottom: spacing.lg,
                 }}
@@ -601,7 +609,7 @@ export default function Checkout() {
                       <Text
                         style={{
                           fontSize: typography.fontSize.base,
-                          fontWeight: typography.fontWeight.semibold,
+                          fontWeight: typography.fontWeight.semibold as '600',
                           color: colors.text.primary,
                           marginBottom: spacing.xs,
                         }}
@@ -621,7 +629,7 @@ export default function Checkout() {
                       <Text
                         style={{
                           fontSize: typography.fontSize.base,
-                          fontWeight: typography.fontWeight.bold,
+                          fontWeight: typography.fontWeight.bold as '700',
                           color: colors.accent,
                         }}
                       >
@@ -738,7 +746,7 @@ export default function Checkout() {
                         <Text
                           style={{
                             fontSize: typography.fontSize.sm,
-                            fontWeight: typography.fontWeight.bold,
+                            fontWeight: typography.fontWeight.bold as '700',
                             color: colors.accent,
                             marginBottom: 2,
                           }}
@@ -767,7 +775,7 @@ export default function Checkout() {
                       <Text
                         style={{
                           fontSize: typography.fontSize.sm,
-                          fontWeight: typography.fontWeight.bold,
+                          fontWeight: typography.fontWeight.bold as '700',
                           color: colors.textColors.onAccent,
                         }}
                       >
@@ -793,7 +801,7 @@ export default function Checkout() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.xl,
-                      fontWeight: typography.fontWeight.bold,
+                      fontWeight: typography.fontWeight.bold as '700',
                       color: colors.text.primary,
                     }}
                   >
@@ -802,7 +810,7 @@ export default function Checkout() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.xl,
-                      fontWeight: typography.fontWeight.bold,
+                      fontWeight: typography.fontWeight.bold as '700',
                       color: colors.accent,
                     }}
                   >
@@ -825,7 +833,7 @@ export default function Checkout() {
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.fontWeight.bold as '700',
                   color: colors.textColors.onAccent,
                 }}
               >
@@ -860,7 +868,7 @@ export default function Checkout() {
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.fontWeight.bold as '700',
                   color: colors.textColors.onAccent,
                 }}
               >
@@ -898,7 +906,7 @@ export default function Checkout() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.lg,
-                    fontWeight: typography.fontWeight.bold,
+                    fontWeight: typography.fontWeight.bold as '700',
                     color: colors.text.primary,
                     marginBottom: spacing.md,
                   }}
@@ -968,7 +976,7 @@ export default function Checkout() {
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.fontWeight.bold as '700',
                   color: colors.text.primary,
                   marginBottom: spacing.md,
                 }}
@@ -1040,7 +1048,7 @@ export default function Checkout() {
                       <Text
                         style={{
                           fontSize: typography.fontSize.base,
-                          fontWeight: typography.fontWeight.bold,
+                          fontWeight: typography.fontWeight.bold as '700',
                           color: colors.text.primary,
                         }}
                       >
@@ -1049,7 +1057,7 @@ export default function Checkout() {
                       <Text
                         style={{
                           fontSize: typography.fontSize.base,
-                          fontWeight: typography.fontWeight.bold,
+                          fontWeight: typography.fontWeight.bold as '700',
                           color: colors.accent,
                         }}
                       >
@@ -1082,7 +1090,7 @@ export default function Checkout() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.lg,
-                      fontWeight: typography.fontWeight.bold,
+                      fontWeight: typography.fontWeight.bold as '700',
                       color: colors.textColors.onAccent,
                     }}
                   >
@@ -1091,7 +1099,7 @@ export default function Checkout() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.normal,
+                      fontWeight: typography.fontWeight.normal as '400',
                       color: colors.textColors.onAccent,
                       opacity: 0.9,
                       marginTop: spacing.xs / 2,
@@ -1104,7 +1112,7 @@ export default function Checkout() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.lg,
-                    fontWeight: typography.fontWeight.bold,
+                    fontWeight: typography.fontWeight.bold as '700',
                     color: colors.textColors.onAccent,
                   }}
                 >
@@ -1112,7 +1120,7 @@ export default function Checkout() {
                     <Text
                       style={{
                         fontSize: typography.fontSize.lg,
-                        fontWeight: typography.fontWeight.bold,
+                        fontWeight: typography.fontWeight.bold as '700',
                         color: colors.textColors.onAccent,
                       }}
                     >
@@ -1121,7 +1129,7 @@ export default function Checkout() {
                     <Text
                       style={{
                         fontSize: typography.fontSize.sm,
-                        fontWeight: typography.fontWeight.normal,
+                        fontWeight: typography.fontWeight.normal as '400',
                         color: colors.textColors.onAccent,
                         opacity: 0.9,
                         marginTop: spacing.xs / 2,
@@ -1148,7 +1156,7 @@ export default function Checkout() {
             <Text
               style={{
                 fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as '700',
                 color: colors.text.primary,
                 marginTop: spacing.lg,
               }}
@@ -1158,171 +1166,6 @@ export default function Checkout() {
           </View>
         )}
 
-        {step === "success" && (
-          <View
-            style={{
-              alignItems: "center",
-              paddingVertical: spacing["4xl"],
-              paddingHorizontal: paddingHorizontal,
-            }}
-          >
-            <View
-              style={{
-                width: 80,
-                height: 80,
-                borderRadius: 40,
-                backgroundColor: colors.status.success,
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: spacing.lg,
-              }}
-            >
-              <MaterialIcons
-                name="check"
-                size={48}
-                color={colors.text.primary}
-              />
-            </View>
-            <Text
-              style={{
-                fontSize: typography.fontSize["2xl"],
-                fontWeight: typography.fontWeight.bold,
-                color: colors.text.primary,
-                marginBottom: spacing.sm,
-                textAlign: "center",
-              }}
-            >
-              Order Confirmed!
-            </Text>
-            <Text
-              style={{
-                fontSize: typography.fontSize.base,
-                color: colors.text.secondary,
-                marginBottom: spacing.lg,
-                textAlign: "center",
-              }}
-            >
-              Your order has been processed successfully. You will receive a
-              confirmation email shortly.
-            </Text>
-
-            {/* Transaction Details */}
-            {transactionId && (
-              <View
-                style={{
-                  backgroundColor: colors.input,
-                  borderRadius: borderRadius.md,
-                  padding: spacing.lg,
-                  width: "100%",
-                  marginBottom: spacing.lg,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    marginBottom: spacing.sm,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.sm,
-                      color: colors.text.secondary,
-                    }}
-                  >
-                    Transaction ID
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.primary,
-                    }}
-                  >
-                    {transactionId}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    marginBottom: spacing.sm,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.sm,
-                      color: colors.text.secondary,
-                    }}
-                  >
-                    Total Amount
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.accent,
-                    }}
-                  >
-                    {formatCurrency(finalTotal, "USD")}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.sm,
-                      color: colors.text.secondary,
-                    }}
-                  >
-                    Items
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.primary,
-                    }}
-                  >
-                    {itemCount} {itemCount === 1 ? "item" : "items"}
-                  </Text>
-                </View>
-              </View>
-            )}
-
-            <TouchableOpacity
-              onPress={handleComplete}
-              accessible={true}
-              accessibilityRole="button"
-              accessibilityLabel="View Order History"
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              style={{
-                backgroundColor: colors.accent,
-                paddingHorizontal: paddingHorizontal,
-                paddingVertical: spacing.md + 2,
-                borderRadius: borderRadius.md,
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: typography.fontSize.base,
-                  fontWeight: typography.fontWeight.semibold,
-                  color: colors.textColors.onAccent,
-                }}
-              >
-                View Order History
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
 
         {step === "error" && (
           <View
@@ -1352,7 +1195,7 @@ export default function Checkout() {
             <Text
               style={{
                 fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as '700',
                 color: colors.text.primary,
                 marginBottom: spacing.sm,
                 textAlign: "center",
@@ -1397,7 +1240,7 @@ export default function Checkout() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.fontWeight.semibold as '600',
                     color: colors.textColors.onAccent,
                   }}
                 >
@@ -1424,7 +1267,7 @@ export default function Checkout() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.fontWeight.semibold as '600',
                     color: colors.text.primary,
                   }}
                 >

@@ -71,7 +71,7 @@ export default function BookService() {
   const totalAmount = feeCalculation.total;
 
   // Get BLKD wallet
-  const blkdWallet = mockWallets.find((w) => w.type === "myimpact" && w.currency === "BLKD");
+  const blkdWallet = mockWallets.find((w) => (w as any).type === "myimpact" && w.currency === "BLKD");
   const blkdBalance = blkdWallet?.balance || 0;
 
   // Calculate BLKD coverage
@@ -80,7 +80,7 @@ export default function BookService() {
 
   // Available payment methods (PaymentMethodSelector will filter by balance internally)
   const availableWallets = mockWallets.filter(
-    (w) => w.type !== "myimpact" && w.currency === product.currency
+    (w) => (w as any).type !== "myimpact" && w.currency === product.currency
   );
 
   // Generate available time slots (example: every hour from 9 AM to 5 PM)
@@ -171,11 +171,11 @@ export default function BookService() {
       {/* Service Info */}
       <View
         style={{
-          backgroundColor: colors.secondary.bg,
+          backgroundColor: colors.secondary,
           borderRadius: borderRadius.lg,
           padding: spacing.lg,
           borderWidth: 1,
-          borderColor: colors.border.light,
+          borderColor: colors.border,
         }}
       >
         <View style={{ flexDirection: "row", gap: spacing.md, marginBottom: spacing.md }}>
@@ -196,7 +196,7 @@ export default function BookService() {
             <Text
               style={{
                 fontSize: typography.fontSize.lg,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as any,
                 color: colors.text.primary,
                 marginBottom: spacing.xs,
               }}
@@ -260,7 +260,7 @@ export default function BookService() {
         <Text
           style={{
             fontSize: typography.fontSize.base,
-            fontWeight: typography.fontWeight.semibold,
+            fontWeight: typography.fontWeight.semibold as any,
             color: colors.text.primary,
             marginBottom: spacing.sm,
           }}
@@ -275,11 +275,11 @@ export default function BookService() {
           multiline
           numberOfLines={4}
           style={{
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.md,
             padding: spacing.md,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
             color: colors.text.primary,
             fontSize: typography.fontSize.base,
             minHeight: 100,
@@ -291,17 +291,17 @@ export default function BookService() {
       {/* Pricing Summary */}
       <View
         style={{
-          backgroundColor: colors.secondary.bg,
+          backgroundColor: colors.secondary,
           borderRadius: borderRadius.lg,
           padding: spacing.lg,
           borderWidth: 1,
-          borderColor: colors.border.light,
+          borderColor: colors.border,
         }}
       >
         <Text
           style={{
             fontSize: typography.fontSize.base,
-            fontWeight: typography.fontWeight.bold,
+            fontWeight: typography.fontWeight.bold as any,
             color: colors.text.primary,
             marginBottom: spacing.md,
           }}
@@ -314,7 +314,7 @@ export default function BookService() {
               Service Price
             </Text>
             <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
-              {formatCurrency(product.price, product.currency)}
+              {formatCurrency(product.price, product.currency as Currency)}
             </Text>
           </View>
           {serviceFee > 0 && (
@@ -323,14 +323,14 @@ export default function BookService() {
                 Service Fee
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
-                {formatCurrency(serviceFee, product.currency)}
+                {formatCurrency(serviceFee, product.currency as Currency)}
               </Text>
             </View>
           )}
           <View
             style={{
               borderTopWidth: 1,
-              borderTopColor: colors.border.light,
+              borderTopColor: colors.border,
               marginTop: spacing.sm,
               paddingTop: spacing.sm,
               flexDirection: "row",
@@ -340,7 +340,7 @@ export default function BookService() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as any,
                 color: colors.text.primary,
               }}
             >
@@ -349,11 +349,11 @@ export default function BookService() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as any,
                 color: colors.accent,
               }}
             >
-              {formatCurrency(totalAmount, product.currency)}
+              {formatCurrency(totalAmount, product.currency as Currency)}
             </Text>
           </View>
         </View>
@@ -368,7 +368,7 @@ export default function BookService() {
         <Text
           style={{
             fontSize: typography.fontSize.base,
-            fontWeight: typography.fontWeight.semibold,
+            fontWeight: typography.fontWeight.semibold as any,
             color: colors.text.primary,
             marginBottom: spacing.md,
           }}
@@ -390,9 +390,9 @@ export default function BookService() {
                   paddingVertical: spacing.md,
                   paddingHorizontal: spacing.lg,
                   borderRadius: borderRadius.md,
-                  backgroundColor: isSelected ? colors.accent : colors.secondary.bg,
+                  backgroundColor: isSelected ? colors.accent : colors.secondary,
                   borderWidth: 1,
-                  borderColor: isSelected ? colors.accent : colors.border.light,
+                  borderColor: isSelected ? colors.accent : colors.border,
                   minWidth: 120,
                   alignItems: "center",
                 }}
@@ -400,7 +400,7 @@ export default function BookService() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.fontWeight.semibold as any,
                     color: isSelected ? colors.textColors.onAccent : colors.text.primary,
                   }}
                 >
@@ -418,7 +418,7 @@ export default function BookService() {
           <Text
             style={{
               fontSize: typography.fontSize.base,
-              fontWeight: typography.fontWeight.semibold,
+              fontWeight: typography.fontWeight.semibold as any,
               color: colors.text.primary,
               marginBottom: spacing.md,
             }}
@@ -442,15 +442,15 @@ export default function BookService() {
                     paddingVertical: spacing.sm,
                     paddingHorizontal: spacing.md,
                     borderRadius: borderRadius.md,
-                    backgroundColor: isSelected ? colors.accent : colors.secondary.bg,
+                    backgroundColor: isSelected ? colors.accent : colors.secondary,
                     borderWidth: 1,
-                    borderColor: isSelected ? colors.accent : colors.border.light,
+                    borderColor: isSelected ? colors.accent : colors.border,
                   }}
                 >
                   <Text
                     style={{
                       fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.medium,
+                      fontWeight: typography.fontWeight.medium as any,
                       color: isSelected ? colors.textColors.onAccent : colors.text.primary,
                     }}
                   >
@@ -470,17 +470,17 @@ export default function BookService() {
       {/* Booking Summary */}
       <View
         style={{
-          backgroundColor: colors.secondary.bg,
+          backgroundColor: colors.secondary,
           borderRadius: borderRadius.lg,
           padding: spacing.lg,
           borderWidth: 1,
-          borderColor: colors.border.light,
+          borderColor: colors.border,
         }}
       >
         <Text
           style={{
             fontSize: typography.fontSize.base,
-            fontWeight: typography.fontWeight.bold,
+            fontWeight: typography.fontWeight.bold as any,
             color: colors.text.primary,
             marginBottom: spacing.md,
           }}
@@ -535,7 +535,7 @@ export default function BookService() {
           <Text
             style={{
               fontSize: typography.fontSize.base,
-              fontWeight: typography.fontWeight.semibold,
+              fontWeight: typography.fontWeight.semibold as any,
               color: colors.text.primary,
               marginBottom: spacing.md,
             }}
@@ -558,17 +558,17 @@ export default function BookService() {
       {/* Final Pricing */}
       <View
         style={{
-          backgroundColor: colors.secondary.bg,
+          backgroundColor: colors.secondary,
           borderRadius: borderRadius.lg,
           padding: spacing.lg,
           borderWidth: 1,
-          borderColor: colors.border.light,
+          borderColor: colors.border,
         }}
       >
         <Text
           style={{
             fontSize: typography.fontSize.base,
-            fontWeight: typography.fontWeight.bold,
+            fontWeight: typography.fontWeight.bold as any,
             color: colors.text.primary,
             marginBottom: spacing.md,
           }}
@@ -581,7 +581,7 @@ export default function BookService() {
               Service Price
             </Text>
             <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
-              {formatCurrency(product.price, product.currency)}
+              {formatCurrency(product.price, product.currency as Currency)}
             </Text>
           </View>
           {serviceFee > 0 && (
@@ -590,7 +590,7 @@ export default function BookService() {
                 Service Fee
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
-                {formatCurrency(serviceFee, product.currency)}
+                {formatCurrency(serviceFee, product.currency as Currency)}
               </Text>
             </View>
           )}
@@ -600,14 +600,14 @@ export default function BookService() {
                 BLKD Applied
               </Text>
               <Text style={{ fontSize: typography.fontSize.sm, color: colors.textColors.success }}>
-                -{formatCurrency(blkdCoverage, "BLKD")}
+                -{formatCurrency(blkdCoverage, "BLKD" as Currency)}
               </Text>
             </View>
           )}
           <View
             style={{
               borderTopWidth: 1,
-              borderTopColor: colors.border.light,
+              borderTopColor: colors.border,
               marginTop: spacing.sm,
               paddingTop: spacing.sm,
               flexDirection: "row",
@@ -617,7 +617,7 @@ export default function BookService() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as any,
                 color: colors.text.primary,
               }}
             >
@@ -626,11 +626,11 @@ export default function BookService() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as any,
                 color: colors.accent,
               }}
             >
-              {formatCurrency(remainingAfterBLKD, product.currency)}
+              {formatCurrency(remainingAfterBLKD, product.currency as Currency)}
             </Text>
           </View>
         </View>
@@ -644,7 +644,7 @@ export default function BookService() {
       <Text
         style={{
           fontSize: typography.fontSize.lg,
-          fontWeight: typography.fontWeight.bold,
+          fontWeight: typography.fontWeight.bold as any,
           color: colors.text.primary,
         }}
       >
@@ -673,7 +673,7 @@ export default function BookService() {
       <Text
         style={{
           fontSize: typography.fontSize["2xl"],
-          fontWeight: typography.fontWeight.bold,
+          fontWeight: typography.fontWeight.bold as any,
           color: colors.text.primary,
           textAlign: "center",
         }}
@@ -692,18 +692,18 @@ export default function BookService() {
       {selectedDate && selectedTime && (
         <View
           style={{
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.lg,
             padding: spacing.lg,
             width: "100%",
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
           }}
         >
           <Text
             style={{
               fontSize: typography.fontSize.base,
-              fontWeight: typography.fontWeight.semibold,
+              fontWeight: typography.fontWeight.semibold as any,
               color: colors.text.primary,
               marginBottom: spacing.sm,
             }}
@@ -728,7 +728,7 @@ export default function BookService() {
         <Text
           style={{
             fontSize: typography.fontSize.base,
-            fontWeight: typography.fontWeight.bold,
+            fontWeight: typography.fontWeight.bold as any,
             color: colors.textColors.onAccent,
           }}
         >
@@ -765,18 +765,18 @@ export default function BookService() {
                 onPress={handleBack}
                 style={{
                   flex: 1,
-                  backgroundColor: colors.secondary.bg,
+                  backgroundColor: colors.secondary,
                   paddingVertical: spacing.md + 2,
                   borderRadius: borderRadius.md,
                   alignItems: "center",
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: colors.border,
                 }}
               >
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.fontWeight.semibold as any,
                     color: colors.text.primary,
                   }}
                 >
@@ -806,7 +806,7 @@ export default function BookService() {
               <Text
                 style={{
                   fontSize: typography.fontSize.base,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.fontWeight.bold as any,
                   color: colors.textColors.onAccent,
                 }}
               >

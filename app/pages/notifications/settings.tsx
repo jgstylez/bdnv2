@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Switch, Platform } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Switch, Platform, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { NotificationPreferences, NotificationChannel } from '@/types/notifications';
+import { api } from '@/lib/api-client';
+import { logger } from '@/lib/logger';
+import { showSuccessToast, showErrorToast } from '@/lib/toast';
+import { useLoading } from '@/hooks/useLoading';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 
 const channelLabels: Record<NotificationChannel, string> = {
   wallet: "Wallet",
@@ -52,6 +57,7 @@ export default function NotificationSettings() {
   const router = useRouter();
   const isMobile = width < 768;
   const [preferences, setPreferences] = useState<NotificationPreferences>(mockPreferences);
+  const { loading: savingPreferences, execute: executeSavePreferences } = useLoading();
 
   const updateChannelPreference = (
     channel: NotificationChannel,
@@ -88,6 +94,26 @@ export default function NotificationSettings() {
         enabled,
       },
     });
+  };
+
+  const handleSavePreferences = async () => {
+    try {
+      await executeSavePreferences(async () => {
+        const response = await api.put('/account/notification-preferences', preferences);
+        logger.info('Notification preferences saved', { preferences });
+        return response;
+      });
+
+      if (!savingPreferences) {
+        showSuccessToast("Preferences Saved", "Your notification preferences have been saved");
+      }
+    } catch (error: any) {
+      logger.error('Failed to save notification preferences', error);
+      showErrorToast(
+        "Failed to Save Preferences",
+        error?.message || "Please try again"
+      );
+    }
   };
 
   return (
@@ -376,6 +402,36 @@ export default function NotificationSettings() {
               </View>
             )}
           </View>
+        </View>
+
+        {/* Save Button */}
+        <View style={{ marginTop: 32, marginBottom: 40 }}>
+          <TouchableOpacity
+            onPress={handleSavePreferences}
+            disabled={savingPreferences}
+            style={{
+              backgroundColor: savingPreferences ? "#474747" : "#ba9988",
+              borderRadius: 12,
+              paddingVertical: 16,
+              alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: spacing.sm,
+            }}
+          >
+            {savingPreferences && (
+              <ActivityIndicator size="small" color="#ffffff" />
+            )}
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: "#ffffff",
+              }}
+            >
+              {savingPreferences ? "Saving..." : "Save Preferences"}
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>

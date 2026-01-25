@@ -10,6 +10,7 @@ import { ProductPlaceholder } from '@/components/ProductPlaceholder';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { useCart } from '@/contexts/CartContext';
 import { formatCurrency } from '@/lib/international';
+import { Currency } from '@/types/wallet';
 import { BackButton } from '@/components/navigation/BackButton';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 
@@ -70,7 +71,7 @@ export default function Cart() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <OptimizedScrollView
         showBackToTop={true}
@@ -95,7 +96,7 @@ export default function Cart() {
             <Text
               style={{
                 fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.fontWeight.bold as any,
                 color: colors.text.primary,
                 marginTop: spacing.lg,
                 marginBottom: spacing.sm,
@@ -124,7 +125,7 @@ export default function Cart() {
               <Text
                 style={{
                   fontSize: typography.fontSize.base,
-                  fontWeight: typography.fontWeight.semibold,
+                  fontWeight: typography.fontWeight.semibold as any,
                   color: colors.textColors.onAccent,
                 }}
               >
@@ -140,11 +141,11 @@ export default function Cart() {
                 <View
                   key={businessOrder.merchantId}
                   style={{
-                    backgroundColor: colors.secondary.bg,
+                    backgroundColor: colors.secondary,
                     borderRadius: borderRadius.lg,
                     padding: spacing.lg,
                     borderWidth: 1,
-                    borderColor: colors.border.light,
+                    borderColor: colors.border,
                   }}
                 >
                   {/* Business Header */}
@@ -156,14 +157,14 @@ export default function Cart() {
                       marginBottom: spacing.md,
                       paddingBottom: spacing.md,
                       borderBottomWidth: 1,
-                      borderBottomColor: colors.border.light,
+                      borderBottomColor: colors.border,
                     }}
                   >
                     <View style={{ flex: 1 }}>
                       <Text
                         style={{
                           fontSize: typography.fontSize.lg,
-                          fontWeight: typography.fontWeight.bold,
+                          fontWeight: typography.fontWeight.bold as any,
                           color: colors.text.primary,
                           marginBottom: spacing.xs,
                         }}
@@ -196,11 +197,11 @@ export default function Cart() {
                   key={item.id}
                   style={{
                     flexDirection: "row",
-                    backgroundColor: colors.secondary.bg,
+                    backgroundColor: colors.secondary,
                     borderRadius: borderRadius.lg,
                     overflow: "hidden",
                     borderWidth: 1,
-                    borderColor: colors.border.light,
+                    borderColor: colors.border,
                   }}
                 >
                   {/* Product Image */}
@@ -210,9 +211,9 @@ export default function Cart() {
                       height: isMobile ? 100 : 120,
                       borderRadius: borderRadius.md,
                       overflow: "hidden",
-                      backgroundColor: colors.secondary.bg,
+                      backgroundColor: colors.secondary,
                       borderWidth: 1,
-                      borderColor: colors.border.light,
+                      borderColor: colors.border,
                     }}
                   >
                     {item.images && 
@@ -243,7 +244,7 @@ export default function Cart() {
                             numberOfLines={2}
                             style={{
                               fontSize: typography.fontSize.base,
-                              fontWeight: typography.fontWeight.semibold,
+                              fontWeight: typography.fontWeight.semibold as any,
                               color: colors.text.primary,
                               marginBottom: spacing.xs,
                               ...(Platform.OS === "web" && {
@@ -252,8 +253,8 @@ export default function Cart() {
                                 WebkitLineClamp: 2,
                                 WebkitBoxOrient: "vertical",
                                 lineHeight: 20,
-                              }),
-                            }}
+                              } as any),
+                            } as any}
                           >
                             {item.name}
                           </Text>
@@ -263,7 +264,7 @@ export default function Cart() {
                               color: colors.text.secondary,
                             }}
                           >
-                            {formatCurrency(item.price, item.currency)} each
+                            {formatCurrency(item.price, item.currency as Currency)} each
                           </Text>
                         </View>
                         <TouchableOpacity
@@ -296,11 +297,11 @@ export default function Cart() {
                             width: 32,
                             height: 32,
                             borderRadius: borderRadius.sm,
-                            backgroundColor: colors.primary.bg,
+                            backgroundColor: colors.background,
                             justifyContent: "center",
                             alignItems: "center",
                             borderWidth: 1,
-                            borderColor: colors.border.light,
+                            borderColor: colors.border,
                           }}
                         >
                           <MaterialIcons name="remove" size={18} color={colors.text.primary} />
@@ -311,7 +312,7 @@ export default function Cart() {
                           accessibilityLabel={`Quantity: ${item.quantity}`}
                           style={{
                             fontSize: typography.fontSize.base,
-                            fontWeight: typography.fontWeight.semibold,
+                            fontWeight: typography.fontWeight.semibold as any,
                             color: colors.text.primary,
                             minWidth: 30,
                             textAlign: "center",
@@ -330,11 +331,11 @@ export default function Cart() {
                             width: 32,
                             height: 32,
                             borderRadius: borderRadius.sm,
-                            backgroundColor: colors.primary.bg,
+                            backgroundColor: colors.background,
                             justifyContent: "center",
                             alignItems: "center",
                             borderWidth: 1,
-                            borderColor: colors.border.light,
+                            borderColor: colors.border,
                           }}
                         >
                           <MaterialIcons name="add" size={18} color={colors.text.primary} />
@@ -343,11 +344,11 @@ export default function Cart() {
                       <Text
                         style={{
                           fontSize: typography.fontSize.lg,
-                          fontWeight: typography.fontWeight.bold,
+                          fontWeight: typography.fontWeight.bold as any,
                           color: colors.accent,
                         }}
                       >
-                        {formatCurrency(item.price * item.quantity, item.currency)}
+                        {formatCurrency(item.price * item.quantity, item.currency as Currency)}
                       </Text>
                     </View>
                     {/* Save for Later Button */}
@@ -367,15 +368,15 @@ export default function Cart() {
                         paddingVertical: spacing.sm,
                         borderRadius: borderRadius.sm,
                         borderWidth: 1,
-                        borderColor: colors.border.light,
-                        backgroundColor: colors.primary.bg,
+                        borderColor: colors.border,
+                        backgroundColor: colors.background,
                       }}
                     >
                       <MaterialIcons name="bookmark-border" size={16} color={colors.text.secondary} />
                       <Text
                         style={{
                           fontSize: typography.fontSize.sm,
-                          fontWeight: typography.fontWeight.normal,
+                          fontWeight: typography.fontWeight.normal as any,
                           color: colors.text.secondary,
                         }}
                       >
@@ -393,7 +394,7 @@ export default function Cart() {
                       marginTop: spacing.md,
                       paddingTop: spacing.md,
                       borderTopWidth: 1,
-                      borderTopColor: colors.border.light,
+                      borderTopColor: colors.border,
                     }}
                   >
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.xs }}>
@@ -401,7 +402,7 @@ export default function Cart() {
                         Subtotal
                       </Text>
                       <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
-                        {formatCurrency(businessOrder.subtotal, businessOrder.currency)}
+                        {formatCurrency(businessOrder.subtotal, businessOrder.currency as Currency)}
                       </Text>
                     </View>
                     {businessOrder.shippingTotal > 0 && (
@@ -410,7 +411,7 @@ export default function Cart() {
                           Shipping
                         </Text>
                         <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
-                          {formatCurrency(businessOrder.shippingTotal, businessOrder.currency)}
+                          {formatCurrency(businessOrder.shippingTotal, businessOrder.currency as Currency)}
                         </Text>
                       </View>
                     )}
@@ -418,7 +419,7 @@ export default function Cart() {
                       <Text
                         style={{
                           fontSize: typography.fontSize.base,
-                          fontWeight: typography.fontWeight.bold,
+                          fontWeight: typography.fontWeight.bold as any,
                           color: colors.text.primary,
                         }}
                       >
@@ -427,11 +428,11 @@ export default function Cart() {
                       <Text
                         style={{
                           fontSize: typography.fontSize.base,
-                          fontWeight: typography.fontWeight.bold,
+                          fontWeight: typography.fontWeight.bold as any,
                           color: colors.accent,
                         }}
                       >
-                        {formatCurrency(businessOrder.total, businessOrder.currency)}
+                        {formatCurrency(businessOrder.total, businessOrder.currency as Currency)}
                       </Text>
                     </View>
                   </View>
@@ -442,17 +443,17 @@ export default function Cart() {
             {/* Order Summary */}
             <View
               style={{
-                backgroundColor: colors.secondary.bg,
+                backgroundColor: colors.secondary,
                 borderRadius: borderRadius.lg,
                 padding: spacing.xl,
                 borderWidth: 1,
-                borderColor: colors.border.light,
+                borderColor: colors.border,
               }}
             >
               <Text
                 style={{
                   fontSize: typography.fontSize.xl,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.fontWeight.bold as any,
                   color: colors.text.primary,
                   marginBottom: spacing.lg,
                 }}
@@ -473,13 +474,13 @@ export default function Cart() {
                     Shipping
                   </Text>
                   <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
-                    {shippingTotal > 0 ? formatCurrency(shippingTotal, "USD") : "Free"}
+                    {shippingTotal > 0 ? formatCurrency(shippingTotal, "USD" as Currency) : "Free"}
                   </Text>
                 </View>
                 <View
                   style={{
                     height: 1,
-                    backgroundColor: colors.border.light,
+                    backgroundColor: colors.border,
                     marginVertical: spacing.sm,
                   }}
                 />
@@ -487,7 +488,7 @@ export default function Cart() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.xl,
-                      fontWeight: typography.fontWeight.bold,
+                      fontWeight: typography.fontWeight.bold as any,
                       color: colors.text.primary,
                     }}
                   >
@@ -496,11 +497,11 @@ export default function Cart() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.xl,
-                      fontWeight: typography.fontWeight.bold,
+                      fontWeight: typography.fontWeight.bold as any,
                       color: colors.accent,
                     }}
                   >
-                    {formatCurrency(total, "USD")}
+                    {formatCurrency(total, "USD" as Currency)}
                   </Text>
                 </View>
               </View>
@@ -522,7 +523,7 @@ export default function Cart() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.lg,
-                    fontWeight: typography.fontWeight.bold,
+                    fontWeight: typography.fontWeight.bold as any,
                     color: colors.textColors.onAccent,
                   }}
                 >
@@ -537,7 +538,7 @@ export default function Cart() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.xl,
-                    fontWeight: typography.fontWeight.bold,
+                    fontWeight: typography.fontWeight.bold as any,
                     color: colors.text.primary,
                     marginBottom: spacing.md,
                   }}
@@ -550,11 +551,11 @@ export default function Cart() {
                       key={`${item.id}-${item.selectedVariantId || "default"}`}
                       style={{
                         flexDirection: "row",
-                        backgroundColor: colors.secondary.bg,
+                        backgroundColor: colors.secondary,
                         borderRadius: borderRadius.lg,
                         padding: spacing.md,
                         borderWidth: 1,
-                        borderColor: colors.border.light,
+                        borderColor: colors.border,
                       }}
                     >
                       {/* Product Image */}
@@ -564,9 +565,9 @@ export default function Cart() {
                           height: isMobile ? 80 : 100,
                           borderRadius: borderRadius.md,
                           overflow: "hidden",
-                          backgroundColor: colors.secondary.bg,
+                          backgroundColor: colors.secondary,
                           borderWidth: 1,
-                          borderColor: colors.border.light,
+                          borderColor: colors.border,
                         }}
                       >
                         {item.images && 
@@ -595,7 +596,7 @@ export default function Cart() {
                             numberOfLines={2}
                             style={{
                               fontSize: typography.fontSize.base,
-                              fontWeight: typography.fontWeight.semibold,
+                              fontWeight: typography.fontWeight.semibold as any,
                               color: colors.text.primary,
                               marginBottom: spacing.xs,
                             }}
@@ -616,11 +617,11 @@ export default function Cart() {
                           <Text
                             style={{
                               fontSize: typography.fontSize.base,
-                              fontWeight: typography.fontWeight.bold,
+                              fontWeight: typography.fontWeight.bold as any,
                               color: colors.accent,
                             }}
                           >
-                            {formatCurrency(item.price, item.currency)} each
+                            {formatCurrency(item.price, item.currency as Currency)} each
                           </Text>
                           <Text
                             style={{
@@ -651,7 +652,7 @@ export default function Cart() {
                             <Text
                               style={{
                                 fontSize: typography.fontSize.sm,
-                                fontWeight: typography.fontWeight.semibold,
+                                fontWeight: typography.fontWeight.semibold as any,
                                 color: colors.textColors.onAccent,
                               }}
                             >
@@ -667,7 +668,7 @@ export default function Cart() {
                               padding: spacing.sm,
                               borderRadius: borderRadius.md,
                               borderWidth: 1,
-                              borderColor: colors.border.light,
+                              borderColor: colors.border,
                             }}
                           >
                             <MaterialIcons name="close" size={20} color={colors.text.secondary} />

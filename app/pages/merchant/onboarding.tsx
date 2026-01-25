@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, useWindowDimensions, KeyboardAvoidingView, Platform, ScrollView, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, useWindowDimensions, KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -11,6 +11,10 @@ import { TaxIdSelector } from '@/components/forms/TaxIdSelector';
 import { TaxIdentification } from '@/types/international';
 import { requiresStateField } from '@/lib/international';
 import { BUSINESS_CATEGORIES } from '@/constants/categories';
+import { api } from '@/lib/api-client';
+import { logger } from '@/lib/logger';
+import { useLoading } from '@/hooks/useLoading';
+import { StepIndicator } from '@/components/StepIndicator';
 
 const MERCHANT_TYPES: { value: MerchantType; label: string; description: string }[] = [
   { value: "local-shop", label: "Local Shop", description: "Physical retail location" },
@@ -131,10 +135,63 @@ export default function MerchantOnboarding() {
     });
   };
 
-  const handleSubmit = () => {
-    // TODO: Submit business onboarding application
-    alert("Business application submitted! We'll review your application and get back to you soon.");
-    router.push("/pages/merchant/dashboard");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!validateStep()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // Prepare onboarding data
+      const onboardingData = {
+        businessName: formData.businessName,
+        merchantTypes: formData.merchantTypes,
+        category: formData.category,
+        description: formData.description,
+        address: formData.address,
+        phone: formData.phone,
+        phoneCountryCode: formData.phoneCountryCode,
+        email: formData.email,
+        website: formData.website,
+        hours: formData.hours,
+        taxIdentification: formData.taxIdentification,
+        currency: formData.currency,
+        isIncorporated: formData.isIncorporated,
+        incorporationType: formData.incorporationType || undefined,
+        incorporationState: formData.incorporationState || undefined,
+        incorporationDate: formData.incorporationDate || undefined,
+        blackOwnedVerificationStatus: params.blackOwnedVerificationStatus || "pending",
+      };
+
+      // Submit onboarding application
+      const response = await api.post('/businesses/onboarding', onboardingData);
+      
+      logger.info('Business onboarding submitted', { 
+        businessName: formData.businessName,
+        applicationId: response.data?.id 
+      });
+
+      Alert.alert(
+        "Application Submitted",
+        "Your business application has been submitted! We'll review your application and get back to you soon. You'll receive an email notification once your application is reviewed.",
+        [
+          {
+            text: "OK",
+            onPress: () => router.push("/pages/merchant/dashboard"),
+          },
+        ]
+      );
+    } catch (error: any) {
+      logger.error('Failed to submit business onboarding', error);
+      Alert.alert(
+        "Submission Failed",
+        error?.message || "Failed to submit your application. Please check your information and try again, or contact support if the problem persists."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderStepContent = () => {
@@ -569,6 +626,16 @@ export default function MerchantOnboarding() {
 
   const progress = (step / totalSteps) * 100;
 
+  // Business enrollment steps
+  const stepIndicatorSteps = [
+    { number: 1, label: "Type" }, // Business Information
+    { number: 2, label: "Details" }, // Category & Description
+    { number: 3, label: "Location" }, // Location Information
+    { number: 4, label: "Contact" }, // Contact Information
+    { number: 5, label: "Legal" }, // Incorporation Status
+    { number: 6, label: "Review" }, // Additional Details
+  ];
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -578,7 +645,7 @@ export default function MerchantOnboarding() {
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
-          paddingTop: Platform.OS === "web" ? 40 : 56,
+          paddingTop: 12,
           paddingBottom: 40,
         }}
       >
@@ -589,6 +656,9 @@ export default function MerchantOnboarding() {
             alignSelf: "center",
           }}
         >
+          {/* Step Indicator */}
+          <StepIndicator currentStep={step} steps={stepIndicatorSteps} />
+
           {/* Progress Bar */}
           <View style={{ marginBottom: 32 }}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
@@ -649,15 +719,19 @@ export default function MerchantOnboarding() {
             <TouchableOpacity
               onPress={handleNext}
               activeOpacity={0.8}
-              disabled={!validateStep()}
+              disabled={!validateStep() || isSubmitting}
               style={{
                 flex: 1,
-                backgroundColor: !validateStep() ? "rgba(186, 153, 136, 0.5)" : "#ba9988",
+                backgroundColor: !validateStep() || isSubmitting ? "rgba(186, 153, 136, 0.5)" : "#ba9988",
                 borderRadius: 12,
                 paddingVertical: 16,
                 alignItems: "center",
+                flexDirection: "row",
+                justifyContent: "center",
+                gap: 8,
               }}
             >
+              {isSubmitting && <ActivityIndicator size="small" color="#ffffff" />}
               <Text
                 style={{
                   fontSize: 16,
@@ -665,7 +739,7 @@ export default function MerchantOnboarding() {
                   color: "#ffffff",
                 }}
               >
-                {step === totalSteps ? "Submit" : "Next"}
+                {isSubmitting ? "Submitting..." : step === totalSteps ? "Submit" : "Next"}
               </Text>
             </TouchableOpacity>
           </View>

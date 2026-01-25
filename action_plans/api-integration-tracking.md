@@ -1,7 +1,10 @@
 # API Integration Tracking
 
-**Date:** 2024-12-19  
+**Date:** 2025-01-25 (Last Updated)  
+**Original Date:** 2024-12-19  
 **Purpose:** Track all API integration TODOs and mock data that needs to be replaced with real API calls
+
+**Note:** Many features now have complete API integration patterns in place (using `api` client, `useLoading` hook, error handling). They use mock responses in development mode but are ready for backend integration. See individual implementation documents for details.
 
 ---
 
@@ -15,12 +18,18 @@ This document tracks all areas where mock data is used or API integration is inc
 
 ### Payment Processing
 - **File:** `app/pages/checkout.tsx`
-- **Line:** ~199
-- **Status:** ❌ Mock
+- **Line:** ~320-370
+- **Status:** ⚠️ **Flow Complete, API Integration Pending**
 - **Description:** Payment processing for checkout flow
 - **Required API:** `POST /api/orders/checkout`
 - **Payload:** Order items, payment method, shipping address, service fees
 - **Response:** Order ID, transaction ID, confirmation
+- **Current Implementation:** 
+  - ✅ Navigates to order confirmation page after payment
+  - ✅ Generates order ID and transaction ID
+  - ✅ Clears cart after successful payment
+  - ⏳ TODO: Replace mock payment processing with real API call
+- **Documentation:** [shopping-checkout-flow-implementation.md](./shopping-checkout-flow-implementation.md)
 
 ### BLKD Purchase Processing
 - **File:** `app/pages/payments/buy-blkd.tsx`
@@ -61,32 +70,74 @@ This document tracks all areas where mock data is used or API integration is inc
 
 ### Product Creation
 - **File:** `app/pages/products/create.tsx`
-- **Line:** ~95
-- **Status:** ❌ Mock
+- **Line:** ~245
+- **Status:** ✅ **API Integration Pattern Complete** (uses mock in dev)
 - **Description:** Create new product
-- **Required API:** `POST /api/products`
+- **Required API:** `POST /api/products` or `POST /api/nonprofits/products`
 - **Payload:** Product data (name, description, price, images, etc.)
 - **Response:** Product ID, confirmation
+- **Implementation:** Full API integration with error handling and loading states
+- **Note:** Product edit page created at `app/pages/products/edit/[id].tsx`
+- **Documentation:** [business-merchant-flows-implementation.md](./business-merchant-flows-implementation.md)
+
+### Product Deletion
+- **File:** `components/products/ProductList.tsx`
+- **Line:** ~242
+- **Status:** ✅ **API Integration Pattern Complete** (uses mock in dev)
+- **Description:** Delete product
+- **Required API:** `DELETE /api/products/:id` or `DELETE /api/nonprofits/products/:id`
+- **Implementation:** Full API integration with confirmation modal and loading states
+- **Documentation:** [business-merchant-flows-implementation.md](./business-merchant-flows-implementation.md)
+
+### Bulk Product Upload
+- **File:** `app/pages/products/bulk-upload.tsx`
+- **Line:** ~79
+- **Status:** ✅ **API Integration Pattern Complete** (uses mock in dev)
+- **Description:** Bulk upload products via CSV/Excel
+- **Required API:** `POST /api/products/bulk-upload` or `POST /api/nonprofits/products/bulk-upload`
+- **Payload:** FormData with file and entityType
+- **Response:** BulkUploadResult with success/failure counts and error details
+- **Implementation:** Full API integration with error handling and detailed error reporting
+- **Documentation:** [business-merchant-flows-implementation.md](./business-merchant-flows-implementation.md)
 
 ### Invoice Creation & Sending
 - **File:** `app/pages/invoices/create.tsx`
-- **Lines:** ~109, ~114
-- **Status:** ❌ Mock
-- **Description:** Create and send invoices
+- **Lines:** ~205-341
+- **Status:** ✅ **API Integration Pattern Complete** (uses mock in dev)
+- **Description:** Create, save draft, and send invoices
 - **Required API:** 
-  - `POST /api/invoices` - Create invoice
-  - `POST /api/invoices/{id}/send` - Send invoice
-- **Payload:** Invoice data, recipient, billing type
+  - `POST /api/invoices` - Create invoice (draft)
+  - `PUT /api/invoices/:id` - Update invoice (draft)
+  - `POST /api/invoices/send` - Send new invoice
+  - `PUT /api/invoices/:id/send` - Resend existing invoice
+- **Payload:** Invoice data, recipient, billing type, line items
 - **Response:** Invoice ID, confirmation
+- **Implementation:** Full API integration with validation, loading states, and error handling
+- **Documentation:** [invoice-flows-implementation.md](./invoice-flows-implementation.md)
+
+### Invoice Payment Tracking
+- **File:** `app/pages/payments/invoice.tsx`
+- **Line:** ~311-342
+- **Status:** ✅ **API Integration Pattern Complete** (uses mock in dev)
+- **Description:** Process invoice payment and track payment status
+- **Required API:**
+  - `POST /api/invoices/:id/pay` - Process payment
+  - `PUT /api/invoices/:id` - Update invoice status (paid, amountPaid, amountDue, paidAt)
+- **Payload:** Payment method, amount, transaction details
+- **Response:** Transaction ID, updated invoice status
+- **Implementation:** Full API integration with fee calculation and payment tracking
+- **Documentation:** [invoice-flows-implementation.md](./invoice-flows-implementation.md)
 
 ### Business Onboarding
 - **File:** `app/pages/merchant/onboarding.tsx`
-- **Line:** ~144
-- **Status:** ❌ Mock
+- **Line:** ~168
+- **Status:** ✅ **API Integration Pattern Complete** (uses mock in dev)
 - **Description:** Submit business onboarding application
-- **Required API:** `POST /api/businesses/onboard`
-- **Payload:** Business information, verification documents
+- **Required API:** `POST /businesses/onboarding`
+- **Payload:** Business information, verification documents, incorporation details
 - **Response:** Application ID, status
+- **Implementation:** Full API integration with `useLoading`, error handling, and loading states
+- **Documentation:** [business-merchant-flows-implementation.md](./business-merchant-flows-implementation.md)
 
 ---
 
@@ -300,12 +351,31 @@ This document tracks all areas where mock data is used or API integration is inc
 ## 🎯 Priority Order
 
 1. **Payment Processing** (Checkout, C2B, BLKD, Gift Cards, Tokens)
+   - ⚠️ Checkout flow complete but needs real API integration
+   - ✅ API patterns in place for other flows
 2. **Product & Business Data** (Product creation, business onboarding)
-3. **User Management** (Profile, settings, authentication)
-4. **Admin Functions** (User/business/nonprofit management)
-5. **Search & Discovery** (Elasticsearch integration)
-6. **Notifications** (Push notifications, email)
-7. **Real-time Updates** (WebSocket integration)
+   - ✅ **COMPLETE** - Business onboarding API integration pattern complete
+   - ✅ **COMPLETE** - Product creation/edit/delete API integration patterns complete
+   - ✅ **COMPLETE** - Bulk upload API integration pattern complete
+   - **Documentation:** [business-merchant-flows-implementation.md](./business-merchant-flows-implementation.md)
+3. **Order Management**
+   - ✅ **COMPLETE** - Order fulfillment API integration pattern complete
+   - ✅ **COMPLETE** - Order tracking UI complete (ready for API data)
+   - **Documentation:** [business-merchant-flows-implementation.md](./business-merchant-flows-implementation.md), [shopping-checkout-flow-implementation.md](./shopping-checkout-flow-implementation.md)
+4. **Invoice Management**
+   - ✅ **COMPLETE** - Invoice creation, draft saving, sending API integration patterns complete
+   - ✅ **COMPLETE** - Invoice payment tracking API integration pattern complete
+   - **Documentation:** [invoice-flows-implementation.md](./invoice-flows-implementation.md)
+5. **User Management** (Profile, settings, authentication)
+   - ✅ **COMPLETE** - Profile editing, account deletion, password/email change API integration patterns complete
+   - ✅ **COMPLETE** - Notification preferences API integration pattern complete
+   - **Documentation:** [account-management-implementation.md](./account-management-implementation.md)
+6. **Admin Functions** (User/business/nonprofit management)
+7. **Search & Discovery** (Elasticsearch integration)
+   - ✅ UI complete - Filtering, sorting, map view implemented
+   - **Documentation:** [search-discovery-implementation.md](./search-discovery-implementation.md)
+8. **Notifications** (Push notifications, email)
+9. **Real-time Updates** (WebSocket integration)
 
 ---
 
@@ -322,17 +392,37 @@ This document tracks all areas where mock data is used or API integration is inc
 
 ## ✅ Completed
 
+### Infrastructure
 - ✅ Logger utility created (`lib/logger.ts`)
 - ✅ Error handling standardized
 - ✅ Mock data structure established
+- ✅ API client infrastructure (`lib/api-client.ts`)
+- ✅ Secure storage utilities (`lib/secure-storage.ts`)
+- ✅ API hooks (`hooks/useApi.ts`)
+- ✅ Pagination hooks (`hooks/usePagination.ts`)
+- ✅ Loading state hook (`hooks/useLoading.ts`)
+
+### Feature Implementations (January 2025)
+- ✅ Business onboarding API integration pattern
+- ✅ Product CRUD operations API integration patterns
+- ✅ Bulk product upload API integration pattern
+- ✅ Order fulfillment API integration pattern
+- ✅ Business verification API integration pattern
+- ✅ Invoice creation, draft saving, sending API integration patterns
+- ✅ Invoice payment tracking API integration pattern
+- ✅ Profile editing, account management API integration patterns
+- ✅ Order tracking UI (ready for API data)
+- ✅ Shopping & checkout flow improvements
+
+**See:** [RECENT-UPDATES-2025-01-25.md](./RECENT-UPDATES-2025-01-25.md) for complete summary
 
 ---
 
 ## 🔄 In Progress
 
-- 🔄 API client setup
-- 🔄 Authentication flow
-- 🔄 Error boundary implementation
+- ⏳ Payment processing real API integration (patterns complete, needs backend)
+- ⏳ Backend API endpoints implementation
+- ⏳ Real-time updates (WebSocket integration)
 
 ---
 

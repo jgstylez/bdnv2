@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Alert, Platform, TextInput, Modal, Switch, KeyboardAvoidingView, Pressable } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Alert, Platform, TextInput, Modal, Switch, KeyboardAvoidingView, Pressable, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -10,6 +10,10 @@ import { HeroSection } from '@/components/layouts/HeroSection';
 import { FormInput } from '@/components/forms';
 import { showSuccessToast, showErrorToast } from '@/lib/toast';
 import { BackButton } from '@/components/navigation/BackButton';
+import { api } from '@/lib/api-client';
+import { logger } from '@/lib/logger';
+import { clearAuthTokens } from '@/lib/secure-storage';
+import { useLoading } from '@/hooks/useLoading';
 
 export default function ManageAccount() {
   const router = useRouter();
@@ -40,23 +44,47 @@ export default function ManageAccount() {
   const [showEmailPublic, setShowEmailPublic] = useState(false);
   const [dataSharing, setDataSharing] = useState(false);
 
-  const handleDeleteAccount = () => {
+  const { loading: deletingAccount, execute: executeDeleteAccount } = useLoading();
+
+  const handleDeleteAccount = async () => {
     if (deleteConfirmation.toLowerCase() !== "delete") {
       Alert.alert("Error", "Please type 'DELETE' to confirm account deletion");
       return;
     }
 
-    // TODO: Implement account deletion
-    Alert.alert("Account Deletion", "Your account deletion request has been submitted. You will receive a confirmation email shortly.", [
-      {
-        text: "OK",
-        onPress: () => {
-          setShowDeleteModal(false);
-          setDeleteConfirmation("");
-          router.push("/(auth)/login");
-        },
-      },
-    ]);
+    try {
+      await executeDeleteAccount(async () => {
+        const response = await api.delete('/account');
+        logger.info('Account deletion requested', { response });
+        return response;
+      });
+
+      if (!deletingAccount) {
+        // Clear auth tokens and redirect to login
+        await clearAuthTokens();
+        setShowDeleteModal(false);
+        setDeleteConfirmation("");
+        
+        Alert.alert(
+          "Account Deletion",
+          "Your account has been deleted successfully. All your data has been permanently removed.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                router.replace("/(auth)/login");
+              },
+            },
+          ]
+        );
+      }
+    } catch (error: any) {
+      logger.error('Failed to delete account', error);
+      Alert.alert(
+        "Failed to Delete Account",
+        error?.message || "Please try again or contact support if the problem persists."
+      );
+    }
   };
 
   // Email validation helper
@@ -64,6 +92,8 @@ export default function ManageAccount() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
+
+  const { loading: changingPassword, execute: executeChangePassword } = useLoading();
 
   const handleChangePassword = async () => {
     // Validation is already handled by disabled state, but double-check
@@ -81,24 +111,32 @@ export default function ManageAccount() {
     }
 
     try {
-      // TODO: Implement API call to change password
-      // await apiClient.post('/account/change-password', {
-      //   currentPassword,
-      //   newPassword,
-      // });
+      await executeChangePassword(async () => {
+        const response = await api.post('/account/change-password', {
+          currentPassword,
+          newPassword,
+        });
+        logger.info('Password changed successfully');
+        return response;
+      });
 
-      showSuccessToast("Password changed", "Your password has been updated successfully");
-      setShowPasswordModal(false);
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      if (!changingPassword) {
+        showSuccessToast("Password Changed", "Your password has been updated successfully");
+        setShowPasswordModal(false);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      }
     } catch (error: any) {
+      logger.error('Failed to change password', error);
       showErrorToast(
-        "Failed to change password",
+        "Failed to Change Password",
         error?.message || "Please check your current password and try again"
       );
     }
   };
+
+  const { loading: changingEmail, execute: executeChangeEmail } = useLoading();
 
   const handleChangeEmail = async () => {
     if (!newEmail) {
@@ -109,36 +147,93 @@ export default function ManageAccount() {
       showErrorToast("Invalid email", "Please enter a valid email address");
       return;
     }
+    if (!emailPassword) {
+      showErrorToast("Password required", "Please enter your password to confirm email change");
+      return;
+    }
 
     try {
-      // TODO: Implement API call to change email
-      // await apiClient.post('/account/change-email', {
-      //   newEmail,
-      // });
+      await executeChangeEmail(async () => {
+        const response = await api.post('/account/change-email', {
+          newEmail,
+          password: emailPassword, // Password confirmation for security
+        });
+        logger.info('Email change requested', { newEmail });
+        return response;
+      });
 
-      showSuccessToast(
-        "Verification email sent",
-        "Please check your new email address to verify the change"
-      );
-      setShowEmailModal(false);
-      setNewEmail("");
-      setEmailPassword("");
+      if (!changingEmail) {
+        showSuccessToast(
+          "Verification Email Sent",
+          "Please check your new email address to verify the change"
+        );
+        setShowEmailModal(false);
+        setNewEmail("");
+        setEmailPassword("");
+      }
     } catch (error: any) {
+      logger.error('Failed to change email', error);
       showErrorToast(
-        "Failed to change email",
+        "Failed to Change Email",
+        error?.message || "Please check your password and try again"
+      );
+    }
+  };
+
+  const { loading: savingPreferences, execute: executeSavePreferences } = useLoading();
+  const { loading: savingPrivacy, execute: executeSavePrivacy } = useLoading();
+
+  const handleSavePreferences = async () => {
+    try {
+      await executeSavePreferences(async () => {
+        const preferencesPayload = {
+          emailNotifications,
+          pushNotifications,
+          marketingEmails,
+          transactionAlerts,
+        };
+
+        const response = await api.put('/account/notification-preferences', preferencesPayload);
+        logger.info('Notification preferences saved', { preferences: preferencesPayload });
+        return response;
+      });
+
+      if (!savingPreferences) {
+        showSuccessToast("Preferences Saved", "Your notification preferences have been saved");
+      }
+    } catch (error: any) {
+      logger.error('Failed to save notification preferences', error);
+      showErrorToast(
+        "Failed to Save Preferences",
         error?.message || "Please try again"
       );
     }
   };
 
-  const handleSavePreferences = () => {
-    // TODO: Save notification preferences
-    Alert.alert("Success", "Your preferences have been saved");
-  };
+  const handleSavePrivacy = async () => {
+    try {
+      await executeSavePrivacy(async () => {
+        const privacyPayload = {
+          profileVisibility,
+          showEmailPublic,
+          dataSharing,
+        };
 
-  const handleSavePrivacy = () => {
-    // TODO: Save privacy settings
-    Alert.alert("Success", "Your privacy settings have been saved");
+        const response = await api.put('/account/privacy-settings', privacyPayload);
+        logger.info('Privacy settings saved', { settings: privacyPayload });
+        return response;
+      });
+
+      if (!savingPrivacy) {
+        showSuccessToast("Privacy Settings Saved", "Your privacy settings have been saved");
+      }
+    } catch (error: any) {
+      logger.error('Failed to save privacy settings', error);
+      showErrorToast(
+        "Failed to Save Privacy Settings",
+        error?.message || "Please try again"
+      );
+    }
   };
 
   return (
@@ -406,13 +501,20 @@ export default function ManageAccount() {
 
           <TouchableOpacity
             onPress={handleSavePreferences}
+            disabled={savingPreferences}
             style={{
-              backgroundColor: colors.accent,
+              backgroundColor: savingPreferences ? colors.secondary : colors.accent,
               paddingVertical: spacing.md,
               borderRadius: borderRadius.md,
               alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: spacing.sm,
             }}
           >
+            {savingPreferences && (
+              <ActivityIndicator size="small" color={colors.text.primary} />
+            )}
             <Text
               style={{
                 fontSize: typography.fontSize.base,
@@ -420,7 +522,7 @@ export default function ManageAccount() {
                 color: colors.text.primary,
               }}
             >
-              Save Preferences
+              {savingPreferences ? "Saving..." : "Save Preferences"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -552,13 +654,20 @@ export default function ManageAccount() {
 
           <TouchableOpacity
             onPress={handleSavePrivacy}
+            disabled={savingPrivacy}
             style={{
-              backgroundColor: colors.accent,
+              backgroundColor: savingPrivacy ? colors.secondary : colors.accent,
               paddingVertical: spacing.md,
               borderRadius: borderRadius.md,
               alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: spacing.sm,
             }}
           >
+            {savingPrivacy && (
+              <ActivityIndicator size="small" color={colors.text.primary} />
+            )}
             <Text
               style={{
                 fontSize: typography.fontSize.base,
@@ -566,7 +675,7 @@ export default function ManageAccount() {
                 color: colors.text.primary,
               }}
             >
-              Save Privacy Settings
+              {savingPrivacy ? "Saving..." : "Save Privacy Settings"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -815,15 +924,15 @@ export default function ManageAccount() {
                   </Pressable>
                   <Pressable
                     onPress={handleDeleteAccount}
-                    disabled={deleteConfirmation.toLowerCase() !== "delete"}
+                    disabled={deleteConfirmation.toLowerCase() !== "delete" || deletingAccount}
                     style={({ pressed }) => ({
                       paddingHorizontal: spacing.lg,
                       paddingVertical: spacing.sm,
                       borderRadius: borderRadius.md,
-                      backgroundColor: deleteConfirmation.toLowerCase() !== "delete"
+                      backgroundColor: deleteConfirmation.toLowerCase() !== "delete" || deletingAccount
                         ? "#3a3a3a"
                         : colors.status.error,
-                      opacity: deleteConfirmation.toLowerCase() !== "delete"
+                      opacity: deleteConfirmation.toLowerCase() !== "delete" || deletingAccount
                         ? 0.5
                         : pressed
                         ? 0.9
@@ -832,24 +941,29 @@ export default function ManageAccount() {
                       alignItems: "center",
                       justifyContent: "center",
                       borderWidth: 1,
-                      borderColor: deleteConfirmation.toLowerCase() !== "delete"
+                      borderColor: deleteConfirmation.toLowerCase() !== "delete" || deletingAccount
                         ? "transparent"
                         : colors.status.error,
+                      flexDirection: "row",
+                      gap: spacing.xs,
                     })}
                     accessibilityLabel="Delete account"
                     accessibilityRole="button"
-                    accessibilityState={{ disabled: deleteConfirmation.toLowerCase() !== "delete" }}
+                    accessibilityState={{ disabled: deleteConfirmation.toLowerCase() !== "delete" || deletingAccount }}
                   >
+                    {deletingAccount && (
+                      <ActivityIndicator size="small" color="#ffffff" />
+                    )}
                     <Text
                       style={{
                         fontSize: typography.fontSize.sm,
                         fontWeight: "600",
-                        color: deleteConfirmation.toLowerCase() !== "delete"
+                        color: deleteConfirmation.toLowerCase() !== "delete" || deletingAccount
                           ? colors.text.secondary
                           : "#ffffff",
                       }}
                     >
-                      Delete Account
+                      {deletingAccount ? "Deleting..." : "Delete Account"}
                     </Text>
                   </Pressable>
                 </View>
@@ -1041,15 +1155,15 @@ export default function ManageAccount() {
                   </Pressable>
                   <Pressable
                     onPress={handleChangePassword}
-                    disabled={!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8}
+                    disabled={!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8 || changingPassword}
                     style={({ pressed }) => ({
                       paddingHorizontal: spacing.lg,
                       paddingVertical: spacing.sm,
                       borderRadius: borderRadius.md,
-                      backgroundColor: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
+                      backgroundColor: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8 || changingPassword)
                         ? "#3a3a3a"
                         : colors.accent,
-                      opacity: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
+                      opacity: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8 || changingPassword)
                         ? 0.5
                         : pressed
                         ? 0.9
@@ -1058,24 +1172,29 @@ export default function ManageAccount() {
                       alignItems: "center",
                       justifyContent: "center",
                       borderWidth: 1,
-                      borderColor: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
+                      borderColor: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8 || changingPassword)
                         ? "transparent"
                         : colors.accent,
+                      flexDirection: "row",
+                      gap: spacing.xs,
                     })}
                     accessibilityLabel="Change password"
                     accessibilityRole="button"
-                    accessibilityState={{ disabled: !currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8 }}
+                    accessibilityState={{ disabled: !currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8 || changingPassword }}
                   >
+                    {changingPassword && (
+                      <ActivityIndicator size="small" color="#ffffff" />
+                    )}
                     <Text
                       style={{
                         fontSize: typography.fontSize.sm,
                         fontWeight: "600",
-                        color: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8)
+                        color: (!currentPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8 || changingPassword)
                           ? colors.text.secondary
                           : "#ffffff",
                       }}
                     >
-                      Change Password
+                      {changingPassword ? "Changing..." : "Change Password"}
                     </Text>
                   </Pressable>
                 </View>
@@ -1333,16 +1452,16 @@ export default function ManageAccount() {
                   </Pressable>
                   <Pressable
                     onPress={handleChangeEmail}
-                    disabled={!newEmail || !isValidEmail(newEmail)}
+                    disabled={!newEmail || !isValidEmail(newEmail) || !emailPassword || changingEmail}
                     style={({ pressed }) => ({
                       flex: 1,
                       paddingHorizontal: spacing.md,
                       paddingVertical: spacing.md,
                       borderRadius: borderRadius.md,
-                      backgroundColor: (!newEmail || !isValidEmail(newEmail))
+                      backgroundColor: (!newEmail || !isValidEmail(newEmail) || !emailPassword || changingEmail)
                         ? "#3a3a3a"
                         : colors.accent,
-                      opacity: (!newEmail || !isValidEmail(newEmail))
+                      opacity: (!newEmail || !isValidEmail(newEmail) || !emailPassword || changingEmail)
                         ? 0.5
                         : pressed
                         ? 0.9
@@ -1351,26 +1470,31 @@ export default function ManageAccount() {
                       alignItems: "center",
                       justifyContent: "center",
                       borderWidth: 1,
-                      borderColor: (!newEmail || !isValidEmail(newEmail))
+                      borderColor: (!newEmail || !isValidEmail(newEmail) || !emailPassword || changingEmail)
                         ? "transparent"
                         : colors.accent,
+                      flexDirection: "row",
+                      gap: spacing.xs,
                     })}
                     accessibilityLabel="Change email address"
                     accessibilityRole="button"
                     accessibilityState={{ 
-                      disabled: !newEmail || !isValidEmail(newEmail)
+                      disabled: !newEmail || !isValidEmail(newEmail) || !emailPassword || changingEmail
                     }}
                   >
+                    {changingEmail && (
+                      <ActivityIndicator size="small" color="#ffffff" />
+                    )}
                     <Text
                       style={{
                         fontSize: typography.fontSize.base,
                         fontWeight: "600",
-                        color: (!newEmail || !isValidEmail(newEmail))
+                        color: (!newEmail || !isValidEmail(newEmail) || !emailPassword || changingEmail)
                           ? colors.text.secondary
                           : "#ffffff",
                       }}
                     >
-                      Change Email
+                      {changingEmail ? "Changing..." : "Change Email"}
                     </Text>
                   </Pressable>
                 </View>

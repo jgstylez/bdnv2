@@ -1,7 +1,8 @@
-import React from "react";
-import { View, Text, ScrollView, useWindowDimensions, Platform } from "react-native";
+import React, { useState } from "react";
+import { View, Text, ScrollView, useWindowDimensions, Platform, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
+import { StepIndicator } from "@/components/StepIndicator";
 
 function ComponentsPage() {
   const { width } = useWindowDimensions();
@@ -44,7 +45,15 @@ function ComponentsPage() {
       icon: "label",
       variants: ["Status", "Label", "Tag", "Chip"],
     },
+    {
+      name: "Step Indicator",
+      description: "Horizontal step progress indicator with numbered circles and connecting lines",
+      icon: "timeline",
+      variants: ["Default", "Active", "Completed"],
+    },
   ];
+
+  const [stepIndicatorStep, setStepIndicatorStep] = useState(2);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
@@ -239,6 +248,87 @@ function ComponentsPage() {
                 </Text>
               </View>
             </View>
+          </View>
+        </View>
+
+        {/* Step Indicator Example */}
+        <View style={{ marginBottom: 32 }}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "700",
+              color: "#ffffff",
+              marginBottom: 16,
+            }}
+          >
+            Step Indicator
+          </Text>
+          <View
+            style={{
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 24,
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: "#ffffff",
+                marginBottom: 16,
+              }}
+            >
+              Example
+            </Text>
+            <StepIndicator
+              currentStep={stepIndicatorStep}
+              steps={[
+                { number: 1, label: "Business" },
+                { number: 2, label: "Amount" },
+                { number: 3, label: "Payment" },
+                { number: 4, label: "Review" },
+              ]}
+            />
+            <View style={{ flexDirection: "row", gap: 8, marginTop: 16 }}>
+              {[1, 2, 3, 4].map((stepNum) => (
+                <TouchableOpacity
+                  key={stepNum}
+                  onPress={() => setStepIndicatorStep(stepNum)}
+                  style={{
+                    flex: 1,
+                    paddingVertical: 8,
+                    paddingHorizontal: 12,
+                    borderRadius: 8,
+                    backgroundColor: stepIndicatorStep === stepNum ? "#ba9988" : "#232323",
+                    borderWidth: 1,
+                    borderColor: stepIndicatorStep === stepNum ? "#ba9988" : "rgba(186, 153, 136, 0.2)",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontWeight: "600",
+                      color: stepIndicatorStep === stepNum ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
+                      textAlign: "center",
+                    }}
+                  >
+                    Step {stepNum}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginTop: 16,
+                lineHeight: 20,
+              }}
+            >
+              Tap the buttons above to see the step indicator update. The component displays numbered circles connected by lines, with active steps highlighted in the accent color (#ba9988).
+            </Text>
           </View>
         </View>
 

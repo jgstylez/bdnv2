@@ -39,11 +39,12 @@ export default function ManageEvent() {
   const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const [activeTab, setActiveTab] = useState<"overview" | "tickets" | "attendees" | "analytics">("overview");
   
-  const event = getMockEvent(id || "1");
+  const eventId = Array.isArray(id) ? id[0] : (id || "1");
+  const event = getMockEvent(eventId);
   
   if (!event) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.background.primary, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, backgroundColor: colors.background, justifyContent: "center", alignItems: "center" }}>
         <StatusBar style="light" />
         <Text style={{ color: colors.text.primary, fontSize: 16 }}>Event not found</Text>
         <TouchableOpacity
@@ -159,7 +160,7 @@ export default function ManageEvent() {
               style={{
                 fontSize: typography.fontSize.xs,
                 color: event.status === "published" ? colors.status.success : colors.accent,
-                fontWeight: typography.fontWeight.semibold,
+                fontWeight: typography.fontWeight.semibold as '600',
                 textTransform: "uppercase",
               }}
             >

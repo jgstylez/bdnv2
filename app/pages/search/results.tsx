@@ -16,6 +16,12 @@ import { SearchResult, SearchFilters } from '@/types/search';
 import { BusinessPlaceholder } from '@/components/BusinessPlaceholder';
 import { ProductPlaceholder } from '@/components/ProductPlaceholder';
 import { BUSINESS_CATEGORIES, getStandardizedCategory } from '@/constants/categories';
+import { SearchFiltersPanel } from '@/components/search/SearchFiltersPanel';
+import { SortSelector, SortOption } from '@/components/search/SortSelector';
+import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { BackButton } from '@/components/navigation/BackButton';
+import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { EmptyState } from '@/components/feedback';
 
 // Mock search results
 const mockResults: SearchResult[] = [
@@ -105,10 +111,9 @@ export default function SearchResults() {
   const [selectedCategory, setSelectedCategory] = useState(
     (params.category as string) || "All"
   );
-  const [sortBy, setSortBy] = useState<
-    "relevance" | "distance" | "rating" | "price"
-  >("relevance");
+  const [sortBy, setSortBy] = useState<SortOption>("relevance");
   const [showFilters, setShowFilters] = useState(false);
+  const [showSortSelector, setShowSortSelector] = useState(false);
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<SearchFilters>({
     category: selectedCategory !== "All" ? selectedCategory : undefined,
@@ -153,6 +158,11 @@ export default function SearchResults() {
         return (b.metadata.rating || 0) - (a.metadata.rating || 0);
       case "price":
         return (a.metadata.price || Infinity) - (b.metadata.price || Infinity);
+      case "newest":
+        // Sort by relevance score as proxy for newest (would use createdAt in real implementation)
+        return (b.relevanceScore || 0) - (a.relevanceScore || 0);
+      case "name":
+        return a.title.localeCompare(b.title);
       default:
         return (b.relevanceScore || 0) - (a.relevanceScore || 0);
     }
@@ -180,33 +190,52 @@ export default function SearchResults() {
       : `${distance.toFixed(1)} mi`;
   };
 
+  const getSortLabel = () => {
+    const option = [
+      { key: "relevance", label: "Relevance" },
+      { key: "distance", label: "Distance" },
+      { key: "rating", label: "Rating" },
+      { key: "price", label: "Price" },
+      { key: "newest", label: "Newest" },
+      { key: "name", label: "Name" },
+    ].find((opt) => opt.key === sortBy);
+    return option?.label || "Relevance";
+  };
+
+  const activeFilterCount = Object.keys(filters).filter(
+    (key) => filters[key as keyof SearchFilters] !== undefined
+  ).length;
+
   return (
-    <View style={{ flex: 1, backgroundColor: "#232323" }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
-      <ScrollView
+      <OptimizedScrollView
+        showBackToTop={true}
         contentContainerStyle={{
-          paddingHorizontal: isMobile ? 20 : 40,
-          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingHorizontal: isMobile ? spacing.md : spacing.xl,
+          paddingTop: spacing.lg,
           paddingBottom: 40,
         }}
       >
+        <BackButton label="Back to Search" />
+
         {/* Search Bar */}
-        <View style={{ marginBottom: 24 }}>
+        <View style={{ marginBottom: spacing.lg }}>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: "#474747",
-              borderRadius: 12,
-              paddingHorizontal: 16,
+              backgroundColor: colors.secondary,
+              borderRadius: borderRadius.md,
+              paddingHorizontal: spacing.md,
               borderWidth: 1,
-              borderColor: "rgba(186, 153, 136, 0.2)",
+              borderColor: colors.border,
             }}
           >
             <MaterialIcons
               name="search"
               size={20}
-              color="rgba(255, 255, 255, 0.5)"
+              color={colors.text.secondary}
             />
             <TextInput
               value={searchQuery}
@@ -218,107 +247,71 @@ export default function SearchResults() {
                 });
               }}
               placeholder="Search..."
-              placeholderTextColor="rgba(255, 255, 255, 0.4)"
+              placeholderTextColor={colors.text.placeholder}
               style={{
                 flex: 1,
-                paddingVertical: 14,
-                paddingHorizontal: 12,
-                fontSize: 16,
-                color: "#ffffff",
+                paddingVertical: spacing.md,
+                paddingHorizontal: spacing.sm,
+                fontSize: typography.fontSize.base,
+                color: colors.text.primary,
               }}
             />
             <TouchableOpacity
-              onPress={() => setShowFilters(!showFilters)}
-              style={{ padding: 4 }}
+              onPress={() => setShowSortSelector(true)}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: spacing.xs,
+                padding: spacing.xs,
+                marginRight: spacing.xs,
+              }}
+            >
+              <MaterialIcons
+                name="sort"
+                size={18}
+                color={colors.text.secondary}
+              />
+              <Text
+                style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.secondary,
+                }}
+              >
+                {getSortLabel()}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setShowFilters(true)}
+              style={{ padding: spacing.xs, position: "relative" }}
             >
               <MaterialIcons
                 name="tune"
                 size={20}
-                color={showFilters ? "#ba9988" : "rgba(255, 255, 255, 0.5)"}
+                color={activeFilterCount > 0 ? colors.accent : colors.text.secondary}
               />
+              {activeFilterCount > 0 && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    width: 8,
+                    height: 8,
+                    borderRadius: 4,
+                    backgroundColor: colors.status.error,
+                  }}
+                />
+              )}
             </TouchableOpacity>
           </View>
         </View>
-
-        {/* Filters */}
-        {showFilters && (
-          <View
-            style={{
-              backgroundColor: "#474747",
-              borderRadius: 12,
-              padding: 16,
-              marginBottom: 24,
-              borderWidth: 1,
-              borderColor: "rgba(186, 153, 136, 0.2)",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "700",
-                color: "#ffffff",
-                marginBottom: 12,
-              }}
-            >
-              Filters
-            </Text>
-            <View style={{ gap: 12 }}>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: "rgba(255, 255, 255, 0.7)",
-                    marginBottom: 8,
-                  }}
-                >
-                  Sort By
-                </Text>
-                <View
-                  style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
-                >
-                  {[
-                    { key: "relevance", label: "Relevance" },
-                    { key: "distance", label: "Distance" },
-                    { key: "rating", label: "Rating" },
-                    { key: "price", label: "Price" },
-                  ].map((option) => (
-                    <TouchableOpacity
-                      key={option.key}
-                      onPress={() => setSortBy(option.key as any)}
-                      style={{
-                        backgroundColor:
-                          sortBy === option.key ? "#ba9988" : "#232323",
-                        paddingHorizontal: 12,
-                        paddingVertical: 8,
-                        borderRadius: 8,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          fontWeight: "600",
-                          color:
-                            sortBy === option.key
-                              ? "#ffffff"
-                              : "rgba(255, 255, 255, 0.7)",
-                        }}
-                      >
-                        {option.label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            </View>
-          </View>
-        )}
 
         {/* Category Filter */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={{ marginBottom: 24 }}
-          contentContainerStyle={{ gap: 8 }}
+          style={{ marginBottom: spacing.lg }}
+          contentContainerStyle={{ gap: spacing.sm }}
         >
           {categories.map((category) => (
             <TouchableOpacity
@@ -326,25 +319,25 @@ export default function SearchResults() {
               onPress={() => setSelectedCategory(category)}
               style={{
                 backgroundColor:
-                  selectedCategory === category ? "#ba9988" : "#474747",
-                paddingHorizontal: 16,
-                paddingVertical: 10,
-                borderRadius: 12,
+                  selectedCategory === category ? colors.accent : colors.secondary,
+                paddingHorizontal: spacing.md,
+                paddingVertical: spacing.sm,
+                borderRadius: borderRadius.md,
                 borderWidth: 1,
                 borderColor:
                   selectedCategory === category
-                    ? "#ba9988"
-                    : "rgba(186, 153, 136, 0.2)",
+                    ? colors.accent
+                    : colors.border,
               }}
             >
               <Text
                 style={{
-                  fontSize: 14,
-                  fontWeight: "600",
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: typography.fontWeight.semibold as any,
                   color:
                     selectedCategory === category
-                      ? "#ffffff"
-                      : "rgba(255, 255, 255, 0.7)",
+                      ? colors.textColors.onAccent
+                      : colors.text.secondary,
                 }}
               >
                 {category}
@@ -353,16 +346,24 @@ export default function SearchResults() {
           ))}
         </ScrollView>
 
-        {/* Results Count */}
-        <View style={{ marginBottom: 16 }}>
+        {/* Results Count and View Toggle */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: spacing.md,
+          }}
+        >
           <Text
             style={{
-              fontSize: 14,
-              color: "rgba(255, 255, 255, 0.7)",
+              fontSize: typography.fontSize.sm,
+              color: colors.text.secondary,
             }}
           >
             {sortedResults.length} result{sortedResults.length !== 1 ? "s" : ""}{" "}
             found
+            {searchQuery && ` for "${searchQuery}"`}
           </Text>
         </View>
 
@@ -395,11 +396,11 @@ export default function SearchResults() {
                     : Platform.OS === "web"
                     ? "calc((100% - 32px) / 3)"
                     : "33.333%",
-                  backgroundColor: "#474747",
-                  borderRadius: 16,
+                  backgroundColor: colors.secondary,
+                  borderRadius: borderRadius.lg,
                   overflow: "hidden",
                   borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
+                  borderColor: colors.border,
                 }}
               >
                 {/* Image */}
@@ -451,7 +452,7 @@ export default function SearchResults() {
                         width: 40,
                         height: 40,
                         borderRadius: 20,
-                        backgroundColor: "#232323",
+                        backgroundColor: colors.background,
                         alignItems: "center",
                         justifyContent: "center",
                       }}
@@ -459,17 +460,17 @@ export default function SearchResults() {
                       <MaterialIcons
                         name={getTypeIcon(result.type) as any}
                         size={20}
-                        color="#ba9988"
+                        color={colors.accent}
                       />
                     </View>
                     <View style={{ flex: 1, minWidth: 0 }}>
                       <Text
                         numberOfLines={1}
                         style={{
-                          fontSize: 16,
-                          fontWeight: "700",
-                          color: "#ffffff",
-                          marginBottom: 4,
+                          fontSize: typography.fontSize.base,
+                          fontWeight: typography.fontWeight.bold as any,
+                          color: colors.text.primary,
+                          marginBottom: spacing.xs,
                         }}
                       >
                         {result.title}
@@ -477,9 +478,9 @@ export default function SearchResults() {
                       <Text
                         numberOfLines={2}
                         style={{
-                          fontSize: 12,
-                          color: "rgba(255, 255, 255, 0.7)",
-                          marginBottom: 8,
+                          fontSize: typography.fontSize.xs,
+                          color: colors.text.secondary,
+                          marginBottom: spacing.sm,
                         }}
                       >
                         {result.description}
@@ -488,23 +489,23 @@ export default function SearchResults() {
                         style={{
                           flexDirection: "row",
                           flexWrap: "wrap",
-                          gap: 6,
+                          gap: spacing.xs,
                         }}
                       >
                         {result.metadata.category && (
                           <View
                             style={{
-                              backgroundColor: "rgba(186, 153, 136, 0.15)",
-                              paddingHorizontal: 6,
-                              paddingVertical: 3,
-                              borderRadius: 4,
+                              backgroundColor: colors.accent + "25",
+                              paddingHorizontal: spacing.xs,
+                              paddingVertical: 2,
+                              borderRadius: borderRadius.sm,
                             }}
                           >
                             <Text
                               style={{
-                                fontSize: 10,
-                                color: "#ba9988",
-                                fontWeight: "600",
+                                fontSize: typography.fontSize.xs,
+                                color: colors.accent,
+                                fontWeight: typography.fontWeight.semibold as any,
                               }}
                             >
                               {result.metadata.category}
@@ -560,9 +561,9 @@ export default function SearchResults() {
                         {result.metadata.price && (
                           <Text
                             style={{
-                              fontSize: 14,
-                              fontWeight: "600",
-                              color: "#ba9988",
+                              fontSize: typography.fontSize.sm,
+                              fontWeight: typography.fontWeight.semibold as any,
+                              color: colors.accent,
                             }}
                           >
                             {result.metadata.currency === "USD" ? "$" : ""}
@@ -578,34 +579,70 @@ export default function SearchResults() {
             ))}
           </View>
         ) : (
-          <View
-            style={{
-              backgroundColor: "#474747",
-              borderRadius: 16,
-              padding: 40,
-              alignItems: "center",
-              borderWidth: 1,
-              borderColor: "rgba(186, 153, 136, 0.2)",
-            }}
-          >
-            <MaterialIcons
-              name="search-off"
-              size={48}
-              color="rgba(186, 153, 136, 0.5)"
-            />
-            <Text
-              style={{
-                fontSize: 16,
-                color: "rgba(255, 255, 255, 0.6)",
-                textAlign: "center",
-                marginTop: 16,
-              }}
-            >
-              No results found. Try adjusting your search or filters.
-            </Text>
-          </View>
+          <EmptyState
+            variant="no-results"
+            title="No results found"
+            description={
+              searchQuery
+                ? `No results found for "${searchQuery}". Try adjusting your search terms or filters.`
+                : "Try adjusting your filters or search terms."
+            }
+            action={
+              <TouchableOpacity
+                onPress={() => {
+                  setSearchQuery("");
+                  setFilters({});
+                  setSelectedCategory("All");
+                }}
+                style={{
+                  backgroundColor: colors.accent,
+                  paddingHorizontal: spacing.xl,
+                  paddingVertical: spacing.md,
+                  borderRadius: borderRadius.md,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.base,
+                    fontWeight: typography.fontWeight.semibold as any,
+                    color: colors.textColors.onAccent,
+                  }}
+                >
+                  Clear Filters
+                </Text>
+              </TouchableOpacity>
+            }
+          />
         )}
-      </ScrollView>
+
+        {/* Filter Panel Modal */}
+        <SearchFiltersPanel
+          filters={filters}
+          onFiltersChange={(newFilters) => {
+            setFilters(newFilters);
+            if (newFilters.category) {
+              setSelectedCategory(newFilters.category);
+            } else {
+              setSelectedCategory("All");
+            }
+          }}
+          visible={showFilters}
+          onClose={() => setShowFilters(false)}
+          onApply={() => setShowFilters(false)}
+          onReset={() => {
+            setSelectedCategory("All");
+            setShowFilters(false);
+          }}
+        />
+
+        {/* Sort Selector Modal */}
+        <SortSelector
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+          visible={showSortSelector}
+          onClose={() => setShowSortSelector(false)}
+        />
+      </OptimizedScrollView>
     </View>
   );
 }

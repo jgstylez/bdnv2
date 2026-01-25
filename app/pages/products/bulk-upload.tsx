@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Platform, Alert } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Platform, Alert, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, usePathname } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -7,6 +7,10 @@ import * as DocumentPicker from "expo-document-picker";
 import { BulkUploadResult } from '@/types/merchant';
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { api } from '@/lib/api-client';
+import { logger } from '@/lib/logger';
+import { showSuccessToast, showErrorToast } from '@/lib/toast';
+import { useLoading } from '@/hooks/useLoading';
 
 /**
  * Shared Bulk Upload Component
@@ -21,9 +25,9 @@ export default function BulkUpload() {
   const userType = pathname?.includes("nonprofit") ? "nonprofit" : "merchant";
   const productsPath = userType === "nonprofit" ? "/pages/nonprofit/products" : "/pages/merchant/products";
   
-  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<DocumentPicker.DocumentPickerAsset | null>(null);
   const [uploadResult, setUploadResult] = useState<BulkUploadResult | null>(null);
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const { loading: uploading, execute: executeUpload } = useLoading();
 
   const handlePickFile = async () => {
     try {
@@ -33,10 +37,12 @@ export default function BulkUpload() {
       });
 
       if (!result.canceled && result.assets[0]) {
-        setSelectedFile(result.assets[0].name);
+        setSelectedFile(result.assets[0]);
+        setUploadResult(null); // Clear previous results
       }
-    } catch (error) {
-      Alert.alert("Error", "Failed to pick file");
+    } catch (error: any) {
+      logger.error('Failed to pick file', error);
+      Alert.alert("Error", "Failed to pick file. Please try again.");
     }
   };
 
@@ -46,23 +52,83 @@ export default function BulkUpload() {
       return;
     }
 
-    setUploading(true);
-    // TODO: Upload file to API with userType context
-    setTimeout(() => {
-      setUploading(false);
+    try {
+      await executeUpload(async () => {
+        // Create FormData for file upload
+        const formData = new FormData();
+        
+        // For React Native, we need to handle file differently
+        const fileUri = selectedFile.uri;
+        const fileName = selectedFile.name || 'products.csv';
+        const fileType = selectedFile.mimeType || 'text/csv';
+
+        // Prepare file for upload
+        formData.append('file', {
+          uri: fileUri,
+          name: fileName,
+          type: fileType,
+        } as any);
+        
+        formData.append('entityType', userType);
+
+        // Upload file to API
+        const endpoint = userType === "nonprofit" 
+          ? '/nonprofits/products/bulk-upload'
+          : '/products/bulk-upload';
+        
+        const response = await api.post<BulkUploadResult>(endpoint, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        const result = response.data;
+        setUploadResult(result);
+
+        logger.info('Bulk upload completed', {
+          total: result.total,
+          successful: result.successful,
+          failed: result.failed,
+        });
+
+        return response;
+      });
+
+      if (!uploading && uploadResult) {
+        if (uploadResult.failed === 0) {
+          showSuccessToast(
+            "Upload Successful",
+            `Successfully uploaded ${uploadResult.successful} products!`
+          );
+        } else {
+          showErrorToast(
+            "Upload Completed with Errors",
+            `${uploadResult.successful} products uploaded, ${uploadResult.failed} failed. Check the error list below.`
+          );
+        }
+      }
+    } catch (error: any) {
+      logger.error('Bulk upload failed', error);
+      
+      // Set error result for display
       setUploadResult({
-        total: 100,
-        successful: 95,
-        failed: 5,
+        total: 0,
+        successful: 0,
+        failed: 0,
         errors: [
-          { row: 10, product: "Product A", error: "Invalid price format" },
-          { row: 23, product: "Product B", error: "Missing required field: name" },
-          { row: 45, product: "Product C", error: "Invalid SKU" },
-          { row: 67, product: "Product D", error: "Category not found" },
-          { row: 89, product: "Product E", error: "Duplicate SKU" },
+          {
+            row: 0,
+            product: "Upload Failed",
+            error: error?.message || "An error occurred during upload. Please check your file format and try again.",
+          },
         ],
       });
-    }, 2000);
+
+      showErrorToast(
+        "Upload Failed",
+        error?.message || "Failed to upload products. Please check your file format and try again."
+      );
+    }
   };
 
   const downloadTemplate = () => {

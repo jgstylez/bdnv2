@@ -172,9 +172,28 @@ export default function InvoiceDetail() {
     router.push(`/pages/invoices/create?id=${invoice.id}&type=${entityType}`);
   };
 
-  const handleSendInvoice = () => {
-    // TODO: Send/resend invoice via API
-    Alert.alert("Success", "Invoice sent successfully!");
+  const { loading: sendingInvoice, execute: executeSendInvoice } = useLoading();
+
+  const handleSendInvoice = async () => {
+    try {
+      await executeSendInvoice(async () => {
+        const response = await api.post(`/invoices/${invoice.id}/send`);
+        logger.info('Invoice sent/resent', { invoiceId: invoice.id });
+        return response;
+      });
+
+      if (!sendingInvoice) {
+        Alert.alert("Success", "Invoice sent successfully!");
+        // Refresh invoice data if needed
+        router.replace(`/pages/invoices/${invoice.id}?view=issuer`);
+      }
+    } catch (error: any) {
+      logger.error('Failed to send invoice', error);
+      Alert.alert(
+        "Failed to Send Invoice",
+        error?.message || "Please try again or contact support if the problem persists."
+      );
+    }
   };
 
   const handleDeleteInvoice = () => {
@@ -1034,6 +1053,7 @@ export default function InvoiceDetail() {
                 {canSend && (
                   <TouchableOpacity
                     onPress={handleSendInvoice}
+                    disabled={sendingInvoice}
                     style={{
                       flex: isMobile ? 0 : 1,
                       backgroundColor: invoice.status === "sent" ? colors.secondary.bg : colors.accent,
@@ -1046,14 +1066,20 @@ export default function InvoiceDetail() {
                       gap: spacing.sm,
                       borderWidth: invoice.status === "sent" ? 1 : 0,
                       borderColor: invoice.status === "sent" ? colors.border.light : undefined,
+                      opacity: sendingInvoice ? 0.6 : 1,
                     }}
                     activeOpacity={0.8}
                   >
-                    <MaterialIcons 
-                      name="send" 
-                      size={isMobile ? 18 : 20} 
-                      color={invoice.status === "sent" ? colors.accent : colors.text.primary} 
-                    />
+                    {sendingInvoice && (
+                      <ActivityIndicator size="small" color={invoice.status === "sent" ? colors.accent : colors.text.primary} />
+                    )}
+                    {!sendingInvoice && (
+                      <MaterialIcons 
+                        name="send" 
+                        size={isMobile ? 18 : 20} 
+                        color={invoice.status === "sent" ? colors.accent : colors.text.primary} 
+                      />
+                    )}
                     <Text
                       style={{
                         fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.base,
@@ -1061,7 +1087,7 @@ export default function InvoiceDetail() {
                         color: invoice.status === "sent" ? colors.accent : colors.text.primary,
                       }}
                     >
-                      {invoice.status === "sent" ? "Resend" : "Send Invoice"}
+                      {sendingInvoice ? "Sending..." : invoice.status === "sent" ? "Resend" : "Send Invoice"}
                     </Text>
                   </TouchableOpacity>
                 )}

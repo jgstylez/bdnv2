@@ -36,8 +36,15 @@ class Logger {
 
   private formatMessage(level: LogLevel, message: string, context?: LogContext): string {
     const timestamp = new Date().toISOString();
-    const contextStr = context ? ` ${JSON.stringify(context)}` : "";
-    return `[${timestamp}] [${level.toUpperCase()}] ${message}${contextStr}`;
+    let contextStr = "";
+    if (context) {
+      try {
+        contextStr = ` ${JSON.stringify(context)}`;
+      } catch (error) {
+        contextStr = ` [Context serialization failed: ${String(error)}]`;
+      }
+    }
+    return `[${timestamp}] [${level.toUpperCase()}] ${message || '(no message)'}${contextStr}`;
   }
 
   /**
@@ -77,15 +84,20 @@ class Logger {
    */
   error(message: string, error?: Error | unknown, context?: LogContext): void {
     if (this.shouldLog("error")) {
-      const errorContext = {
-        ...context,
-        error: error instanceof Error ? {
-          message: error.message,
-          stack: error.stack,
-          name: error.name,
-        } : error,
-      };
-      console.error(this.formatMessage("error", message, errorContext));
+      try {
+        const errorContext: LogContext = {
+          ...(context || {}),
+          error: error instanceof Error ? {
+            message: error.message || '(no error message)',
+            stack: error.stack || '(no stack trace)',
+            name: error.name || 'Error',
+          } : error !== undefined && error !== null ? String(error) : '(no error details)',
+        };
+        console.error(this.formatMessage("error", message || '(no message)', errorContext));
+      } catch (formatError) {
+        // Fallback if formatting fails
+        console.error(`[${new Date().toISOString()}] [ERROR]`, message || '(no message)', error, context);
+      }
       
       // TODO: In production, send to error tracking service (e.g., Sentry)
       // if (!this.isDevelopment) {

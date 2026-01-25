@@ -14,7 +14,8 @@ export default function EventDetail() {
   const { width } = useWindowDimensions();
   const { isMobile, scrollViewBottomPadding } = useResponsive();
   const [selectedTicketTypes, setSelectedTicketTypes] = useState<Record<string, number>>({});
-  const event = getMockEvent(id || "1") || getMockEvent("1")!; // In real app, fetch by id
+  const eventId = Array.isArray(id) ? id[0] : (id || "1");
+  const event = getMockEvent(eventId) || getMockEvent("1")!; // In real app, fetch by id
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -368,7 +369,7 @@ export default function EventDetail() {
                       {event.venue.name}
                     </Text>
                     <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>
-                      {event.venue.street}, {event.venue.city}, {event.venue.state} {event.venue.postalCode || event.venue.zipCode}
+                      {event.venue.street}, {event.venue.city}, {event.venue.state} {event.venue.postalCode}
                     </Text>
                   </View>
                 </View>
@@ -478,7 +479,7 @@ export default function EventDetail() {
                         {event.venue.name}
                       </Text>
                       <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.7)" }}>
-                        {event.venue.street}, {event.venue.city}, {event.venue.state} {event.venue.postalCode || event.venue.zipCode}
+                        {event.venue.street}, {event.venue.city}, {event.venue.state} {event.venue.postalCode}
                       </Text>
                     </View>
                   </View>
@@ -502,7 +503,7 @@ export default function EventDetail() {
             <View
               style={{
                 width: 400,
-                ...(isMobile ? {} : { position: "sticky" as any, top: 20, alignSelf: "flex-start", maxHeight: "calc(100vh - 40px)" }),
+                ...(isMobile ? {} : { alignSelf: "flex-start" }),
               }}
             >
               {renderTicketModule()}

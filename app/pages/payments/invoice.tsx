@@ -15,6 +15,12 @@ import { HeroSection } from '@/components/layouts/HeroSection';
 import { BackButton } from '@/components/navigation/BackButton';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 import { FeeBreakdown } from '@/components/FeeBreakdown';
+import { api } from '@/lib/api-client';
+import { logger } from '@/lib/logger';
+import { processBusinessPayment } from '@/lib/payment-processing';
+import { showSuccessToast, showErrorToast } from '@/lib/toast';
+import { useLoading } from '@/hooks/useLoading';
+import { StepIndicator } from '@/components/StepIndicator';
 
 // Extended wallet type for mock data with additional properties
 type MockWallet = WalletType & {
@@ -308,37 +314,72 @@ export default function InvoicePayment() {
     }
   };
 
-  const handleProcessPayment = () => {
+  const { loading: processingPayment, execute: executeProcessPayment } = useLoading();
+
+  const handleProcessPayment = async () => {
     setStep("processing");
     setErrorMessage(null);
     
-    // TODO: Process payment via API
-    // This should:
-    // 1. Deduct totalAmount (including service fee) from user's wallet
-    // 2. Add numericAmount to business/nonprofit account
-    // 3. Calculate and deduct platform fee from business (10% or 5% with BDN+ Business)
-    // 4. Create transaction records with fee breakdown
-    // 5. Update invoice status to "paid"
-    
-    setTimeout(() => {
-      try {
-        // Simulate potential errors (for testing - remove in production)
-        const shouldFail = false; // Set to true to test error handling
+    try {
+      await executeProcessPayment(async () => {
+        // Calculate payment breakdown
+        const paymentAmount = numericAmount;
+        const serviceFee = totalAmount - numericAmount;
         
-        if (shouldFail) {
-          throw new Error("Payment processing failed");
-        }
-
-        const newTransactionId = `TXN-${Date.now()}`;
-        setTransactionId(newTransactionId);
-        setStep("success");
-      } catch (error) {
-        setErrorMessage(
-          "We couldn't complete your payment right now. Please check your payment method and try again, or contact support if the issue persists."
+        // Process payment using payment processing utility
+        const paymentResult = processBusinessPayment(
+          paymentAmount,
+          invoice.currency,
+          invoice.issuerId,
+          invoice.issuerType,
+          "user-1", // TODO: Get actual user ID from auth context
+          `Invoice payment: ${invoice.invoiceNumber}`
         );
-        setStep("error");
+
+        // Create payment record
+        const paymentData = {
+          invoiceId: invoice.id,
+          amount: paymentAmount,
+          currency: invoice.currency,
+          paymentMethod: useBLKD ? "blkd" : selectedWallet?.provider || "bdn",
+          transactionId: paymentResult.transaction.id,
+          serviceFee,
+          platformFee: paymentResult.feeBreakdown.platformFee,
+          netAmount: paymentResult.feeBreakdown.netAmount,
+          feeBreakdown: paymentResult.feeBreakdown,
+        };
+
+        // Process payment via API
+        const response = await api.post(`/invoices/${invoice.id}/pay`, paymentData);
+        
+        // Update invoice status to paid
+        await api.put(`/invoices/${invoice.id}`, {
+          status: "paid",
+          amountPaid: invoice.amountPaid + paymentAmount,
+          amountDue: invoice.amountDue - paymentAmount,
+          paidAt: new Date().toISOString(),
+        });
+
+        logger.info('Invoice payment processed', {
+          invoiceId: invoice.id,
+          transactionId: paymentResult.transaction.id,
+          amount: paymentAmount,
+        });
+
+        setTransactionId(paymentResult.transaction.id);
+        return response;
+      });
+
+      if (!processingPayment) {
+        setStep("success");
       }
-    }, 2000);
+    } catch (error: any) {
+      logger.error('Failed to process invoice payment', error);
+      setErrorMessage(
+        error?.message || "We couldn't complete your payment right now. Please check your payment method and try again, or contact support if the issue persists."
+      );
+      setStep("error");
+    }
   };
 
   const handleComplete = () => {
@@ -944,54 +985,20 @@ export default function InvoicePayment() {
           subtitle={`${invoice.invoiceNumber} • ${formatCurrency(invoice.amountDue, invoice.currency)}`}
         />
 
-        {/* Progress Steps */}
-        {step !== "processing" && step !== "success" && step !== "error" && (
-          <View style={{ marginBottom: spacing.xl }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: spacing.md }}>
-              {[
-                { step: "payment-method", label: "Payment" },
-                { step: "review", label: "Review" },
-              ].map((s, index) => {
-                const stepIndex = ["payment-method", "review"].indexOf(step);
-                const isActive = index <= stepIndex;
-                const isCurrent = index === stepIndex;
-                return (
-                  <View key={s.step} style={{ flex: 1, alignItems: "center" }}>
-                    <View
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        backgroundColor: isActive ? colors.accent : colors.accent + "20",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginBottom: spacing.sm,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: typography.fontSize.base,
-                          fontWeight: typography.fontWeight.bold,
-                          color: isActive ? colors.textColors.onAccent : colors.text.secondary,
-                        }}
-                      >
-                        {index + 1}
-                      </Text>
-                    </View>
-                    <Text
-                      style={{
-                        fontSize: typography.fontSize.sm,
-                        color: isCurrent ? colors.accent : colors.text.secondary,
-                      }}
-                    >
-                      {s.label}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-          </View>
-        )}
+        {/* Step Indicator */}
+        {step !== "processing" && step !== "success" && step !== "error" && (() => {
+          const stepIndex = ["payment-method", "review"].indexOf(step);
+          const currentStepNumber = stepIndex >= 0 ? stepIndex + 1 : 1;
+          return (
+            <StepIndicator
+              currentStep={currentStepNumber}
+              steps={[
+                { number: 1, label: "Payment", key: "payment-method" },
+                { number: 2, label: "Review", key: "review" },
+              ]}
+            />
+          );
+        })()}
 
         {/* Step Content */}
         {step === "payment-method" && renderPaymentMethodStep()}

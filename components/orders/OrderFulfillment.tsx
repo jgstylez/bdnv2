@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useEffect, useMemo } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal, Alert } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal, Alert, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { EntitySwitcher } from "@/components/EntitySwitcher";
@@ -19,6 +19,10 @@ import { useResponsive } from "@/hooks/useResponsive";
 import { colors, spacing, borderRadius, typography } from "@/constants/theme";
 import { Order, OrderStatus, FulfillmentStatus, PaymentStatus, OrderType, OrderStats } from "@/types/orders";
 import { formatCurrency } from "@/lib/international";
+import { api } from "@/lib/api-client";
+import { logger } from "@/lib/logger";
+import { showSuccessToast, showErrorToast } from "@/lib/toast";
+import { useLoading } from "@/hooks/useLoading";
 
 interface OrderFulfillmentProps {
   entityType: "business" | "nonprofit";
@@ -423,37 +427,75 @@ export function OrderFulfillment({ entityType, orders: externalOrders, onOrdersC
     setShowFulfillModal(true);
   };
 
-  const handleMarkAsShipped = () => {
+  const { loading: updatingOrder, execute: executeUpdateOrder } = useLoading();
+
+  const handleMarkAsShipped = async () => {
     if (!selectedOrder || !trackingNumber || !carrier || carrier === "") {
       Alert.alert("Error", "Please select a carrier and provide tracking number");
       return;
     }
 
-    // TODO: Update order via API
-    const updatedOrders = orders.map((order) =>
-      order.id === selectedOrder.id
-        ? {
-            ...order,
-            status: "shipped" as OrderStatus,
-            fulfillmentStatus: "shipped" as FulfillmentStatus,
-            shippingInfo: {
-              ...order.shippingInfo,
-              carrier,
-              trackingNumber,
-              shippedAt: new Date().toISOString(),
-              estimatedDeliveryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-            },
-          }
-        : order
-    );
-    
-    setOrders(updatedOrders);
-    onOrdersChange?.(updatedOrders);
-    setShowFulfillModal(false);
-    setTrackingNumber("");
-    setCarrier("");
-    setSelectedOrder(null);
-    Alert.alert("Success", "Order marked as shipped");
+    try {
+      await executeUpdateOrder(async () => {
+        const updateData = {
+          status: "shipped" as OrderStatus,
+          fulfillmentStatus: "shipped" as FulfillmentStatus,
+          shippingInfo: {
+            ...selectedOrder.shippingInfo,
+            carrier,
+            trackingNumber,
+            shippedAt: new Date().toISOString(),
+            estimatedDeliveryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+          },
+        };
+
+        const endpoint = entityType === "nonprofit"
+          ? `/nonprofits/orders/${selectedOrder.id}/fulfill`
+          : `/orders/${selectedOrder.id}/fulfill`;
+
+        const response = await api.put(endpoint, updateData);
+        
+        logger.info('Order marked as shipped', {
+          orderId: selectedOrder.id,
+          trackingNumber,
+          carrier,
+        });
+
+        return response;
+      });
+
+      // Update local state after successful fulfillment
+      const updatedOrders = orders.map((order) =>
+        order.id === selectedOrder.id
+          ? {
+              ...order,
+              status: "shipped" as OrderStatus,
+              fulfillmentStatus: "shipped" as FulfillmentStatus,
+              shippingInfo: {
+                ...order.shippingInfo,
+                carrier,
+                trackingNumber,
+                shippedAt: new Date().toISOString(),
+                estimatedDeliveryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+              },
+            }
+          : order
+      );
+      
+      setOrders(updatedOrders);
+      onOrdersChange?.(updatedOrders);
+      setShowFulfillModal(false);
+      setTrackingNumber("");
+      setCarrier("");
+      setSelectedOrder(null);
+      showSuccessToast("Order Shipped", "Order has been marked as shipped successfully");
+    } catch (error: any) {
+      logger.error('Failed to mark order as shipped', error);
+      showErrorToast(
+        "Failed to Update Order",
+        error?.message || "Please check the tracking information and try again."
+      );
+    }
   };
 
   const handleUpdateStatus = (orderId: string, newStatus: OrderStatus) => {
@@ -1249,16 +1291,21 @@ export function OrderFulfillment({ entityType, orders: externalOrders, onOrdersC
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={handleMarkAsShipped}
+                    disabled={updatingOrder}
                     style={{
                       flex: 1,
                       paddingVertical: spacing.md,
                       borderRadius: borderRadius.md,
-                      backgroundColor: colors.status.success,
+                      backgroundColor: updatingOrder ? colors.accentLight : colors.status.success,
                       alignItems: "center",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      gap: spacing.xs,
                     }}
                   >
+                    {updatingOrder && <ActivityIndicator size="small" color={colors.text.primary} />}
                     <Text style={{ fontSize: typography.fontSize.base, color: colors.text.primary, fontWeight: typography.fontWeight.bold }}>
-                      Add Tracking #
+                      {updatingOrder ? "Updating..." : "Add Tracking #"}
                     </Text>
                   </TouchableOpacity>
                 </View>

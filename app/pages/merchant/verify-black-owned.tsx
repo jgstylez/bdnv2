@@ -7,8 +7,10 @@ import * as DocumentPicker from "expo-document-picker";
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { useResponsive } from '@/hooks/useResponsive';
 import { typography, spacing, colors, borderRadius } from '@/constants/theme';
-import { logError } from '@/lib/logger';
+import { logger } from '@/lib/logger';
 import { parseDocument, RECOMMENDED_DOCUMENTS, ParsedBusinessInfo } from '@/lib/documentParser';
+import { api } from '@/lib/api-client';
+import { useLoading } from '@/hooks/useLoading';
 
 export default function VerifyBlackOwned() {
   const { width } = useWindowDimensions();
@@ -29,7 +31,6 @@ export default function VerifyBlackOwned() {
 
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ name: string; uri: string }>>([]);
   const [photoIdFile, setPhotoIdFile] = useState<{ name: string; uri: string } | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isParsing, setIsParsing] = useState(false);
   const [parsedInfo, setParsedInfo] = useState<ParsedBusinessInfo | null>(null);
   const [isBlackOwned, setIsBlackOwned] = useState(false);
@@ -167,53 +168,83 @@ export default function VerifyBlackOwned() {
     return true;
   };
 
+  const { loading: submittingVerification, execute: executeSubmitVerification } = useLoading();
+
   const handleSubmit = async () => {
     // Validation disabled for development
     // if (!validateForm()) return;
 
-    setIsSubmitting(true);
     try {
-      // TODO: Submit verification request to backend
-      // This would typically:
-      // 1. Upload documents to storage
-      // 2. Create verification request record
-      // 3. Send notification to admin team
-      
-      Alert.alert(
-        "Verification Submitted",
-        "Your Black-owned business verification request has been submitted. Our team will review your documents and get back to you within 2-3 business days. You'll receive an email notification once your verification is complete.",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              // Store verification status in local storage/context
-              // Navigate to onboarding with verification pending status
-              // Pass parsed information to onboarding for pre-filling
-              const onboardingParams: Record<string, string> = {
-                blackOwnedVerificationStatus: "pending",
-                businessName: formData.businessName,
-              };
-              
-              // Include parsed info if available
-              if (parsedInfo) {
-                if (parsedInfo.taxId) onboardingParams.taxId = parsedInfo.taxId;
-                if (parsedInfo.incorporationType) onboardingParams.incorporationType = parsedInfo.incorporationType;
-                if (parsedInfo.incorporationState) onboardingParams.incorporationState = parsedInfo.incorporationState;
-                if (parsedInfo.incorporationDate) onboardingParams.incorporationDate = parsedInfo.incorporationDate;
-              }
-              
-              router.push({
-                pathname: "/pages/merchant/onboarding",
-                params: onboardingParams,
-              });
-            },
+      await executeSubmitVerification(async () => {
+        // Prepare verification data
+        const verificationData = {
+          businessName: formData.businessName,
+          businessType: formData.businessType,
+          taxId: formData.taxId,
+          incorporationType: formData.incorporationType,
+          incorporationState: formData.incorporationState,
+          incorporationDate: formData.incorporationDate,
+          ownerName: formData.ownerName,
+          ownerEmail: formData.ownerEmail,
+          ownerPhone: formData.ownerPhone,
+          documents: {
+            // Document URIs would be uploaded to storage first
+            // For now, we'll include the file references
+            certificateOfIncorporation: formData.certificateOfIncorporation,
+            taxDocument: formData.taxDocument,
+            businessLicense: formData.businessLicense,
+            additionalDocuments: formData.additionalDocuments,
           },
-        ]
+          parsedInfo: parsedInfo || undefined,
+        };
+
+        // Submit verification request
+        const response = await api.post('/businesses/verification/black-owned', verificationData);
+        
+        logger.info('Black-owned verification submitted', {
+          businessName: formData.businessName,
+          verificationId: response.data?.id,
+        });
+
+        return response;
+      });
+
+      Alert.alert(
+          "Verification Submitted",
+          "Your Black-owned business verification request has been submitted. Our team will review your documents and get back to you within 2-3 business days. You'll receive an email notification once your verification is complete.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                // Navigate to onboarding with verification pending status
+                // Pass parsed information to onboarding for pre-filling
+                const onboardingParams: Record<string, string> = {
+                  blackOwnedVerificationStatus: "pending",
+                  businessName: formData.businessName,
+                };
+                
+                // Include parsed info if available
+                if (parsedInfo) {
+                  if (parsedInfo.taxId) onboardingParams.taxId = parsedInfo.taxId;
+                  if (parsedInfo.incorporationType) onboardingParams.incorporationType = parsedInfo.incorporationType;
+                  if (parsedInfo.incorporationState) onboardingParams.incorporationState = parsedInfo.incorporationState;
+                  if (parsedInfo.incorporationDate) onboardingParams.incorporationDate = parsedInfo.incorporationDate;
+                }
+                
+                router.push({
+                  pathname: "/pages/merchant/onboarding",
+                  params: onboardingParams,
+                });
+              },
+            },
+          ]
+        );
+    } catch (error: any) {
+      logger.error('Failed to submit verification', error);
+      Alert.alert(
+        "Submission Failed",
+        error?.message || "Failed to submit verification. Please check your documents and try again, or contact support if the problem persists."
       );
-    } catch (error) {
-      Alert.alert("Error", "Failed to submit verification. Please try again.");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -662,17 +693,21 @@ export default function VerifyBlackOwned() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleSubmit}
-            disabled={isSubmitting}
+            disabled={submittingVerification}
             style={{
               flex: 1,
-              backgroundColor: isSubmitting ? "#666666" : "#ba9988",
+              backgroundColor: submittingVerification ? "#666666" : "#ba9988",
               borderRadius: 12,
               padding: 16,
               alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: 8,
             }}
           >
+            {submittingVerification && <ActivityIndicator size="small" color="#ffffff" />}
             <Text style={{ fontSize: typography.fontSize.base, fontWeight: "600", color: "#ffffff" }}>
-              {isSubmitting ? "Submitting..." : "Submit"}
+              {submittingVerification ? "Submitting..." : "Submit"}
             </Text>
           </TouchableOpacity>
         </View>
