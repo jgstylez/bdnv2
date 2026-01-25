@@ -1,0 +1,5 @@
+# Netlify redirects for Single Page Application (SPA)
+# This ensures all routes are handled by the client-side router
+# The 200 status code means Netlify will serve index.html without redirecting
+
+/*    /index.html   200
