@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Share, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
 import { Merchant } from '@/types/merchant';
 import { useResponsive } from '@/hooks/useResponsive';
 import { logError } from '@/lib/logger';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock merchant data
 const mockMerchant: Merchant = {
@@ -23,6 +25,7 @@ const mockMerchant: Merchant = {
 };
 
 export default function QRCodePage() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const { isMobile, isDesktop } = useResponsive();
   const qrValue = mockMerchant.qrCodeUrl || `https://bdn.app/merchant/${mockMerchant.id}`;
@@ -54,6 +57,15 @@ export default function QRCodePage() {
           alignItems: "center",
         }}
       >
+        <View style={{ width: "100%", maxWidth: 900, marginBottom: 24 }}>
+          <BackButton 
+            textColor="#ffffff"
+            iconColor="#ffffff"
+            onPress={() => {
+              router.push("/pages/merchant/dashboard");
+            }}
+          />
+        </View>
         {isDesktop ? (
           // Desktop: Two-column layout
           <View

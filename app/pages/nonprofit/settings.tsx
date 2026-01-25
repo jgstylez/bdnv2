@@ -9,6 +9,7 @@ import { HeroSection } from '@/components/layouts/HeroSection';
 import { useResponsive } from '@/hooks/useResponsive';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { FormInput } from '@/components/forms';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock organization data
 const mockOrganization: Organization = {
@@ -129,6 +130,13 @@ export default function NonprofitSettings() {
           paddingBottom: 40,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.push("/pages/nonprofit/dashboard");
+          }}
+        />
         {/* Hero Section */}
         <HeroSection
           title="Settings"

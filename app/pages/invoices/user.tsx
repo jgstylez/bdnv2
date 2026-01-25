@@ -17,6 +17,7 @@ import { HeroSection } from "@/components/layouts/HeroSection";
 import { FilterDropdown } from "@/components/admin/FilterDropdown";
 import { OptimizedScrollView } from "@/components/optimized/OptimizedScrollView";
 import { formatCurrency } from "@/lib/international";
+import { BackButton } from "@/components/navigation/BackButton";
 
 // Mock invoices - in production, fetch from API where recipientId matches current user
 const mockUserInvoices: Invoice[] = [
@@ -204,6 +205,13 @@ export default function UserInvoicesPage() {
           paddingBottom: scrollViewBottomPadding,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
         <HeroSection
           title="Invoices"
           subtitle="View and pay invoices you've received"

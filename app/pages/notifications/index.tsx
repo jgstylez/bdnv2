@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Notification, NotificationChannel, NotificationBadge } from '@/types/notifications';
 import { markAllNotificationsRead } from '@/lib/notifications';
 import { logError } from '@/lib/logger';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock notifications - initial data
 const initialNotifications: Notification[] = [
@@ -251,6 +252,13 @@ export default function Notifications() {
         }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#ba9988" />}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
         {/* Unread Count */}
         <View style={{ marginBottom: 16 }}>
           <Text

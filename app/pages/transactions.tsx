@@ -8,6 +8,7 @@ import { formatCurrency } from '@/lib/international';
 import { FilterDropdown } from '@/components/admin/FilterDropdown';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock transactions data
 const mockTransactions: Transaction[] = [
@@ -291,6 +292,13 @@ export default function TransactionHistory() {
           paddingBottom: 40,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
         {/* Hero Section */}
         <HeroSection
           title="Transactions"

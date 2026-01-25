@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 import { FormSelect } from '@/components/forms/FormSelect';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock user data
 const mockUser = {
@@ -202,6 +203,13 @@ export default function Profile() {
           paddingBottom: 40,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
         {/* Section Selector */}
         <View
           style={{

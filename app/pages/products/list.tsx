@@ -8,12 +8,14 @@
 import React from "react";
 import { View, ScrollView, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { ProductList } from "@/components/products/ProductList";
 import { useResponsive } from "@/hooks/useResponsive";
 import { colors, spacing } from "@/constants/theme";
+import { BackButton } from "@/components/navigation/BackButton";
 
 export default function ProductsListPage() {
+  const router = useRouter();
   const params = useLocalSearchParams<{ entityType?: string }>();
   const { paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   
@@ -30,6 +32,18 @@ export default function ProductsListPage() {
           paddingBottom: scrollViewBottomPadding,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            // Route back to the appropriate dashboard based on entity type
+            if (entityType === "nonprofit") {
+              router.push("/pages/nonprofit/dashboard");
+            } else {
+              router.push("/pages/merchant/dashboard");
+            }
+          }}
+        />
         <ProductList entityType={entityType} />
       </ScrollView>
     </View>

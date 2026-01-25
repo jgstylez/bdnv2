@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Conversation } from '@/types/messages';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock conversations
 const mockConversations: Conversation[] = [
@@ -155,6 +156,13 @@ export default function Messages() {
           paddingBottom: 40,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
         {/* Header */}
         <View style={{ marginBottom: 32 }}>
           <Text

@@ -9,6 +9,7 @@ import { InternationalAddressForm } from '@/components/forms/InternationalAddres
 import { TaxIdSelector } from '@/components/forms/TaxIdSelector';
 import { TaxIdentification } from '@/types/international';
 import { requiresStateField } from '@/lib/international';
+import { BackButton } from '@/components/navigation/BackButton';
 
 const ORGANIZATION_TYPES: { value: OrganizationType; label: string; description: string }[] = [
   { value: "nonprofit", label: "Nonprofit", description: "501(c)(3) nonprofit organization" },
@@ -306,6 +307,13 @@ export default function NonprofitOnboarding() {
           paddingBottom: 40,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.push("/pages/nonprofit/dashboard");
+          }}
+        />
         {/* Header */}
         <View style={{ marginBottom: 32 }}>
           <TouchableOpacity

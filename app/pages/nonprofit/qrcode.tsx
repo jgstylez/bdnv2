@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Share, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
 import { Organization } from '@/types/nonprofit';
 import { useResponsive } from '@/hooks/useResponsive';
 import { logError } from '@/lib/logger';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock nonprofit data
 const mockNonprofit: Organization = {
@@ -29,6 +31,7 @@ const mockNonprofit: Organization = {
 };
 
 export default function NonprofitQRCodePage() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const { isMobile, isDesktop } = useResponsive();
   const qrValue = `https://bdn.app/nonprofit/${mockNonprofit.id}`;
@@ -60,6 +63,15 @@ export default function NonprofitQRCodePage() {
           alignItems: "center",
         }}
       >
+        <View style={{ width: "100%", maxWidth: 900, marginBottom: 24 }}>
+          <BackButton 
+            textColor="#ffffff"
+            iconColor="#ffffff"
+            onPress={() => {
+              router.push("/pages/nonprofit/dashboard");
+            }}
+          />
+        </View>
         {isDesktop ? (
           // Desktop: Two-column layout
           <View

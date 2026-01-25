@@ -9,6 +9,7 @@ import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { FormInput } from '@/components/forms';
 import { showSuccessToast, showErrorToast } from '@/lib/toast';
+import { BackButton } from '@/components/navigation/BackButton';
 
 export default function ManageAccount() {
   const router = useRouter();
@@ -150,26 +151,13 @@ export default function ManageAccount() {
           paddingBottom: spacing["4xl"],
         }}
       >
-        {/* Header */}
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: spacing.lg,
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
           }}
-        >
-          <MaterialIcons name="arrow-back" size={24} color={colors.text.primary} />
-          <Text
-            style={{
-              fontSize: typography.fontSize.base,
-              color: colors.text.primary,
-              marginLeft: spacing.sm,
-            }}
-          >
-            Back to Account
-          </Text>
-        </TouchableOpacity>
+        />
 
         {/* Hero Section */}
         <HeroSection

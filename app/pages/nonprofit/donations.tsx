@@ -1,8 +1,10 @@
 import React from "react";
 import { View, Text, ScrollView, useWindowDimensions, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Donation } from '@/types/nonprofit';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock donations
 const mockDonations: Donation[] = [
@@ -55,6 +57,7 @@ const mockDonations: Donation[] = [
 ];
 
 export default function NonprofitDonations() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -76,6 +79,13 @@ export default function NonprofitDonations() {
           paddingBottom: 40,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.push("/pages/nonprofit/dashboard");
+          }}
+        />
         {/* Summary Cards */}
         <View
           style={{

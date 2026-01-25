@@ -7,6 +7,7 @@ import { NonprofitSwitcher } from '@/components/NonprofitSwitcher';
 import { useResponsive } from '@/hooks/useResponsive';
 import { useCampaigns } from '@/hooks/useCampaigns';
 import { logger } from '@/lib/logger';
+import { BackButton } from '@/components/navigation/BackButton';
 
 export default function NonprofitCampaigns() {
   const router = useRouter();
@@ -37,6 +38,13 @@ export default function NonprofitCampaigns() {
           paddingBottom: 40,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.push("/pages/nonprofit/dashboard");
+          }}
+        />
         {/* Nonprofit Switcher */}
         <NonprofitSwitcher />
 

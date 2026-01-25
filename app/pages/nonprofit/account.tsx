@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { OrganizationTransaction } from '@/types/nonprofit';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock transactions
 const mockTransactions: OrganizationTransaction[] = [
@@ -61,6 +63,7 @@ const mockTransactions: OrganizationTransaction[] = [
 ];
 
 export default function OrganizationAccount() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -113,6 +116,13 @@ export default function OrganizationAccount() {
           paddingBottom: 40,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.push("/pages/nonprofit/dashboard");
+          }}
+        />
         {/* Balance Card */}
         <View
           style={{

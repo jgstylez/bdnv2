@@ -8,6 +8,7 @@ import { WalletCard } from '@/components/WalletCard';
 import { Carousel } from '@/components/layouts/Carousel';
 import { Wallet, Currency, BankAccountWallet, CreditCardWallet } from '@/types/wallet';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Extended wallet type for mock data with additional properties
 type MockWallet = Wallet & {
@@ -295,6 +296,13 @@ export default function Pay() {
           paddingBottom: bottomPadding,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
         {/* Total Balance */}
         <View
           style={{

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { useResponsive } from '@/hooks/useResponsive';
 import { SalesMetrics, CustomerInsight, PerformanceMetric } from '@/types/merchant';
 import { ReviewAnalytics, REVIEW_REASONS } from '@/types/review';
 import { platformValues, isAndroid } from "../../../utils/platform";
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock analytics data
 const mockSalesMetrics: SalesMetrics = {
@@ -72,6 +74,7 @@ const mockReviewAnalytics: ReviewAnalytics = {
 };
 
 export default function Analytics() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const { isMobile, paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   const [selectedPeriod, setSelectedPeriod] = useState<"daily" | "weekly" | "monthly" | "yearly">("monthly");
@@ -122,6 +125,13 @@ export default function Analytics() {
           paddingBottom: scrollViewBottomPadding,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.push("/pages/merchant/dashboard");
+          }}
+        />
         {/* Hero Section */}
         <HeroSection
           title="Analytics"

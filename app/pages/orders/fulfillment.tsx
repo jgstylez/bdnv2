@@ -8,12 +8,14 @@
 import React from "react";
 import { View, ScrollView, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { OrderFulfillment } from "@/components/orders/OrderFulfillment";
 import { useResponsive } from "@/hooks/useResponsive";
 import { colors, spacing } from "@/constants/theme";
+import { BackButton } from "@/components/navigation/BackButton";
 
 export default function OrdersFulfillmentPage() {
+  const router = useRouter();
   const params = useLocalSearchParams<{ entityType?: string }>();
   const { paddingHorizontal, scrollViewBottomPadding } = useResponsive();
   
@@ -30,6 +32,18 @@ export default function OrdersFulfillmentPage() {
           paddingBottom: scrollViewBottomPadding,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            // Route back to the appropriate dashboard based on entity type
+            if (entityType === "nonprofit") {
+              router.push("/pages/nonprofit/dashboard");
+            } else {
+              router.push("/pages/merchant/dashboard");
+            }
+          }}
+        />
         <OrderFulfillment entityType={entityType} />
       </ScrollView>
     </View>

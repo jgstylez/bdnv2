@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Menu, MenuCategory, MenuItem } from '@/types/menu';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock menu data
 const mockMenus: Menu[] = [
@@ -124,6 +125,13 @@ export default function MenuManagement() {
           paddingBottom: 40,
         }}
       >
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.push("/pages/merchant/dashboard");
+          }}
+        />
         {/* Header */}
         <View style={{ marginBottom: 24 }}>
           <Text

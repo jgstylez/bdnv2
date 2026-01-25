@@ -259,7 +259,30 @@ export function ProductList({ entityType, products: externalProducts, onProducts
       <EntitySwitcher entityType={entityType} />
 
       {/* Action Buttons */}
-      <View style={{ marginBottom: spacing.xl, flexDirection: "row", gap: spacing.sm, justifyContent: "flex-end", flexWrap: "wrap" }}>
+      <View style={{ marginBottom: spacing.xl, flexDirection: "row", gap: spacing.sm, justifyContent: "flex-start", flexWrap: "nowrap" }}>
+        <TouchableOpacity
+          onPress={() => router.push(`/pages/products/create?type=${getRouteType()}`)}
+          style={{
+            backgroundColor: colors.accent,
+            paddingHorizontal: spacing.md,
+            paddingVertical: spacing.sm,
+            borderRadius: borderRadius.md,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: spacing.xs,
+          }}
+        >
+          <MaterialIcons name="add" size={20} color={colors.text.primary} />
+          <Text
+            style={{
+              fontSize: typography.fontSize.sm,
+              fontWeight: typography.fontWeight.semibold,
+              color: colors.text.primary,
+            }}
+          >
+            Add Product
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => router.push(`/pages/products/bulk-upload?type=${getRouteType()}`)}
           style={{
@@ -308,29 +331,6 @@ export function ProductList({ entityType, products: externalProducts, onProducts
             }}
           >
             Integrations
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => router.push(`/pages/products/create?type=${getRouteType()}`)}
-          style={{
-            backgroundColor: colors.accent,
-            paddingHorizontal: spacing.md,
-            paddingVertical: spacing.sm,
-            borderRadius: borderRadius.md,
-            flexDirection: "row",
-            alignItems: "center",
-            gap: spacing.xs,
-          }}
-        >
-          <MaterialIcons name="add" size={20} color={colors.text.primary} />
-          <Text
-            style={{
-              fontSize: typography.fontSize.sm,
-              fontWeight: typography.fontWeight.semibold,
-              color: colors.text.primary,
-            }}
-          >
-            Add Product
           </Text>
         </TouchableOpacity>
       </View>
