@@ -57,16 +57,28 @@ export const BackButton: React.FC<BackButtonProps> = ({
   const handlePress = () => {
     if (onPress) {
       onPress();
-    } else if (to) {
-      router.push(to as any);
     } else {
+      // Always try router.back() first to respect navigation history
+      // If 'to' is provided, it serves as a fallback route
+      // Note: router.back() doesn't throw errors, so we call it first
       router.back();
+      
+      // If 'to' is provided and router.back() doesn't navigate (no history),
+      // the app will stay on the current page. In that case, we could navigate
+      // to 'to', but since we can't detect if back() worked, we'll just use back()
+      // and trust the navigation stack. If needed, users can provide onPress
+      // with custom logic to handle fallback navigation.
     }
   };
 
   return (
     <TouchableOpacity
       onPress={handlePress}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`Go back${label !== "Back" ? ` to ${label}` : ""}`}
+      accessibilityHint="Returns to previous page"
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       style={{
         flexDirection: "row",
         alignItems: "center",

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Platform, Alert } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Platform, Alert, Modal, TextInput } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -106,6 +106,8 @@ export default function HelpArticleDetail() {
   const [hasVoted, setHasVoted] = useState<"helpful" | "notHelpful" | null>(null);
   const [helpfulCount, setHelpfulCount] = useState(0);
   const [notHelpfulCount, setNotHelpfulCount] = useState(0);
+  const [showFeedbackPanel, setShowFeedbackPanel] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
 
   const article = id ? mockArticles[id] : null;
 
@@ -145,13 +147,33 @@ export default function HelpArticleDetail() {
       Alert.alert("Already Voted", "You've already provided feedback on this article.");
       return;
     }
-    setHasVoted(type);
+    
     if (type === "helpful") {
+      setHasVoted("helpful");
       setHelpfulCount(prev => prev + 1);
+      // TODO: Send feedback to API
     } else {
-      setNotHelpfulCount(prev => prev + 1);
+      // Show feedback panel for "not helpful"
+      setShowFeedbackPanel(true);
     }
-    // TODO: Send feedback to API
+  };
+
+  const handleSubmitFeedback = () => {
+    if (!feedbackText.trim()) {
+      Alert.alert("Feedback Required", "Please tell us why this article wasn't helpful.");
+      return;
+    }
+    
+    setHasVoted("notHelpful");
+    setNotHelpfulCount(prev => prev + 1);
+    setShowFeedbackPanel(false);
+    setFeedbackText("");
+    // TODO: Send feedback to API with feedbackText
+  };
+
+  const handleCancelFeedback = () => {
+    setShowFeedbackPanel(false);
+    setFeedbackText("");
   };
 
   const formatDate = (dateString: string) => {
@@ -170,10 +192,17 @@ export default function HelpArticleDetail() {
         contentContainerStyle={{
           paddingHorizontal,
           paddingTop: Platform.OS === "web" ? 20 : 36,
-          paddingBottom: scrollViewBottomPadding,
+          paddingBottom: scrollViewBottomPadding + 40,
         }}
       >
-        <BackButton />
+        <BackButton 
+          onPress={() => {
+            // Try to go back in navigation history
+            router.back();
+            // Note: If there's no history, router.back() won't navigate
+            // In that case, user can manually navigate or we could add a timeout fallback
+          }}
+        />
 
         {/* Article Header */}
         <View style={{ marginBottom: spacing.xl }}>
@@ -408,6 +437,135 @@ export default function HelpArticleDetail() {
           )}
         </View>
 
+        {/* Feedback Panel Modal */}
+        <Modal
+          visible={showFeedbackPanel}
+          transparent
+          animationType="fade"
+          onRequestClose={handleCancelFeedback}
+        >
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: spacing.lg,
+            }}
+            activeOpacity={1}
+            onPress={handleCancelFeedback}
+          >
+            <View
+              style={{
+                backgroundColor: "#232323",
+                borderRadius: borderRadius.lg,
+                padding: spacing.lg,
+                width: "100%",
+                maxWidth: 500,
+                borderWidth: 1,
+                borderColor: "#474747",
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.5,
+                shadowRadius: 12,
+                elevation: 10,
+              }}
+              onStartShouldSetResponder={() => true}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: spacing.md }}>
+                <Text
+                  style={{
+                    fontSize: typography.fontSize.lg,
+                    fontWeight: typography.fontWeight.bold,
+                    color: colors.text.primary,
+                  }}
+                >
+                  Help us improve
+                </Text>
+                <TouchableOpacity onPress={handleCancelFeedback}>
+                  <MaterialIcons name="close" size={24} color={colors.text.secondary} />
+                </TouchableOpacity>
+              </View>
+              
+              <Text
+                style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.secondary,
+                  marginBottom: spacing.md,
+                }}
+              >
+                We're sorry this article wasn't helpful. Please tell us what we can improve:
+              </Text>
+
+              <TextInput
+                value={feedbackText}
+                onChangeText={setFeedbackText}
+                placeholder="What information were you looking for? What was unclear?"
+                placeholderTextColor={colors.text.tertiary}
+                multiline
+                numberOfLines={4}
+                style={{
+                  backgroundColor: "#474747",
+                  borderRadius: borderRadius.md,
+                  padding: spacing.md,
+                  color: colors.text.primary,
+                  fontSize: typography.fontSize.base,
+                  minHeight: 100,
+                  textAlignVertical: "top",
+                  borderWidth: 1,
+                  borderColor: "#5a5a68",
+                  marginBottom: spacing.md,
+                }}
+              />
+
+              <View style={{ flexDirection: "row", gap: spacing.md }}>
+                <TouchableOpacity
+                  onPress={handleCancelFeedback}
+                  style={{
+                    flex: 1,
+                    backgroundColor: "#474747",
+                    paddingVertical: spacing.md,
+                    borderRadius: borderRadius.md,
+                    borderWidth: 1,
+                    borderColor: "#5a5a68",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.base,
+                      fontWeight: "600",
+                      color: colors.text.secondary,
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleSubmitFeedback}
+                  style={{
+                    flex: 1,
+                    backgroundColor: colors.status.error,
+                    paddingVertical: spacing.md,
+                    borderRadius: borderRadius.md,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.base,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                    }}
+                  >
+                    Submit Feedback
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </Modal>
+
         {/* Related Articles */}
         {article.relatedArticles && article.relatedArticles.length > 0 && (
           <View style={{ marginBottom: spacing.xl }}>
@@ -471,6 +629,7 @@ export default function HelpArticleDetail() {
             padding: spacing.lg,
             borderWidth: 1,
             borderColor: colors.accent + "40",
+            marginBottom: spacing.xl,
           }}
         >
           <View style={{ flexDirection: "row", alignItems: "flex-start", gap: spacing.md }}>
@@ -497,8 +656,7 @@ export default function HelpArticleDetail() {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  // TODO: Navigate to support/contact page
-                  Alert.alert("Contact Support", "Support feature coming soon!");
+                  router.push("/pages/support");
                 }}
                 style={{
                   alignSelf: "flex-start",
