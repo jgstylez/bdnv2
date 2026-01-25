@@ -180,7 +180,7 @@ interface EndpointType {
     required?: boolean;
     inPath?: boolean;
   }>;
-  body?: Record<string, { type: string; required?: boolean; default?: string; description: string }>;
+  body?: Record<string, { type: string; required?: boolean; default?: string; description: string } | undefined>;
   exampleBody?: Record<string, any>;
   exampleResponse: Record<string, any>;
 }
@@ -339,7 +339,7 @@ export default function ApiPlayground() {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{

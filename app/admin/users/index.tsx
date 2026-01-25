@@ -471,6 +471,8 @@ export default function UserManagement() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            totalItems={filteredUsers.length}
+            itemsPerPage={itemsPerPage}
             onPageChange={setCurrentPage}
           />
         )}

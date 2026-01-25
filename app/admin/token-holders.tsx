@@ -435,14 +435,7 @@ export default function TokenHoldersManagement() {
               <AdminDataCard
                 key={holder.id}
                 title={holder.name || formatAddress(holder.walletAddress)}
-                subtitle={holder.email || holder.walletAddress}
-                metadata={[
-                  { label: "Token Type", value: holder.tokenType },
-                  { label: "Balance", value: holder.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
-                  { label: "Status", value: holder.status },
-                  { label: "Transactions", value: holder.totalTransactions.toString() },
-                  { label: "Joined", value: holder.joinedDate },
-                ]}
+                subtitle={`${holder.email || holder.walletAddress} • ${holder.tokenType} • Balance: ${holder.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} • Transactions: ${holder.totalTransactions} • Joined: ${holder.joinedDate}`}
                 actions={[
                   {
                     label: holder.status === "frozen" ? "Unfreeze" : "Freeze",
@@ -499,7 +492,7 @@ export default function TokenHoldersManagement() {
         >
           <View style={{ gap: spacing.md }}>
             <View>
-              <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+              <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.weights.semibold as any, color: colors.text.primary, marginBottom: spacing.xs }}>
                 Wallet Address
               </Text>
               <Text style={{ fontSize: typography.fontSize.base, color: colors.text.secondary, fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace" }}>
@@ -507,7 +500,7 @@ export default function TokenHoldersManagement() {
               </Text>
             </View>
             <View>
-              <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+              <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.weights.semibold as any, color: colors.text.primary, marginBottom: spacing.xs }}>
                 Name
               </Text>
               <TextInput
@@ -516,18 +509,18 @@ export default function TokenHoldersManagement() {
                 placeholder="Enter name (optional)"
                 placeholderTextColor={colors.text.placeholder}
                 style={{
-                  backgroundColor: colors.secondary.bg,
+                  backgroundColor: colors.secondary,
                   borderRadius: borderRadius.md,
                   padding: spacing.md,
                   color: colors.text.primary,
                   fontSize: typography.fontSize.base,
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: colors.border,
                 }}
               />
             </View>
             <View>
-              <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+              <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.weights.semibold as any, color: colors.text.primary, marginBottom: spacing.xs }}>
                 Email
               </Text>
               <TextInput
@@ -536,18 +529,18 @@ export default function TokenHoldersManagement() {
                 placeholder="Enter email (optional)"
                 placeholderTextColor={colors.text.placeholder}
                 style={{
-                  backgroundColor: colors.secondary.bg,
+                  backgroundColor: colors.secondary,
                   borderRadius: borderRadius.md,
                   padding: spacing.md,
                   color: colors.text.primary,
                   fontSize: typography.fontSize.base,
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: colors.border,
                 }}
               />
             </View>
             <View>
-              <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+              <Text style={{ fontSize: typography.fontSize.sm, fontWeight: typography.weights.semibold as any, color: colors.text.primary, marginBottom: spacing.xs }}>
                 Status
               </Text>
               <View style={{ flexDirection: "row", gap: spacing.sm }}>
@@ -559,16 +552,16 @@ export default function TokenHoldersManagement() {
                       flex: 1,
                       padding: spacing.md,
                       borderRadius: borderRadius.md,
-                      backgroundColor: editForm.status === status ? colors.accent : colors.secondary.bg,
+                      backgroundColor: editForm.status === status ? colors.accent : colors.secondary,
                       borderWidth: 1,
-                      borderColor: editForm.status === status ? colors.accent : colors.border.light,
+                      borderColor: editForm.status === status ? colors.accent : colors.border,
                       alignItems: "center",
                     }}
                   >
                     <Text
                       style={{
                         fontSize: typography.fontSize.sm,
-                        fontWeight: typography.fontWeight.semibold,
+                        fontWeight: typography.weights.semibold as any,
                         color: editForm.status === status ? colors.text.primary : colors.text.secondary,
                         textTransform: "capitalize",
                       }}
@@ -589,13 +582,13 @@ export default function TokenHoldersManagement() {
                   flex: 1,
                   padding: spacing.md,
                   borderRadius: borderRadius.md,
-                  backgroundColor: colors.secondary.bg,
+                  backgroundColor: colors.secondary,
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: colors.border,
                   alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.weights.semibold as any, color: colors.text.primary }}>
                   Cancel
                 </Text>
               </TouchableOpacity>
@@ -609,7 +602,7 @@ export default function TokenHoldersManagement() {
                   alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.weights.semibold as any, color: colors.text.primary }}>
                   Save Changes
                 </Text>
               </TouchableOpacity>
@@ -642,13 +635,13 @@ export default function TokenHoldersManagement() {
                   flex: 1,
                   padding: spacing.md,
                   borderRadius: borderRadius.md,
-                  backgroundColor: colors.secondary.bg,
+                  backgroundColor: colors.secondary,
                   borderWidth: 1,
-                  borderColor: colors.border.light,
+                  borderColor: colors.border,
                   alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.weights.semibold as any, color: colors.text.primary }}>
                   Cancel
                 </Text>
               </TouchableOpacity>
@@ -662,7 +655,7 @@ export default function TokenHoldersManagement() {
                   alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.weights.semibold as any, color: colors.text.primary }}>
                   {selectedHolder?.status === "frozen" ? "Unfreeze" : "Freeze"}
                 </Text>
               </TouchableOpacity>

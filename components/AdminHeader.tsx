@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, useWindowDimensions } from "react-native";
+import { View, Text, TouchableOpacity, useWindowDimensions, Platform } from "react-native";
 import { usePathname, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -10,6 +10,8 @@ interface AdminHeaderProps {
 export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuPress }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 1024 && Platform.OS === "web";
 
   const getPageTitle = () => {
     if (pathname === "/admin" || pathname === "/admin/") return "Admin Dashboard";
@@ -88,27 +90,29 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuPress }) => {
           </Text>
         </TouchableOpacity>
 
-        {/* Menu Button */}
-        <TouchableOpacity
-          onPress={handleMenuPress}
-          activeOpacity={0.7}
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            backgroundColor: "#474747",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1001,
-            elevation: 1001,
-          }}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          accessible={true}
-          accessibilityLabel="Open admin menu"
-          accessibilityRole="button"
-        >
-          <MaterialIcons name="menu" size={24} color="rgba(255, 255, 255, 0.7)" />
-        </TouchableOpacity>
+        {/* Menu Button - Mobile only */}
+        {!isDesktop && (
+          <TouchableOpacity
+            onPress={handleMenuPress}
+            activeOpacity={0.7}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              backgroundColor: "#474747",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1001,
+              elevation: 1001,
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            accessible={true}
+            accessibilityLabel="Open admin menu"
+            accessibilityRole="button"
+          >
+            <MaterialIcons name="menu" size={24} color="rgba(255, 255, 255, 0.7)" />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

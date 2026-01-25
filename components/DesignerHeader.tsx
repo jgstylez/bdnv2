@@ -3,25 +3,27 @@ import { View, Text, TouchableOpacity, useWindowDimensions, Platform } from "rea
 import { usePathname, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 
-interface DeveloperHeaderProps {
+interface DesignerHeaderProps {
   onMenuPress: () => void;
 }
 
-export const DeveloperHeader: React.FC<DeveloperHeaderProps> = ({ onMenuPress }) => {
+export const DesignerHeader: React.FC<DesignerHeaderProps> = ({ onMenuPress }) => {
   const pathname = usePathname();
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isDesktop = width >= 1024 && Platform.OS === "web";
 
   const getPageTitle = () => {
-    if (pathname === "/developer" || pathname === "/developer/") return "Developer Dashboard";
-    if (pathname?.includes("/developer/api-docs")) return "API Documentation";
-    if (pathname?.includes("/developer/api-keys")) return "API Keys";
-    if (pathname?.includes("/developer/webhooks")) return "Webhooks";
-    if (pathname?.includes("/developer/sdks")) return "SDKs & Code Examples";
-    if (pathname?.includes("/developer/logs")) return "Logs & Debugging";
-    if (pathname?.includes("/developer/testing")) return "Testing Tools";
-    return "Developer";
+    if (pathname === "/designer" || pathname === "/designer/") return "Designer Dashboard";
+    if (pathname?.includes("/designer/brand-identity")) return "Brand Identity";
+    if (pathname?.includes("/designer/logo")) return "Logo";
+    if (pathname?.includes("/designer/ui-design")) return "UI Design";
+    if (pathname?.includes("/designer/color-palette")) return "Color Palette";
+    if (pathname?.includes("/designer/typography")) return "Typography";
+    if (pathname?.includes("/designer/components")) return "Components";
+    if (pathname?.includes("/designer/spacing")) return "Spacing";
+    if (pathname?.includes("/designer/icons")) return "Icons";
+    return "Designer";
   };
 
   const handleMenuPress = () => {
@@ -101,7 +103,7 @@ export const DeveloperHeader: React.FC<DeveloperHeaderProps> = ({ onMenuPress })
             }}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             accessible={true}
-            accessibilityLabel="Open developer menu"
+            accessibilityLabel="Open designer menu"
             accessibilityRole="button"
           >
             <MaterialIcons name="menu" size={24} color="rgba(255, 255, 255, 0.7)" />
@@ -111,4 +113,3 @@ export const DeveloperHeader: React.FC<DeveloperHeaderProps> = ({ onMenuPress })
     </View>
   );
 };
-

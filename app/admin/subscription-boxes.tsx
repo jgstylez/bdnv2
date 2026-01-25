@@ -3,6 +3,7 @@ import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SubscriptionBox, SubscriptionBoxPlan, SubscriptionBoxShipment, SubscriptionStatus, SubscriptionFrequency, getFrequencyLabel, getDurationLabel } from '@/types/subscription-box';
+import { Currency } from '@/types/wallet';
 import { formatCurrency } from '@/lib/international';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { FilterDropdown } from '@/components/admin/FilterDropdown';
@@ -348,7 +349,7 @@ export default function SubscriptionBoxesManagement() {
               <AdminDataCard
                 key={subscription.id}
                 title={`Subscription ${subscription.id}`}
-                subtitle={`${getFrequencyLabel(subscription.frequency)} • ${getDurationLabel(subscription.duration)} • ${formatCurrency(subscription.pricePerShipment + subscription.shippingCostPerShipment, subscription.currency)}/shipment`}
+                subtitle={`${getFrequencyLabel(subscription.frequency)} • ${getDurationLabel(subscription.duration)} • ${formatCurrency(subscription.pricePerShipment + subscription.shippingCostPerShipment, subscription.currency as Currency)}/shipment`}
                 badges={[
                   {
                     label: subscription.status,
@@ -481,7 +482,7 @@ export default function SubscriptionBoxesManagement() {
             <AdminDataCard
               key={plan.id}
               title={plan.name}
-              subtitle={`${getFrequencyLabel(plan.frequency)} • ${getDurationLabel(plan.duration)} • ${formatCurrency(plan.pricePerShipment + plan.shippingCostPerShipment, plan.currency)}/shipment`}
+              subtitle={`${getFrequencyLabel(plan.frequency)} • ${getDurationLabel(plan.duration)} • ${formatCurrency(plan.pricePerShipment + plan.shippingCostPerShipment, plan.currency as Currency)}/shipment`}
               badges={[
                 {
                   label: plan.isActive ? "Active" : "Inactive",
@@ -1010,7 +1011,7 @@ export default function SubscriptionBoxesManagement() {
                       {formatCurrency(
                         (selectedOrder as SubscriptionBoxPlan).pricePerShipment +
                           (selectedOrder as SubscriptionBoxPlan).shippingCostPerShipment,
-                        (selectedOrder as SubscriptionBoxPlan).currency
+                        (selectedOrder as SubscriptionBoxPlan).currency as Currency
                       )}
                     </Text>
                   </View>

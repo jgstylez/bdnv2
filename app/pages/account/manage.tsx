@@ -141,7 +141,7 @@ export default function ManageAccount() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
@@ -180,18 +180,18 @@ export default function ManageAccount() {
         {/* Account Settings */}
         <View
           style={{
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.lg,
             padding: spacing.xl,
             marginBottom: spacing.xl,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
           }}
         >
           <Text
             style={{
               fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
+              fontWeight: typography.weights.bold as any,
               color: colors.text.primary,
               marginBottom: spacing.md,
             }}
@@ -208,7 +208,7 @@ export default function ManageAccount() {
                 justifyContent: "space-between",
                 paddingVertical: spacing.md,
                 borderBottomWidth: 1,
-                borderBottomColor: colors.border.light,
+                borderBottomColor: colors.border,
               }}
             >
               <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.md }}>
@@ -217,7 +217,7 @@ export default function ManageAccount() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
+                      fontWeight: typography.weights.semibold as any,
                       color: colors.text.primary,
                     }}
                   >
@@ -244,7 +244,7 @@ export default function ManageAccount() {
                 justifyContent: "space-between",
                 paddingVertical: spacing.md,
                 borderBottomWidth: 1,
-                borderBottomColor: colors.border.light,
+                borderBottomColor: colors.border,
               }}
             >
               <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.md }}>
@@ -253,7 +253,7 @@ export default function ManageAccount() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
+                      fontWeight: typography.weights.semibold as any,
                       color: colors.text.primary,
                     }}
                   >
@@ -277,12 +277,12 @@ export default function ManageAccount() {
         {/* Notification Preferences */}
         <View
           style={{
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.lg,
             padding: spacing.xl,
             marginBottom: spacing.xl,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
           }}
         >
           <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.md }}>
@@ -290,7 +290,7 @@ export default function ManageAccount() {
             <Text
               style={{
                 fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.weights.bold as any,
                 color: colors.text.primary,
               }}
             >
@@ -304,7 +304,7 @@ export default function ManageAccount() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.weights.semibold as any,
                     color: colors.text.primary,
                     marginBottom: spacing.xs,
                   }}
@@ -323,7 +323,7 @@ export default function ManageAccount() {
               <Switch
                 value={emailNotifications}
                 onValueChange={setEmailNotifications}
-                trackColor={{ false: colors.secondary.bg, true: colors.accent }}
+                trackColor={{ false: colors.secondary, true: colors.accent }}
                 thumbColor={colors.text.primary}
               />
             </View>
@@ -333,7 +333,7 @@ export default function ManageAccount() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.weights.semibold as any,
                     color: colors.text.primary,
                     marginBottom: spacing.xs,
                   }}
@@ -352,7 +352,7 @@ export default function ManageAccount() {
               <Switch
                 value={pushNotifications}
                 onValueChange={setPushNotifications}
-                trackColor={{ false: colors.secondary.bg, true: colors.accent }}
+                trackColor={{ false: colors.secondary, true: colors.accent }}
                 thumbColor={colors.text.primary}
               />
             </View>
@@ -362,7 +362,7 @@ export default function ManageAccount() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.weights.semibold as any,
                     color: colors.text.primary,
                     marginBottom: spacing.xs,
                   }}
@@ -381,7 +381,7 @@ export default function ManageAccount() {
               <Switch
                 value={marketingEmails}
                 onValueChange={setMarketingEmails}
-                trackColor={{ false: colors.secondary.bg, true: colors.accent }}
+                trackColor={{ false: colors.secondary, true: colors.accent }}
                 thumbColor={colors.text.primary}
               />
             </View>
@@ -391,7 +391,7 @@ export default function ManageAccount() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.weights.semibold as any,
                     color: colors.text.primary,
                     marginBottom: spacing.xs,
                   }}
@@ -410,7 +410,7 @@ export default function ManageAccount() {
               <Switch
                 value={transactionAlerts}
                 onValueChange={setTransactionAlerts}
-                trackColor={{ false: colors.secondary.bg, true: colors.accent }}
+                trackColor={{ false: colors.secondary, true: colors.accent }}
                 thumbColor={colors.text.primary}
               />
             </View>
@@ -428,7 +428,7 @@ export default function ManageAccount() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.weights.bold as any,
                 color: colors.text.primary,
               }}
             >
@@ -440,12 +440,12 @@ export default function ManageAccount() {
         {/* Privacy Settings */}
         <View
           style={{
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.lg,
             padding: spacing.xl,
             marginBottom: spacing.xl,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
           }}
         >
           <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.md }}>
@@ -453,7 +453,7 @@ export default function ManageAccount() {
             <Text
               style={{
                 fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.weights.bold as any,
                 color: colors.text.primary,
               }}
             >
@@ -466,7 +466,7 @@ export default function ManageAccount() {
               <Text
                 style={{
                   fontSize: typography.fontSize.base,
-                  fontWeight: typography.fontWeight.semibold,
+                  fontWeight: typography.weights.semibold as any,
                   color: colors.text.primary,
                   marginBottom: spacing.sm,
                 }}
@@ -477,21 +477,21 @@ export default function ManageAccount() {
                 {["public", "friends", "private"].map((option) => (
                   <TouchableOpacity
                     key={option}
-                    onPress={() => setProfileVisibility(option)}
+                    onPress={() => setProfileVisibility(option as "public" | "friends" | "private")}
                     style={{
                       flex: 1,
                       paddingVertical: spacing.sm,
                       borderRadius: borderRadius.sm,
-                      backgroundColor: profileVisibility === option ? colors.accent : colors.background.input,
+                      backgroundColor: profileVisibility === option ? colors.accent : colors.input,
                       borderWidth: 1,
-                      borderColor: profileVisibility === option ? colors.accent : colors.border.light,
+                      borderColor: profileVisibility === option ? colors.accent : colors.border,
                       alignItems: "center",
                     }}
                   >
                     <Text
                       style={{
                         fontSize: typography.fontSize.sm,
-                        fontWeight: typography.fontWeight.semibold,
+                        fontWeight: typography.weights.semibold as any,
                         color: profileVisibility === option ? colors.text.primary : colors.text.secondary,
                         textTransform: "capitalize",
                       }}
@@ -508,7 +508,7 @@ export default function ManageAccount() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.weights.semibold as any,
                     color: colors.text.primary,
                     marginBottom: spacing.xs,
                   }}
@@ -527,7 +527,7 @@ export default function ManageAccount() {
               <Switch
                 value={showEmailPublic}
                 onValueChange={setShowEmailPublic}
-                trackColor={{ false: colors.secondary.bg, true: colors.accent }}
+                trackColor={{ false: colors.secondary, true: colors.accent }}
                 thumbColor={colors.text.primary}
               />
             </View>
@@ -537,7 +537,7 @@ export default function ManageAccount() {
                 <Text
                   style={{
                     fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.weights.semibold as any,
                     color: colors.text.primary,
                     marginBottom: spacing.xs,
                   }}
@@ -556,7 +556,7 @@ export default function ManageAccount() {
               <Switch
                 value={dataSharing}
                 onValueChange={setDataSharing}
-                trackColor={{ false: colors.secondary.bg, true: colors.accent }}
+                trackColor={{ false: colors.secondary, true: colors.accent }}
                 thumbColor={colors.text.primary}
               />
             </View>
@@ -574,7 +574,7 @@ export default function ManageAccount() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.weights.bold as any,
                 color: colors.text.primary,
               }}
             >
@@ -586,7 +586,7 @@ export default function ManageAccount() {
         {/* Danger Zone */}
         <View
           style={{
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.lg,
             padding: spacing.xl,
             borderWidth: 1,
@@ -598,7 +598,7 @@ export default function ManageAccount() {
             <Text
               style={{
                 fontSize: typography.fontSize.xl,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.weights.bold as any,
                 color: colors.status.error,
               }}
             >
@@ -632,7 +632,7 @@ export default function ManageAccount() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.bold,
+                fontWeight: typography.weights.bold as any,
                 color: colors.status.error,
               }}
             >
@@ -711,7 +711,7 @@ export default function ManageAccount() {
                     <Text
                       style={{
                         fontSize: typography.fontSize["2xl"],
-                        fontWeight: typography.fontWeight.bold,
+                        fontWeight: typography.weights.bold as any,
                         color: colors.text.primary,
                         marginBottom: spacing.xs,
                       }}
@@ -766,7 +766,7 @@ export default function ManageAccount() {
                         lineHeight: 18,
                       }}
                     >
-                      To confirm, please type <Text style={{ fontWeight: typography.fontWeight.bold, color: colors.status.error }}>DELETE</Text> in the field below:
+                      To confirm, please type <Text style={{ fontWeight: typography.weights.bold as any, color: colors.status.error }}>DELETE</Text> in the field below:
                     </Text>
                     <FormInput
                       value={deleteConfirmation}
@@ -944,7 +944,7 @@ export default function ManageAccount() {
                     <Text
                       style={{
                         fontSize: typography.fontSize["2xl"],
-                        fontWeight: typography.fontWeight.bold,
+                        fontWeight: typography.weights.bold as any,
                         color: colors.text.primary,
                         marginBottom: spacing.xs,
                       }}
@@ -1001,7 +1001,6 @@ export default function ManageAccount() {
                       secureTextEntry
                       showPasswordToggle
                       placeholder="Re-enter your new password"
-                      required
                     />
                   </View>
                 </View>
@@ -1169,7 +1168,7 @@ export default function ManageAccount() {
                     <Text
                       style={{
                         fontSize: typography.fontSize["2xl"],
-                        fontWeight: typography.fontWeight.bold,
+                        fontWeight: typography.weights.bold as any,
                         color: colors.text.primary,
                         marginBottom: spacing.xs,
                       }}
@@ -1226,7 +1225,6 @@ export default function ManageAccount() {
                         keyboardType="email-address"
                         autoCapitalize="none"
                         placeholder="Enter new email address"
-                        required
                       />
                       {newEmail && newEmail.length > 0 && !isValidEmail(newEmail) && (
                         <View
@@ -1275,7 +1273,7 @@ export default function ManageAccount() {
                             flexDirection: "row",
                             alignItems: "center",
                           }}
-                          accessibilityRole="status"
+                          accessibilityRole="text"
                         >
                           <MaterialIcons 
                             name="check-circle" 

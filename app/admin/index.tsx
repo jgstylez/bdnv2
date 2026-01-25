@@ -166,7 +166,7 @@ function AdminDashboardContent() {
               letterSpacing: 0.5,
             }}
           >
-            Platform Management & Control
+            Platform Management
           </Text>
         </View>
 
@@ -321,26 +321,33 @@ function AdminDashboardContent() {
             style={{
               flexDirection: "row",
               flexWrap: "wrap",
-              gap: 16,
+              marginHorizontal: -6,
+              alignItems: "stretch",
             }}
           >
             {adminSections.map((section) => (
-              <TouchableOpacity
+              <View
                 key={section.id}
-                onPress={() => router.push(section.route as any)}
                 style={{
-                  width: Platform.OS === "web" ? "calc(50% - 8px)" : "48%",
-                  flexBasis: Platform.OS === "web" ? undefined : "48%",
-                  flexGrow: 0,
-                  flexShrink: 0,
-                  backgroundColor: "#474747",
-                  borderRadius: 16,
-                  padding: 20,
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.2)",
-                  minHeight: 140,
+                  flex: 1,
+                  minWidth: isMobile ? "48%" : "32%",
+                  maxWidth: isMobile ? "48%" : "32%",
+                  paddingHorizontal: 6,
+                  marginBottom: 12,
                 }}
               >
+                <TouchableOpacity
+                  onPress={() => router.push(section.route as any)}
+                  style={{
+                    backgroundColor: "#474747",
+                    borderRadius: 16,
+                    padding: 20,
+                    borderWidth: 1,
+                    borderColor: "rgba(186, 153, 136, 0.2)",
+                    minHeight: 140,
+                    flex: 1,
+                  }}
+                >
                 <View
                   style={{
                     width: 48,
@@ -372,7 +379,8 @@ function AdminDashboardContent() {
                 >
                   {section.description}
                 </Text>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
             ))}
           </View>
         </View>

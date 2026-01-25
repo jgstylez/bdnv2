@@ -1,81 +1,95 @@
 import React from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  useWindowDimensions,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, spacing, borderRadius, typography } from '@/constants/theme';
-import { DeveloperRedirect } from '@/components/DeveloperRedirect';
-import { DeveloperPageHeader } from '@/components/developer/DeveloperPageHeader';
 
-// Mock developer stats
+// Mock designer stats
 const mockStats = {
-  totalApiKeys: 3,
-  activeWebhooks: 5,
-  apiCallsToday: 12450,
-  apiCallsThisMonth: 342000,
-  rateLimitRemaining: 8750,
-  rateLimitTotal: 10000,
-  errorsToday: 12,
-  avgResponseTime: 145, // ms
+  designTokens: 45,
+  componentsDocumented: 28,
+  colorPalettes: 8,
+  typographyStyles: 12,
 };
 
-const developerSections = [
+const designerSections = [
   {
-    id: "api-docs",
-    name: "API Documentation",
-    description: "Complete API reference with endpoints",
-    icon: "menu-book",
-    color: "#2196f3",
-    route: "/developer/api-docs",
+    id: "brand-identity",
+    name: "Brand Identity",
+    description: "Logo, mission, values, etc",
+    icon: "badge",
+    color: "#ba9988",
+    route: "/designer/brand-identity",
   },
   {
-    id: "api-keys",
-    name: "API Keys",
-    description: "Manage your API keys and access credentials",
-    icon: "vpn-key",
-    color: "#4caf50",
-    route: "/developer/api-keys",
-  },
-  {
-    id: "webhooks",
-    name: "Webhooks",
-    description: "Configure and manage webhook endpoints",
-    icon: "webhook",
+    id: "logo",
+    name: "Logo",
+    description: "Logo variations, usage guidelines",
+    icon: "auto-awesome",
     color: "#9c27b0",
-    route: "/developer/webhooks",
+    route: "/designer/logo",
   },
   {
-    id: "sdks",
-    name: "SDKs & Examples",
-    description: "Download SDKs and view code examples",
-    icon: "code",
+    id: "ui-design",
+    name: "UI Design",
+    description: "Design principles and interaction patterns",
+    icon: "design-services",
+    color: "#e91e63",
+    route: "/designer/ui-design",
+  },
+  {
+    id: "color-palette",
+    name: "Color Palette",
+    description: "Color system with swatches and usage",
+    icon: "palette",
+    color: "#2196f3",
+    route: "/designer/color-palette",
+  },
+  {
+    id: "typography",
+    name: "Typography",
+    description: "Font families, weights, and styles",
+    icon: "text-fields",
+    color: "#4caf50",
+    route: "/designer/typography",
+  },
+  {
+    id: "components",
+    name: "Components",
+    description: "Reusable component library and patterns",
+    icon: "widgets",
     color: "#ff9800",
-    route: "/developer/sdks",
+    route: "/designer/components",
   },
   {
-    id: "logs",
-    name: "Logs & Debugging",
-    description: "View API logs and debug requests",
-    icon: "bug-report",
-    color: "#ff4444",
-    route: "/developer/logs",
-  },
-  {
-    id: "testing",
-    name: "Testing Tools",
-    description: "Test API endpoints and validate integrations",
-    icon: "science",
+    id: "spacing",
+    name: "Spacing",
+    description: "Spacing scale and layout grid system",
+    icon: "view-column",
     color: "#00bcd4",
-    route: "/developer/testing",
+    route: "/designer/spacing",
+  },
+  {
+    id: "icons",
+    name: "Icons",
+    description: "Icon library and usage guidelines",
+    icon: "image",
+    color: "#ff4444",
+    route: "/designer/icons",
   },
 ];
 
-function DeveloperDashboardContent() {
+function DesignerDashboardContent() {
   const { width } = useWindowDimensions();
   const router = useRouter();
   const isMobile = width < 768;
-
-  const rateLimitPercentage = (mockStats.rateLimitRemaining / mockStats.rateLimitTotal) * 100;
 
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
@@ -98,7 +112,7 @@ function DeveloperDashboardContent() {
               letterSpacing: 0.5,
             }}
           >
-            Developer Portal
+            Designer Portal
           </Text>
         </View>
 
@@ -130,87 +144,7 @@ function DeveloperDashboardContent() {
                 marginBottom: 8,
               }}
             >
-              API Calls Today
-            </Text>
-            <Text
-              style={{
-                fontSize: 28,
-                fontWeight: "700",
-                color: "#2196f3",
-              }}
-            >
-              {mockStats.apiCallsToday.toLocaleString()}
-            </Text>
-          </View>
-          <View
-            style={{
-              flex: isMobile ? 1 : 1,
-              minWidth: isMobile ? "47%" : undefined,
-              maxWidth: isMobile ? "47%" : undefined,
-              backgroundColor: "#474747",
-              borderRadius: 16,
-              padding: 20,
-              borderWidth: 1,
-              borderColor: "rgba(186, 153, 136, 0.2)",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(255, 255, 255, 0.7)",
-                marginBottom: 8,
-              }}
-            >
-              Rate Limit Remaining
-            </Text>
-            <Text
-              style={{
-                fontSize: 28,
-                fontWeight: "700",
-                color: "#4caf50",
-              }}
-            >
-              {mockStats.rateLimitRemaining.toLocaleString()}
-            </Text>
-            <View
-              style={{
-                marginTop: 8,
-                height: 4,
-                backgroundColor: "#232323",
-                borderRadius: 2,
-                overflow: "hidden",
-              }}
-            >
-              <View
-                style={{
-                  height: "100%",
-                  width: `${rateLimitPercentage}%`,
-                  backgroundColor: "#4caf50",
-                  borderRadius: 2,
-                }}
-              />
-            </View>
-          </View>
-          <View
-            style={{
-              flex: isMobile ? 1 : 1,
-              minWidth: isMobile ? "47%" : undefined,
-              maxWidth: isMobile ? "47%" : undefined,
-              backgroundColor: "#474747",
-              borderRadius: 16,
-              padding: 20,
-              borderWidth: 1,
-              borderColor: "rgba(186, 153, 136, 0.2)",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(255, 255, 255, 0.7)",
-                marginBottom: 8,
-              }}
-            >
-              Active API Keys
+              Design Tokens
             </Text>
             <Text
               style={{
@@ -219,7 +153,7 @@ function DeveloperDashboardContent() {
                 color: "#ba9988",
               }}
             >
-              {mockStats.totalApiKeys}
+              {mockStats.designTokens}
             </Text>
           </View>
           <View
@@ -241,21 +175,83 @@ function DeveloperDashboardContent() {
                 marginBottom: 8,
               }}
             >
-              Avg Response Time
+              Components
             </Text>
             <Text
               style={{
                 fontSize: 28,
                 fontWeight: "700",
-                color: "#ff9800",
+                color: "#e91e63",
               }}
             >
-              {mockStats.avgResponseTime}ms
+              {mockStats.componentsDocumented}
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
+              }}
+            >
+              Color Palettes
+            </Text>
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "700",
+                color: "#2196f3",
+              }}
+            >
+              {mockStats.colorPalettes}
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: isMobile ? 1 : 1,
+              minWidth: isMobile ? "47%" : undefined,
+              maxWidth: isMobile ? "47%" : undefined,
+              backgroundColor: "#474747",
+              borderRadius: 16,
+              padding: 20,
+              borderWidth: 1,
+              borderColor: "rgba(186, 153, 136, 0.2)",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                marginBottom: 8,
+              }}
+            >
+              Typography Styles
+            </Text>
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "700",
+                color: "#4caf50",
+              }}
+            >
+              {mockStats.typographyStyles}
             </Text>
           </View>
         </View>
 
-        {/* Developer Tools */}
+        {/* Design Guidelines */}
         <View style={{ marginBottom: 32 }}>
           <Text
             style={{
@@ -265,7 +261,7 @@ function DeveloperDashboardContent() {
               marginBottom: 24,
             }}
           >
-            Developer Tools
+            Design Guidelines
           </Text>
           <View
             style={{
@@ -275,7 +271,7 @@ function DeveloperDashboardContent() {
               alignItems: "stretch",
             }}
           >
-            {developerSections.map((section) => (
+            {designerSections.map((section) => (
               <View
                 key={section.id}
                 style={{
@@ -309,7 +305,11 @@ function DeveloperDashboardContent() {
                       marginBottom: 16,
                     }}
                   >
-                    <MaterialIcons name={section.icon as any} size={24} color={section.color} />
+                    <MaterialIcons
+                      name={section.icon as any}
+                      size={24}
+                      color={section.color}
+                    />
                   </View>
                   <Text
                     style={{
@@ -359,22 +359,22 @@ function DeveloperDashboardContent() {
             <View style={{ gap: 16 }}>
               {[
                 {
-                  title: "Getting Started Guide",
-                  description: "Learn how to integrate with the BDN API",
-                  icon: "rocket-launch",
-                  link: "/developer/api-docs",
+                  title: "Brand Guidelines",
+                  description: "Learn about our brand identity and voice",
+                  icon: "badge",
+                  link: "/designer/brand-identity",
                 },
                 {
-                  title: "API Status",
-                  description: "Check API status and uptime",
-                  icon: "check-circle",
-                  link: "/developer/logs",
+                  title: "Design System",
+                  description: "Explore our complete design system",
+                  icon: "palette",
+                  link: "/designer/color-palette",
                 },
                 {
-                  title: "Support & Community",
-                  description: "Get help from our developer community",
-                  icon: "forum",
-                  link: "#",
+                  title: "Component Library",
+                  description: "Browse reusable components and patterns",
+                  icon: "widgets",
+                  link: "/designer/components",
                 },
               ].map((link, index) => (
                 <TouchableOpacity
@@ -388,7 +388,12 @@ function DeveloperDashboardContent() {
                     borderBottomColor: "rgba(186, 153, 136, 0.2)",
                   }}
                 >
-                  <MaterialIcons name={link.icon as any} size={20} color="#ba9988" style={{ marginRight: 16 }} />
+                  <MaterialIcons
+                    name={link.icon as any}
+                    size={20}
+                    color="#ba9988"
+                    style={{ marginRight: 16 }}
+                  />
                   <View style={{ flex: 1 }}>
                     <Text
                       style={{
@@ -409,7 +414,11 @@ function DeveloperDashboardContent() {
                       {link.description}
                     </Text>
                   </View>
-                  <MaterialIcons name="chevron-right" size={20} color="rgba(255, 255, 255, 0.5)" />
+                  <MaterialIcons
+                    name="chevron-right"
+                    size={20}
+                    color="rgba(255, 255, 255, 0.5)"
+                  />
                 </TouchableOpacity>
               ))}
             </View>
@@ -420,11 +429,6 @@ function DeveloperDashboardContent() {
   );
 }
 
-export default function DeveloperDashboard() {
-  return (
-    <DeveloperRedirect>
-      <DeveloperDashboardContent />
-    </DeveloperRedirect>
-  );
+export default function DesignerDashboard() {
+  return <DesignerDashboardContent />;
 }
-

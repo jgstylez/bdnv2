@@ -15,7 +15,7 @@ export default function AboutLegal() {
   const [activeTab, setActiveTab] = useState<TabType>("about");
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary.bg }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={{
@@ -57,11 +57,11 @@ export default function AboutLegal() {
             flexDirection: "row",
             gap: spacing.sm,
             marginBottom: spacing.xl,
-            backgroundColor: colors.secondary.bg,
+            backgroundColor: colors.secondary,
             borderRadius: borderRadius.md,
             padding: spacing.xs,
             borderWidth: 1,
-            borderColor: colors.border.light,
+            borderColor: colors.border,
           }}
         >
           <TouchableOpacity
@@ -77,7 +77,7 @@ export default function AboutLegal() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.semibold,
+                fontWeight: typography.weights.semibold as any,
                 color: activeTab === "about" ? colors.text.primary : colors.text.secondary,
               }}
             >
@@ -97,7 +97,7 @@ export default function AboutLegal() {
             <Text
               style={{
                 fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.semibold,
+                fontWeight: typography.weights.semibold as any,
                 color: activeTab === "legal" ? colors.text.primary : colors.text.secondary,
               }}
             >
@@ -110,11 +110,11 @@ export default function AboutLegal() {
         {activeTab === "about" ? (
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.secondary,
               borderRadius: borderRadius.lg,
               padding: spacing.xl,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
             }}
           >
             {/* App Version */}
@@ -122,7 +122,7 @@ export default function AboutLegal() {
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.weights.bold as any,
                   color: colors.text.primary,
                   marginBottom: spacing.sm,
                 }}
@@ -144,7 +144,7 @@ export default function AboutLegal() {
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.weights.bold as any,
                   color: colors.text.primary,
                   marginBottom: spacing.sm,
                 }}
@@ -167,7 +167,7 @@ export default function AboutLegal() {
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.weights.bold as any,
                   color: colors.text.primary,
                   marginBottom: spacing.md,
                 }}
@@ -259,7 +259,7 @@ export default function AboutLegal() {
               style={{
                 paddingTop: spacing.xl,
                 borderTopWidth: 1,
-                borderTopColor: colors.border.light,
+                borderTopColor: colors.border,
               }}
             >
               <Text
@@ -276,11 +276,11 @@ export default function AboutLegal() {
         ) : (
           <View
             style={{
-              backgroundColor: colors.secondary.bg,
+              backgroundColor: colors.secondary,
               borderRadius: borderRadius.lg,
               padding: spacing.xl,
               borderWidth: 1,
-              borderColor: colors.border.light,
+              borderColor: colors.border,
             }}
           >
             {/* Terms of Service */}
@@ -288,7 +288,7 @@ export default function AboutLegal() {
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.weights.bold as any,
                   color: colors.text.primary,
                   marginBottom: spacing.sm,
                 }}
@@ -316,7 +316,7 @@ export default function AboutLegal() {
                   style={{
                     fontSize: typography.fontSize.base,
                     color: colors.accent,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.weights.semibold as any,
                   }}
                 >
                   View Full Terms of Service
@@ -330,7 +330,7 @@ export default function AboutLegal() {
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.weights.bold as any,
                   color: colors.text.primary,
                   marginBottom: spacing.sm,
                 }}
@@ -358,7 +358,7 @@ export default function AboutLegal() {
                   style={{
                     fontSize: typography.fontSize.base,
                     color: colors.accent,
-                    fontWeight: typography.fontWeight.semibold,
+                    fontWeight: typography.weights.semibold as any,
                   }}
                 >
                   View Full Privacy Policy
@@ -372,7 +372,7 @@ export default function AboutLegal() {
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.weights.bold as any,
                   color: colors.text.primary,
                   marginBottom: spacing.sm,
                 }}
@@ -384,7 +384,7 @@ export default function AboutLegal() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
+                      fontWeight: typography.weights.semibold as any,
                       color: colors.text.primary,
                       marginBottom: spacing.xs,
                     }}
@@ -405,7 +405,7 @@ export default function AboutLegal() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
+                      fontWeight: typography.weights.semibold as any,
                       color: colors.text.primary,
                       marginBottom: spacing.xs,
                     }}
@@ -426,7 +426,7 @@ export default function AboutLegal() {
                   <Text
                     style={{
                       fontSize: typography.fontSize.base,
-                      fontWeight: typography.fontWeight.semibold,
+                      fontWeight: typography.weights.semibold as any,
                       color: colors.text.primary,
                       marginBottom: spacing.xs,
                     }}
@@ -451,13 +451,13 @@ export default function AboutLegal() {
               style={{
                 paddingTop: spacing.xl,
                 borderTopWidth: 1,
-                borderTopColor: colors.border.light,
+                borderTopColor: colors.border,
               }}
             >
               <Text
                 style={{
                   fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.bold,
+                  fontWeight: typography.weights.bold as any,
                   color: colors.text.primary,
                   marginBottom: spacing.sm,
                 }}

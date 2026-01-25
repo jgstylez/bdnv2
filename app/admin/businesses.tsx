@@ -378,8 +378,6 @@ export default function BusinessManagement() {
               flexDirection: isMobile ? "column" : "row",
               gap: 16,
             }}
-          >,
-            }}
           >
             <FilterDropdown
               label="Status"

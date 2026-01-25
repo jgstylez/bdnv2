@@ -109,7 +109,7 @@ export default function PinSetup() {
             {pin.map((digit, index) => (
               <TextInput
                 key={index}
-                ref={(ref) => (inputRefs.current[index] = ref)}
+                ref={(ref) => { inputRefs.current[index] = ref; }}
                 value={digit}
                 onChangeText={(value) => handlePinChange(value, index)}
                 onKeyPress={({ nativeEvent }) => handleKeyPress(nativeEvent.key, index)}

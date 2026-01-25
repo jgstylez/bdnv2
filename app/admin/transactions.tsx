@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Modal, Platform } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, TextInput, Modal, Platform, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Transaction, TransactionType, TransactionStatus } from '@/types/transactions';
+import { Currency } from '@/types/wallet';
 import { formatCurrency } from '@/lib/international';
 import { Pagination } from '@/components/admin/Pagination';
 
@@ -77,6 +78,7 @@ const mockTransactions: Transaction[] = [
 export default function TransactionManagement() {
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
+  const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedType, setSelectedType] = useState<string>("all");
@@ -87,7 +89,7 @@ export default function TransactionManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const filteredTransactions = mockTransactions.filter((txn) => {
+  const filteredTransactions = transactions.filter((txn) => {
     const matchesSearch = searchQuery === "" ||
       txn.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       txn.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -453,7 +455,7 @@ export default function TransactionManagement() {
                       marginBottom: 4,
                     }}
                   >
-                    {formatCurrency(txn.amount, txn.currency)}
+                    {formatCurrency(txn.amount, txn.currency as Currency)}
                   </Text>
                   <View
                     style={{
@@ -493,7 +495,7 @@ export default function TransactionManagement() {
                       color: "rgba(255, 255, 255, 0.6)",
                     }}
                   >
-                    Fee: {formatCurrency(txn.fee || 0, txn.currency)}
+                    Fee: {formatCurrency(txn.fee || 0, txn.currency as Currency)}
                   </Text>
                 )}
                 {txn.netAmount && (
@@ -503,7 +505,7 @@ export default function TransactionManagement() {
                       color: "rgba(255, 255, 255, 0.6)",
                     }}
                   >
-                    Net: {formatCurrency(txn.netAmount, txn.currency)}
+                    Net: {formatCurrency(txn.netAmount, txn.currency as Currency)}
                   </Text>
                 )}
               </View>

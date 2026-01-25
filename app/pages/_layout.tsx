@@ -153,9 +153,10 @@ export default function PagesLayout() {
             </View>
             {!isDesktop && (
               <CustomTabBar
-                state={createTabBarState()}
-                descriptors={createTabBarDescriptors()}
-                navigation={createTabBarNavigation()}
+                state={createTabBarState() as any}
+                descriptors={createTabBarDescriptors() as any}
+                navigation={createTabBarNavigation() as any}
+                insets={insets}
               />
             )}
           </View>
