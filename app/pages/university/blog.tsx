@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import { BlogPost } from '@/types/education';
 import { platformValues, isAndroid } from "../../../utils/platform";
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock blog posts
 const mockBlogPosts: BlogPost[] = [
@@ -110,6 +111,15 @@ export default function Blog() {
           paddingBottom: 40,
         }}
       >
+        {/* Back Button */}
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
+
         {/* Category Filters */}
         <ScrollView
           horizontal

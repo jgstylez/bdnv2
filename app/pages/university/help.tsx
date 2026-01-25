@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HelpArticle } from '@/types/education';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock help articles
 const mockArticles: HelpArticle[] = [
@@ -88,6 +89,15 @@ export default function Help() {
           paddingBottom: 40,
         }}
       >
+        {/* Back Button */}
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
+
         {/* Search */}
         <View style={{ marginBottom: 24 }}>
           <View

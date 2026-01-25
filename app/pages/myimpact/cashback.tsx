@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Cashback } from '@/types/impact';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock cashback data
 const mockCashback: Cashback[] = [
@@ -50,6 +52,7 @@ const mockCashback: Cashback[] = [
 ];
 
 export default function CashbackPage() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [selectedFilter, setSelectedFilter] = useState<"all" | Cashback["status"]>("all");
@@ -97,6 +100,15 @@ export default function CashbackPage() {
           paddingBottom: 40,
         }}
       >
+        {/* Back Button */}
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
+
         {/* Cashback Summary */}
         <View
           style={{

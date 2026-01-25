@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { VideoChannel, VideoContent } from '@/types/media';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock data
 const mockChannels: VideoChannel[] = [
@@ -75,6 +77,7 @@ const mockVideos: VideoContent[] = [
 ];
 
 export default function BDNTV() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [selectedTab, setSelectedTab] = useState<"channels" | "videos">("channels");
@@ -82,13 +85,32 @@ export default function BDNTV() {
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
+      {/* Back Button - Positioned outside ScrollView to ensure visibility */}
+      <View style={{ 
+        paddingHorizontal: isMobile ? 20 : 40, 
+        paddingTop: Platform.OS === "web" ? 20 : 16,
+        paddingBottom: 8,
+        backgroundColor: "#232323",
+        zIndex: 10,
+      }}>
+        <BackButton 
+          label="Back"
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          marginBottom={0}
+          onPress={() => {
+            router.back();
+          }}
+        />
+      </View>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: isMobile ? 20 : 40,
-          paddingTop: Platform.OS === "web" ? 20 : 36,
+          paddingTop: 0,
           paddingBottom: 40,
         }}
       >
+
         {/* Tabs */}
         <View
           style={{

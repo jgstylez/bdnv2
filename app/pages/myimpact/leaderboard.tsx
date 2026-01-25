@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform, Switch } from "react-native";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LeaderboardEntry } from '@/types/impact';
 import { HeroSection } from '@/components/layouts/HeroSection';
 import { useResponsive } from '@/hooks/useResponsive';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock leaderboard data - Top 20
 const mockLeaderboard: LeaderboardEntry[] = [
@@ -201,6 +203,7 @@ const USER_LEVELS = {
 };
 
 export default function Leaderboard() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const { isMobile, scrollViewBottomPadding } = useResponsive();
   const [selectedPeriod, setSelectedPeriod] = useState<"all-time" | "monthly" | "weekly">("all-time");
@@ -271,6 +274,15 @@ export default function Leaderboard() {
           paddingBottom: scrollViewBottomPadding,
         }}
       >
+        {/* Back Button */}
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
+
         {/* Hero Section */}
         <HeroSection
           title="Leaderboard"

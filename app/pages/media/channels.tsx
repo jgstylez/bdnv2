@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MediaChannel } from '@/types/media';
 import { showSuccessToast, showErrorToast, showInfoToast } from '@/lib/toast';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock channels
 const mockChannels: MediaChannel[] = [
@@ -203,6 +204,19 @@ export default function MediaChannels() {
           paddingBottom: 40,
         }}
       >
+        {/* Back Button */}
+        <View style={{ marginBottom: 24 }}>
+          <BackButton 
+            label="Back"
+            textColor="#ffffff"
+            iconColor="#ffffff"
+            marginBottom={0}
+            onPress={() => {
+              router.back();
+            }}
+          />
+        </View>
+
         {/* Category Filters */}
         <ScrollView
           horizontal

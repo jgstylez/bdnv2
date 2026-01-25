@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Badge, BadgeCategory, UserBadge, BADGE_DEFINITIONS } from '@/types/badges';
 import { BadgeIcon } from '@/components/BadgeIcon';
 import { HeroSection } from '@/components/layouts/HeroSection';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock user badges - in production, this would come from an API
 const mockUserBadges: UserBadge[] = [
@@ -70,6 +72,7 @@ const rarityColors: Record<string, string> = {
 };
 
 export default function Badges() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [selectedCategory, setSelectedCategory] = useState<BadgeCategory | "all">("all");
@@ -106,6 +109,15 @@ export default function Badges() {
           paddingBottom: 40,
         }}
       >
+        {/* Back Button */}
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
+
         {/* Hero Section */}
         <HeroSection
           title="Badges"

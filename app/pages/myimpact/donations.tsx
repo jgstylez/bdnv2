@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Donation, CommunityImpact } from '@/types/impact';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock donations
 const mockDonations: Donation[] = [
@@ -56,6 +58,7 @@ const mockCommunityImpact: CommunityImpact = {
 };
 
 export default function Donations() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [selectedFilter, setSelectedFilter] = useState<"all" | Donation["recipientType"]>("all");
@@ -123,6 +126,15 @@ export default function Donations() {
           paddingBottom: 40,
         }}
       >
+        {/* Back Button */}
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
+
         {/* Community Impact Summary */}
         <View
           style={{

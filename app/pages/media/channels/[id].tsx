@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { MediaChannel, MediaContentItem } from '@/types/media';
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
 import { showSuccessToast, showErrorToast, showInfoToast } from '@/lib/toast';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock channels data (same as channels.tsx)
 const mockChannels: MediaChannel[] = [
@@ -308,20 +309,14 @@ export default function ChannelDetail() {
         }}
       >
         {/* Header with Back Button */}
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 24,
-            alignSelf: "flex-start",
+        <BackButton 
+          label="Back to Channels"
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
           }}
-        >
-          <MaterialIcons name="arrow-back" size={24} color="#ffffff" />
-          <Text style={{ color: "#ffffff", fontSize: 16, marginLeft: 8, fontWeight: "600" }}>
-            Back to Channels
-          </Text>
-        </TouchableOpacity>
+        />
 
         {/* Channel Header Card */}
         <View

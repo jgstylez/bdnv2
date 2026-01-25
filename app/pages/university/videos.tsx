@@ -7,6 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Video } from '@/types/education';
 import { platformValues, isAndroid } from "../../../utils/platform";
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock videos
 const mockVideos: Video[] = [
@@ -90,6 +91,15 @@ export default function Videos() {
           paddingBottom: 40,
         }}
       >
+        {/* Back Button */}
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
+
         {/* Category Filters */}
         <ScrollView
           horizontal

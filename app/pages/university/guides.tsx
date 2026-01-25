@@ -7,6 +7,7 @@ import { Guide } from '@/types/education';
 import { useResponsive } from '@/hooks/useResponsive';
 import { platformValues, isAndroid } from "../../../utils/platform";
 import { OptimizedScrollView } from '@/components/optimized/OptimizedScrollView';
+import { BackButton } from '@/components/navigation/BackButton';
 
 // Mock guides
 const mockGuides: Guide[] = [
@@ -104,6 +105,14 @@ export default function Guides() {
           paddingBottom: scrollViewBottomPadding,
         }}
       >
+        {/* Back Button */}
+        <BackButton 
+          textColor="#ffffff"
+          iconColor="#ffffff"
+          onPress={() => {
+            router.back();
+          }}
+        />
 
         {/* Category Filters */}
         <ScrollView
