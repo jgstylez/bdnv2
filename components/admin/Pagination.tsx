@@ -12,6 +12,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
   showPageNumbers?: boolean;
   maxPageNumbers?: number;
+  alwaysShow?: boolean; // Force display even when totalPages <= 1
 }
 
 /**
@@ -26,10 +27,11 @@ export function Pagination({
   onPageChange,
   showPageNumbers = true,
   maxPageNumbers = 5,
+  alwaysShow = false,
 }: PaginationProps) {
   const { isMobile } = useResponsive();
 
-  if (totalPages <= 1) {
+  if (!alwaysShow && totalPages <= 1) {
     return null;
   }
 

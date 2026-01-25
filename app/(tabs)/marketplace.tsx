@@ -68,7 +68,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   const cardWidth = getCardWidth();
 
   const handleSeeAll = () => {
-    router.push(`/pages/products/list?section=${section || "all"}`);
+    router.push(`/pages/products/browse?section=${section || "all"}`);
   };
 
   return (

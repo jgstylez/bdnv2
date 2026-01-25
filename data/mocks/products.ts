@@ -746,15 +746,123 @@ export const getProductsByType = (type: "physical" | "digital" | "service"): Pro
 };
 
 /**
- * Get featured products (first 6)
+ * Simple seeded random number generator
  */
-export const getFeaturedProducts = (): Product[] => {
-  return mockProducts.slice(0, 6);
+const seededRandom = (seed: number) => {
+  let value = seed;
+  return () => {
+    value = (value * 9301 + 49297) % 233280;
+    return value / 233280;
+  };
 };
 
 /**
- * Get trending products (products 2-8)
+ * Shuffle array using seeded random (for consistency)
+ */
+const shuffleArrayWithSeed = <T>(array: T[], seed: number): T[] => {
+  const shuffled = [...array];
+  const random = seededRandom(seed);
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+/**
+ * Get a session-based seed that changes on each page load but is consistent within a render
+ * Uses current hour + day to create a seed that changes daily but is stable within the hour
+ */
+const getSessionSeed = (offset: number = 0): number => {
+  if (typeof window !== 'undefined') {
+    // Browser: use sessionStorage to maintain consistency within a session
+    const storageKey = `bdn_product_seed_${offset}`;
+    const stored = sessionStorage.getItem(storageKey);
+    if (stored) {
+      return parseInt(stored, 10);
+    }
+    const seed = Math.floor(Date.now() / 1000) + offset * 1000000;
+    sessionStorage.setItem(storageKey, seed.toString());
+    return seed;
+  }
+  // Server/Node: use time-based seed with offset
+  return Math.floor(Date.now() / 1000) + offset * 1000000;
+};
+
+/**
+ * Get random products ensuring a mix of types
+ */
+const getRandomMixedProducts = (count: number, seed: number, excludeIds: string[] = []): Product[] => {
+  // Filter out excluded products
+  const availableProducts = mockProducts.filter(p => !excludeIds.includes(p.id));
+  
+  if (availableProducts.length === 0) {
+    return [];
+  }
+  
+  // Shuffle all available products with seed
+  const shuffled = shuffleArrayWithSeed(availableProducts, seed);
+  
+  // Separate by type
+  const physical = shuffled.filter(p => p.productType === 'physical');
+  const digital = shuffled.filter(p => p.productType === 'digital');
+  const service = shuffled.filter(p => p.productType === 'service');
+  
+  const result: Product[] = [];
+  const usedIds = new Set<string>();
+  
+  // Distribute products evenly across types to ensure mix
+  let typeIndex = 0;
+  const types = [physical, digital, service];
+  
+  while (result.length < count) {
+    const currentType = types[typeIndex % 3];
+    const availableInType = currentType.filter(p => !usedIds.has(p.id));
+    
+    if (availableInType.length > 0) {
+      const product = availableInType[0];
+      result.push(product);
+      usedIds.add(product.id);
+    }
+    
+    typeIndex++;
+    
+    // If we've gone through all types and still need more, fill from remaining shuffled
+    if (typeIndex % 3 === 0 && result.length < count) {
+      const remaining = shuffled.filter(p => !usedIds.has(p.id));
+      if (remaining.length > 0) {
+        result.push(remaining[0]);
+        usedIds.add(remaining[0].id);
+      } else {
+        // No more products available
+        break;
+      }
+    }
+  }
+  
+  return result;
+};
+
+/**
+ * Get featured products (random mix of 6 products)
+ * Products change on each page load/session but remain consistent within a session
+ */
+export const getFeaturedProducts = (): Product[] => {
+  const seed = getSessionSeed(0);
+  return getRandomMixedProducts(6, seed);
+};
+
+/**
+ * Get trending products (random mix of 6 products, excluding featured)
+ * Products change on each page load/session but remain consistent within a session
+ * Ensures no overlap with featured products
  */
 export const getTrendingProducts = (): Product[] => {
-  return mockProducts.slice(2, 8);
+  // Get featured products first to exclude them
+  const featured = getFeaturedProducts();
+  const featuredIds = featured.map(p => p.id);
+  
+  // Use different seed offset and exclude featured products
+  const seed = getSessionSeed(1);
+  return getRandomMixedProducts(6, seed, featuredIds);
 };
