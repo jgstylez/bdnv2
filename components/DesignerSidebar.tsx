@@ -19,6 +19,7 @@ const navItems: NavItem[] = [
   { label: "Components", href: "/designer/components", icon: "widgets" },
   { label: "Spacing", href: "/designer/spacing", icon: "view-column" },
   { label: "Icons", href: "/designer/icons", icon: "image" },
+  { label: "Imagery", href: "/designer/imagery", icon: "photo-library" },
 ];
 
 export const DesignerSidebar: React.FC = () => {

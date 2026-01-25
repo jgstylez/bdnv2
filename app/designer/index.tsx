@@ -84,6 +84,14 @@ const designerSections = [
     color: "#ff4444",
     route: "/designer/icons",
   },
+  {
+    id: "imagery",
+    name: "Imagery",
+    description: "Photography, illustrations, and visual assets",
+    icon: "photo-library",
+    color: "#9c27b0",
+    route: "/designer/imagery",
+  },
 ];
 
 function DesignerDashboardContent() {
@@ -365,7 +373,7 @@ function DesignerDashboardContent() {
                   link: "/designer/brand-identity",
                 },
                 {
-                  title: "Design System",
+                  title: "Color Palette",
                   description: "Explore our complete design system",
                   icon: "palette",
                   link: "/designer/color-palette",

@@ -24,6 +24,7 @@ const designerMenuItems = [
   { label: "Components", icon: "widgets", href: "/designer/components" },
   { label: "Spacing", icon: "view-column", href: "/designer/spacing" },
   { label: "Icons", icon: "image", href: "/designer/icons" },
+  { label: "Imagery", icon: "photo-library", href: "/designer/imagery" },
 ];
 
 export const DesignerMenuPanel: React.FC<DesignerMenuPanelProps> = ({ isOpen, onClose }) => {

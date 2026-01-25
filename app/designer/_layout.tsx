@@ -31,6 +31,7 @@ export default function DesignerLayout() {
             <Stack.Screen name="components" />
             <Stack.Screen name="spacing" />
             <Stack.Screen name="icons" />
+            <Stack.Screen name="imagery" />
           </Stack>
         </View>
       </View>
