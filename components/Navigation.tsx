@@ -19,8 +19,8 @@ export const Navigation: React.FC<NavigationProps> = ({ includeSafeAreaPadding =
   const navItems = [
     { label: "Home", href: "/" },
     { label: "Features", href: "/web/features" },
-    { label: "Resources", href: "/web/learn" },
     { label: "Community", href: "/web/learn/community-impact" },
+    { label: "Resources", href: "/web/learn" },
     { label: "About", href: "/web/about" },
     { label: "Contact", href: "/web/contact" },
   ];

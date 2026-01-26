@@ -1202,6 +1202,7 @@ export default function Support() {
                   </Text>
                   <View style={{ gap: 12 }}>
                     <TouchableOpacity
+                      onPress={() => router.push("/web/faq")}
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
@@ -1217,7 +1218,7 @@ export default function Support() {
                           flex: 1,
                         }}
                       >
-                        Help Center
+                        FAQ
                       </Text>
                       <MaterialIcons
                         name="chevron-right"
@@ -1226,6 +1227,10 @@ export default function Support() {
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
+                      onPress={() => {
+                        // Already on support page, just ensure form tab is active
+                        setActiveTab("form");
+                      }}
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
@@ -1234,7 +1239,7 @@ export default function Support() {
                       }}
                     >
                       <MaterialIcons
-                        name="menu-book"
+                        name="support-agent"
                         size={20}
                         color="#ba9988"
                       />
@@ -1245,7 +1250,7 @@ export default function Support() {
                           flex: 1,
                         }}
                       >
-                        User Guides
+                        Contact Support
                       </Text>
                       <MaterialIcons
                         name="chevron-right"
@@ -1254,6 +1259,7 @@ export default function Support() {
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
+                      onPress={() => router.push("/web/community")}
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
@@ -1261,7 +1267,7 @@ export default function Support() {
                         paddingVertical: 8,
                       }}
                     >
-                      <MaterialIcons name="article" size={20} color="#ba9988" />
+                      <MaterialIcons name="forum" size={20} color="#ba9988" />
                       <Text
                         style={{
                           fontSize: 14,
@@ -1269,7 +1275,36 @@ export default function Support() {
                           flex: 1,
                         }}
                       >
-                        FAQ
+                        Community Forum
+                      </Text>
+                      <MaterialIcons
+                        name="chevron-right"
+                        size={20}
+                        color="rgba(255, 255, 255, 0.5)"
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => router.push("/pages/university/videos")}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 12,
+                        paddingVertical: 8,
+                      }}
+                    >
+                      <MaterialIcons
+                        name="play-circle"
+                        size={20}
+                        color="#ba9988"
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: "#ffffff",
+                          flex: 1,
+                        }}
+                      >
+                        Video Tutorials
                       </Text>
                       <MaterialIcons
                         name="chevron-right"

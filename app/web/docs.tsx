@@ -54,9 +54,9 @@ const docCategories = [
 ];
 
 const quickLinks = [
-  { title: "FAQ", icon: "help", href: "/support" },
-  { title: "Contact Support", icon: "support-agent", href: "/support" },
-  { title: "Community Forum", icon: "forum", href: "/community" },
+  { title: "FAQ", icon: "help", href: "/web/faq" },
+  { title: "Contact Support", icon: "support-agent", href: "/pages/support" },
+  { title: "Community Forum", icon: "forum", href: "/web/community" },
   { title: "Video Tutorials", icon: "play-circle", href: "/pages/university/videos" },
 ];
 
