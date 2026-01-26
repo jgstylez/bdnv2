@@ -46,7 +46,7 @@ export default function BDNPlus() {
         }}
       >
         <HeroSection
-          title="BDN+ Premium"
+          title="BDN+ Subscription"
           subtitle="Unlock enhanced features and exclusive benefits. Choose the plan that's right for you."
         />
 

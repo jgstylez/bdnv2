@@ -60,7 +60,7 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {
     id: "plus",
     tier: "plus",
-    name: "BDN+",
+    name: "BDN+ Premium",
     description: "Enhanced features for consumers",
     price: { monthly: 9.99, yearly: 99.99 },
     currency: "USD",

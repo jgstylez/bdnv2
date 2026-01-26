@@ -18,6 +18,7 @@ export default function Pricing() {
   const insets = useSafeAreaInsets();
   const { isMobile, paddingHorizontal } = useResponsive();
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+  const [expandedFaqIndex, setExpandedFaqIndex] = useState<number | null>(null);
 
   const handleSubscribe = (plan: SubscriptionPlan) => {
     if (plan.tier === "free") {
@@ -39,7 +40,7 @@ export default function Pricing() {
         }}
       >
         <PublicHeroSection
-          title="BDN+ Premium"
+          title="BDN+ Subscription"
           subtitle="Unlock enhanced features and exclusive benefits. Choose the plan that's right for you."
         />
 
@@ -444,7 +445,7 @@ export default function Pricing() {
               >
                 Frequently Asked Questions
               </Text>
-              <View style={{ gap: 20 }}>
+              <View style={{ gap: 12 }}>
                 {[
                   {
                     question: "What's included in the free plan?",
@@ -466,38 +467,76 @@ export default function Pricing() {
                     question: "Do you offer refunds?",
                     answer: "We offer a 30-day money-back guarantee for all BDN+ subscriptions. If you're not satisfied, contact our support team for a full refund.",
                   },
-                ].map((faq, index) => (
-                  <View
-                    key={index}
-                    style={{
-                      backgroundColor: "rgba(71, 71, 71, 0.4)",
-                      borderRadius: 16,
-                      padding: 24,
-                      borderWidth: 1,
-                      borderColor: "rgba(186, 153, 136, 0.3)",
-                    }}
-                  >
-                    <Text
+                ].map((faq, index) => {
+                  const isExpanded = expandedFaqIndex === index;
+                  return (
+                    <View
+                      key={index}
                       style={{
-                        fontSize: 18,
-                        fontWeight: "600",
-                        color: "#ffffff",
-                        marginBottom: 12,
+                        backgroundColor: "rgba(71, 71, 71, 0.4)",
+                        borderRadius: 16,
+                        borderWidth: 1,
+                        borderColor: "rgba(186, 153, 136, 0.3)",
+                        overflow: "hidden",
                       }}
                     >
-                      {faq.question}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: "rgba(255, 255, 255, 0.7)",
-                        lineHeight: 24,
-                      }}
-                    >
-                      {faq.answer}
-                    </Text>
-                  </View>
-                ))}
+                      <TouchableOpacity
+                        onPress={() => setExpandedFaqIndex(isExpanded ? null : index)}
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel={faq.question}
+                        accessibilityHint={isExpanded ? "Double tap to collapse" : "Double tap to expand"}
+                        accessibilityState={{ expanded: isExpanded }}
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: 24,
+                          minHeight: 44,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            fontWeight: "600",
+                            color: "#ffffff",
+                            flex: 1,
+                            paddingRight: 16,
+                          }}
+                        >
+                          {faq.question}
+                        </Text>
+                        <MaterialIcons
+                          name={isExpanded ? "expand-less" : "expand-more"}
+                          size={24}
+                          color="#ba9988"
+                        />
+                      </TouchableOpacity>
+                      {isExpanded && (
+                        <View
+                          style={{
+                            paddingHorizontal: 24,
+                            paddingBottom: 24,
+                            borderTopWidth: 1,
+                            borderTopColor: "rgba(186, 153, 136, 0.2)",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 15,
+                              color: "rgba(255, 255, 255, 0.7)",
+                              lineHeight: 24,
+                              paddingTop: 16,
+                            }}
+                          >
+                            {faq.answer}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  );
+                })}
               </View>
             </View>
           </View>
@@ -531,78 +570,88 @@ export default function Pricing() {
               >
                 What Our Members Say
               </Text>
-              <View
-                style={{
-                  flexDirection: isMobile ? "column" : "row",
-                  gap: 24,
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingRight: isMobile ? 0 : 20,
+                  gap: 20,
                 }}
               >
                 {[
                   {
                     quote: "BDN+ has been worth every penny. The enhanced cashback and analytics help me track my impact and save money at the same time.",
                     author: "Sarah Johnson",
-                    role: "BDN+ Member",
-                    rating: 5,
+                    role: "BDN+ Premium Member",
+                    verified: true,
                   },
                   {
                     quote: "As a business owner, BDN+ Business gave me the tools I needed to grow. The analytics dashboard alone is worth the subscription.",
                     author: "Marcus Williams",
                     role: "Business Owner",
-                    rating: 5,
+                    verified: true,
                   },
                   {
                     quote: "The free plan is great, but upgrading to BDN+ unlocked features that really help me maximize my economic impact.",
                     author: "Aisha Davis",
-                    role: "BDN+ Member",
-                    rating: 5,
+                    role: "BDN+ Premium Member",
+                    verified: true,
                   },
                 ].map((testimonial, index) => (
                   <View
                     key={index}
                     style={{
-                      flex: 1,
+                      width: isMobile ? width - 80 : 380,
                       backgroundColor: "rgba(71, 71, 71, 0.4)",
                       borderRadius: 20,
-                      padding: 24,
+                      padding: isMobile ? 24 : 32,
                       borderWidth: 1,
                       borderColor: "rgba(186, 153, 136, 0.3)",
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 4 },
+                      shadowOpacity: 0.2,
+                      shadowRadius: 12,
+                      elevation: 4,
                     }}
                   >
-                    <View style={{ flexDirection: "row", marginBottom: 16 }}>
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <MaterialIcons key={i} name="star" size={20} color="#ba9988" />
-                      ))}
-                    </View>
                     <Text
                       style={{
-                        fontSize: 20,
-                        color: "#ba9988",
-                        marginBottom: 12,
-                      }}
-                    >
-                      "
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 15,
+                        fontSize: isMobile ? 15 : 16,
                         color: "rgba(255, 255, 255, 0.9)",
                         lineHeight: 24,
-                        marginBottom: 20,
+                        marginBottom: 24,
                       }}
                     >
                       {testimonial.quote}
                     </Text>
-                    <View style={{ borderTopWidth: 1, borderTopColor: "rgba(186, 153, 136, 0.2)", paddingTop: 16 }}>
-                      <Text
+                    <View
+                      style={{
+                        borderTopWidth: 1,
+                        borderTopColor: "rgba(186, 153, 136, 0.2)",
+                        paddingTop: 20,
+                      }}
+                    >
+                      <View
                         style={{
-                          fontSize: 16,
-                          fontWeight: "600",
-                          color: "#ffffff",
-                          marginBottom: 4,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 8,
+                          marginBottom: 6,
                         }}
                       >
-                        {testimonial.author}
-                      </Text>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "600",
+                            color: "#ffffff",
+                          }}
+                        >
+                          {testimonial.author}
+                        </Text>
+                        {testimonial.verified && (
+                          <MaterialIcons name="verified" size={18} color="#ba9988" />
+                        )}
+                      </View>
                       <Text
                         style={{
                           fontSize: 13,
@@ -614,7 +663,7 @@ export default function Pricing() {
                     </View>
                   </View>
                 ))}
-              </View>
+              </ScrollView>
             </View>
           </View>
         </ScrollAnimatedView>
