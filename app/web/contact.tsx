@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, useWindowDimensions, TextInput, TouchableOpacity, Alert, Linking } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, TextInput, TouchableOpacity, Alert, Linking, Modal } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -9,23 +9,22 @@ import { PublicHeroSection } from '@/components/layouts/PublicHeroSection';
 import { ScrollAnimatedView } from '@/components/ScrollAnimatedView';
 import { DecorativePattern } from '@/components/placeholders/SVGPlaceholders';
 
-type UserType = "consumer" | "business" | "nonprofit" | "general";
-
 export default function Contact() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const isMobile = width < 768;
-  const [userType, setUserType] = useState<UserType>("general");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    contactType: "",
     subject: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [contactTypeDropdownOpen, setContactTypeDropdownOpen] = useState(false);
 
   const handleSubmit = () => {
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name || !formData.email || !formData.contactType || !formData.message) {
       Alert.alert("Required Fields", "Please fill in all required fields.");
       return;
     }
@@ -35,9 +34,16 @@ export default function Contact() {
     setTimeout(() => {
       setIsSubmitting(false);
       Alert.alert("Thank You", "We've received your message and will get back to you soon!");
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormData({ name: "", email: "", contactType: "", subject: "", message: "" });
     }, 1000);
   };
+
+  const contactTypes = [
+    { key: "consumer", label: "Consumer" },
+    { key: "business", label: "Business" },
+    { key: "nonprofit", label: "Nonprofit" },
+    { key: "general", label: "General Inquiry" },
+  ];
 
   const contactMethods = [
     {
@@ -75,113 +81,8 @@ export default function Contact() {
           subtitle="Have questions? We're here to help. Reach out and let's connect."
         />
 
-        {/* User Type Selector */}
-        <ScrollAnimatedView delay={100}>
-          <View
-            style={{
-              paddingHorizontal: isMobile ? 20 : 40,
-              paddingVertical: isMobile ? 40 : 60,
-              backgroundColor: "#232323",
-            }}
-          >
-            <View
-              style={{
-                maxWidth: 1000,
-                alignSelf: "center",
-                width: "100%",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: isMobile ? 16 : 18,
-                  fontWeight: "600",
-                  color: "#ffffff",
-                  marginBottom: 16,
-                  textAlign: "center",
-                }}
-              >
-                I'm contacting as:
-              </Text>
-              <View
-                style={{
-                  flexDirection: isMobile ? "column" : "row",
-                  gap: 12,
-                  justifyContent: "center",
-                  flexWrap: "wrap",
-                }}
-              >
-                {[
-                  { key: "consumer", label: "Consumer" },
-                  { key: "business", label: "Business" },
-                  { key: "nonprofit", label: "Nonprofit" },
-                  { key: "general", label: "General Inquiry" },
-                ].map((type) => (
-                  <TouchableOpacity
-                    key={type.key}
-                    onPress={() => setUserType(type.key as UserType)}
-                    accessible={true}
-                    accessibilityRole="button"
-                    accessibilityLabel={`Select ${type.label} as contact type`}
-                    accessibilityHint={`Double tap to select ${type.label}`}
-                    accessibilityState={{ selected: userType === type.key }}
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                    style={{
-                      backgroundColor: userType === type.key ? "#ba9988" : "#474747",
-                      paddingHorizontal: 24,
-                      paddingVertical: 12,
-                      borderRadius: 12,
-                      borderWidth: userType === type.key ? 0 : 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                      minHeight: 44,
-                      minWidth: 44,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        fontWeight: "600",
-                        color: userType === type.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                      }}
-                    >
-                      {type.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-              {userType === "business" && (
-                <TouchableOpacity
-                  onPress={() => {}}
-                  accessible={true}
-                  accessibilityRole="button"
-                  accessibilityLabel="Schedule a demo for business"
-                  accessibilityHint="Double tap to schedule a demo"
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                  style={{
-                    backgroundColor: "#ba9988",
-                    paddingVertical: 12,
-                    borderRadius: 12,
-                    alignItems: "center",
-                    marginTop: 20,
-                    minHeight: 44,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontWeight: "600",
-                      color: "#ffffff",
-                    }}
-                  >
-                    Schedule a Demo →
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        </ScrollAnimatedView>
-
         {/* Contact Methods */}
-        <ScrollAnimatedView delay={200}>
+        <ScrollAnimatedView delay={100}>
           <View
             style={{
               paddingHorizontal: isMobile ? 20 : 40,
@@ -200,7 +101,7 @@ export default function Contact() {
                 style={{
                   flexDirection: isMobile ? "column" : "row",
                   gap: 24,
-                  marginBottom: 60,
+                  marginBottom: 0,
                 }}
               >
                 {contactMethods.map((method, index) => (
@@ -294,7 +195,7 @@ export default function Contact() {
         </ScrollAnimatedView>
 
         {/* Contact Form */}
-        <ScrollAnimatedView delay={400}>
+        <ScrollAnimatedView delay={200}>
           <View
             style={{
               paddingHorizontal: isMobile ? 20 : 40,
@@ -402,6 +303,153 @@ export default function Contact() {
                       }}
                     />
                   </View>
+                </View>
+
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: "#ffffff",
+                      marginBottom: 8,
+                    }}
+                  >
+                    I'm contacting as *
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setContactTypeDropdownOpen(true)}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Select contact type"
+                    accessibilityHint="Double tap to open contact type dropdown"
+                    style={{
+                      backgroundColor: "#474747",
+                      borderRadius: 12,
+                      padding: 16,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.2)",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      minHeight: 44,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: formData.contactType ? "#ffffff" : "rgba(255, 255, 255, 0.4)",
+                      }}
+                    >
+                      {formData.contactType
+                        ? contactTypes.find((t) => t.key === formData.contactType)?.label
+                        : "Select contact type"}
+                    </Text>
+                    <MaterialIcons
+                      name={contactTypeDropdownOpen ? "keyboard-arrow-up" : "keyboard-arrow-down"}
+                      size={20}
+                      color="rgba(255, 255, 255, 0.6)"
+                    />
+                  </TouchableOpacity>
+                  <Modal
+                    visible={contactTypeDropdownOpen}
+                    transparent
+                    animationType="fade"
+                    onRequestClose={() => setContactTypeDropdownOpen(false)}
+                  >
+                    <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        backgroundColor: "rgba(0, 0, 0, 0.95)",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: 20,
+                      }}
+                      activeOpacity={1}
+                      onPress={() => setContactTypeDropdownOpen(false)}
+                    >
+                      <View
+                        style={{
+                          backgroundColor: "#474747",
+                          borderRadius: 16,
+                          width: "100%",
+                          maxWidth: 400,
+                          maxHeight: 400,
+                          borderWidth: 2,
+                          borderColor: "#5a5a68",
+                        }}
+                        onStartShouldSetResponder={() => true}
+                      >
+                        <View
+                          style={{
+                            padding: 16,
+                            borderBottomWidth: 2,
+                            borderBottomColor: "#5a5a68",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            backgroundColor: "#474747",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              fontWeight: "700",
+                              color: "#ffffff",
+                            }}
+                          >
+                            I'm contacting as
+                          </Text>
+                          <TouchableOpacity onPress={() => setContactTypeDropdownOpen(false)}>
+                            <MaterialIcons name="close" size={20} color="rgba(255, 255, 255, 0.6)" />
+                          </TouchableOpacity>
+                        </View>
+                        <ScrollView style={{ maxHeight: 300 }}>
+                          {contactTypes.map((type) => (
+                            <TouchableOpacity
+                              key={type.key}
+                              onPress={() => {
+                                setFormData({ ...formData, contactType: type.key });
+                                setContactTypeDropdownOpen(false);
+                              }}
+                              accessible={true}
+                              accessibilityRole="button"
+                              accessibilityLabel={`Select ${type.label} as contact type`}
+                              accessibilityHint={`Double tap to select ${type.label}`}
+                              style={{
+                                paddingVertical: 16,
+                                paddingHorizontal: 20,
+                                borderBottomWidth: 1,
+                                borderBottomColor: "#5a5a68",
+                                backgroundColor:
+                                  formData.contactType === type.key ? "rgba(186, 153, 136, 0.3)" : "#474747",
+                              }}
+                            >
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    fontSize: 14,
+                                    fontWeight: formData.contactType === type.key ? "600" : "400",
+                                    color: formData.contactType === type.key ? "#ba9988" : "#ffffff",
+                                  }}
+                                >
+                                  {type.label}
+                                </Text>
+                                {formData.contactType === type.key && (
+                                  <MaterialIcons name="check" size={20} color="#ba9988" />
+                                )}
+                              </View>
+                            </TouchableOpacity>
+                          ))}
+                        </ScrollView>
+                      </View>
+                    </TouchableOpacity>
+                  </Modal>
                 </View>
 
                 <View>

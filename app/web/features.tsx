@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, ScrollView, useWindowDimensions, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -18,7 +18,6 @@ export default function Features() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const isMobile = width < 768;
-  const [selectedFilter, setSelectedFilter] = useState<"all" | "consumer" | "business" | "nonprofit">("all");
 
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
@@ -35,83 +34,6 @@ export default function Features() {
           title="Platform Features"
           subtitle="Everything you need to support Black businesses and build economic power in one powerful platform."
         />
-
-        {/* User Type Filter */}
-        <ScrollAnimatedView delay={100}>
-          <View
-            style={{
-              paddingHorizontal: isMobile ? 20 : 40,
-              paddingVertical: isMobile ? 40 : 60,
-              backgroundColor: "#232323",
-            }}
-          >
-            <View
-              style={{
-                maxWidth: 1200,
-                alignSelf: "center",
-                width: "100%",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: isMobile ? 18 : 20,
-                  fontWeight: "600",
-                  color: "#ffffff",
-                  marginBottom: 16,
-                  textAlign: "center",
-                }}
-              >
-                Filter by User Type
-              </Text>
-              <View
-                style={{
-                  flexDirection: isMobile ? "column" : "row",
-                  gap: 12,
-                  justifyContent: "center",
-                  flexWrap: "wrap",
-                }}
-              >
-                {[
-                  { key: "all", label: "All Features" },
-                  { key: "consumer", label: "For Consumers" },
-                  { key: "business", label: "For Businesses" },
-                  { key: "nonprofit", label: "For Nonprofits" },
-                ].map((filter) => (
-                  <TouchableOpacity
-                    key={filter.key}
-                    onPress={() => setSelectedFilter(filter.key as any)}
-                    accessible={true}
-                    accessibilityRole="button"
-                    accessibilityLabel={`Filter features by ${filter.label.toLowerCase()}`}
-                    accessibilityHint={`Double tap to ${selectedFilter === filter.key ? "deselect" : "select"} ${filter.label.toLowerCase()} filter`}
-                    accessibilityState={{ selected: selectedFilter === filter.key }}
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                    style={{
-                      backgroundColor: selectedFilter === filter.key ? "#ba9988" : "#474747",
-                      paddingHorizontal: 24,
-                      paddingVertical: 12,
-                      borderRadius: 12,
-                      borderWidth: selectedFilter === filter.key ? 0 : 1,
-                      borderColor: "rgba(186, 153, 136, 0.2)",
-                      minHeight: 44,
-                      minWidth: 44,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        fontWeight: "600",
-                        color: selectedFilter === filter.key ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
-                      }}
-                    >
-                      {filter.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          </View>
-        </ScrollAnimatedView>
 
         <FintechFeaturesSection />
         <FeaturesSection />

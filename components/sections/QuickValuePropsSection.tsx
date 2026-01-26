@@ -27,7 +27,7 @@ const VALUE_PROPS = [
     description: "Connect with supporters, raise funds, and amplify your impact. Tools designed for community organizations.",
     benefits: ["Fundraising campaigns", "Community engagement", "Impact tracking", "Donor management"],
     cta: "Learn More",
-    href: "/web/community",
+    href: "/web/learn/community-impact",
   },
 ];
 

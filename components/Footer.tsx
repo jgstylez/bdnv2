@@ -45,7 +45,7 @@ export const Footer: React.FC = () => {
         { label: "Documentation", href: "/web/docs" },
         { label: "Knowledge Base", href: "/web/knowledge-base" },
         { label: "Blog", href: "/web/blog" },
-        { label: "Community", href: "/web/community" },
+        { label: "Community", href: "/web/learn/community-impact" },
       ],
     },
   ];
