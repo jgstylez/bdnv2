@@ -197,7 +197,7 @@ export const Footer: React.FC = () => {
                 color: "#ffffff",
               }}
             >
-              Get Started Free
+              Get Started Free →
             </Text>
           </TouchableOpacity>
         </View>

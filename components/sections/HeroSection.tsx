@@ -174,6 +174,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 position: "relative",
               }}
             >
+              <Image
+                source={require("@/assets/images/public/home_video_placeholder.jpg")}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+              />
               <View
                 style={{
                   position: "absolute",
@@ -203,28 +217,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     style={{ marginLeft: 4 }}
                   />
                 </View>
-              </View>
-              <View
-                style={{
-                  position: "absolute",
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                <MaterialIcons name="play-circle-filled" size={20} color="#ffffff" />
-                <Text
-                  style={{
-                    fontSize: isMobile ? 14 : 16,
-                    fontWeight: "600",
-                    color: "#ffffff",
-                  }}
-                >
-                  WHAT WE DO - WATCH VIDEO
-                </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -274,7 +266,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   letterSpacing: 0.5,
                 }}
               >
-                I'm a Consumer
+                I'm a Consumer →
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -307,7 +299,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   letterSpacing: 0.5,
                 }}
               >
-                I'm a Business
+                I'm a Business →
               </Text>
             </TouchableOpacity>
           </View>

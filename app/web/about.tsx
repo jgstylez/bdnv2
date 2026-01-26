@@ -58,6 +58,10 @@ export default function About() {
         <PublicHeroSection
           title="About Black Dollar Network"
           subtitle="Building economic power through innovation, collaboration, and community."
+          showVideo={true}
+          videoUrl=""
+          videoTitle="About Black Dollar Network"
+          videoPlaceholderImage={require("@/assets/images/public/about_bdn_placeholder.jpg")}
         />
 
         {/* Mission Section */}
@@ -409,7 +413,7 @@ export default function About() {
                       color: "#ffffff",
                     }}
                   >
-                    I'm a Consumer
+                    I'm a Consumer →
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -436,7 +440,7 @@ export default function About() {
                       color: "#ba9988",
                     }}
                   >
-                    I'm a Business
+                    I'm a Business →
                   </Text>
                 </TouchableOpacity>
               </View>

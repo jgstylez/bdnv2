@@ -444,7 +444,7 @@ export default function GroupEconomics() {
                     color: "#ffffff",
                   }}
                 >
-                  Get Started Free
+                  Get Started Free →
                 </Text>
               </TouchableOpacity>
             </View>

@@ -765,7 +765,7 @@ export default function FAQ() {
                       color: "#ffffff",
                     }}
                   >
-                    Contact Us
+                    Contact Us →
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -791,7 +791,7 @@ export default function FAQ() {
                       color: "#ba9988",
                     }}
                   >
-                    Get Started Free
+                    Get Started Free →
                   </Text>
                 </TouchableOpacity>
               </View>

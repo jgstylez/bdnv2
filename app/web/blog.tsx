@@ -314,7 +314,7 @@ export default function Blog() {
                                 color: "#ffffff",
                               }}
                             >
-                              Sign Up Free
+                              Sign Up Free →
                             </Text>
                           </TouchableOpacity>
                         </View>

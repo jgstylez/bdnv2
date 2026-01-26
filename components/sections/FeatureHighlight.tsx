@@ -108,7 +108,7 @@ export const FeatureHighlight: React.FC = () => {
                     color: "#ffffff",
                   }}
                 >
-                  Join the Community
+                  Join the Community →
                 </Text>
               </TouchableOpacity>
             </View>

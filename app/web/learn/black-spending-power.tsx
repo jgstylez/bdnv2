@@ -354,7 +354,7 @@ export default function BlackSpendingPower() {
                     color: "#ffffff",
                   }}
                 >
-                  Get Started Free
+                  Get Started Free →
                 </Text>
               </TouchableOpacity>
             </View>

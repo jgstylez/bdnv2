@@ -578,7 +578,7 @@ export default function LearnIndex() {
                     color: "#ffffff",
                   }}
                 >
-                  Subscribe to Newsletter
+                  Subscribe to Newsletter →
                 </Text>
               </TouchableOpacity>
             </View>

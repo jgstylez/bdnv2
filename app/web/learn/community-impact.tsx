@@ -432,7 +432,7 @@ export default function CommunityImpact() {
                       color: "#ffffff",
                     }}
                   >
-                    Get Started Free
+                    Get Started Free →
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -464,7 +464,7 @@ export default function CommunityImpact() {
                       color: "#ba9988",
                     }}
                   >
-                    List Your Business
+                    List Your Business →
                   </Text>
                 </TouchableOpacity>
               </View>

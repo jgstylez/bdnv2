@@ -34,6 +34,7 @@ export default function ForBusinesses() {
           showVideo={true}
           videoUrl=""
           videoTitle="See How BDN Works for Businesses"
+          videoPlaceholderImage={require("@/assets/images/public/for_business_video_placeholder.jpg")}
         >
           <ScrollAnimatedView delay={100}>
             <View
@@ -75,7 +76,7 @@ export default function ForBusinesses() {
                     color: "#ffffff",
                   }}
                 >
-                  List Your Business
+                  List Your Business →
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -272,7 +273,7 @@ export default function ForBusinesses() {
                     color: "#ffffff",
                   }}
                 >
-                  Learn More About Market Opportunity →
+                  Learn More →
                 </Text>
               </TouchableOpacity>
             </View>
@@ -408,7 +409,7 @@ export default function ForBusinesses() {
                     color: "#ffffff",
                   }}
                 >
-                  Learn More About Group Economics →
+                  Learn More →
                 </Text>
               </TouchableOpacity>
             </View>
@@ -776,7 +777,7 @@ export default function ForBusinesses() {
                       color: "#ffffff",
                     }}
                   >
-                    Browse Resources
+                    Browse Resources →
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -801,7 +802,7 @@ export default function ForBusinesses() {
                       color: "#ba9988",
                     }}
                   >
-                    BDN University
+                    BDN University →
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -871,7 +872,7 @@ export default function ForBusinesses() {
                     color: "#ffffff",
                   }}
                 >
-                  List Your Business
+                  List Your Business →
                 </Text>
               </TouchableOpacity>
             </View>

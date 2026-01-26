@@ -343,7 +343,7 @@ export default function Community() {
                     color: "#ffffff",
                   }}
                 >
-                  Join the Community
+                  Join the Community →
                 </Text>
               </TouchableOpacity>
             </View>

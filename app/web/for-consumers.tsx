@@ -35,6 +35,7 @@ export default function ForConsumers() {
           showVideo={true}
           videoUrl=""
           videoTitle="See How BDN Works for Consumers"
+          videoPlaceholderImage={require("@/assets/images/public/for_consumer_video_placeholder.jpg")}
         >
           <ScrollAnimatedView delay={100}>
             <View
@@ -72,7 +73,7 @@ export default function ForConsumers() {
                     color: "#ffffff",
                   }}
                 >
-                  Get Started Free
+                  Get Started Free →
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -101,7 +102,7 @@ export default function ForConsumers() {
                     color: "#ba9988",
                   }}
                 >
-                  View Features
+                  View Features →
                 </Text>
               </TouchableOpacity>
             </View>
@@ -253,7 +254,7 @@ export default function ForConsumers() {
                     color: "#ffffff",
                   }}
                 >
-                  Learn More About Black Spending Power →
+                  Learn More →
                 </Text>
               </TouchableOpacity>
             </View>
@@ -606,7 +607,7 @@ export default function ForConsumers() {
                     color: "#ffffff",
                   }}
                 >
-                  Learn More About Group Economics →
+                  Learn More →
                 </Text>
               </TouchableOpacity>
             </View>
@@ -751,7 +752,7 @@ export default function ForConsumers() {
                       color: "#ffffff",
                     }}
                   >
-                    Browse Resources
+                    Browse Resources →
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -776,75 +777,10 @@ export default function ForConsumers() {
                       color: "#ba9988",
                     }}
                   >
-                    BDN University
+                    BDN University →
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
-          </View>
-        </ScrollAnimatedView>
-
-        {/* Final CTA */}
-        <ScrollAnimatedView delay={1400}>
-          <View
-            style={{
-              paddingHorizontal: isMobile ? 20 : 40,
-              paddingVertical: isMobile ? 60 : 80,
-              backgroundColor: "#1a1a1a",
-            }}
-          >
-            <View
-              style={{
-                maxWidth: 800,
-                alignSelf: "center",
-                width: "100%",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: isMobile ? 32 : 44,
-                  fontWeight: "700",
-                  color: "#ffffff",
-                  marginBottom: 24,
-                  textAlign: "center",
-                  letterSpacing: -0.5,
-                }}
-              >
-                Start Your Journey Today
-              </Text>
-              <Text
-                style={{
-                  fontSize: isMobile ? 16 : 18,
-                  color: "rgba(255, 255, 255, 0.7)",
-                  textAlign: "center",
-                  marginBottom: 40,
-                  maxWidth: 600,
-                }}
-              >
-                Join thousands of members building economic power and creating lasting change in Black communities.
-              </Text>
-              <TouchableOpacity
-                onPress={() => router.push("/(auth)/signup")}
-                style={{
-                  backgroundColor: "#ba9988",
-                  paddingHorizontal: 48,
-                  paddingVertical: 18,
-                  borderRadius: 14,
-                  minWidth: 200,
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: "700",
-                    color: "#ffffff",
-                  }}
-                >
-                  Get Started Free
-                </Text>
-              </TouchableOpacity>
             </View>
           </View>
         </ScrollAnimatedView>

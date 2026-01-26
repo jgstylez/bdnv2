@@ -292,7 +292,7 @@ export default function Pricing() {
                       color: "#ffffff",
                     }}
                   >
-                    {plan.tier === "free" ? "Get Started Free" : "Subscribe"}
+                    {plan.tier === "free" ? "Get Started Free →" : "Subscribe →"}
                   </Text>
                 </TouchableOpacity>
               </View>

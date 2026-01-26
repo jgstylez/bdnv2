@@ -136,7 +136,7 @@ export default function Features() {
                       color: "#ffffff",
                     }}
                   >
-                    For Consumers
+                    For Consumers →
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -163,7 +163,7 @@ export default function Features() {
                       color: "#ba9988",
                     }}
                   >
-                    For Businesses
+                    For Businesses →
                   </Text>
                 </TouchableOpacity>
               </View>
