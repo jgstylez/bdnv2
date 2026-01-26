@@ -2007,11 +2007,13 @@ export default function Support() {
                         style={{
                           flexDirection: "row",
                           alignItems: "center",
-                          backgroundColor: "#232323",
+                          backgroundColor: "rgba(71, 71, 71, 0.4)",
                           borderRadius: 12,
                           paddingHorizontal: 12,
+                          paddingVertical: 12,
                           borderWidth: 1,
-                          borderColor: "rgba(186, 153, 136, 0.2)",
+                          borderColor: "rgba(186, 153, 136, 0.3)",
+                          gap: 12,
                         }}
                       >
                         <MaterialIcons
@@ -2022,12 +2024,10 @@ export default function Support() {
                         <TextInput
                           value={helpSearchQuery}
                           onChangeText={setHelpSearchQuery}
-                          placeholder="Search help articles..."
+                          placeholder="Search articles..."
                           placeholderTextColor="rgba(255, 255, 255, 0.4)"
                           style={{
                             flex: 1,
-                            paddingVertical: 10,
-                            paddingHorizontal: 8,
                             fontSize: 14,
                             color: "#ffffff",
                           }}
@@ -2086,6 +2086,20 @@ export default function Support() {
                           </TouchableOpacity>
                         ))}
                       </ScrollView>
+                    </View>
+
+                    {/* Popular Articles Section */}
+                    <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: "700",
+                          color: "#ffffff",
+                          marginBottom: 16,
+                        }}
+                      >
+                        Popular Articles
+                      </Text>
                     </View>
 
                     {/* Articles List */}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, useWindowDimensions, TouchableOpacity } from "react-native";
+import { View, Text, useWindowDimensions, TouchableOpacity, TextInput } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -98,6 +98,11 @@ export default function KnowledgeBase() {
     ),
   })).filter(category => category.articles.length > 0);
 
+  const filteredPopularArticles = popularArticles.filter(article =>
+    article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    article.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <View style={{ flex: 1, backgroundColor: "#232323" }}>
       <StatusBar style="light" />
@@ -114,8 +119,55 @@ export default function KnowledgeBase() {
           subtitle="Find answers to common questions and learn how to make the most of BDN."
         />
 
-        {/* Popular Articles */}
+        {/* Search Bar */}
         <ScrollAnimatedView delay={200}>
+          <View
+            style={{
+              paddingHorizontal: isMobile ? 20 : 40,
+              paddingTop: 40,
+              paddingBottom: 20,
+              backgroundColor: "#232323",
+            }}
+          >
+            <View
+              style={{
+                maxWidth: 1200,
+                alignSelf: "center",
+                width: "100%",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  backgroundColor: "rgba(71, 71, 71, 0.4)",
+                  borderRadius: 12,
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  borderWidth: 1,
+                  borderColor: "rgba(186, 153, 136, 0.3)",
+                  gap: 12,
+                }}
+              >
+                <MaterialIcons name="search" size={20} color="rgba(255, 255, 255, 0.5)" />
+                <TextInput
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder="Search articles..."
+                  placeholderTextColor="rgba(255, 255, 255, 0.4)"
+                  style={{
+                    flex: 1,
+                    fontSize: 15,
+                    color: "#ffffff",
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollAnimatedView>
+
+        {/* Popular Articles */}
+        <ScrollAnimatedView delay={250}>
           <View
             style={{
               paddingHorizontal: isMobile ? 20 : 40,
@@ -148,7 +200,8 @@ export default function KnowledgeBase() {
                   gap: 16,
                 }}
               >
-                {popularArticles.map((article, index) => (
+                {filteredPopularArticles.length > 0 ? (
+                  filteredPopularArticles.map((article, index) => (
                   <TouchableOpacity
                     key={index}
                     accessible={true}
@@ -205,58 +258,39 @@ export default function KnowledgeBase() {
                     </View>
                     <MaterialIcons name="chevron-right" size={20} color="rgba(255, 255, 255, 0.5)" />
                   </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          </View>
-        </ScrollAnimatedView>
-
-        {/* Search Bar */}
-        <ScrollAnimatedView delay={250}>
-          <View
-            style={{
-              paddingHorizontal: isMobile ? 20 : 40,
-              paddingBottom: 20,
-              backgroundColor: "#232323",
-            }}
-          >
-            <View
-              style={{
-                maxWidth: 1200,
-                alignSelf: "center",
-                width: "100%",
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "rgba(71, 71, 71, 0.4)",
-                  borderRadius: 12,
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                  borderWidth: 1,
-                  borderColor: "rgba(186, 153, 136, 0.3)",
-                  gap: 12,
-                }}
-              >
-                <MaterialIcons name="search" size={20} color="rgba(255, 255, 255, 0.5)" />
-                <Text
-                  style={{
-                    flex: 1,
-                    fontSize: 15,
-                    color: "rgba(255, 255, 255, 0.7)",
-                  }}
-                >
-                  Search articles...
-                </Text>
+                  ))
+                ) : (
+                  <View
+                    style={{
+                      width: "100%",
+                      padding: 40,
+                      alignItems: "center",
+                      backgroundColor: "rgba(71, 71, 71, 0.4)",
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      borderColor: "rgba(186, 153, 136, 0.3)",
+                    }}
+                  >
+                    <MaterialIcons name="search-off" size={32} color="rgba(186, 153, 136, 0.5)" />
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: "rgba(255, 255, 255, 0.6)",
+                        textAlign: "center",
+                        marginTop: 12,
+                      }}
+                    >
+                      No popular articles found matching your search
+                    </Text>
+                  </View>
+                )}
               </View>
             </View>
           </View>
         </ScrollAnimatedView>
 
         {/* Knowledge Categories */}
-        <ScrollAnimatedView delay={300}>
+        <ScrollAnimatedView delay={350}>
           <View
             style={{
               paddingHorizontal: isMobile ? 20 : 40,
@@ -430,7 +464,7 @@ export default function KnowledgeBase() {
         </ScrollAnimatedView>
 
         {/* Contact Support CTA */}
-        <ScrollAnimatedView delay={400}>
+        <ScrollAnimatedView delay={450}>
           <View
             style={{
               paddingHorizontal: isMobile ? 20 : 40,
