@@ -5,13 +5,13 @@ import { Linking } from "react-native";
 import { usePathname } from 'expo-router';
 import { colors, spacing, typography } from '@/constants/theme';
 
-const OPERATOR_URL = "https://operator.blackdollarnetwork.com";
+const DESIGNER_URL = "https://designer.blackdollarnetwork.com";
 const MAIN_DOMAIN = "https://blackdollarnetwork.com";
 
 /**
- * Checks if we're currently on the operator or admin subdomain (production/sandbox only, not localhost)
+ * Checks if we're currently on the designer subdomain (production/sandbox only, not localhost)
  */
-function isOperatorSubdomain(): boolean {
+function isDesignerSubdomain(): boolean {
   if (Platform.OS !== 'web' || typeof window === 'undefined' || !window.location) {
     return false;
   }
@@ -23,15 +23,13 @@ function isOperatorSubdomain(): boolean {
     return false;
   }
   
-  return hostname === 'operator.blackdollarnetwork.com' || 
-         hostname === 'admin.blackdollarnetwork.com' ||
-         (hostname.startsWith('operator.') && !hostname.includes('localhost')) ||
-         (hostname.startsWith('admin.') && !hostname.includes('localhost'));
+  return hostname === 'designer.blackdollarnetwork.com' ||
+         (hostname.startsWith('designer.') && !hostname.includes('localhost'));
 }
 
 /**
  * Checks if we're on localhost (development environment)
- * Also checks for operator.localhost and admin.localhost to simulate subdomain behavior
+ * Also checks for designer.localhost to simulate subdomain behavior
  */
 function isLocalhost(): boolean {
   if (Platform.OS !== 'web' || typeof window === 'undefined' || !window.location) {
@@ -39,30 +37,28 @@ function isLocalhost(): boolean {
   }
 
   const hostname = window.location.hostname.toLowerCase();
-  // Check for localhost, 127.0.0.1, operator.localhost, or admin.localhost (simulating subdomain)
+  // Check for localhost, 127.0.0.1, or designer.localhost (simulating subdomain)
   return (
     hostname === 'localhost' || 
     hostname === '127.0.0.1' || 
     hostname.startsWith('localhost:') ||
-    hostname === 'operator.localhost' ||
-    hostname === 'admin.localhost' ||
-    hostname.startsWith('operator.localhost:') ||
-    hostname.startsWith('admin.localhost:')
+    hostname === 'designer.localhost' ||
+    hostname.startsWith('designer.localhost:')
   );
 }
 
-interface AdminRedirectProps {
+interface DesignerRedirectProps {
   children: React.ReactNode;
 }
 
 /**
- * AdminRedirect component that handles context-aware redirects for /admin route
- * - Localhost: Shows admin dashboard locally (no redirect)
- * - Operator/Admin subdomain: Redirects to blackdollarnetwork.com/admin
- * - Sandbox/Other domains with /admin: Redirects to blackdollarnetwork.com/admin
- * - Main domain with /admin: Shows admin dashboard (no redirect)
+ * DesignerRedirect component that handles context-aware redirects for /designer route
+ * - Localhost: Shows designer dashboard locally (no redirect)
+ * - Designer subdomain: Redirects to blackdollarnetwork.com/designer
+ * - Sandbox/Other domains with /designer: Redirects to blackdollarnetwork.com/designer
+ * - Main domain with /designer: Shows designer dashboard (no redirect)
  */
-export function AdminRedirect({ children }: AdminRedirectProps) {
+export function DesignerRedirect({ children }: DesignerRedirectProps) {
   const pathname = usePathname();
   
   // Initialize shouldShowContent based on synchronous check to avoid flash
@@ -75,20 +71,16 @@ export function AdminRedirect({ children }: AdminRedirectProps) {
     const isLocal = hostname === 'localhost' || 
                     hostname === '127.0.0.1' || 
                     hostname.startsWith('localhost:') ||
-                    hostname === 'operator.localhost' ||
-                    hostname === 'admin.localhost' ||
-                    hostname.startsWith('operator.localhost:') ||
-                    hostname.startsWith('admin.localhost:');
-    const isOperator = hostname === 'operator.blackdollarnetwork.com' || 
-                       hostname === 'admin.blackdollarnetwork.com' ||
-                       hostname.startsWith('operator.') ||
-                       hostname.startsWith('admin.');
-    // On main domain /admin path, show content. Otherwise redirect.
+                    hostname === 'designer.localhost' ||
+                    hostname.startsWith('designer.localhost:');
+    const isDesigner = hostname === 'designer.blackdollarnetwork.com' || 
+                       (hostname.startsWith('designer.') && !hostname.includes('localhost'));
+    // On main domain /designer path, show content. Otherwise redirect.
     const isOnMainDomainPath = hostname === 'blackdollarnetwork.com' || hostname === 'www.blackdollarnetwork.com' || hostname.includes('sandbox.blackdollarnetwork.com');
     
     return {
-      shouldShowContent: isLocal || (isOnMainDomainPath && window.location.pathname.startsWith('/admin')),
-      shouldRedirect: !isLocal && (isOperator || !isOnMainDomainPath || !window.location.pathname.startsWith('/admin')),
+      shouldShowContent: isLocal || (isOnMainDomainPath && window.location.pathname.startsWith('/designer')),
+      shouldRedirect: !isLocal && (isDesigner || !isOnMainDomainPath || !window.location.pathname.startsWith('/designer')),
       isRedirecting: false,
     };
   };
@@ -104,12 +96,12 @@ export function AdminRedirect({ children }: AdminRedirectProps) {
       if (Platform.OS !== 'web') {
         setIsRedirecting(true);
         try {
-          const canOpen = await Linking.canOpenURL(OPERATOR_URL);
+          const canOpen = await Linking.canOpenURL(DESIGNER_URL);
           if (canOpen) {
-            await Linking.openURL(OPERATOR_URL);
+            await Linking.openURL(DESIGNER_URL);
           }
         } catch (error) {
-          console.error('Failed to redirect to operator site:', error);
+          console.error('Failed to redirect to designer site:', error);
           setIsRedirecting(false);
         }
         return;
@@ -122,28 +114,28 @@ export function AdminRedirect({ children }: AdminRedirectProps) {
 
       const hostname = window.location.hostname.toLowerCase();
 
-      // Case 1: On localhost (including operator.localhost and admin.localhost) - don't redirect, show content
+      // Case 1: On localhost (including designer.localhost) - don't redirect, show content
       // Check this FIRST to prevent localhost subdomains from being treated as production subdomains
       if (isLocalhost()) {
         setShouldRedirect(false);
         setIsRedirecting(false);
         setShouldShowContent(true);
         if (__DEV__) {
-          console.log('[AdminRedirect] On localhost, keeping local');
+          console.log('[DesignerRedirect] On localhost, keeping local');
         }
         return;
       }
 
-      // Case 2: Already on operator/admin subdomain (production/sandbox) - redirect to main domain path
-      if (isOperatorSubdomain()) {
+      // Case 2: Already on designer subdomain (production/sandbox) - redirect to main domain path
+      if (isDesignerSubdomain()) {
         setIsRedirecting(true);
         setShouldRedirect(true);
         setShouldShowContent(false);
         try {
           if (__DEV__) {
-            console.log('[AdminRedirect] Redirecting from operator/admin subdomain to main domain');
+            console.log('[DesignerRedirect] Redirecting from designer subdomain to main domain');
           }
-          window.location.href = `${MAIN_DOMAIN}/admin${window.location.pathname === '/' ? '' : window.location.pathname}${window.location.search}`;
+          window.location.href = `${MAIN_DOMAIN}/designer${window.location.pathname === '/' ? '' : window.location.pathname}${window.location.search}`;
         } catch (error) {
           console.error('Failed to redirect:', error);
           setIsRedirecting(false);
@@ -152,29 +144,29 @@ export function AdminRedirect({ children }: AdminRedirectProps) {
         return;
       }
 
-      // Case 3: On sandbox or any other domain with /admin path - redirect to main domain /admin path
-      // (This handles cases where someone accesses /admin on a non-subdomain URL)
-      // Only redirect if we're actually on the /admin route
-      if (pathname?.startsWith('/admin')) {
+      // Case 3: On sandbox or any other domain with /designer path - redirect to main domain /designer path
+      // (This handles cases where someone accesses /designer on a non-subdomain URL)
+      // Only redirect if we're actually on the /designer route
+      if (pathname?.startsWith('/designer')) {
         setIsRedirecting(true);
         setShouldRedirect(true);
         setShouldShowContent(false);
         
         try {
           if (__DEV__) {
-            console.log('[AdminRedirect] Redirecting from', hostname, 'to', `${MAIN_DOMAIN}/admin`);
+            console.log('[DesignerRedirect] Redirecting from', hostname, 'to', `${MAIN_DOMAIN}/designer`);
           }
-          const remainingPath = pathname === '/admin' ? '' : pathname.replace('/admin', '');
-          window.location.href = `${MAIN_DOMAIN}/admin${remainingPath}${window.location.search}`;
+          const remainingPath = pathname === '/designer' ? '' : pathname.replace('/designer', '');
+          window.location.href = `${MAIN_DOMAIN}/designer${remainingPath}${window.location.search}`;
         } catch (error) {
-          console.error('Failed to redirect to operator site:', error);
+          console.error('Failed to redirect to designer site:', error);
           setIsRedirecting(false);
           setShouldShowContent(true); // Fallback to showing content on error
         }
         return;
       }
       
-      // Not on /admin path, show content (or let app handle routing)
+      // Not on /designer path, show content (or let app handle routing)
       setShouldShowContent(true);
       setShouldRedirect(false);
       setIsRedirecting(false);
@@ -183,7 +175,7 @@ export function AdminRedirect({ children }: AdminRedirectProps) {
     checkAndRedirect();
   }, [pathname]);
 
-  // If we're on operator subdomain or localhost, show the admin dashboard
+  // If we're on designer subdomain or localhost, show the designer dashboard
   if (shouldShowContent && !shouldRedirect && !isRedirecting) {
     return <>{children}</>;
   }
@@ -200,7 +192,7 @@ export function AdminRedirect({ children }: AdminRedirectProps) {
           color: colors.text.secondary,
         }}
       >
-        Redirecting to operator portal...
+        Redirecting to designer portal...
       </Text>
     </View>
   );

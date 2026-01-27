@@ -10,6 +10,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { DesignerRedirect } from '@/components/DesignerRedirect';
 
 // Mock designer stats
 const mockStats = {
@@ -438,5 +439,9 @@ function DesignerDashboardContent() {
 }
 
 export default function DesignerDashboard() {
-  return <DesignerDashboardContent />;
+  return (
+    <DesignerRedirect>
+      <DesignerDashboardContent />
+    </DesignerRedirect>
+  );
 }

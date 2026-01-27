@@ -459,6 +459,19 @@ Business Receives:
 - 📋 Send USD from Hub → Business banks (planned)
 - 📋 Handle cash-out requests (BLKD → USD, 5% fee) (planned)
 
+**i-payout API Integration Details:**
+- 📋 **API Base URL**: `https://merchantapi.testewallet.com/api/v1` (test) / `https://merchantapi.ewallet.com/api/v1` (production)
+- 📋 **Authentication**: Bearer token with X-MerchantId header
+- 📋 **Key Endpoints**:
+  - `POST /api/v1/beneficiaries` - Create beneficiary
+  - `POST /api/v1/transfermethods/beneficiaries/{token}/bank-accounts` - Add bank account
+  - `POST /api/v1/transfers` - Create transfer (RegularACH, SameDayACH, RealtimeACH, etc.)
+  - `POST /api/v1/transfers/{token}/approve` - Approve transfer (if autoApprove: false)
+  - `GET /api/v1/transfers/{token}` - Get transfer status
+- 📋 **Webhooks**: Real-time notifications for transfer status changes
+- 📋 **Security**: All bank data managed exclusively by i-payout, BDN only stores tokenized references
+- 📋 **See**: `action_plans/ipayout-integration-guide.md` for complete integration details
+
 ## Backend API Development
 
 **Status:** ⏳ **In Progress** - Only Products API implemented

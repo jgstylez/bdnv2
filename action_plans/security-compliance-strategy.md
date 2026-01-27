@@ -245,58 +245,147 @@ BLKD Wallet (Proprietary Internal System):
 
 **iPayOuts Integration** (`server/src/integrations/ipayouts.ts`):
 
+**API Base URLs:**
+- Test: `https://merchantapi.testewallet.com/api/v1`
+- Production: `https://merchantapi.ewallet.com/api/v1`
+
+**Authentication:**
+- Bearer token authentication with `X-MerchantId` header
+- Token obtained via `POST /api/v1/auth/token`
+- Tokens expire after 3600 seconds (refresh before expiration)
+
+**Key API Endpoints:**
+- `POST /api/v1/beneficiaries` - Create beneficiary (returns `beneficiaryToken`)
+- `POST /api/v1/transfermethods/beneficiaries/{token}/bank-accounts` - Add bank account (returns `transferMethodToken`)
+- `POST /api/v1/transfers` - Create transfer (supports RegularACH, SameDayACH, RealtimeACH, etc.)
+- `POST /api/v1/transfers/{token}/approve` - Approve transfer (if `autoApprove: false`)
+- `GET /api/v1/transfers/{token}` - Get transfer status
+- Webhooks: Real-time notifications for transfer events
+
 ```typescript
 /**
  * iPayOuts Integration
  * 
- * CRITICAL: Card and bank information is managed EXCLUSIVELY by iPayOuts
- * BDN system NEVER receives, stores, or processes raw card/bank data
+ * CRITICAL: Bank information is managed EXCLUSIVELY by i-payout
+ * BDN system NEVER receives, stores, or processes raw bank data
  * 
  * Responsibilities:
- * - ACH/bank transfers (incoming and outgoing)
- * - Bank account management (add, update, delete)
- * - Bank account verification
- * - All bank data storage and encryption handled by iPayOuts
+ * - Beneficiary management (create, retrieve, update)
+ * - Transfer method management (bank accounts, credit cards, wire profiles)
+ * - ACH/bank transfers (RegularACH, SameDayACH, RealtimeACH, International, Swift Wire)
+ * - Transfer approval and status tracking
+ * - Webhook processing for real-time updates
+ * - All bank data storage and encryption handled by i-payout
+ * 
+ * See: action_plans/ipayout-integration-guide.md for complete API documentation
  */
 class IPayOutsClient {
   /**
-   * Add bank account - Data sent directly to iPayOuts
-   * BDN receives only tokenized reference back
+   * Create beneficiary - Returns beneficiaryToken for future operations
    */
-  async addBankAccount(params: {
-    userId: string;
-    accountNumber: string; // Sent to iPayOuts, never stored in BDN
-    routingNumber: string; // Sent to iPayOuts, never stored in BDN
-    accountType: 'checking' | 'savings';
-    accountHolderName: string;
-  }): Promise<{ token: string; last4: string; bankName: string }> {
-    // Call iPayOuts API with bank data
-    // iPayOuts stores and manages all bank account data
-    // Return only tokenized reference and display info to BDN
+  async createBeneficiary(params: {
+    username: string;        // Unique identifier
+    firstName: string;
+    lastName: string;
+    email?: string;
+    phone?: string;
+    country: string;
+    address1?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+  }): Promise<{ beneficiaryToken: string }> {
+    // POST /api/v1/beneficiaries
+    // Returns beneficiaryToken - store this in BDN database
   }
   
   /**
-   * Update bank account - Managed via iPayOuts API
+   * Add bank account - Data sent directly to i-payout
+   * BDN receives only tokenized reference (transferMethodToken) back
    */
-  async updateBankAccount(token: string, updates: Partial<BankAccountData>): Promise<void> {
-    // All updates go through iPayOuts API
-    // BDN never receives full account data
+  async addBankAccount(
+    beneficiaryToken: string,
+    params: {
+      accountHolderName: string;
+      accountNickName: string;
+      accountCurrency: string;
+      accountNumber: string;      // Sent to i-payout, NEVER stored in BDN
+      accountType1: 'personal' | 'business';
+      accountType2: 'checking' | 'savings';
+      bankName: string;
+      bankCountry: string;
+      routingNumber: string;       // Sent to i-payout, NEVER stored in BDN
+      branchAddress?: string;
+      beneficiaryFirstName: string;
+      beneficiaryLastName: string;
+      beneficiaryCountry: string;
+      beneficiaryAddress1: string;
+      beneficiaryState?: string;
+      beneficiaryCity?: string;
+      beneficiaryZipCode?: string;
+    }
+  ): Promise<{ token: string }> {
+    // POST /api/v1/transfermethods/beneficiaries/{beneficiaryToken}/bank-accounts
+    // i-payout stores and manages all bank account data
+    // Return only transferMethodToken and display info to BDN
   }
   
   /**
-   * Process ACH transfer - Bank data managed by iPayOuts
+   * Create transfer - Bank data managed by i-payout via tokens
    */
-  async processACHTransfer(params: {
-    fromToken: string; // Tokenized bank account reference
-    toToken: string; // Tokenized bank account reference
-    amount: number;
-    currency: 'USD';
-  }): Promise<{ transactionId: string }> {
-    // Process via iPayOuts API
+  async createTransfer(params: {
+    merchantTransactionId: string;  // BDN transaction ID
+    beneficiaryToken: string;
+    autoApprove?: boolean;          // true = auto-approve, false = manual approval
+    comments?: string;
+    dateExpire?: string;
+    destinationAmount: number;
+    destinationCurrency: string;
+    destinationType: string;        // "RegularACH", "SameDayACH", "RealtimeACH", etc.
+    destinationToken?: string;      // Use existing transfer method token
+    bankAccount?: any;              // Or provide bank account details inline
+  }): Promise<{
+    token: string;                  // Transfer token for tracking
+    statusId: number;
+    customerFee: number;
+    merchantFee: number;
+    fxRate?: number;
+  }> {
+    // POST /api/v1/transfers
     // Bank account data never touches BDN system
+    // Returns transferToken - store this in BDN database for tracking
+  }
+  
+  /**
+   * Approve transfer - For manual approval workflow
+   */
+  async approveTransfer(transferToken: string): Promise<void> {
+    // POST /api/v1/transfers/{transferToken}/approve
+    // Only needed if autoApprove: false
+  }
+  
+  /**
+   * Get transfer status - Monitor transfer progress
+   */
+  async getTransfer(transferToken: string): Promise<{
+    statusId: number;
+    status: string;
+    dateCompleted?: string;
+  }> {
+    // GET /api/v1/transfers/{transferToken}
   }
 }
 ```
+
+**Security Implementation Notes:**
+- ⚠️ **NEVER store**: Full account numbers, routing numbers, or any sensitive bank data
+- ✅ **ONLY store**: `beneficiaryToken`, `transferMethodToken`, `transferToken` (tokenized references)
+- ✅ **Store display info**: Bank name, account type, last 4 digits (if provided by i-payout)
+- ✅ **Webhook security**: Verify HMAC-SHA256 signatures using webhook secret
+- ✅ **Token management**: Implement automatic token refresh before expiration
+- ✅ **Error handling**: Never expose sensitive data in error messages
+
+**See**: `action_plans/ipayout-integration-guide.md` for complete implementation guide with code examples, database schema, and security best practices.
 
 **Ecom Payments Integration** (`server/src/integrations/ecom-payments.ts`):
 

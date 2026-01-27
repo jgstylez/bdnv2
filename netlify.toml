@@ -1,0 +1,98 @@
+[build]
+  command = "npm run build"
+  publish = ".output/public"
+
+# Redirect rules - subdomains redirect to main domain paths
+# Production subdomains
+[[redirects]]
+  from = "https://developer.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/developer/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://operator.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/admin/:splat"
+  status = 301
+  force = true
+
+# Support admin subdomain as alias for operator (if DNS is configured)
+[[redirects]]
+  from = "https://admin.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/admin/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://designer.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/designer/:splat"
+  status = 301
+  force = true
+
+# Sandbox subdomains (redirect to main domain paths)
+[[redirects]]
+  from = "https://developer.sandbox.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/developer/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://operator.sandbox.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/admin/:splat"
+  status = 301
+  force = true
+
+# Support admin sandbox subdomain as alias
+[[redirects]]
+  from = "https://admin.sandbox.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/admin/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://designer.sandbox.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/designer/:splat"
+  status = 301
+  force = true
+
+# Also handle HTTP redirects (before HTTPS is forced)
+[[redirects]]
+  from = "http://developer.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/developer/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://operator.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/admin/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://admin.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/admin/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://designer.blackdollarnetwork.com/*"
+  to = "https://blackdollarnetwork.com/designer/:splat"
+  status = 301
+  force = true
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Headers for API routes
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"

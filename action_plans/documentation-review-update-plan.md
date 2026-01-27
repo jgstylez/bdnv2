@@ -43,11 +43,13 @@ This document reviews all action plans and technical documentation to identify:
 
 **Documented In:**
 - `bdn-2.0-comprehensive-technical-plan.md` - Describes Ecom Payments and iPayOuts integration
+- `ipayout-integration-guide.md` - **NEW** - Complete i-payout Full API Integration guide (created January 27, 2026)
 - `security-compliance-strategy.md` - Details PCI compliance for processors
 
 **Actual Implementation:**
 - ❌ **NOT IMPLEMENTED** - No `server/src/integrations/ecom-payments.ts` exists
 - ❌ **NOT IMPLEMENTED** - No `server/src/integrations/ipayouts.ts` exists
+- ✅ **DOCUMENTATION UPDATED** - Complete integration guide created at `ipayout-integration-guide.md` with API endpoints, authentication, beneficiary management, transfer methods, transfers, webhooks, error handling, and implementation examples
 - ❌ **NOT IMPLEMENTED** - No payment processor SDKs integrated
 - ✅ **PARTIAL** - Payment method types defined in types
 - ✅ **PARTIAL** - PCI compliance documentation exists

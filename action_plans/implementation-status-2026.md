@@ -68,7 +68,7 @@
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Ecom Payments Integration | 📋 Planned | Documented but not integrated |
-| iPayOuts Integration | 📋 Planned | Documented but not integrated |
+| iPayOuts Integration | 📋 Planned | Documented but not integrated. See `ipayout-integration-guide.md` for API endpoints, authentication, beneficiary management, transfer methods, transfers, and webhooks |
 | Hub Wallet | 📋 Planned | Documented but not implemented |
 | Payment Method Management | ⏳ In Progress | Types defined, no backend implementation |
 
@@ -189,7 +189,7 @@
 | Shopify Integration | 📋 Planned | Documented but not implemented |
 | WooCommerce Integration | 📋 Planned | Documented but not implemented |
 | Printful Integration | 📋 Planned | Documented but not implemented |
-| Payment Processors | 📋 Planned | Ecom Payments, iPayOuts documented |
+| Payment Processors | 📋 Planned | Ecom Payments, iPayOuts documented. See `ipayout-integration-guide.md` for complete API integration details |
 
 ---
 
@@ -219,6 +219,8 @@
 
 1. **Backend Transaction Engine** - Unified payment processing system
 2. **Payment Processor Integration** - Ecom Payments and iPayOuts
+   - i-payout: Full API integration required (beneficiaries, transfer methods, transfers, webhooks)
+   - See `action_plans/ipayout-integration-guide.md` for complete implementation guide
 3. **Firestore Integration** - Real-time features
 4. **Admin Panel Backend** - Admin API endpoints
 5. **Third-Party Integrations** - Shopify, WooCommerce, Printful

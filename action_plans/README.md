@@ -77,6 +77,7 @@ These plans cover the complete technical architecture and implementation strateg
 - **[developer-dashboard-summary.md](./developer-dashboard-summary.md)** - Developer dashboard summary
 - **[subscription-box-feature.md](./subscription-box-feature.md)** - Subscription box feature documentation
 - **[daily-co-integration.md](./daily-co-integration.md)** - Daily.co video call integration
+- **[ipayout-integration-guide.md](./ipayout-integration-guide.md)** - **NEW** - Complete i-payout API integration guide (beneficiaries, transfer methods, transfers, webhooks)
 
 ### Production & Release
 - **[production-readiness-review.md](./production-readiness-review.md)** - Production readiness assessment
@@ -161,11 +162,14 @@ When referring to "mobile" in this codebase, it encompasses **both** mobile brow
 ### Recent Updates (January 2026)
 
 #### January 27, 2026
+- **[ipayout-integration-guide.md](./ipayout-integration-guide.md)** - **NEW** - Complete i-payout Full API Integration guide with authentication, beneficiary management, transfer methods, transfers, webhooks, error handling, and implementation examples
 - **[expo-setup-consolidated-plan.md](./expo-setup-consolidated-plan.md)** - **NEW** - Consolidated Expo setup plan (resolves conflicts, aligns all Expo docs)
 - **[documentation-review-update-plan.md](./documentation-review-update-plan.md)** - **NEW** - Comprehensive documentation review and update plan
 - **[implementation-status-2026.md](./implementation-status-2026.md)** - **NEW** - Current implementation status of all features
 - **[refactoring-optimization-plan.md](./refactoring-optimization-plan.md)** - **NEW** - Refactoring and optimization opportunities
-- Updated **[bdn-2.0-comprehensive-technical-plan.md](./bdn-2.0-comprehensive-technical-plan.md)** with status indicators
+- Updated **[bdn-2.0-comprehensive-technical-plan.md](./bdn-2.0-comprehensive-technical-plan.md)** with accurate i-payout API endpoints and integration details
+- Updated **[security-compliance-strategy.md](./security-compliance-strategy.md)** with correct i-payout API implementation details and security best practices
+- Updated **[implementation-status-2026.md](./implementation-status-2026.md)** with detailed i-payout integration requirements
 - Updated **[expo-production-insights.md](./expo-production-insights.md)** to reflect current state
 - Updated **[infrastructure-deployment-strategy.md](./infrastructure-deployment-strategy.md)** to clarify mobile vs backend deployment
 
