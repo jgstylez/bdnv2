@@ -286,7 +286,6 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
 
           {/* Navigation Groups */}
           <View style={{ 
-            paddingTop: Platform.OS === "ios" ? 4 : 8,
             paddingHorizontal: 0, // Padding handled by individual Pressables
           }}>
             {filteredNavigationMenu.map(
@@ -300,8 +299,9 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                   <View
                     key={group.label}
                     style={{
-                      borderBottomWidth:
-                        groupIndex < filteredNavigationMenu.length - 1 ? 1 : 0,
+                      borderTopWidth: groupIndex > 0 ? 1 : 0,
+                      borderTopColor: "#474747",
+                      borderBottomWidth: groupIndex === filteredNavigationMenu.length - 1 ? 1 : 0,
                       borderBottomColor: "#474747",
                     }}
                   >
@@ -312,6 +312,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({ isOpen, onClose }) => {
                         backgroundColor: hasActiveItem
                           ? "rgba(186, 153, 136, 0.1)"
                           : "transparent",
+                        marginTop: hasActiveItem && groupIndex > 0 ? -1 : 0,
                         opacity: pressed ? 0.7 : 1,
                         ...(Platform.OS === "web" && {
                           cursor: "pointer",
