@@ -124,8 +124,15 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           };
 
           return (
-            <View
+            <TouchableOpacity
               key={product.id}
+              onPress={() => onProductPress(product)}
+              activeOpacity={0.8}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel={`View ${product.name} product details`}
+              accessibilityHint="Double tap to view product details"
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               style={{
                 width: cardWidth,
                 backgroundColor: colors.secondary,
@@ -136,17 +143,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
               }}
             >
               {/* Product Image - Square, bleeding to top, left, bottom */}
-              <TouchableOpacity
-                onPress={() => onProductPress(product)}
-                activeOpacity={0.8}
-                accessible={true}
-                accessibilityRole="button"
-                accessibilityLabel={`View ${product.name} product details`}
-                accessibilityHint="Double tap to view product details"
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              >
-                <View
-                  style={{
+              <View
+                style={{
                     width: "100%",
                     aspectRatio: 1,
                     position: "relative",
@@ -270,43 +268,35 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                     </View>
                   )}
                 </View>
-              </TouchableOpacity>
 
               {/* Product Info */}
               <View style={{ padding: spacing.md }}>
-                <TouchableOpacity
-                  onPress={() => onProductPress(product)}
-                  activeOpacity={0.8}
-                  accessible={true}
-                  accessibilityRole="button"
-                  accessibilityLabel={`View ${product.name} product details`}
-                  accessibilityHint="Double tap to view product details"
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                <Text
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                  style={{
+                    fontSize: typography.sizes.md,
+                    fontWeight: typography.weights.semibold as any,
+                    color: colors.text.primary,
+                    marginBottom: spacing.xs,
+                    height: 40,
+                    overflow: "hidden",
+                    ...(Platform.OS === "web" && {
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      lineHeight: "20px",
+                    }),
+                  } as any}
                 >
-                  <Text
-                    numberOfLines={2}
-                    ellipsizeMode="tail"
-                    style={{
-                      fontSize: typography.sizes.md,
-                      fontWeight: typography.weights.semibold as any,
-                      color: colors.text.primary,
-                      marginBottom: spacing.xs,
-                      height: 40,
-                      overflow: "hidden",
-                      ...(Platform.OS === "web" && {
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        lineHeight: "20px",
-                      }),
-                    } as any}
-                  >
-                    {product.name}
-                  </Text>
-                </TouchableOpacity>
+                  {product.name}
+                </Text>
                 {/* Business/Merchant Link */}
                 <TouchableOpacity
-                  onPress={handleBusinessPress}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    handleBusinessPress();
+                  }}
                   activeOpacity={0.7}
                   style={{ marginBottom: spacing.xs }}
                   accessible={true}
@@ -386,7 +376,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   </Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>
