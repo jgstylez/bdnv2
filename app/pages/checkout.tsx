@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Alert,
   Platform,
+  Linking,
 } from "react-native";
 import { Image } from "expo-image";
 import { StatusBar } from "expo-status-bar";
@@ -42,6 +43,12 @@ import {
 } from "@/data/mocks/products";
 import { OptimizedScrollView } from "@/components/optimized/OptimizedScrollView";
 import { ShippingAddress } from "@/types/orders";
+import { api } from "@/lib/api-client";
+import { API_CONFIG } from "@/lib/config";
+import {
+  simulateDownloadApiResponse,
+  generateMockDownloadToken,
+} from "@/lib/mock-downloads";
 
 // Extended wallet type for mock data with additional properties
 type MockWallet = Wallet & {
@@ -64,6 +71,7 @@ type CheckoutStep =
   | "shipping"
   | "payment"
   | "processing"
+  | "digital-confirmation"
   | "success"
   | "error";
 
@@ -96,6 +104,9 @@ export default function Checkout() {
   >(null);
   const [shippingAddress, setShippingAddress] =
     useState<ShippingAddress | null>(null);
+  const [purchasedDigitalProducts, setPurchasedDigitalProducts] = useState<
+    Array<Product & { downloadToken?: string; downloadCount?: number; downloadLimit?: number }>
+  >([]);
 
   // Mock wallets - in production, fetch from API/context
   useEffect(() => {
@@ -198,6 +209,9 @@ export default function Checkout() {
     if (step === "payment") {
       return requiresShipping ? "Back to Shipping" : "Back to Review";
     }
+    if (step === "digital-confirmation") {
+      return "Back to Review";
+    }
     if (isBuyNow && buyNowProduct) {
       return "Back to Product";
     }
@@ -213,6 +227,8 @@ export default function Checkout() {
       } else {
         setStep("review");
       }
+    } else if (step === "digital-confirmation") {
+      setStep("review");
     } else {
       router.back();
     }
@@ -297,6 +313,15 @@ export default function Checkout() {
     (item) => item.productType === "physical" && item.shippingRequired,
   );
 
+  // Determine product types in cart
+  const productTypes = new Set(
+    checkoutItems.map((item) => item.productType),
+  );
+  const isAllService = productTypes.size === 1 && productTypes.has("service");
+  const isAllDigital = productTypes.size === 1 && productTypes.has("digital");
+  const isAllPhysical =
+    productTypes.size === 1 && productTypes.has("physical");
+
   const handleProceedToPayment = () => {
     // If shipping is required, go to shipping step first
     if (requiresShipping) {
@@ -348,6 +373,52 @@ export default function Checkout() {
         if (!isBuyNow) {
           await clearCart();
         }
+
+        // Handle different product types post-payment
+        if (isAllService) {
+          // Redirect to booking service page
+          const firstServiceProduct = checkoutItems.find(
+            (item) => item.productType === "service",
+          );
+          if (firstServiceProduct) {
+            router.push(
+              `/pages/book-service?productId=${firstServiceProduct.id}`,
+            );
+            return;
+          }
+        } else if (isAllDigital) {
+          // Fetch download tokens for digital products
+          try {
+            // TODO: In production, this should fetch from the actual order API
+            // For now, we'll simulate getting download tokens
+            // In real implementation:
+            // const downloads = await api.get(`/api/orders/${newOrderId}/downloads`);
+            
+            // Simulate download tokens with realistic mock data
+            const productsWithTokens = checkoutItems.map((item) => {
+              const mockDownload = simulateDownloadApiResponse(item, newOrderId);
+              return {
+                ...item,
+                downloadToken: mockDownload.downloadToken,
+                downloadUrl: mockDownload.downloadUrl, // Include URL for fallback
+                downloadCount: mockDownload.downloadCount,
+                downloadLimit: mockDownload.downloadLimit,
+                expiresAt: mockDownload.expiresAt,
+              };
+            });
+            
+            setPurchasedDigitalProducts(productsWithTokens);
+            setStep("digital-confirmation");
+            return;
+          } catch (error) {
+            console.error("Failed to fetch download tokens:", error);
+            // Still show confirmation but with error message
+            setPurchasedDigitalProducts(checkoutItems);
+            setStep("digital-confirmation");
+            return;
+          }
+        }
+        // For physical products, continue to order confirmation
 
         // Navigate to order confirmation page
         router.push({
@@ -521,12 +592,18 @@ export default function Checkout() {
         <BackButton
           label={getBackLabel()}
           to={
-            step === "shipping" || step === "payment"
+            step === "shipping" ||
+            step === "payment" ||
+            step === "digital-confirmation"
               ? undefined
               : getBackDestination()
           }
           onPress={
-            step === "shipping" || step === "payment" ? handleBack : undefined
+            step === "shipping" ||
+            step === "payment" ||
+            step === "digital-confirmation"
+              ? handleBack
+              : undefined
           }
         />
 
@@ -1166,6 +1243,207 @@ export default function Checkout() {
           </View>
         )}
 
+        {step === "digital-confirmation" && (
+          <View style={{ gap: spacing.xl }}>
+            <View
+              style={{
+                alignItems: "center",
+                paddingVertical: spacing.xl,
+              }}
+            >
+              <MaterialIcons
+                name="check-circle"
+                size={64}
+                color={colors.accent}
+              />
+              <Text
+                style={{
+                  fontSize: typography.fontSize.xl,
+                  fontWeight: typography.fontWeight.bold as '700',
+                  color: colors.text.primary,
+                  marginTop: spacing.lg,
+                  marginBottom: spacing.sm,
+                }}
+              >
+                Purchase Complete!
+              </Text>
+              <Text
+                style={{
+                  fontSize: typography.fontSize.base,
+                  color: colors.text.secondary,
+                  textAlign: "center",
+                }}
+              >
+                Your digital products are ready to download
+              </Text>
+            </View>
+
+            <View
+              style={{
+                backgroundColor: colors.input,
+                borderRadius: borderRadius.lg,
+                padding: spacing.xl,
+                borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: typography.fontSize.lg,
+                  fontWeight: typography.fontWeight.bold as '700',
+                  color: colors.text.primary,
+                  marginBottom: spacing.md,
+                }}
+              >
+                Your Digital Products
+              </Text>
+              {purchasedDigitalProducts.map((product) => (
+                <View
+                  key={product.id}
+                  style={{
+                    paddingVertical: spacing.md,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.border,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: typography.fontSize.base,
+                      fontWeight: typography.fontWeight.semibold as '600',
+                      color: colors.text.primary,
+                      marginBottom: spacing.xs,
+                    }}
+                  >
+                    {product.name}
+                  </Text>
+                  {product.downloadToken ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        // Navigate to in-app download/preview page
+                        router.push({
+                          pathname: "/pages/download",
+                          params: {
+                            token: product.downloadToken,
+                            url: (product as any).downloadUrl, // Include URL as fallback
+                            productName: product.name,
+                            productId: product.id,
+                          },
+                        });
+                      }}
+                      style={{
+                        backgroundColor: colors.accent,
+                        paddingVertical: spacing.md,
+                        paddingHorizontal: spacing.lg,
+                        borderRadius: borderRadius.md,
+                        marginTop: spacing.sm,
+                        alignSelf: "flex-start",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: spacing.sm,
+                      }}
+                    >
+                      <MaterialIcons
+                        name="visibility"
+                        size={20}
+                        color={colors.textColors.onAccent}
+                      />
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.base,
+                          fontWeight: typography.fontWeight.bold as '700',
+                          color: colors.textColors.onAccent,
+                        }}
+                      >
+                        View / Download
+                      </Text>
+                    </TouchableOpacity>
+                  ) : product.downloadUrl ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        // Navigate to in-app download/preview page
+                        router.push({
+                          pathname: "/pages/download",
+                          params: {
+                            url: product.downloadUrl,
+                            productName: product.name,
+                            productId: product.id,
+                          },
+                        });
+                      }}
+                      style={{
+                        backgroundColor: colors.accent,
+                        paddingVertical: spacing.md,
+                        paddingHorizontal: spacing.lg,
+                        borderRadius: borderRadius.md,
+                        marginTop: spacing.sm,
+                        alignSelf: "flex-start",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: spacing.sm,
+                      }}
+                    >
+                      <MaterialIcons
+                        name="visibility"
+                        size={20}
+                        color={colors.textColors.onAccent}
+                      />
+                      <Text
+                        style={{
+                          fontSize: typography.fontSize.base,
+                          fontWeight: typography.fontWeight.bold as '700',
+                          color: colors.textColors.onAccent,
+                        }}
+                      >
+                        View / Download
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.sm,
+                        color: colors.text.secondary,
+                        marginTop: spacing.sm,
+                      }}
+                    >
+                      Download link will be available soon
+                    </Text>
+                  )}
+                  {product.downloadLimit !== undefined && product.downloadLimit !== -1 && (
+                    <Text
+                      style={{
+                        fontSize: typography.fontSize.xs,
+                        color: colors.text.secondary,
+                        marginTop: spacing.xs / 2,
+                      }}
+                    >
+                      {product.downloadCount ?? 0} / {product.downloadLimit} downloads used
+                    </Text>
+                  )}
+                </View>
+              ))}
+            </View>
+
+            <TouchableOpacity
+              onPress={() => router.push("/(tabs)/marketplace")}
+              style={{
+                backgroundColor: colors.accent,
+                paddingVertical: spacing.md + 2,
+                borderRadius: borderRadius.md,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: typography.fontSize.lg,
+                  fontWeight: typography.fontWeight.bold as '700',
+                  color: colors.textColors.onAccent,
+                }}
+              >
+                Continue Shopping
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {step === "error" && (
           <View

@@ -176,7 +176,15 @@ export default function ProductDetail() {
 
   const handleDownload = () => {
     if (product.downloadUrl) {
-      Linking.openURL(product.downloadUrl);
+      // Navigate to in-app download/preview page
+      router.push({
+        pathname: "/pages/download",
+        params: {
+          url: product.downloadUrl,
+          productName: product.name,
+          productId: product.id,
+        },
+      });
     }
   };
 
@@ -735,7 +743,7 @@ export default function ProductDetail() {
 
             {/* Action Buttons - Only show when subscription is disabled */}
             {!isSubscriptionEnabled && (
-              <View style={{ flexDirection: "row", gap: spacing.md, marginTop: spacing.lg }}>
+              <View style={{ flexDirection: "row", gap: isMobile ? spacing.sm : spacing.md, marginTop: spacing.lg }}>
                 {product.productType === "service" ? (
                   <TouchableOpacity
                     onPress={handleBookService}
@@ -764,12 +772,12 @@ export default function ProductDetail() {
                       disabled={variantRequired || (currentInventory <= 0 && product.productType === "physical")}
                       activeOpacity={0.7}
                       style={{
-                        flex: 1,
+                        flex: isMobile ? 2 : 1,
                         backgroundColor: variantRequired || (currentInventory <= 0 && product.productType === "physical") 
                           ? "rgba(186, 153, 136, 0.5)" 
                           : colors.accent,
-                        paddingVertical: spacing.md + 2,
-                        paddingHorizontal: paddingHorizontal,
+                        paddingVertical: isMobile ? spacing.sm + 2 : spacing.md + 2,
+                        paddingHorizontal: isMobile ? spacing.sm : paddingHorizontal,
                         borderRadius: borderRadius.md,
                         alignItems: "center",
                         opacity: variantRequired || (currentInventory <= 0 && product.productType === "physical") ? 0.6 : 1,
@@ -778,7 +786,7 @@ export default function ProductDetail() {
                       <View style={{ alignItems: "center" }}>
                         <Text
                           style={{
-                            fontSize: typography.fontSize.lg,
+                            fontSize: isMobile ? typography.fontSize.base : typography.fontSize.lg,
                             fontWeight: typography.fontWeight.bold,
                             color: colors.textColors.onAccent,
                           }}
@@ -787,7 +795,7 @@ export default function ProductDetail() {
                         </Text>
                         <Text
                           style={{
-                            fontSize: typography.fontSize.sm,
+                            fontSize: isMobile ? typography.fontSize.xs : typography.fontSize.sm,
                             fontWeight: typography.fontWeight.normal,
                             color: colors.textColors.onAccent,
                             opacity: 0.9,
@@ -801,24 +809,34 @@ export default function ProductDetail() {
                     {product.downloadUrl && (
                       <TouchableOpacity
                         onPress={handleDownload}
+                        activeOpacity={0.7}
                         style={{
-                          flex: 1,
+                          flex: isMobile ? 1 : 1,
                           backgroundColor: colors.secondary.bg,
-                          paddingVertical: spacing.md + 2,
+                          paddingVertical: isMobile ? spacing.sm + 2 : spacing.md + 2,
+                          paddingHorizontal: isMobile ? spacing.sm : spacing.lg,
                           borderRadius: borderRadius.md,
                           alignItems: "center",
+                          justifyContent: "center",
                           borderWidth: 1,
                           borderColor: colors.border.light,
+                          flexDirection: "row",
+                          gap: spacing.xs,
                         }}
                       >
+                        <MaterialIcons
+                          name="visibility"
+                          size={isMobile ? 16 : 20}
+                          color={colors.text.primary}
+                        />
                         <Text
                           style={{
-                            fontSize: typography.fontSize.lg,
+                            fontSize: isMobile ? typography.fontSize.sm : typography.fontSize.lg,
                             fontWeight: typography.fontWeight.semibold,
                             color: colors.text.primary,
                           }}
                         >
-                          Preview Download
+                          Preview
                         </Text>
                       </TouchableOpacity>
                     )}

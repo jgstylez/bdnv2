@@ -29,8 +29,39 @@ model User {
   wallet     Wallet?
   sessions   Session[]
   ownedBadges UserBadge[]
+  digitalDownloads DigitalDownload[]
 
   @@map("users")
+}
+
+model DigitalDownload {
+  id              String   @id @default(uuid())
+  orderItem       OrderItem @relation(fields: [orderItemId], references: [id])
+  orderItemId     String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  productId       String
+  downloadToken   String   @unique
+  downloadCount   Int      @default(0)
+  downloadLimit   Int      @default(-1) // -1 for unlimited
+  expiresAt       DateTime?
+  createdAt       DateTime @default(now())
+  lastDownloadAt  DateTime?
+
+  downloads       DownloadLog[]
+
+  @@map("digital_downloads")
+}
+
+model DownloadLog {
+  id              String   @id @default(uuid())
+  digitalDownload DigitalDownload @relation(fields: [digitalDownloadId], references: [id], onDelete: Cascade)
+  digitalDownloadId String
+  ipAddress       String?
+  userAgent       String?
+  downloadedAt    DateTime @default(now())
+
+  @@map("download_logs")
 }
 
 model Session {
@@ -80,6 +111,12 @@ model Product {
   imageUrl     String?
   isAvailable  Boolean     @default(true)
   variants     Json?
+  // Digital product fields
+  downloadUrl  String?
+  downloadLimit Int?       @default(-1) // -1 for unlimited
+  expirationDate DateTime?
+  externalProductId String? // For products managed on external systems
+  externalSystem String?   // Name of external system
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
@@ -139,6 +176,8 @@ model OrderItem {
   productId       String
   quantity        Int
   priceAtPurchase Float
+
+  digitalDownload DigitalDownload?
 
   @@map("order_items")
 }
