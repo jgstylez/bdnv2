@@ -12,6 +12,15 @@ import { api } from '@/lib/api-client';
 import { logger } from '@/lib/logger';
 import { showSuccessToast, showErrorToast } from '@/lib/toast';
 import { useLoading } from '@/hooks/useLoading';
+import {
+  getGenderOptions,
+  getEthnicityOptions,
+  getEducationOptions,
+  getIncomeOptions,
+  getBankOptions,
+  getHBCUOptions,
+  getGreekOptions,
+} from '@/constants/demographics';
 
 // Mock user data
 const mockUser = {
@@ -53,17 +62,12 @@ export default function Profile() {
     employmentStatus: "",
     householdSize: "",
     preferredLanguage: "",
+    bank: "",
+    greek: "",
   });
 
-  const ethnicities = [
-    { label: "African American", value: "African American" },
-    { label: "Afro-Caribbean", value: "Afro-Caribbean" },
-    { label: "Afro-Latino", value: "Afro-Latino" },
-    { label: "African", value: "African" },
-    { label: "Multiracial (Black)", value: "Multiracial (Black)" },
-    { label: "Other", value: "Other" },
-    { label: "Prefer not to say", value: "Prefer not to say" },
-  ];
+  // Use predefined demographics constants
+  const ethnicities = getEthnicityOptions();
 
   const industries = [
     { label: "Technology", value: "Technology" },
@@ -92,52 +96,15 @@ export default function Profile() {
     { label: "Prefer not to say", value: "Prefer not to say" },
   ];
 
-  const genders = [
-    { label: "Male", value: "Male" },
-    { label: "Female", value: "Female" },
-    { label: "Non-binary", value: "Non-binary" },
-    { label: "Other", value: "Other" },
-    { label: "Prefer not to say", value: "Prefer not to say" },
-  ];
+  const genders = getGenderOptions();
 
-  const educationLevels = [
-    { label: "High School", value: "High School" },
-    { label: "Some College", value: "Some College" },
-    { label: "Associate's Degree", value: "Associate's Degree" },
-    { label: "Bachelor's Degree", value: "Bachelor's Degree" },
-    { label: "Master's Degree", value: "Master's Degree" },
-    { label: "Doctorate/PhD", value: "Doctorate/PhD" },
-    { label: "Professional Degree", value: "Professional Degree" },
-    { label: "Other", value: "Other" },
-    { label: "Prefer not to say", value: "Prefer not to say" },
-  ];
+  const educationLevels = getEducationOptions();
 
-  const hbcuList = [
-    { label: "Howard University", value: "Howard University" },
-    { label: "Spelman College", value: "Spelman College" },
-    { label: "Morehouse College", value: "Morehouse College" },
-    { label: "Hampton University", value: "Hampton University" },
-    { label: "Tuskegee University", value: "Tuskegee University" },
-    { label: "Fisk University", value: "Fisk University" },
-    { label: "Xavier University of Louisiana", value: "Xavier University of Louisiana" },
-    { label: "North Carolina A&T State University", value: "North Carolina A&T State University" },
-    { label: "Florida A&M University", value: "Florida A&M University" },
-    { label: "Clark Atlanta University", value: "Clark Atlanta University" },
-    { label: "Other HBCU", value: "Other HBCU" },
-    { label: "Not an HBCU graduate", value: "Not an HBCU graduate" },
-    { label: "Prefer not to say", value: "Prefer not to say" },
-  ];
+  const hbcuList = getHBCUOptions();
+  const bankOptions = getBankOptions();
+  const greekOptions = getGreekOptions();
 
-  const incomeRanges = [
-    { label: "Under $25,000", value: "Under $25,000" },
-    { label: "$25,000 - $49,999", value: "$25,000 - $49,999" },
-    { label: "$50,000 - $74,999", value: "$50,000 - $74,999" },
-    { label: "$75,000 - $99,999", value: "$75,000 - $99,999" },
-    { label: "$100,000 - $149,999", value: "$100,000 - $149,999" },
-    { label: "$150,000 - $199,999", value: "$150,000 - $199,999" },
-    { label: "$200,000+", value: "$200,000+" },
-    { label: "Prefer not to say", value: "Prefer not to say" },
-  ];
+  const incomeRanges = getIncomeOptions();
 
   const employmentStatuses = [
     { label: "Employed Full-time", value: "Employed Full-time" },
@@ -246,6 +213,8 @@ export default function Profile() {
           employmentStatus: demographicsData.employmentStatus,
           householdSize: demographicsData.householdSize,
           preferredLanguage: demographicsData.preferredLanguage,
+          bank: demographicsData.bank,
+          greek: demographicsData.greek,
         };
 
         const response = await api.put('/account/demographics', demographicsPayload);
@@ -692,7 +661,7 @@ export default function Profile() {
 
             <View
               style={{
-                backgroundColor: "#474747",
+                backgroundColor: "#28282d", // Darker background for better contrast with white text
                 borderRadius: 16,
                 padding: 20,
                 borderWidth: 1,
@@ -702,11 +671,16 @@ export default function Profile() {
             >
               {/* Ethnicity */}
               <FormSelect
-                label="Ethnicity"
+                label="Ethnicity *"
                 value={demographicsData.ethnicity}
                 options={ethnicities}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, ethnicity: value })}
                 placeholder="Select ethnicity"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
               {/* Industry */}
@@ -716,6 +690,11 @@ export default function Profile() {
                 options={industries}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, industry: value })}
                 placeholder="Select industry"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
               {/* Age Range */}
@@ -725,24 +704,39 @@ export default function Profile() {
                 options={ageRanges}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, ageRange: value })}
                 placeholder="Select age range"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
               {/* Gender */}
               <FormSelect
-                label="Gender"
+                label="Gender *"
                 value={demographicsData.gender}
                 options={genders}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, gender: value })}
                 placeholder="Select gender"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
-              {/* Educational Background */}
+              {/* Education */}
               <FormSelect
-                label="Educational Background"
+                label="Education *"
                 value={demographicsData.educationalBackground}
                 options={educationLevels}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, educationalBackground: value })}
-                placeholder="Select educational background"
+                placeholder="Select education level"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
               {/* HBCU */}
@@ -752,15 +746,25 @@ export default function Profile() {
                 options={hbcuList}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, hbcu: value })}
                 placeholder="Select HBCU"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
               {/* Income Range */}
               <FormSelect
-                label="Annual Household Income Range"
+                label="Annual Household Income Range *"
                 value={demographicsData.incomeRange}
                 options={incomeRanges}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, incomeRange: value })}
                 placeholder="Select income range"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
               {/* Employment Status */}
@@ -770,6 +774,11 @@ export default function Profile() {
                 options={employmentStatuses}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, employmentStatus: value })}
                 placeholder="Select employment status"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
               {/* Household Size */}
@@ -779,6 +788,11 @@ export default function Profile() {
                 options={householdSizes}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, householdSize: value })}
                 placeholder="Select household size"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
               {/* Preferred Language */}
@@ -788,6 +802,39 @@ export default function Profile() {
                 options={languages}
                 onSelect={(value) => setDemographicsData({ ...demographicsData, preferredLanguage: value })}
                 placeholder="Select preferred language"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
+              />
+
+              {/* Bank */}
+              <FormSelect
+                label="Bank"
+                value={demographicsData.bank}
+                options={bankOptions}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, bank: value })}
+                placeholder="Select bank"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
+              />
+
+              {/* Greek Affiliation */}
+              <FormSelect
+                label="Greek Affiliation *"
+                value={demographicsData.greek}
+                options={greekOptions}
+                onSelect={(value) => setDemographicsData({ ...demographicsData, greek: value })}
+                placeholder="Select Greek affiliation"
+                buttonStyle={{ backgroundColor: "#28282d" }}
+                textColor="#ffffff"
+                placeholderColor="rgba(255, 255, 255, 0.6)"
+                iconColor="rgba(255, 255, 255, 0.7)"
+                labelColor="#ffffff"
               />
 
               {/* Save Button */}

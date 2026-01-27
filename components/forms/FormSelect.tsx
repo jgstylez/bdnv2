@@ -12,6 +12,10 @@ interface FormSelectProps {
   placeholder?: string;
   containerStyle?: ViewStyle;
   buttonStyle?: ViewStyle;
+  textColor?: string;
+  placeholderColor?: string;
+  iconColor?: string;
+  labelColor?: string;
 }
 
 export function FormSelect({
@@ -23,6 +27,10 @@ export function FormSelect({
   placeholder = "Select an option",
   containerStyle,
   buttonStyle,
+  textColor,
+  placeholderColor,
+  iconColor,
+  labelColor,
 }: FormSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [buttonLayout, setButtonLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
@@ -94,7 +102,7 @@ export function FormSelect({
           style={{
             fontSize: typography.fontSize.sm,
             fontWeight: "600",
-            color: colors.text.primary,
+            color: labelColor || colors.text.primary,
           }}
         >
           {label}
@@ -124,7 +132,9 @@ export function FormSelect({
           <Text
             style={{
               fontSize: typography.fontSize.base,
-              color: selectedOption ? colors.text.primary : colors.text.placeholder,
+              color: selectedOption 
+                ? (textColor || colors.text.primary)
+                : (placeholderColor || colors.text.placeholder),
             }}
           >
             {selectedOption?.label || placeholder}
@@ -132,7 +142,7 @@ export function FormSelect({
           <MaterialIcons
             name={isOpen ? "expand-less" : "expand-more"}
             size={24}
-            color={colors.text.secondary}
+            color={iconColor || colors.text.secondary}
           />
         </TouchableOpacity>
 
