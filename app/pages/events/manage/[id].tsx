@@ -10,6 +10,7 @@ import { getMockEvent } from '@/data/mocks/events';
 import { BackButton } from '@/components/navigation/BackButton';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { formatCurrency } from '@/lib/international';
+import { Currency } from '@/types/wallet';
 
 // Mock analytics data
 const mockAnalytics: EventAnalytics = {
@@ -160,7 +161,7 @@ export default function ManageEvent() {
               style={{
                 fontSize: typography.fontSize.xs,
                 color: event.status === "published" ? colors.status.success : colors.accent,
-                fontWeight: typography.fontWeight.semibold as '600',
+                fontWeight: typography.fontWeight.semibold as '600' as '600',
                 textTransform: "uppercase",
               }}
             >
@@ -173,7 +174,7 @@ export default function ManageEvent() {
           <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
             Title
           </Text>
-          <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+          <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold as '700' as '700', color: colors.text.primary }}>
             {event.title}
           </Text>
         </View>
@@ -223,7 +224,7 @@ export default function ManageEvent() {
             <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
               Attendees
             </Text>
-            <Text style={{ fontSize: typography.fontSize.xl, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+            <Text style={{ fontSize: typography.fontSize.xl, fontWeight: typography.fontWeight.bold as '700' as '700', color: colors.text.primary }}>
               {event.currentAttendees} / {event.maxAttendees || "∞"}
             </Text>
           </View>
@@ -231,7 +232,7 @@ export default function ManageEvent() {
             <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
               Tickets Sold
             </Text>
-            <Text style={{ fontSize: typography.fontSize.xl, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+            <Text style={{ fontSize: typography.fontSize.xl, fontWeight: typography.fontWeight.bold as '700' as '700', color: colors.text.primary }}>
               {analytics.totalTicketsSold}
             </Text>
           </View>
@@ -240,7 +241,7 @@ export default function ManageEvent() {
 
       {/* Quick Actions */}
       <View style={{ gap: spacing.md, marginTop: spacing.lg }}>
-        <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+        <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold as '700' as '700', color: colors.text.primary }}>
           Quick Actions
         </Text>
         <View style={{ flexDirection: "row", gap: spacing.md, flexWrap: "wrap" }}>
@@ -259,7 +260,7 @@ export default function ManageEvent() {
             }}
           >
             <MaterialIcons name="edit" size={20} color={colors.text.primary} />
-            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600' as '600', color: colors.text.primary }}>
               Edit Event
             </Text>
           </TouchableOpacity>
@@ -280,7 +281,7 @@ export default function ManageEvent() {
             }}
           >
             <MaterialIcons name="content-copy" size={20} color={colors.text.primary} />
-            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600' as '600', color: colors.text.primary }}>
               Duplicate
             </Text>
           </TouchableOpacity>
@@ -303,7 +304,7 @@ export default function ManageEvent() {
             }}
           >
             <MaterialIcons name="cancel" size={20} color={colors.status.warning} />
-            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.status.warning }}>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.status.warning }}>
               Cancel Event
             </Text>
           </TouchableOpacity>
@@ -324,7 +325,7 @@ export default function ManageEvent() {
             }}
           >
             <MaterialIcons name="delete" size={20} color={colors.status.error} />
-            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.status.error }}>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.status.error }}>
               Delete
             </Text>
           </TouchableOpacity>
@@ -335,7 +336,7 @@ export default function ManageEvent() {
 
   const renderTickets = () => (
     <View style={{ gap: spacing.lg }}>
-      <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+      <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary }}>
         Ticket Types
       </Text>
       {event.ticketTypes.map((ticketType) => {
@@ -354,7 +355,7 @@ export default function ManageEvent() {
           >
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: spacing.md }}>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary, marginBottom: spacing.xs }}>
+                <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary, marginBottom: spacing.xs }}>
                   {ticketType.name}
                 </Text>
                 {ticketType.description && (
@@ -362,8 +363,8 @@ export default function ManageEvent() {
                     {ticketType.description}
                   </Text>
                 )}
-                <Text style={{ fontSize: typography.fontSize.xl, fontWeight: typography.fontWeight.bold, color: colors.accent }}>
-                  {formatCurrency(ticketType.price, ticketType.currency)}
+                <Text style={{ fontSize: typography.fontSize.xl, fontWeight: typography.fontWeight.bold as '700', color: colors.accent }}>
+                  {formatCurrency(ticketType.price, ticketType.currency as Currency)}
                 </Text>
               </View>
               <TouchableOpacity
@@ -384,7 +385,7 @@ export default function ManageEvent() {
                 <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
                   Sold
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                   {sold} / {ticketType.quantity}
                 </Text>
               </View>
@@ -392,8 +393,8 @@ export default function ManageEvent() {
                 <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
                   Revenue
                 </Text>
-                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.status.success }}>
-                  {formatCurrency(revenue, ticketType.currency)}
+                <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.status.success }}>
+                  {formatCurrency(revenue, ticketType.currency as Currency)}
                 </Text>
               </View>
             </View>
@@ -416,7 +417,7 @@ export default function ManageEvent() {
         }}
       >
         <MaterialIcons name="add" size={20} color={colors.accent} />
-        <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.accent }}>
+        <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.accent }}>
           Add Ticket Type
         </Text>
       </TouchableOpacity>
@@ -426,7 +427,7 @@ export default function ManageEvent() {
   const renderAttendees = () => (
     <View style={{ gap: spacing.lg }}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+        <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary }}>
           Attendees ({attendees.length})
         </Text>
         <TouchableOpacity
@@ -460,7 +461,7 @@ export default function ManageEvent() {
           }}
         >
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary, marginBottom: spacing.xs }}>
               {attendee.name}
             </Text>
             <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
@@ -485,7 +486,7 @@ export default function ManageEvent() {
                   borderRadius: borderRadius.sm,
                 }}
               >
-                <Text style={{ fontSize: typography.fontSize.xs, color: colors.status.success, fontWeight: typography.fontWeight.semibold }}>
+                <Text style={{ fontSize: typography.fontSize.xs, color: colors.status.success, fontWeight: typography.fontWeight.semibold as '600' }}>
                   Checked In
                 </Text>
               </View>
@@ -498,7 +499,7 @@ export default function ManageEvent() {
                   borderRadius: borderRadius.sm,
                 }}
               >
-                <Text style={{ fontSize: typography.fontSize.xs, color: colors.text.primary, fontWeight: typography.fontWeight.semibold }}>
+                <Text style={{ fontSize: typography.fontSize.xs, color: colors.text.primary, fontWeight: typography.fontWeight.semibold as '600' }}>
                   Check In
                 </Text>
               </TouchableOpacity>
@@ -511,7 +512,7 @@ export default function ManageEvent() {
 
   const renderAnalytics = () => (
     <View style={{ gap: spacing.lg }}>
-      <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+      <Text style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary }}>
         Analytics
       </Text>
 
@@ -531,7 +532,7 @@ export default function ManageEvent() {
           <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
             Total Revenue
           </Text>
-          <Text style={{ fontSize: typography.fontSize["2xl"], fontWeight: typography.fontWeight.bold, color: colors.status.success }}>
+          <Text style={{ fontSize: typography.fontSize["2xl"], fontWeight: typography.fontWeight.bold as '700', color: colors.status.success }}>
             {formatCurrency(analytics.totalRevenue, "USD")}
           </Text>
         </View>
@@ -549,7 +550,7 @@ export default function ManageEvent() {
           <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
             Tickets Sold
           </Text>
-          <Text style={{ fontSize: typography.fontSize["2xl"], fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+          <Text style={{ fontSize: typography.fontSize["2xl"], fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary }}>
             {analytics.totalTicketsSold}
           </Text>
         </View>
@@ -567,7 +568,7 @@ export default function ManageEvent() {
           <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
             Views
           </Text>
-          <Text style={{ fontSize: typography.fontSize["2xl"], fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+          <Text style={{ fontSize: typography.fontSize["2xl"], fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary }}>
             {analytics.views.toLocaleString()}
           </Text>
         </View>
@@ -585,7 +586,7 @@ export default function ManageEvent() {
           <Text style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xs }}>
             Shares
           </Text>
-          <Text style={{ fontSize: typography.fontSize["2xl"], fontWeight: typography.fontWeight.bold, color: colors.text.primary }}>
+          <Text style={{ fontSize: typography.fontSize["2xl"], fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary }}>
             {analytics.shares}
           </Text>
         </View>
@@ -593,7 +594,7 @@ export default function ManageEvent() {
 
       {/* Revenue by Ticket Type */}
       <View>
-        <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold, color: colors.text.primary, marginBottom: spacing.md }}>
+        <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold as '700', color: colors.text.primary, marginBottom: spacing.md }}>
           Revenue by Ticket Type
         </Text>
         {analytics.revenueByTicketType.map((item) => (
@@ -609,10 +610,10 @@ export default function ManageEvent() {
             }}
           >
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.xs }}>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold as '600', color: colors.text.primary }}>
                 {item.ticketTypeName}
               </Text>
-              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold, color: colors.status.success }}>
+              <Text style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.bold as '700', color: colors.status.success }}>
                 {formatCurrency(item.revenue, "USD")}
               </Text>
             </View>
@@ -640,7 +641,7 @@ export default function ManageEvent() {
         <Text
           style={{
             fontSize: typography.fontSize["2xl"],
-            fontWeight: typography.fontWeight.bold,
+            fontWeight: typography.fontWeight.bold as '700',
             color: colors.text.primary,
             marginTop: spacing.md,
             marginBottom: spacing.lg,
@@ -676,7 +677,7 @@ export default function ManageEvent() {
               <Text
                 style={{
                   fontSize: typography.fontSize.sm,
-                  fontWeight: typography.fontWeight.semibold,
+                  fontWeight: typography.fontWeight.semibold as '600',
                   color: activeTab === tab ? colors.text.primary : colors.text.secondary,
                   textTransform: "capitalize",
                 }}

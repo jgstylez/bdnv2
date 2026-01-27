@@ -81,9 +81,15 @@ const palette = {
   },
 };
 
+// Create secondary and border as objects that can be used as strings
+const createColorObject = (value: string) => {
+  const obj = Object.assign(value, { value });
+  return obj as string & { value: string };
+};
+
 export const colors = {
   primary: palette.brown[500],
-  secondary: '#474747', // Updated to match brand card color
+  secondary: Object.assign('#474747', { bg: '#474747' }) as string & { bg: string },
   tertiary: palette.gray[500],
   accent: '#ba9988', // Updated to match design system
   accentLight: 'rgba(186, 153, 136, 0.2)', // Light variant with opacity
@@ -92,8 +98,8 @@ export const colors = {
   warning: palette.orange[500],
   info: palette.blue[500],
 
-  background: palette.gray[1000],
-  border: palette.gray[900],
+  background: Object.assign(palette.gray[1000], { primary: palette.gray[1000], input: palette.gray[950] }) as string & { primary: string; input: string },
+  border: Object.assign(palette.gray[900], { light: palette.gray[800] }) as string & { light: string },
   input: palette.gray[950],
   
   text: {
