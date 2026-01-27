@@ -6,9 +6,37 @@ todos: []
 
 # BDN 2.0 Comprehensive Technical Plan
 
+**Last Updated:** 2026-01-27  
+**Status:** 📋 **Planning Document** - See [implementation-status-2026.md](./implementation-status-2026.md) for current implementation status
+
+## Implementation Status Overview
+
+**Status Legend:**
+
+- ✅ **Implemented** - Feature is fully implemented and working
+- ⏳ **In Progress** - Feature is partially implemented
+- 📋 **Planned** - Feature is documented and planned but not started
+- ❌ **Not Started** - Feature not yet planned or started
+
+**Quick Status:**
+
+- **Frontend Infrastructure:** ✅ Implemented (API client, error handling, loading states)
+- **Backend API:** ⏳ In Progress (Only Products API implemented)
+- **Transaction Engine:** 📋 Planned (Not implemented)
+- **Payment Processors:** 📋 Planned (Not integrated)
+- **Database:** ⏳ In Progress (PostgreSQL implemented, Firestore planned)
+- **Business Features:** ✅ Implemented (Onboarding, products, orders)
+- **Shopping Flows:** ✅ Implemented (Cart, checkout, order confirmation)
+
+**For detailed implementation status, see:** [implementation-status-2026.md](./implementation-status-2026.md)
+
+---
+
 ## Executive Summary
 
 This plan outlines the complete technical architecture for BDN 2.0, including the BLKD payment system integration with Ecom Payments and iPayOuts, comprehensive inventory management with third-party integrations (Shopify, WooCommerce, Printful), hybrid database strategy (Firestore + PostgreSQL), content gating system for inbound marketing, Google Cloud hosting, CI/CD pipeline, and AI-enhanced user experience features.
+
+**Note:** This document describes the planned architecture. Many features are documented but not yet implemented. See implementation status document for current state.
 
 ## Architecture Overview
 
@@ -67,7 +95,11 @@ This plan outlines the complete technical architecture for BDN 2.0, including th
 
 ## Database Strategy (Hybrid Approach)
 
+**Status:** ⏳ **In Progress** - PostgreSQL implemented, Firestore planned
+
 ### PostgreSQL (Transactional Data)
+
+**Status:** ✅ **Implemented** - Basic schema exists and working
 
 **Location:** `server/prisma/schema.prisma`
 
@@ -96,6 +128,8 @@ This plan outlines the complete technical architecture for BDN 2.0, including th
 
 ### Firestore (Real-time Data)
 
+**Status:** 📋 **Planned** - Documented but not yet implemented
+
 **Location:** `action_plans/database-design.md`
 
 **Use Cases:**
@@ -123,9 +157,15 @@ This plan outlines the complete technical architecture for BDN 2.0, including th
 
 ## Unified Transaction Engine
 
+**Status:** 📋 **Planned** - Documented but not yet implemented
+
+**Current State:** Payment flows use mock data. Basic fee calculation utilities exist in `lib/payment-processing.ts`.
+
 ### Architecture Overview
 
 The Transaction Engine is the central system that handles all purchase and payment flows in BDN 2.0. While different purchase types (products, services, BLKD, gift cards, tokens, donations, invoices, event tickets) may have different UX flows, they all flow through the same unified backend engine for consistency, tracking, and error handling.
+
+**Note:** This is the planned architecture. Current implementation uses mock payment processing in frontend flows.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -203,7 +243,6 @@ All transactions flow through the unified engine with standardized types:
 **Phase 2: Payment Processing**
 
 1. Process payment via selected method:
-
    - Credit Card → Ecom Payments
    - Bank Account → iPayOuts
    - BLKD Wallet → Direct transfer
@@ -216,7 +255,6 @@ All transactions flow through the unified engine with standardized types:
 **Phase 3: Transaction Recording**
 
 1. Create transaction records:
-
    - Consumer transaction (payment out)
    - Business/entity transaction (payment received)
    - Platform fee transaction (if applicable)
@@ -259,12 +297,16 @@ interface TransactionResponse {
 }
 
 class TransactionEngine {
-  async processTransaction(request: TransactionRequest): Promise<TransactionResponse>
-  async validateTransaction(request: TransactionRequest): Promise<ValidationResult>
-  async calculateFees(request: TransactionRequest): Promise<FeeBreakdown>
-  async processPayment(request: TransactionRequest): Promise<PaymentResult>
-  async recordTransaction(result: PaymentResult): Promise<TransactionRecord>
-  async handlePostProcessing(transaction: TransactionRecord): Promise<void>
+  async processTransaction(
+    request: TransactionRequest,
+  ): Promise<TransactionResponse>;
+  async validateTransaction(
+    request: TransactionRequest,
+  ): Promise<ValidationResult>;
+  async calculateFees(request: TransactionRequest): Promise<FeeBreakdown>;
+  async processPayment(request: TransactionRequest): Promise<PaymentResult>;
+  async recordTransaction(result: PaymentResult): Promise<TransactionRecord>;
+  async handlePostProcessing(transaction: TransactionRecord): Promise<void>;
 }
 ```
 
@@ -312,40 +354,33 @@ PENDING → PROCESSING → COMPLETED
 **Phase 2: Migrate Purchase Flows** (Week 3-6)
 
 1. **Product Checkout** (`app/pages/checkout.tsx`)
-
    - Replace mock payment with `TransactionEngine.processTransaction()`
    - Use unified error handling
    - Update to use transaction tracking
 
 2. **C2B Payment** (`app/pages/payments/c2b-payment.tsx`)
-
    - Migrate to unified engine
    - Use `C2BPaymentHandler`
    - Standardize error messages
 
 3. **BLKD Purchase** (`app/pages/payments/buy-blkd.tsx`)
-
    - Use `BLKDPurchaseHandler`
    - Integrate with Hub Wallet
    - Unified tracking
 
 4. **Gift Card** (`app/pages/payments/buy-gift-card.tsx`)
-
    - Use `GiftCardHandler`
    - Standardize flow
 
 5. **Token Purchase** (`app/pages/payments/token-purchase.tsx`)
-
    - Use `TokenPurchaseHandler`
    - Unified processing
 
 6. **Invoice Payment** (`app/pages/payments/invoice.tsx`)
-
    - Use `InvoiceHandler`
    - Standardize flow
 
 7. **Event Tickets** (`app/pages/events/checkout.tsx`)
-
    - Use `EventTicketHandler`
    - Unified processing
 
@@ -364,6 +399,10 @@ PENDING → PROCESSING → COMPLETED
 4. Load testing
 
 ## Payment System Integration
+
+**Status:** 📋 **Planned** - Payment processors not yet integrated
+
+**Current State:** Payment flows have complete UI but use mock payment processing. Ready for backend API integration.
 
 ### BLKD Payment Flow Architecture
 
@@ -403,22 +442,32 @@ Business Receives:
 
 ### Payment Processor Integration
 
+**Status:** 📋 **Planned** - Not yet integrated
+
 **Ecom Payments (Credit Cards):**
 
-- Replace Stripe integration
-- Handle card charges
-- Batch payouts to Hub Wallet
-- Webhook handling for payment confirmations
+- 📋 Replace Stripe integration (planned)
+- 📋 Handle card charges (planned)
+- 📋 Batch payouts to Hub Wallet (planned)
+- 📋 Webhook handling for payment confirmations (planned)
 
 **iPayOuts (ACH/Bank Transfers):**
 
-- Replace Dwolla integration
-- Handle ALL bank transfers (in & out)
-- Transfer USD from Ecom → Hub Wallet
-- Send USD from Hub → Business banks
-- Handle cash-out requests (BLKD → USD, 5% fee)
+- 📋 Replace Dwolla integration (planned)
+- 📋 Handle ALL bank transfers (in & out) (planned)
+- 📋 Transfer USD from Ecom → Hub Wallet (planned)
+- 📋 Send USD from Hub → Business banks (planned)
+- 📋 Handle cash-out requests (BLKD → USD, 5% fee) (planned)
 
 ## Backend API Development
+
+**Status:** ⏳ **In Progress** - Only Products API implemented
+
+**Current State:**
+
+- ✅ Products API implemented (`server/src/api/products/`)
+- ❌ Most other endpoints not yet implemented
+- ✅ Frontend ready for API integration (API client infrastructure complete)
 
 ### API Structure
 
@@ -426,48 +475,75 @@ Business Receives:
 
 **Required Endpoints:**
 
+**Note:** Status indicators show implementation status:
+
+- ✅ Implemented
+- ⏳ In Progress
+- 📋 Planned
+- ❌ Not Started
+
 #### Authentication (`server/src/api/auth/`)
 
-- `POST /api/auth/login` - User login
-- `POST /api/auth/signup` - User registration
-- `POST /api/auth/refresh` - Token refresh
-- `POST /api/auth/logout` - Logout
-- `POST /api/auth/reset-password` - Password reset
+**Status:** ❌ **Not Started**
+
+- ❌ `POST /api/auth/login` - User login
+- ❌ `POST /api/auth/signup` - User registration
+- ❌ `POST /api/auth/refresh` - Token refresh
+- ❌ `POST /api/auth/logout` - Logout
+- ❌ `POST /api/auth/reset-password` - Password reset
 
 #### Payments (`server/src/api/payments/`)
 
-- `POST /api/payments/c2b` - Consumer-to-business payment
-- `POST /api/payments/blkd/purchase` - Buy BLKD
-- `POST /api/payments/blkd/cashout` - Cash out BLKD to USD
-- `POST /api/payments/gift-card/order` - Gift card purchase
-- `POST /api/payments/tokens/purchase` - Token purchase
-- `GET /api/payments/methods` - List payment methods
-- `POST /api/payments/methods` - Add payment method
+**Status:** ❌ **Not Started**
+
+- ❌ `POST /api/payments/c2b` - Consumer-to-business payment
+- ❌ `POST /api/payments/blkd/purchase` - Buy BLKD
+- ❌ `POST /api/payments/blkd/cashout` - Cash out BLKD to USD
+- ❌ `POST /api/payments/gift-card/order` - Gift card purchase
+- ❌ `POST /api/payments/tokens/purchase` - Token purchase
+- ❌ `GET /api/payments/methods` - List payment methods
+- ❌ `POST /api/payments/methods` - Add payment method
 
 #### Transactions (`server/src/api/transactions/`)
 
-- `GET /api/transactions` - List user transactions
-- `GET /api/transactions/:id` - Get transaction details
-- `POST /api/transactions/:id/refund` - Refund transaction
+**Status:** ❌ **Not Started**
+
+- ❌ `GET /api/transactions` - List user transactions
+- ❌ `GET /api/transactions/:id` - Get transaction details
+- ❌ `POST /api/transactions/:id/refund` - Refund transaction
 
 #### Wallets (`server/src/api/wallets/`)
 
-- `GET /api/wallets` - List user wallets
-- `GET /api/wallets/:id` - Get wallet details
-- `GET /api/wallets/:id/balance` - Get wallet balance
+**Status:** ❌ **Not Started**
+
+- ❌ `GET /api/wallets` - List user wallets
+- ❌ `GET /api/wallets/:id` - Get wallet details
+- ❌ `GET /api/wallets/:id/balance` - Get wallet balance
 
 #### Orders (`server/src/api/orders/`)
 
-- `POST /api/orders/checkout` - Process checkout
-- `GET /api/orders` - List orders
-- `GET /api/orders/:id` - Get order details
+**Status:** ❌ **Not Started**
+
+- ❌ `POST /api/orders/checkout` - Process checkout
+- ❌ `GET /api/orders` - List orders
+- ❌ `GET /api/orders/:id` - Get order details
 
 #### Users (`server/src/api/users/`)
 
-- `GET /api/users/me` - Get current user
-- `PUT /api/users/me` - Update user profile
-- `GET /api/users/me/preferences` - Get user preferences
-- `PUT /api/users/me/preferences` - Update user preferences
+**Status:** ❌ **Not Started**
+
+- ❌ `GET /api/users/me` - Get current user
+- ❌ `PUT /api/users/me` - Update user profile
+- ❌ `GET /api/users/me/preferences` - Get user preferences
+- ❌ `PUT /api/users/me/preferences` - Update user preferences
+
+#### Products (`server/src/api/products/`)
+
+**Status:** ✅ **Implemented**
+
+- ✅ `GET /api/products` - List products
+- ✅ `GET /api/products/:id` - Get product details
+- ✅ `POST /api/products` - Create product
 
 ### API Client Implementation
 
@@ -491,32 +567,27 @@ Business Receives:
 **Settings Categories:**
 
 1. **Notification Preferences** (`NotificationPreferences`)
-
    - Channels: wallet, promotions, events, system, social, merchant
    - Delivery methods: push, email, in-app
    - Quiet hours
    - Digest frequency
 
 2. **Privacy Settings**
-
    - Profile visibility
    - Email/phone visibility
    - Activity sharing
 
 3. **Payment Preferences**
-
    - Default payment method
    - Auto-use BLKD
    - Save payment methods
 
 4. **Shopping Preferences**
-
    - Default shipping address
    - Preferred shipping method
    - Auto-fill settings
 
 5. **App Preferences**
-
    - Language
    - Currency display (USD/BLKD)
    - Theme (already dark theme)
@@ -537,6 +608,7 @@ Business Receives:
 - `app.blackdollarnetwork.com` - User application (dashboard if logged in, login if not) (`@(tabs)`, `@pages`)
 - `operator.blackdollarnetwork.com` - Admin/Operator dashboard (if logged in as admin) (`@admin`)
 - `developer.blackdollarnetwork.com` - Developer dashboard (if logged in as developer) (`@developer`)
+- `designer.blackdollarnetwork.com` - Designer dashboard (if logged in as designer) (`@designer`)
 
 **Sandbox Domains:**
 
@@ -544,6 +616,7 @@ Business Receives:
 - `app.sandbox.blackdollarnetwork.com` - Sandbox app
 - `operator.sandbox.blackdollarnetwork.com` - Sandbox admin
 - `developer.sandbox.blackdollarnetwork.com` - Sandbox developer
+- `designer.sandbox.blackdollarnetwork.com` - Sandbox designer
 
 **Local Development:**
 
@@ -556,35 +629,38 @@ Business Receives:
 ```typescript
 export enum Subdomain {
   PUBLIC = null, // No subdomain or www
-  APP = 'app',
-  OPERATOR = 'operator',
-  DEVELOPER = 'developer',
+  APP = "app",
+  OPERATOR = "operator",
+  DEVELOPER = "developer",
+  DESIGNER = "designer",
 }
 
 export function getSubdomain(): Subdomain {
-  if (Platform.OS !== 'web') {
+  if (Platform.OS !== "web") {
     return Subdomain.APP; // Mobile apps default to app
   }
 
   const hostname = window.location.hostname;
-  
+
   // Local development
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
     const params = new URLSearchParams(window.location.search);
-    const subdomain = params.get('subdomain');
-    if (subdomain === 'operator') return Subdomain.OPERATOR;
-    if (subdomain === 'developer') return Subdomain.DEVELOPER;
-    if (subdomain === 'app') return Subdomain.APP;
+    const subdomain = params.get("subdomain");
+    if (subdomain === "operator") return Subdomain.OPERATOR;
+    if (subdomain === "developer") return Subdomain.DEVELOPER;
+    if (subdomain === "designer") return Subdomain.DESIGNER;
+    if (subdomain === "app") return Subdomain.APP;
     return Subdomain.PUBLIC; // Default to public
   }
 
   // Production/Sandbox
-  const parts = hostname.split('.');
+  const parts = hostname.split(".");
   if (parts.length >= 3) {
     const subdomain = parts[0];
-    if (subdomain === 'app') return Subdomain.APP;
-    if (subdomain === 'operator') return Subdomain.OPERATOR;
-    if (subdomain === 'developer') return Subdomain.DEVELOPER;
+    if (subdomain === "app") return Subdomain.APP;
+    if (subdomain === "operator") return Subdomain.OPERATOR;
+    if (subdomain === "developer") return Subdomain.DEVELOPER;
+    if (subdomain === "designer") return Subdomain.DESIGNER;
   }
 
   return Subdomain.PUBLIC; // Default to public marketing site
@@ -596,14 +672,14 @@ export function getSubdomain(): Subdomain {
 ```typescript
 export default function RootLayout() {
   const subdomain = getSubdomain();
-  
+
   return (
     <Stack>
       {/* Public pages - only on public subdomain */}
       {subdomain === Subdomain.PUBLIC && (
         <Stack.Screen name="web" />
       )}
-      
+
       {/* App routes - on app subdomain or mobile */}
       {(subdomain === Subdomain.APP || Platform.OS !== 'web') && (
         <>
@@ -612,15 +688,20 @@ export default function RootLayout() {
           <Stack.Screen name="pages" />
         </>
       )}
-      
+
       {/* Admin routes - only on operator subdomain */}
       {subdomain === Subdomain.OPERATOR && (
         <Stack.Screen name="admin" />
       )}
-      
+
       {/* Developer routes - only on developer subdomain */}
       {subdomain === Subdomain.DEVELOPER && (
         <Stack.Screen name="developer" />
+      )}
+
+      {/* Designer routes - only on designer subdomain */}
+      {subdomain === Subdomain.DESIGNER && (
+        <Stack.Screen name="designer" />
       )}
     </Stack>
   );
@@ -633,21 +714,25 @@ export default function RootLayout() {
 
 ```typescript
 export function subdomainAuth(req: Request, res: Response, next: NextFunction) {
-  const hostname = req.get('host') || '';
+  const hostname = req.get("host") || "";
   const subdomain = extractSubdomain(hostname);
-  
+
   // Set subdomain context for request
   req.subdomain = subdomain;
-  
+
   // Enforce subdomain-specific access
-  if (subdomain === 'operator' && !req.user?.isAdmin) {
-    return res.status(403).json({ error: 'Admin access required' });
+  if (subdomain === "operator" && !req.user?.isAdmin) {
+    return res.status(403).json({ error: "Admin access required" });
   }
-  
-  if (subdomain === 'developer' && !req.user?.isDeveloper) {
-    return res.status(403).json({ error: 'Developer access required' });
+
+  if (subdomain === "developer" && !req.user?.isDeveloper) {
+    return res.status(403).json({ error: "Developer access required" });
   }
-  
+
+  if (subdomain === "designer" && !req.user?.isDesigner) {
+    return res.status(403).json({ error: "Designer access required" });
+  }
+
   next();
 }
 ```
@@ -661,15 +746,13 @@ export function subdomainAuth(req: Request, res: Response, next: NextFunction) {
 **Environments:**
 
 1. **Development** (`development`)
-
    - Local development
    - Domain: `localhost:8081`
    - Mock payment processors
    - Local PostgreSQL/Firestore emulators
-   - Subdomain via query params: `?subdomain=app`, `?subdomain=operator`, `?subdomain=developer`
+   - Subdomain via query params: `?subdomain=app`, `?subdomain=operator`, `?subdomain=developer`, `?subdomain=designer`
 
 2. **Sandbox** (`sandbox`)
-
    - Staging environment
    - Domains: `*.sandbox.blackdollarnetwork.com`
    - Sandbox payment processor accounts
@@ -677,7 +760,6 @@ export function subdomainAuth(req: Request, res: Response, next: NextFunction) {
    - Separate Firebase project
 
 3. **Production** (`production`)
-
    - Live environment
    - Domains: `*.blackdollarnetwork.com`
    - Production payment processors
@@ -694,7 +776,7 @@ export function subdomainAuth(req: Request, res: Response, next: NextFunction) {
 
 ```bash
 # API Configuration
-EXPO_PUBLIC_API_URL=https://api.bdn.com
+EXPO_PUBLIC_API_URL=https://api.blackdollarnetwork.com
 EXPO_PUBLIC_ENVIRONMENT=production
 
 # Firebase
@@ -778,14 +860,12 @@ GOOGLE_CLOUD_STORAGE_BUCKET=...
 **Workflows:**
 
 1. **CI Pipeline** (`.github/workflows/ci.yml`)
-
    - Run on every PR
    - Lint and type check
    - Run tests
    - Build check
 
 2. **Deploy to Sandbox** (`.github/workflows/deploy-sandbox.yml`)
-
    - Trigger: Push to `develop` branch
    - Build Expo app
    - Deploy backend to Cloud Run (sandbox)
@@ -793,7 +873,6 @@ GOOGLE_CLOUD_STORAGE_BUCKET=...
    - Update Firestore indexes
 
 3. **Deploy to Production** (`.github/workflows/deploy-production.yml`)
-
    - Trigger: Push to `main` branch (or manual)
    - Build Expo app
    - Deploy backend to Cloud Run (production)
@@ -885,21 +964,21 @@ The error handling system provides detailed error information for development wh
 
 ```typescript
 export enum ErrorCategory {
-  PAYMENT = 'PAYMENT',
-  TRANSACTION = 'TRANSACTION',
-  NETWORK = 'NETWORK',
-  AUTHENTICATION = 'AUTHENTICATION',
-  VALIDATION = 'VALIDATION',
-  BUSINESS_LOGIC = 'BUSINESS_LOGIC',
-  EXTERNAL_SERVICE = 'EXTERNAL_SERVICE',
-  SYSTEM = 'SYSTEM',
+  PAYMENT = "PAYMENT",
+  TRANSACTION = "TRANSACTION",
+  NETWORK = "NETWORK",
+  AUTHENTICATION = "AUTHENTICATION",
+  VALIDATION = "VALIDATION",
+  BUSINESS_LOGIC = "BUSINESS_LOGIC",
+  EXTERNAL_SERVICE = "EXTERNAL_SERVICE",
+  SYSTEM = "SYSTEM",
 }
 
 export enum ErrorSeverity {
-  LOW = 'LOW',           // Informational, non-critical
-  MEDIUM = 'MEDIUM',     // User action required
-  HIGH = 'HIGH',         // Transaction failed, retry possible
-  CRITICAL = 'CRITICAL', // System error, requires attention
+  LOW = "LOW", // Informational, non-critical
+  MEDIUM = "MEDIUM", // User action required
+  HIGH = "HIGH", // Transaction failed, retry possible
+  CRITICAL = "CRITICAL", // System error, requires attention
 }
 
 export interface BDNError {
@@ -932,20 +1011,20 @@ class ErrorHandler {
     severity: ErrorSeverity,
     technicalMessage: string,
     userMessage: string,
-    details?: Record<string, any>
-  ): BDNError
+    details?: Record<string, any>,
+  ): BDNError;
 
   // Log error with full context
-  logError(error: BDNError, context?: Record<string, any>): void
+  logError(error: BDNError, context?: Record<string, any>): void;
 
   // Get user-friendly message
-  getUserMessage(error: BDNError): string
+  getUserMessage(error: BDNError): string;
 
   // Determine if error is retryable
-  isRetryable(error: BDNError): boolean
+  isRetryable(error: BDNError): boolean;
 
   // Format error for API response
-  formatForAPI(error: BDNError, includeDetails?: boolean): APIErrorResponse
+  formatForAPI(error: BDNError, includeDetails?: boolean): APIErrorResponse;
 }
 ```
 
@@ -956,20 +1035,27 @@ Maps technical errors to user-friendly messages:
 ```typescript
 const ERROR_MESSAGES: Record<string, string> = {
   // Payment Errors
-  PAYMENT_INSUFFICIENT_FUNDS: "You don't have enough funds to complete this transaction. Please add funds or choose a different payment method.",
-  PAYMENT_METHOD_DECLINED: "Your payment method was declined. Please check your card details or try a different payment method.",
-  PAYMENT_PROCESSOR_ERROR: "We're having trouble processing your payment right now. Please try again in a few moments.",
-  
+  PAYMENT_INSUFFICIENT_FUNDS:
+    "You don't have enough funds to complete this transaction. Please add funds or choose a different payment method.",
+  PAYMENT_METHOD_DECLINED:
+    "Your payment method was declined. Please check your card details or try a different payment method.",
+  PAYMENT_PROCESSOR_ERROR:
+    "We're having trouble processing your payment right now. Please try again in a few moments.",
+
   // Transaction Errors
-  TRANSACTION_INVENTORY_UNAVAILABLE: "Sorry, this item is no longer available. Please check back later or browse similar items.",
-  TRANSACTION_LIMIT_EXCEEDED: "You've reached the transaction limit. Please try again later or contact support.",
-  
+  TRANSACTION_INVENTORY_UNAVAILABLE:
+    "Sorry, this item is no longer available. Please check back later or browse similar items.",
+  TRANSACTION_LIMIT_EXCEEDED:
+    "You've reached the transaction limit. Please try again later or contact support.",
+
   // Network Errors
-  NETWORK_CONNECTION_ERROR: "Unable to connect. Please check your internet connection and try again.",
+  NETWORK_CONNECTION_ERROR:
+    "Unable to connect. Please check your internet connection and try again.",
   NETWORK_TIMEOUT: "The request took too long. Please try again.",
-  
+
   // Generic
-  UNKNOWN_ERROR: "Something went wrong. Please try again or contact support if the issue persists.",
+  UNKNOWN_ERROR:
+    "Something went wrong. Please try again or contact support if the issue persists.",
 };
 
 export function getUserFriendlyMessage(error: BDNError | Error): string {
@@ -986,7 +1072,7 @@ interface ErrorDisplayProps {
   error: BDNError | Error | string;
   onRetry?: () => void;
   onDismiss?: () => void;
-  variant?: 'toast' | 'inline' | 'modal';
+  variant?: "toast" | "inline" | "modal";
   showDetails?: boolean; // Only in development
 }
 
@@ -1012,26 +1098,26 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     const bdnError = mapToBDNError(error);
-    
+
     // Log detailed error for development
     if (ENV.isDevelopment) {
-      logger.error('API Error', {
+      logger.error("API Error", {
         code: bdnError.code,
         category: bdnError.category,
         details: bdnError.details,
         stack: bdnError.stack,
       });
     }
-    
+
     // Show user-friendly message
     ErrorDisplay.show({
       error: bdnError,
-      variant: 'toast',
+      variant: "toast",
       showDetails: ENV.isDevelopment,
     });
-    
+
     return Promise.reject(bdnError);
-  }
+  },
 );
 ```
 
@@ -1098,7 +1184,7 @@ class ErrorLogger {
 export async function retryWithBackoff<T>(
   operation: () => Promise<T>,
   maxRetries: number = 3,
-  backoffMs: number = 1000
+  backoffMs: number = 1000,
 ): Promise<T> {
   // Implementation with exponential backoff
 }
@@ -1161,23 +1247,23 @@ interface ContentGateProps {
 
 export function ContentGate(props: ContentGateProps) {
   const { isAuthenticated } = useAuth();
-  
+
   if (!props.requiresAuth || isAuthenticated) {
     return <>{props.children}</>;
   }
-  
+
   if (props.gateType === 'soft' && props.previewContent) {
     return (
       <>
         {props.previewContent}
-        <SignupPrompt 
+        <SignupPrompt
           ctaText={props.ctaText}
           onSignupClick={props.onSignupClick}
         />
       </>
     );
   }
-  
+
   return <SignupPrompt />;
 }
 ```
@@ -1269,7 +1355,7 @@ model BlogPost {
   publishedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([slug])
   @@index([isPublished, publishedAt])
   @@map("blog_posts")
@@ -1283,7 +1369,7 @@ model ContentView {
   ipAddress String?
   userAgent String?
   viewedAt DateTime @default(now())
-  
+
   @@index([contentType, contentId])
   @@index([userId])
   @@map("content_views")
@@ -1295,7 +1381,7 @@ model SignupConversion {
   sourceId String? // ID of content that triggered signup
   userId String
   convertedAt DateTime @default(now())
-  
+
   @@index([source, sourceId])
   @@index([userId])
   @@map("signup_conversions")
@@ -1438,21 +1524,18 @@ model SignupConversion {
 **Refactoring Strategy:**
 
 1. **Component Extraction**
-
    - Extract reusable UI components
    - Extract form sections into separate components
    - Extract business logic into custom hooks
    - Extract utility functions into separate files
 
 2. **File Organization**
-
    - Split large pages into smaller sub-components
    - Move shared logic to hooks or services
    - Create feature-specific component directories
    - Separate concerns (UI, logic, data)
 
 3. **Pattern-Based Refactoring**
-
    - Use composition over large monolithic components
    - Extract step-based flows into separate step components
    - Create shared form components
@@ -1554,41 +1637,35 @@ export default function C2BPayment() {
 **For Files Over 400 LOC:**
 
 1. **Identify Sections:**
-
    - [ ] List all major sections/features in the file
    - [ ] Identify reusable components
    - [ ] Identify shared logic
    - [ ] Identify utility functions
 
 2. **Extract Components:**
-
    - [ ] Create component directory: `components/[feature]/`
    - [ ] Extract UI sections into components
    - [ ] Extract form sections into form components
    - [ ] Extract modal/dialog components
 
 3. **Extract Hooks:**
-
    - [ ] Create hook file: `hooks/use[Feature].ts`
    - [ ] Move state management to hook
    - [ ] Move business logic to hook
    - [ ] Move API calls to hook
 
 4. **Extract Services:**
-
    - [ ] Create service file: `services/[feature]-service.ts` or `lib/[feature].ts`
    - [ ] Move complex business logic to service
    - [ ] Move data transformation to service
    - [ ] Move validation logic to service
 
 5. **Extract Types:**
-
    - [ ] Create types file: `types/[feature].ts`
    - [ ] Move interfaces/types to types file
    - [ ] Ensure proper type exports
 
 6. **Extract Constants:**
-
    - [ ] Create constants file: `constants/[feature].ts`
    - [ ] Move magic numbers/strings to constants
    - [ ] Move configuration to constants
@@ -1659,18 +1736,21 @@ export default function C2BPayment() {
 ```javascript
 module.exports = {
   extends: [
-    'expo',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
+    "expo",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
   ],
   rules: {
-    '@typescript-eslint/no-explicit-any': 'error',
-    '@typescript-eslint/explicit-function-return-type': 'warn',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
-    'max-lines': ['warn', { max: 400, skipBlankLines: true, skipComments: true }],
-    'max-lines-per-function': ['warn', { max: 100, skipBlankLines: true }],
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "max-lines": [
+      "warn",
+      { max: 400, skipBlankLines: true, skipComments: true },
+    ],
+    "max-lines-per-function": ["warn", { max: 100, skipBlankLines: true }],
   },
 };
 ```
@@ -1717,22 +1797,18 @@ npm run check-file-sizes
 **Phase 1: Critical Files (>1000 LOC)** - Weeks 1-2
 
 1. `app/pages/support.tsx` (1,553 lines)
-
    - Extract: FAQ sections, ticket forms, chat components
    - Target: Main file < 200 lines, 5-7 extracted components
 
 2. `app/pages/tokens.tsx` (1,530 lines)
-
    - Extract: Token cards, purchase flow, history components
    - Target: Main file < 200 lines, 6-8 extracted components
 
 3. `app/pages/payments/c2b-payment.tsx` (1,920 lines)
-
    - Extract: Step components, business selector, payment form
    - Target: Main file < 200 lines, 8-10 extracted components
 
 4. `app/pages/products/create.tsx` (1,258 lines)
-
    - Extract: Form steps, product type selector, image upload
    - Target: Main file < 200 lines, 5-7 extracted components
 
@@ -1869,9 +1945,9 @@ model AdminUser {
   lastLoginAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  
+
   user        User      @relation(fields: [userId], references: [id])
-  
+
   @@index([role])
   @@index([isActive])
   @@map("admin_users")
@@ -1883,7 +1959,7 @@ model AdminPermission {
   description String?
   category    String   // "users", "businesses", "transactions", "content", "system"
   createdAt   DateTime @default(now())
-  
+
   @@map("admin_permissions")
 }
 
@@ -1897,9 +1973,9 @@ model AdminAuditLog {
   ipAddress   String?
   userAgent   String?
   createdAt   DateTime @default(now())
-  
+
   admin       AdminUser @relation(fields: [adminId], references: [id])
-  
+
   @@index([adminId, createdAt])
   @@index([resource, resourceId])
   @@map("admin_audit_logs")
@@ -2179,30 +2255,30 @@ interface AdminDashboardStats {
   activeUsers: number; // Last 30 days
   newUsersToday: number;
   newUsersThisWeek: number;
-  
+
   // Business Metrics
   totalBusinesses: number;
   pendingBusinessApprovals: number;
   activeBusinesses: number;
-  
+
   // Nonprofit Metrics
   totalNonprofits: number;
   pendingNonprofitApprovals: number;
-  
+
   // Transaction Metrics
   totalTransactions: number;
   transactionsToday: number;
   totalRevenue: number;
   revenueToday: number;
   platformFees: number;
-  
+
   // Support Metrics
   openDisputes: number;
   openSupportTickets: number;
   avgResolutionTime: number; // Hours
-  
+
   // System Health
-  systemStatus: 'healthy' | 'degraded' | 'down';
+  systemStatus: "healthy" | "degraded" | "down";
   apiResponseTime: number; // ms
   errorRate: number; // percentage
 }
@@ -2249,7 +2325,6 @@ interface AdminDashboardStats {
 **Refactoring Approach:**
 
 1. Extract reusable admin components:
-
    - `components/admin/DataTable.tsx` - Reusable data table
    - `components/admin/FilterPanel.tsx` - Filter panel
    - `components/admin/ActionButtons.tsx` - Action buttons
@@ -2257,14 +2332,12 @@ interface AdminDashboardStats {
    - `components/admin/ApprovalCard.tsx` - Approval cards
 
 2. Extract admin hooks:
-
    - `hooks/admin/useAdminUsers.ts` - User management logic
    - `hooks/admin/useAdminBusinesses.ts` - Business management logic
    - `hooks/admin/useAdminTransactions.ts` - Transaction management logic
    - `hooks/admin/useAdminDisputes.ts` - Dispute management logic
 
 3. Extract admin services:
-
    - `services/admin-service.ts` - Core admin API calls
    - `services/admin-stats-service.ts` - Statistics service
    - `services/admin-audit-service.ts` - Audit logging service
@@ -2274,36 +2347,30 @@ interface AdminDashboardStats {
 **How Admin Relates to Main App:**
 
 1. **User Management:**
-
    - Admin can view and modify any user account
    - Changes sync to main app immediately
    - Admin actions trigger notifications in main app
 
 2. **Business Management:**
-
    - Business approvals in admin → Business appears in main app
    - Business suspensions → Business hidden from main app
    - Business edits → Updates reflected in main app
 
 3. **Transaction Monitoring:**
-
    - Admin can view all transactions from main app
    - Admin can process refunds → Updates user wallet in main app
    - Admin can flag transactions → Triggers review in main app
 
 4. **Content Moderation:**
-
    - Admin approves/rejects content → Content appears/hidden in main app
    - Admin edits content → Updates reflected in main app
 
 5. **Support Integration:**
-
    - Disputes from main app → Appear in admin panel
    - Admin resolutions → Notifications sent to users in main app
    - Support tickets → Managed in admin, visible to users in main app
 
 6. **Analytics:**
-
    - Admin analytics pull data from main app database
    - Real-time metrics from main app activity
    - Reports generated from main app transactions
@@ -2313,28 +2380,24 @@ interface AdminDashboardStats {
 **Security Measures:**
 
 1. **Authentication:**
-
    - Separate admin login flow
    - Two-factor authentication required
    - Session timeout (15 minutes inactivity)
    - IP whitelisting (optional)
 
 2. **Authorization:**
-
    - Role-based access control (RBAC)
    - Granular permissions per feature
    - Permission checks on every API call
    - Frontend route protection
 
 3. **Audit Trail:**
-
    - All admin actions logged
    - Immutable audit logs
    - Regular audit log reviews
    - Compliance reporting
 
 4. **Data Protection:**
-
    - Encrypted admin sessions
    - Secure API endpoints
    - Rate limiting on admin APIs
@@ -2356,54 +2419,156 @@ interface AdminDashboardStats {
 - `server/src/middleware/permission-check.ts` - Permission checking middleware
 - `server/src/services/admin-stats-service.ts` - Statistics service
 - `server/src/services/admin-audit-service.ts` - Audit logging service
-- `lib/subdomain-utils.ts` - Enhanced subdomain detection
+- `lib/subdomain-utils.ts` - Enhanced subdomain detection (supports operator, developer, designer)
 - `components/admin/DataTable.tsx` - Reusable data table
 - `components/admin/FilterPanel.tsx` - Filter panel component
 - `hooks/admin/useAdminUsers.ts` - User management hook
 - `hooks/admin/useAdminBusinesses.ts` - Business management hook
 
+**New Designer Files:**
+
+- `app/designer/*` - Designer dashboard pages
+- `server/src/api/designer/` - Designer API endpoints (if needed)
+- `components/DesignerGuard.tsx` - Designer access guard component
+
 **Modified Files:**
 
-- `app/_layout.tsx` - Add subdomain-based routing
+- `app/_layout.tsx` - Add subdomain-based routing (supports operator, developer, designer)
 - `lib/config.ts` - Add domain configuration
+- `lib/subdomain-utils.ts` - Add designer subdomain support
 - `components/AdminGuard.tsx` - Enhance with permission checking
-- `server/prisma/schema.prisma` - Add admin models
+- `server/src/middleware/subdomain-auth.ts` - Add designer access control
+- `server/prisma/schema.prisma` - Add admin models (and designer role if needed)
 - `app/admin/*` - Refactor all admin pages to <400 LOC
+
+## Designer Dashboard
+
+### Overview
+
+The Designer Dashboard (`@designer`) is accessible only to users with designer privileges via `designer.blackdollarnetwork.com`. It provides design and content creation tools for managing visual assets, templates, and design resources for the BDN platform.
+
+### Designer Access Control
+
+**Designer Role** (`server/prisma/schema.prisma`):
+
+Designer access is controlled via user role flag:
+
+```prisma
+model User {
+  // ... existing fields ...
+  isDesigner Boolean @default(false)
+  // ... other fields ...
+}
+```
+
+**Access Control Implementation:**
+
+- `components/DesignerGuard.tsx` - Designer access guard component (to be created)
+- `server/src/middleware/subdomain-auth.ts` - Backend designer verification (already includes designer check)
+- Designer-specific permissions can be added similar to admin permissions
+
+### Designer Features & Functionality
+
+**1. Design Asset Management** (`app/designer/assets/`)
+
+- Upload and manage design assets
+- Organize assets by category
+- Version control for design files
+- Asset library for platform use
+
+**2. Template Management** (`app/designer/templates/`)
+
+- Create and manage design templates
+- Template preview and testing
+- Template versioning
+- Template sharing and collaboration
+
+**3. Content Design Tools** (`app/designer/content/`)
+
+- Design tools for creating visual content
+- Image editing and optimization
+- Brand asset management
+- Design system components
+
+**4. Design System** (`app/designer/design-system/`)
+
+- Component library management
+- Style guide maintenance
+- Design token management
+- Design documentation
+
+### Designer API Endpoints
+
+**Designer Authentication** (`server/src/api/designer/auth.ts`):
+
+- `POST /api/designer/login` - Designer login
+- `POST /api/designer/logout` - Designer logout
+- `GET /api/designer/me` - Get current designer user
+
+**Design Assets** (`server/src/api/designer/assets.ts`):
+
+- `GET /api/designer/assets` - List design assets
+- `POST /api/designer/assets` - Upload design asset
+- `GET /api/designer/assets/:id` - Get asset details
+- `PUT /api/designer/assets/:id` - Update asset
+- `DELETE /api/designer/assets/:id` - Delete asset
+
+**Templates** (`server/src/api/designer/templates.ts`):
+
+- `GET /api/designer/templates` - List templates
+- `POST /api/designer/templates` - Create template
+- `GET /api/designer/templates/:id` - Get template details
+- `PUT /api/designer/templates/:id` - Update template
+- `DELETE /api/designer/templates/:id` - Delete template
+
+### Designer Security
+
+**Security Measures:**
+
+1. **Authentication:**
+   - Separate designer login flow
+   - Two-factor authentication (optional)
+   - Session timeout (30 minutes inactivity)
+
+2. **Authorization:**
+   - Designer role-based access
+   - Permission checks on API calls
+   - Frontend route protection
+
+3. **Asset Protection:**
+   - Secure asset storage
+   - Access control for sensitive assets
+   - Asset usage tracking
 
 ## AI/Agentic Features
 
 ### AI Integration Opportunities
 
 1. **Smart Payment Suggestions**
-
    - Location: `app/(tabs)/pay.tsx`
    - Suggest optimal payment method based on transaction amount
    - Recommend BLKD purchase when balance is low
    - Predict cashback opportunities
 
 2. **Intelligent Product Recommendations**
-
    - Location: `app/(tabs)/marketplace.tsx`
    - Personalized product suggestions
    - Business recommendations based on location/preferences
    - Price comparison and deals
 
 3. **Transaction Insights**
-
    - Location: `app/pages/transactions.tsx`
    - Spending pattern analysis
    - Budget recommendations
    - Cashback optimization tips
 
 4. **Chat Support Assistant**
-
    - Location: `app/pages/support.tsx`
    - AI-powered support chat
    - FAQ automation
    - Ticket routing
 
 5. **Smart Notifications**
-
    - Location: `lib/notifications.ts`
    - Intelligent notification timing
    - Priority-based grouping
@@ -2420,28 +2585,24 @@ interface AdminDashboardStats {
 ### Security Measures
 
 1. **Authentication**
-
    - JWT tokens with refresh mechanism
    - Secure token storage (`expo-secure-store`)
    - Biometric authentication support
    - PIN-based authentication
 
 2. **Payment Security**
-
    - PCI DSS compliance (no card data storage)
    - Tokenized payment methods only
    - Encrypted communication (HTTPS/TLS)
    - Webhook signature verification
 
 3. **Data Protection**
-
    - Encrypted database connections
    - Secure environment variables (EAS Secrets)
    - Firestore security rules
    - Input validation and sanitization
 
 4. **API Security**
-
    - Rate limiting
    - CORS configuration
    - Request validation
@@ -2452,25 +2613,21 @@ interface AdminDashboardStats {
 ### Monitoring Stack
 
 1. **Error Tracking**
-
    - Sentry integration
    - Error boundary components
    - Crash reporting
 
 2. **Analytics**
-
    - Firebase Analytics
    - Custom event tracking
    - User behavior analytics
 
 3. **Performance Monitoring**
-
    - Google Cloud Monitoring
    - API response time tracking
    - Database query performance
 
 4. **Logging**
-
    - Structured logging (`lib/logger.ts`)
    - Cloud Logging integration
    - Log aggregation and search
@@ -2678,12 +2835,12 @@ model Product {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   deletedAt       DateTime?
-  
+
   variants        ProductVariant[]
   inventoryItems  InventoryItem[]
   platformMappings PlatformProductMapping[]
   orders          OrderItem[]
-  
+
   @@index([businessId, status])
   @@index([sku])
   @@map("products")
@@ -2704,12 +2861,12 @@ model ProductVariant {
   status          VariantStatus @default(ACTIVE)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   product         Product  @relation(fields: [productId], references: [id])
   inventoryItems  InventoryItem[]
   platformMappings PlatformVariantMapping[]
   orderItems      OrderItem[]
-  
+
   @@index([productId, status])
   @@index([sku])
   @@map("product_variants")
@@ -2727,10 +2884,10 @@ model InventoryItem {
   lastCountedAt   DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   variant         ProductVariant @relation(fields: [variantId], references: [id])
   location        InventoryLocation @relation(fields: [locationId], references: [id])
-  
+
   @@unique([variantId, locationId])
   @@index([locationId, quantity])
   @@map("inventory_items")
@@ -2746,9 +2903,9 @@ model InventoryLocation {
   isActive        Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   inventoryItems  InventoryItem[]
-  
+
   @@index([businessId, isActive])
   @@map("inventory_locations")
 }
@@ -2765,9 +2922,9 @@ model PlatformProductMapping {
   syncErrors      Json?     // Array of error messages
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   product         Product  @relation(fields: [productId], references: [id])
-  
+
   @@unique([productId, platform, platformProductId])
   @@index([platform, syncStatus])
   @@map("platform_product_mappings")
@@ -2783,9 +2940,9 @@ model PlatformVariantMapping {
   syncStatus      SyncStatus @default(PENDING)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   variant         ProductVariant @relation(fields: [variantId], references: [id])
-  
+
   @@unique([variantId, platform, platformVariantId])
   @@map("platform_variant_mappings")
 }
@@ -2806,7 +2963,7 @@ model BulkUploadJob {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   completedAt     DateTime?
-  
+
   @@index([businessId, status])
   @@map("bulk_upload_jobs")
 }
@@ -3133,7 +3290,13 @@ enum JobStatus {
 - `components/admin/FilterPanel.tsx` - Admin filter panel
 - `hooks/admin/useAdminUsers.ts` - User management hook
 - `hooks/admin/useAdminBusinesses.ts` - Business management hook
-- `lib/subdomain-utils.ts` - Enhanced subdomain detection (domain routing)
+- `lib/subdomain-utils.ts` - Enhanced subdomain detection (supports operator, developer, designer)
+
+**Designer Dashboard:**
+
+- `app/designer/*` - Designer dashboard pages
+- `server/src/api/designer/` - Designer API endpoints (if needed)
+- `components/DesignerGuard.tsx` - Designer access guard component
 
 **Code Quality Tools:**
 
@@ -3213,7 +3376,7 @@ enum JobStatus {
 - `app/admin/blkd-purchases.tsx` - Refactor to <400 LOC, extract BLKD purchase components
 - `app/admin/nonprofits.tsx` - Refactor to <400 LOC, extract nonprofit components
 - `app/admin/transactions.tsx` - Refactor to <400 LOC, extract transaction components
-- `app/_layout.tsx` - Add subdomain-based routing for admin/operator domain
+- `app/_layout.tsx` - Add subdomain-based routing for admin/operator, developer, and designer domains
 
 ## Success Metrics
 

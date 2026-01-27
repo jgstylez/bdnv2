@@ -5,6 +5,7 @@ This folder contains all project documentation, planning documents, and architec
 ## 📚 Documentation Structure
 
 ### Core Documentation
+- **[implementation-status-2026.md](./implementation-status-2026.md)** - **CURRENT STATUS** - What's implemented vs planned
 - **[CODEBASE-REVIEW-2025.md](./CODEBASE-REVIEW-2025.md)** - **START HERE** - Comprehensive, up-to-date codebase review
 - **[project-overview.md](./project-overview.md)** - Project overview and getting started guide
 - **[architecture.md](./architecture.md)** - Architecture and design system documentation
@@ -13,6 +14,7 @@ This folder contains all project documentation, planning documents, and architec
 These plans cover the complete technical architecture and implementation strategy for BDN 2.0:
 
 - **[bdn-2.0-comprehensive-technical-plan.md](./bdn-2.0-comprehensive-technical-plan.md)** - **MASTER PLAN** - Complete technical architecture, payment system, inventory management, content gating, admin panel, AI features, and implementation phases
+  - **Note:** This document describes planned architecture. See [implementation-status-2026.md](./implementation-status-2026.md) for what's actually implemented.
 - **[security-compliance-strategy.md](./security-compliance-strategy.md)** - Database security, PCI DSS compliance (USD transactions via processors), GDPR/CCPA, financial regulations
 - **[unit-testing-strategy.md](./unit-testing-strategy.md)** - Unit testing strategy with tests written alongside features
 - **[testing-strategy-expansion.md](./testing-strategy-expansion.md)** - Integration, E2E, and performance testing strategies
@@ -29,10 +31,12 @@ These plans cover the complete technical architecture and implementation strateg
 - **[platform-features.md](./platform-features.md)** - Platform features and functionality overview
 
 ### Implementation & Progress
-- **[implementation-progress.md](./implementation-progress.md)** - Current implementation status and progress
+- **[implementation-status-2026.md](./implementation-status-2026.md)** - **CURRENT STATUS** - What's implemented vs planned (January 2026)
+- **[implementation-progress.md](./implementation-progress.md)** - Implementation status and progress tracking
 - **[api-integration-tracking.md](./api-integration-tracking.md)** - API integration TODO tracking
 - **[refactoring-progress.md](./refactoring-progress.md)** - Refactoring progress and status
-- **[RECENT-UPDATES-2025-01-25.md](./RECENT-UPDATES-2025-01-25.md)** - **NEW** - Summary of recent implementation work (January 25, 2025)
+- **[RECENT-UPDATES-2025-01-25.md](./RECENT-UPDATES-2025-01-25.md)** - Summary of recent implementation work (January 25, 2025)
+- **[documentation-review-update-plan.md](./documentation-review-update-plan.md)** - **NEW** - Documentation review and update plan (January 2026)
 
 ### Recent Implementation Work (January 2025)
 - **[business-merchant-flows-implementation.md](./business-merchant-flows-implementation.md)** - Business onboarding, product management, order fulfillment, verification workflows
@@ -52,6 +56,7 @@ These plans cover the complete technical architecture and implementation strateg
 - **[pci-compliance-final-check.md](./pci-compliance-final-check.md)** - PCI compliance checklist
 
 ### Technical Guides
+- **[expo-setup-consolidated-plan.md](./expo-setup-consolidated-plan.md)** - **NEW** - Consolidated Expo setup plan (environment variables, EAS Build, updates, notifications)
 - **[expo-image-migration-guide.md](./expo-image-migration-guide.md)** - expo-image migration guide
 - **[nativecn-setup.md](./nativecn-setup.md)** - NativeCN component library setup
 - **[nativecn-examples.md](./nativecn-examples.md)** - NativeCN usage examples
@@ -77,12 +82,13 @@ These plans cover the complete technical architecture and implementation strateg
 - **[production-readiness-review.md](./production-readiness-review.md)** - Production readiness assessment
 - **[pre-release-checklist.md](./pre-release-checklist.md)** - Pre-release checklist
 - **[pre-release-analysis.md](./pre-release-analysis.md)** - Pre-release analysis
-- **[expo-production-insights.md](./expo-production-insights.md)** - Expo production insights
+- **[expo-setup-consolidated-plan.md](./expo-setup-consolidated-plan.md)** - **NEW** - Consolidated Expo setup plan
+- **[expo-production-insights.md](./expo-production-insights.md)** - Expo production insights (see consolidated plan for updates)
 
 ### Refactoring & Optimization
+- **[refactoring-optimization-plan.md](./refactoring-optimization-plan.md)** - **NEW** - Comprehensive refactoring and optimization plan (recurring payments, redundant fields, statistics)
 - **[refactoring-plan.md](./refactoring-plan.md)** - Refactoring plan and strategy
 - **[refactoring-progress.md](./refactoring-progress.md)** - Refactoring progress tracking
-- **[refactoring-optimization-review.md](./refactoring-optimization-review.md)** - Refactoring and optimization review
 - **[tokens-refactoring-plan.md](./tokens-refactoring-plan.md)** - Tokens page refactoring plan
 
 ### Business & Configuration
@@ -150,7 +156,18 @@ When referring to "mobile" in this codebase, it encompasses **both** mobile brow
 
 ---
 
-**Last Updated:** 2025-01-25
+**Last Updated:** 2026-01-27
+
+### Recent Updates (January 2026)
+
+#### January 27, 2026
+- **[expo-setup-consolidated-plan.md](./expo-setup-consolidated-plan.md)** - **NEW** - Consolidated Expo setup plan (resolves conflicts, aligns all Expo docs)
+- **[documentation-review-update-plan.md](./documentation-review-update-plan.md)** - **NEW** - Comprehensive documentation review and update plan
+- **[implementation-status-2026.md](./implementation-status-2026.md)** - **NEW** - Current implementation status of all features
+- **[refactoring-optimization-plan.md](./refactoring-optimization-plan.md)** - **NEW** - Refactoring and optimization opportunities
+- Updated **[bdn-2.0-comprehensive-technical-plan.md](./bdn-2.0-comprehensive-technical-plan.md)** with status indicators
+- Updated **[expo-production-insights.md](./expo-production-insights.md)** to reflect current state
+- Updated **[infrastructure-deployment-strategy.md](./infrastructure-deployment-strategy.md)** to clarify mobile vs backend deployment
 
 ### Recent Updates (January 2025)
 

@@ -1,4 +1,4 @@
-import { Notification, NotificationPreferences, PushNotificationToken, NotificationBadge } from "../types/notifications";
+import { Notification, NotificationPreferences, PushNotificationToken, NotificationBadge, NotificationType, NotificationChannel, NotificationPriority } from "../types/notifications";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { logError, logInfo } from "./logger";
@@ -13,6 +13,8 @@ if (!isExpoGo) {
       shouldShowAlert: true,
       shouldPlaySound: true,
       shouldSetBadge: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
     }),
   });
 }
@@ -210,12 +212,13 @@ export function setupNotificationListeners(
   // Foreground notification handler
   Notifications.addNotificationReceivedListener((notification) => {
     // Convert Expo notification to our Notification type
+    const data = notification.request.content.data || {};
     const customNotification: Notification = {
       id: notification.request.identifier,
       userId: "", // Will be set by backend
-      type: notification.request.content.data?.type || "system",
-      channel: notification.request.content.data?.channel || "system",
-      priority: notification.request.content.data?.priority || "normal",
+      type: (typeof data.type === 'string' ? data.type : "system") as NotificationType,
+      channel: (typeof data.channel === 'string' ? data.channel : "system") as NotificationChannel,
+      priority: (typeof data.priority === 'string' ? data.priority : "normal") as NotificationPriority,
       title: notification.request.content.title || "",
       message: notification.request.content.body || "",
       data: notification.request.content.data,
@@ -227,12 +230,13 @@ export function setupNotificationListeners(
 
   // Background/quit notification tap handler
   Notifications.addNotificationResponseReceivedListener((response) => {
+    const data = response.notification.request.content.data || {};
     const customNotification: Notification = {
       id: response.notification.request.identifier,
       userId: "",
-      type: response.notification.request.content.data?.type || "system",
-      channel: response.notification.request.content.data?.channel || "system",
-      priority: response.notification.request.content.data?.priority || "normal",
+      type: (typeof data.type === 'string' ? data.type : "system") as NotificationType,
+      channel: (typeof data.channel === 'string' ? data.channel : "system") as NotificationChannel,
+      priority: (typeof data.priority === 'string' ? data.priority : "normal") as NotificationPriority,
       title: response.notification.request.content.title || "",
       message: response.notification.request.content.body || "",
       data: response.notification.request.content.data,

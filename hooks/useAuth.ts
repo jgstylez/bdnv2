@@ -70,7 +70,7 @@ export function useAuth() {
     return () => unsubscribe();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string) => {
     if (DEV_MODE_AUTH) {
       // Development mode: auto-login
       setIsAuthenticated(true);
@@ -93,7 +93,7 @@ export function useAuth() {
     }
   };
 
-  const signup = async (email, password) => {
+  const signup = async (email: string, password: string) => {
     if (DEV_MODE_AUTH) {
       // Development mode: auto-signup
       setIsAuthenticated(true);

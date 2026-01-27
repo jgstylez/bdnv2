@@ -1,9 +1,15 @@
-import { SearchResult, SearchFilters, ElasticsearchConfig } from "../types/search";
+import {
+  SearchResult,
+  SearchFilters,
+  ElasticsearchConfig,
+} from "../types/search";
 import { logError, logInfo } from "./logger";
 
 // Elasticsearch configuration
 const config: ElasticsearchConfig = {
-  endpoint: process.env.EXPO_PUBLIC_ELASTICSEARCH_ENDPOINT || "https://search.bdn.app",
+  endpoint:
+    process.env.EXPO_PUBLIC_ELASTICSEARCH_ENDPOINT ||
+    "https://search.blackdollarnetwork.com",
   index: "bdn_index",
   apiKey: process.env.EXPO_PUBLIC_ELASTICSEARCH_API_KEY,
 };
@@ -16,12 +22,12 @@ const config: ElasticsearchConfig = {
  */
 export async function elasticsearchSearch(
   query: string,
-  filters?: SearchFilters
+  filters?: SearchFilters,
 ): Promise<SearchResult[]> {
   try {
     // TODO: Implement actual Elasticsearch integration
     // This is a placeholder that will be replaced with actual API calls
-    
+
     const searchBody: {
       query: {
         bool: {
@@ -131,7 +137,7 @@ export async function getSearchSuggestions(query: string): Promise<string[]> {
   try {
     // TODO: Implement Elasticsearch suggest API
     // This would use Elasticsearch's completion suggester
-    
+
     // Placeholder return
     return [];
   } catch (error) {
@@ -159,4 +165,3 @@ export async function trackSearchActivity(activity: {
     logError("Error tracking search activity", error, { activity });
   }
 }
-

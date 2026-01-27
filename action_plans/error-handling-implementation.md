@@ -307,7 +307,7 @@ To migrate existing code:
 - ✅ `components/FormValidationFeedback.tsx`
 - ✅ `hooks/useLoading.ts`
 - ✅ `components/feedback/index.ts`
-- ✅ `components/feedback/README.md`
+- ✅ `action_plans/feedback-components-readme.md`
 
 ### Modified
 - ✅ `components/lists/EmptyState.tsx` - Fixed colors, added variants

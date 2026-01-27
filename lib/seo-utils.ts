@@ -100,7 +100,7 @@ export function generateBusinessStructuredData(
     : 'https://blackdollarnetwork.com';
   
   const businessUrl = `${baseUrl}/pages/businesses/${business.id}`;
-  const imageUrl = business.imageUrl || business.logoUrl || `${baseUrl}/bdn-logo.svg`;
+  const imageUrl = business.imageUrl || `${baseUrl}/bdn-logo.svg`;
 
   const structuredData: any = {
     '@context': 'https://schema.org',
@@ -115,11 +115,11 @@ export function generateBusinessStructuredData(
   if (business.address) {
     structuredData.address = {
       '@type': 'PostalAddress',
-      streetAddress: business.address.streetAddress,
+      streetAddress: business.address.street + (business.address.street2 ? `, ${business.address.street2}` : ''),
       addressLocality: business.address.city,
       addressRegion: business.address.state,
       postalCode: business.address.postalCode,
-      addressCountry: business.address.countryCode || 'US',
+      addressCountry: business.address.country || 'US',
     };
   }
 
@@ -191,11 +191,11 @@ export function generateNonprofitStructuredData(
   if (organization.address) {
     structuredData.address = {
       '@type': 'PostalAddress',
-      streetAddress: organization.address.streetAddress,
+      streetAddress: organization.address.street + (organization.address.street2 ? `, ${organization.address.street2}` : ''),
       addressLocality: organization.address.city,
       addressRegion: organization.address.state,
       postalCode: organization.address.postalCode,
-      addressCountry: organization.address.countryCode || 'US',
+      addressCountry: organization.address.country || 'US',
     };
   }
 

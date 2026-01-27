@@ -40,6 +40,14 @@ todos:
 
 This plan establishes the infrastructure and deployment strategy for BDN 2.0, covering Docker containerization, Google Cloud Run deployment, CI/CD pipelines, environment management, and deployment strategies.
 
+**Important:** This document focuses on **backend API deployment** (Docker/Cloud Run). For **mobile app deployment** (iOS/Android via EAS Build), see [expo-setup-consolidated-plan.md](./expo-setup-consolidated-plan.md).
+
+### Deployment Architecture
+
+- **Backend API** → Docker/Cloud Run (this document)
+- **Mobile Apps (iOS/Android)** → EAS Build ([expo-setup-consolidated-plan.md](./expo-setup-consolidated-plan.md))
+- **Web App** → EAS Build or Cloud Run (static export)
+
 ## 1. Docker Containerization
 
 ### Backend Dockerfile

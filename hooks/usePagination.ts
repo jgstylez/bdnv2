@@ -189,8 +189,6 @@ export function useServerPagination(
     currentPage,
     totalPages,
     itemsPerPage,
-    startIndex,
-    endIndex,
     setCurrentPage: goToPage,
     setItemsPerPage,
     goToPage,

@@ -17,11 +17,9 @@ export async function shareContent(options: ShareOptions): Promise<boolean> {
   try {
     // Native mobile platforms (iOS/Android)
     if (Platform.OS !== 'web') {
-      const shareContent: { message?: string; url?: string; title?: string } = {};
-      
-      if (message) {
-        shareContent.message = message;
-      }
+      const shareContent: { message: string; url?: string; title?: string } = {
+        message,
+      };
       
       if (url && Platform.OS === 'ios') {
         shareContent.url = url;
