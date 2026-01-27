@@ -13,7 +13,6 @@ import Animated, {
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/sections/HeroSection';
-import { DevelopmentStatusSection } from '@/components/sections/DevelopmentStatusSection';
 import { InvestmentBreakdownSection, ProjectUnityCTASection } from '@/components/sections/InvestmentBreakdownSection';
 import { KeyInitiativesSection } from '@/components/sections/KeyInitiativesSection';
 import { BusinessCategoriesCarousel } from '@/components/sections/BusinessCategoriesCarousel';
@@ -166,7 +165,6 @@ export default function Home() {
           videoUrl=""
           videoTitle="WHAT WE DO - WATCH VIDEO"
         />
-        <DevelopmentStatusSection />
         <BusinessDirectoryPreview />
         <FeaturesSection />
         <ImpactChainSection />
